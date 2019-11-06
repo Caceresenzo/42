@@ -1,0 +1,101 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+e1r7p22.42.fr
+Darwin 18.6.0 x86_64
+$> date
+Wed Nov  6 14:40:18 CET 2019
+$> gcc --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/c++/4.2.1
+Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+Target: x86_64-apple-darwin18.6.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+$> clang --version
+Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+Target: x86_64-apple-darwin18.6.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: intra/2019/activities/42cursus_libft/ecaceres
+
+= Git history ==================================================================
+$> git -C /tmp/tmp2dbQUX/user log --pretty='%H - %an, %ad : %s'
+69c0f0504324456fac55cb5f6d1697f9da4c3df9 - Enzo CACERES, Wed Nov 6 13:07:59 2019 +0100 : Added everything
+
+= Collected files ==========================================
+$> ls -lAR /tmp/tmp2dbQUX/user
+total 32
+-rw-r--r--   1 root  wheel  2671 Nov  6 14:40 Makefile
+-rw-r--r--   1 root  wheel  2680 Nov  6 14:40 __GIT_HISTORY
+-rw-r--r--   1 root  wheel  2966 Nov  6 14:40 libft.h
+-rw-r--r--   1 root  wheel  1505 Nov  6 14:40 libft_bonus.h
+drwxr-xr-x  36 root  wheel  1152 Nov  6 14:40 src
+drwxr-xr-x  11 root  wheel   352 Nov  6 14:40 src-bonus
+
+/tmp/tmp2dbQUX/user/src:
+total 272
+-rw-r--r--  1 root  wheel  1362 Nov  6 14:40 ft_atoi.c
+-rw-r--r--  1 root  wheel   989 Nov  6 14:40 ft_bzero.c
+-rw-r--r--  1 root  wheel  1099 Nov  6 14:40 ft_calloc.c
+-rw-r--r--  1 root  wheel   981 Nov  6 14:40 ft_isalnum.c
+-rw-r--r--  1 root  wheel   999 Nov  6 14:40 ft_isalpha.c
+-rw-r--r--  1 root  wheel   973 Nov  6 14:40 ft_isascii.c
+-rw-r--r--  1 root  wheel   971 Nov  6 14:40 ft_isdigit.c
+-rw-r--r--  1 root  wheel   972 Nov  6 14:40 ft_isprint.c
+-rw-r--r--  1 root  wheel  1505 Nov  6 14:40 ft_itoa.c
+-rw-r--r--  1 root  wheel  1181 Nov  6 14:40 ft_memccpy.c
+-rw-r--r--  1 root  wheel  1141 Nov  6 14:40 ft_memchr.c
+-rw-r--r--  1 root  wheel  1193 Nov  6 14:40 ft_memcmp.c
+-rw-r--r--  1 root  wheel  1164 Nov  6 14:40 ft_memcpy.c
+-rw-r--r--  1 root  wheel  1455 Nov  6 14:40 ft_memmove.c
+-rw-r--r--  1 root  wheel  1059 Nov  6 14:40 ft_memset.c
+-rw-r--r--  1 root  wheel  1466 Nov  6 14:40 ft_putchar_fd.c
+-rw-r--r--  1 root  wheel  1000 Nov  6 14:40 ft_putendl_fd.c
+-rw-r--r--  1 root  wheel  1134 Nov  6 14:40 ft_putnbr_fd.c
+-rw-r--r--  1 root  wheel  1064 Nov  6 14:40 ft_putstr_fd.c
+-rw-r--r--  1 root  wheel  2099 Nov  6 14:40 ft_split.c
+-rw-r--r--  1 root  wheel   999 Nov  6 14:40 ft_strchr.c
+-rw-r--r--  1 root  wheel  1152 Nov  6 14:40 ft_strdup.c
+-rw-r--r--  1 root  wheel  1247 Nov  6 14:40 ft_strjoin.c
+-rw-r--r--  1 root  wheel  1432 Nov  6 14:40 ft_strlcat.c
+-rw-r--r--  1 root  wheel  1228 Nov  6 14:40 ft_strlcpy.c
+-rw-r--r--  1 root  wheel  1027 Nov  6 14:40 ft_strlen.c
+-rw-r--r--  1 root  wheel  1243 Nov  6 14:40 ft_strmapi.c
+-rw-r--r--  1 root  wheel  1157 Nov  6 14:40 ft_strncmp.c
+-rw-r--r--  1 root  wheel  1287 Nov  6 14:40 ft_strnstr.c
+-rw-r--r--  1 root  wheel  1176 Nov  6 14:40 ft_strrchr.c
+-rw-r--r--  1 root  wheel  1944 Nov  6 14:40 ft_strtrim.c
+-rw-r--r--  1 root  wheel  1186 Nov  6 14:40 ft_substr.c
+-rw-r--r--  1 root  wheel  1000 Nov  6 14:40 ft_tolower.c
+-rw-r--r--  1 root  wheel  1000 Nov  6 14:40 ft_toupper.c
+
+/tmp/tmp2dbQUX/user/src-bonus:
+total 72
+-rw-r--r--  1 root  wheel  1102 Nov  6 14:40 ft_lstadd_back_bonus.c
+-rw-r--r--  1 root  wheel  1005 Nov  6 14:40 ft_lstadd_front_bonus.c
+-rw-r--r--  1 root  wheel  1076 Nov  6 14:40 ft_lstclear_bonus.c
+-rw-r--r--  1 root  wheel  1009 Nov  6 14:40 ft_lstdelone_bonus.c
+-rw-r--r--  1 root  wheel  1124 Nov  6 14:40 ft_lstiter_bonus.c
+-rw-r--r--  1 root  wheel  1112 Nov  6 14:40 ft_lstlast_bonus.c
+-rw-r--r--  1 root  wheel  1447 Nov  6 14:40 ft_lstmap_bonus.c
+-rw-r--r--  1 root  wheel  1069 Nov  6 14:40 ft_lstnew_bonus.c
+-rw-r--r--  1 root  wheel  1078 Nov  6 14:40 ft_lstsize_bonus.c
+
+= libft_basics_1 ===============================================================
+make: *** No rule to make target `src/ft_atoi.o', needed by `libft.a'.  Stop.
+
+Grade: 0
+
+= libft_basics_2 ===============================================================
+make: *** No rule to make target `src/ft_atoi.o', needed by `libft.a'.  Stop.
+
+Grade: 0
+
+= libft_bonus ==================================================================
+make: *** No rule to make target `src/ft_atoi.o', needed by `bonus'.  Stop.
+
+Grade: 0
+
+= Final grade: 0 ===============================================================

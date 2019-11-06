@@ -1,0 +1,6 @@
+	
+Hi,
+
+You have been graded 0 on Libft:
+
+libft_basics_1: KO (Does not compile) | libft_basics_2: KO (Does not compile) | libft_bonus: KO (Does not compile)
