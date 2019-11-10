@@ -37,6 +37,7 @@ class NorminetteError:
 			return int(match.group(1));
 		return ""
 	
+	@staticmethod
 	def create(context, message):
 		context = context.strip()
 		message = message.strip()
@@ -117,7 +118,7 @@ class Norminette:
 			if error.message == "":
 				continue
 			
-			createProblemMarker(severity, target_file, line, message, permanent=False)
+			createProblemMarker(severity, target_file, line, "[norminette] {}".format(message), permanent=False)
 
 			if error.context == None:
 				line = ""
