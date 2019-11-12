@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 17:39:25 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/05 17:39:25 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/05 16:06:06 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/05 16:06:06 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_bonus.h"
+#include "libft.h"
 
-void	ft_lstiter(t_list *lst, void (*f)(void *))
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_list *next;
+	t_list	*next;
 
 	if (lst != NULL)
 	{
 		next = lst;
 		while (1)
 		{
-			(*f)(next->content);
+			if (next->next == NULL)
+				return (next);
 			next = next->next;
-			if (next == NULL)
-				return ;
 		}
 	}
+	return (NULL);
 }

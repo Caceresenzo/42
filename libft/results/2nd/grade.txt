@@ -1,0 +1,6 @@
+	
+Hi,
+
+You have been graded 0 on Libft:
+
+libft_basics_1: Segmentation fault | libft_basics_2: 10/10 correct functions | libft_bonus: SIGABORT

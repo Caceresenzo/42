@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstdelone_bonus.c                               :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 16:35:09 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/05 16:35:09 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/05 15:37:20 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/05 15:37:20 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_bonus.h"
+#include "libft.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+t_list		*ft_lstnew(void *content)
 {
-	(*del)(lst->content);
-	free(lst);
+	t_list *list;
+
+	CHECK_MALLOC(list, sizeof(t_list));
+	list->content = content;
+	list->next = NULL;
+	return (list);
 }

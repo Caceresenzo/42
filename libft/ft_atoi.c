@@ -31,8 +31,6 @@ int		ft_atoi(const char *str)
 		result *= 10;
 		result += str[index] - '0';
 		index++;
-		if (index > 18)
-			return (negative == 1 ? -1 : 0);
 	}
 	return (result * negative);
 }

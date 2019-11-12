@@ -50,12 +50,12 @@ static void		internal_ft_split_do(char const *s, char c, char **array,
 	length = 0;
 	while (array_index < item_count)
 	{
-		if (s[index] == c)
+		if (s[index] == c || s[index] == '\0')
 		{
 			if (length != 0)
 			{
 				CHECK_PTR_EMPTY(str = ft_calloc(length + 1, sizeof(char)));
-				ft_memcpy(str, s + (index - length), index - (index - length));
+				ft_memcpy(str, s + index - length, length);
 				array[array_index] = str;
 				array_index++;
 			}

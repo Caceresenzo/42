@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 16:02:29 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/05 16:02:29 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/04 16:03:29 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/04 16:03:29 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft_bonus.h"
+#include "libft.h"
 
-int		ft_lstsize(t_list *lst)
+void	ft_bzero(void *s, size_t n)
 {
-	int		size;
-	t_list	*next;
-
-	size = 0;
-	next = lst;
-	while (next != NULL)
-	{
-		next = next->next;
-		size++;
-	}
-	return (size);
+	ft_memset(s, 0, n);
 }

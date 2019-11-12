@@ -1,30 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 10:38:00 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/05 10:38:00 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/05 10:24:43 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/05 10:24:43 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*str;
-	size_t	index;
+	char			step;
+	size_t			index;
+	unsigned char	*dest;
+	unsigned char	*source;
 
-	CHECK_PTR(s);
-	CHECK_MALLOC(str, (len * sizeof(char)) + 1);
+	if (dst == NULL && src == NULL)
+		return (NULL);
+	step = +1;
+	dest = (unsigned char *)dst;
+	source = (unsigned char *)src;
+	if (dst > src)
+	{
+		step = -1;
+		dest = (unsigned char *)(dst + len - 1);
+		source = (unsigned char *)(src + len - 1);
+	}
 	index = 0;
 	while (index < len)
 	{
-		str[index] = s[start + index];
+		*dest = *source;
+		dest += step;
+		source += step;
 		index++;
 	}
-	str[index] = '\0';
-	return (str);
+	return (dst);
 }
