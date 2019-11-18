@@ -31,5 +31,5 @@ int		main(int argc, char **argv)
 //		return (1);
 //	}
 //	return (engine_initialize(argv[1], save_arg));
-	return (engine_initialize("maps/test.cub", 0));
+	return (engine_initialize("maps/test2.cub", 0));
 }

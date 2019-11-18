@@ -24,3 +24,12 @@ void	*mlx_window_initialize(t_mlx_context *context)
 												context->height, WINDOW_NAME));
 	return (context);
 }
+
+void	*mlx_canvas_initialize(t_engine *eng, t_map *map, t_image **canvas_ptr)
+{
+	t_image *img;
+
+	img = image_create(eng, eng->ctx.width, eng->ctx.height);
+	CHECK_PTR(*canvas_ptr = img);
+	return (canvas_ptr);
+}

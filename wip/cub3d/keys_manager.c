@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   key_manager.c                                      :+:      :+:    :+:   */
+/*   keys_manager.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "keys.h"
 #include "cub3d.h"
 
-char	*g_keys[300] = {
+char	*g_keys[KEY_COUNT] = {
 	"A",
 	"S",
 	"D",
@@ -185,7 +186,7 @@ char	*g_keys[300] = {
 char
 	*key_get_str(int keycode)
 {
-	if (keycode < 0 || keycode > 300)
+	if (keycode < 0 || keycode > KEY_COUNT)
 		return (NULL);
 	return (g_keys[keycode]);
 }

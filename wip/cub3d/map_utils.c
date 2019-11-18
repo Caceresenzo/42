@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_loop.c                                      :+:      :+:    :+:   */
+/*   map_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 15:54:24 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 15:54:24 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/18 12:44:10 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/18 12:44:10 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 int
-	engine_loop(t_engine *engine)
+	map_is_empty_at(t_map *map, int x, int y)
 {
-	int		has_moved;
-
-	if (engine->dirty)
-	{
-		render_scene(engine);
-		mlx_put_image_to_window(engine->ctx.mlx, engine->ctx.win,
-								engine->canvas->ptr, 0, 0);
-	}
-	engine->player.move_speed = 0.01 * 5.0;
-	engine->player.rot_speed = 0.01 * 5.0;
-	has_moved = player_handle_mouvement(engine->map, &(engine->player));
-	engine->dirty = engine->dirty || has_moved;
-	return (0);
+	return (map->objs[y][x].type == OBJ_EMPTY);
 }

@@ -13,6 +13,12 @@
 #ifndef MATHS_H
 # define MATHS_H
 
+typedef struct		s_vec2d
+{
+	double			x;
+	double			y;
+}					t_vec2d;
+
 typedef struct		s_vec2i
 {
 	int				x;

@@ -12,16 +12,13 @@
 
 #include "cub3d.h"
 
-//int		g_letter_index = 0;
-//char	*g_alphabet = "F012";
-
-int engine_on_key_pressed(int keycode, t_engine *engine)
+int
+	engine_on_key_pressed(int keycode, t_engine *engine)
 {
-	printf("EVENT: on_key_pressed: keycode = %d\n", keycode);
-//	printf("# define KEY_F%s %d\n", ft_strdup(ft_chrtostr(g_alphabet[g_letter_index])), keycode);
-//	fflush(stdout);
-//	g_letter_index++;
 	char *str;
+
+	printf("EVENT: on_key_pressed: keycode = %d\n", keycode);
+	key_state_set(keycode, STATE_PRESSED);
 	if (keycode == KEY_SPACE)
 		str = ft_strdup(" ");
 	else if (keycode == KEY_DELETE)
@@ -35,7 +32,6 @@ int engine_on_key_pressed(int keycode, t_engine *engine)
 			str = engine->str;
 			engine->str = ft_calloc(ft_strlen(str), sizeof(char));
 			ft_memcpy(engine->str, str, ft_strlen(str) - 1);
-			; //			engine->str = ft_str(engine->str, key_get_str(keycode));
 		}
 		else
 			engine->str = ft_strjoin(engine->str, str);

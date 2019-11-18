@@ -14,6 +14,7 @@
 # define CUB3D_H
 
 # include <stdio.h>
+# include <math.h>
 # include <fcntl.h>
 
 # include "minilibx_mms_beta/mlx.h"
@@ -93,17 +94,57 @@ typedef struct		s_mlx_context
 	int				height;
 }					t_mlx_context;
 
+typedef struct		s_player
+{
+	t_vec2d			pos;
+	t_vec2d			dir;
+	t_vec2d			plane;
+	double			move_speed;
+	double			rot_speed;
+}					t_player;
+
 typedef struct		s_engine
 {
 	t_mlx_context	ctx;
 	char			*str;
 	t_map			*map;
+	t_player		player;
+	t_image			*canvas;
+	int				dirty;
 }					t_engine;
+
+typedef struct		s_ray_result
+{
+	int				line_height;
+	int				start;
+	int				end;
+	int				color;
+}					t_ray_result;
+
+typedef struct		s_ray
+{
+	t_player		*player;
+	t_vec2d			ray_dir;
+	t_vec2d			step;
+	t_vec2d			delta_dist;
+	double			perp_wall_dist;
+	double			camera_x;
+	t_vec2d			side_dist;
+	int				side;
+	int				hit;
+	t_ray_result	result;
+}					t_ray;
 
 typedef struct		s_g_obj_data_player
 {
 	int				dir;
 }					t_g_obj_data_player;
+
+typedef	struct		s_drawer_line_args
+{
+	t_image			*image;
+	int				color;
+}					t_drawer_line_args;
 
 int					engine_initialize(char *path, int save_arg);
 void				*engine_hooks(t_engine *engine);
@@ -123,8 +164,8 @@ void				*engine_handle_error(char *error);
 
 void				*mlx_context_initialize(t_mlx_context *context);
 void				*mlx_window_initialize(t_mlx_context *context);
-
-char				*key_get_str(int keycode);
+void				*mlx_canvas_initialize(t_engine *engine, t_map *map,
+											t_image **canvas_ptr);
 
 int					color_assemble(int red, int green, int blue);
 void				color_dismentle(int color, int *red, int *green, int *blue);
@@ -146,8 +187,29 @@ char				*map_loader_grid_create_line(t_game_object **grid,
 												t_map *map, char **split);
 char				*map_loader_parse_grid(t_engine *eng, t_map *map,
 											char **split);
+int					map_is_empty_at(t_map *map, int x, int y);
+
+void				map_dump_object(t_game_object object);
+void				map_dump(t_map *map);
 
 t_image				*image_create(t_engine *eng, int width, int height);
 t_image				*image_load(t_engine *eng, char *path);
+
+void				image_set_pixel(t_image *image, int x, int y, int color);
+void				image_draw_vertical_line(t_drawer_line_args args, int x,
+											int y_start, int y_end);
+
+int					player_handle_mouvement(t_map *map, t_player *player);
+
+void				render_scene(t_engine *engine);
+
+void				ray_compute_pre(t_engine *engine, t_ray *ray, t_vec2d *pos,
+									t_vec2i *map_pos);
+void				ray_compute_step(t_engine *engine, t_ray *ray,
+									t_vec2i *map_pos);
+void				ray_compute_result(t_engine *engine, t_ray *ray,
+									t_vec2i *map_pos, int height);
+void				ray_compute(t_engine *engine, t_ray *ray, int height,
+								int x);
 
 #endif

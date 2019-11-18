@@ -23,15 +23,22 @@ SRCS	=	engine_handle_error.c \
 			engine_on_mouse_pressed.c \
 			engine_on_mouse_released.c \
 			image.c \
-			key_manager.c \
+			image_draw_line.c \
+			keys_manager.c \
+			keys_states.c \
 			main.c \
+			map_dumper.c \
 			map_loader.c \
 			map_loader_set_color.c \
 			map_loader_set_grid.c \
 			map_loader_set_resolution.c \
 			map_loader_set_texture.c \
 			map_texture_loader.c \
+			map_utils.c \
 			mlx_context_initialization.c \
+			player_handle_mouvement.c \
+			ray_compute.c \
+			renderer.c \
 			util_color.c 
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
@@ -40,7 +47,7 @@ INCS	= -I. -Ilibft/ -Iminilibx_opengl/
 	${CC} ${FLAGS} -c $< -o ${<:.c=.o} ${INCS}
 	
 %.o: $(PROJECT_ROOT)%.c
-	gcc ${INCS} -c -g -v $(CPPFLAGS) -o $@ $< 
+	gcc ${INCS} -c -g $(CPPFLAGS) -o $@ $< 
 
 $(NAME): libs ${OBJS}
 	gcc $(OBJS) -g -framework OpenGL -framework AppKit -o $(NAME) ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
@@ -53,5 +60,6 @@ libs:
 	cp ${PROJECT_ROOT}/minilibx_mms_beta/libmlx.dylib ./libmlx.dylib
 
 clean:
-	rm -rf cub3d $(OBJS)
-	rm -rf .*.{dylib,o}
+	rm -fr cub3d $(OBJS)
+	rm -rf .*.o
+	rm -rf .*.dylib

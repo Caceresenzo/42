@@ -1,31 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_loop.c                                      :+:      :+:    :+:   */
+/*   keys_states.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 15:54:24 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 15:54:24 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/18 12:07:50 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/18 12:07:50 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "keys.h"
 #include "cub3d.h"
 
-int
-	engine_loop(t_engine *engine)
-{
-	int		has_moved;
+int		g_keys_states[KEY_COUNT];
 
-	if (engine->dirty)
+void
+	key_state_initialize(void)
+{
+	size_t	index;
+
+	index = 0;
+	while (index < KEY_COUNT)
 	{
-		render_scene(engine);
-		mlx_put_image_to_window(engine->ctx.mlx, engine->ctx.win,
-								engine->canvas->ptr, 0, 0);
+		g_keys_states[index] = 0;
+		index++;
 	}
-	engine->player.move_speed = 0.01 * 5.0;
-	engine->player.rot_speed = 0.01 * 5.0;
-	has_moved = player_handle_mouvement(engine->map, &(engine->player));
-	engine->dirty = engine->dirty || has_moved;
-	return (0);
+}
+
+int
+	key_state_set(int keycode, int state)
+{
+	int		was;
+
+	was = g_keys_states[keycode];
+	g_keys_states[keycode] = state;
+	return (was);
+}
+
+int
+	key_state_get(int keycode)
+{
+	return (g_keys_states[keycode]);
 }

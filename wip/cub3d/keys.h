@@ -13,6 +13,8 @@
 #ifndef KEYS_H
 # define KEYS_H
 
+# define KEY_COUNT 300
+
 # define KEY_A 0
 # define KEY_B 11
 # define KEY_C 8
@@ -101,5 +103,15 @@
 # define KEY_F10 109
 # define KEY_F11 110
 # define KEY_F12 111
+
+# define STATE_RELEASED 0
+# define STATE_PRESSED 1
+
+char	*key_get_str(int keycode);
+
+void	key_state_initialize(void);
+
+int		key_state_set(int keycode, int state);
+int		key_state_get(int keycode);
 
 #endif
