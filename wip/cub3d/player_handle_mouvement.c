@@ -47,6 +47,7 @@ int
 {
 	int		has_moved;
 
+	has_moved = 0;
 	if (key_state_get(KEY_ARROW_UP) && (has_moved = 1))
 		i_player_handle_collision(map, player, 1);
 	if (key_state_get(KEY_ARROW_DOWN) && (has_moved = 1))

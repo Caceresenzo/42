@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <math.h>
 # include <fcntl.h>
+# include <time.h>
 
 # include "minilibx_mms_beta/mlx.h"
 # include "libft/libft.h"
@@ -111,6 +112,7 @@ typedef struct		s_engine
 	t_player		player;
 	t_image			*canvas;
 	int				dirty;
+	int				was_dirty;
 }					t_engine;
 
 typedef struct		s_ray_result
@@ -123,8 +125,10 @@ typedef struct		s_ray_result
 
 typedef struct		s_ray
 {
+	int				x;
+	t_engine		*engine;
 	t_player		*player;
-	t_vec2d			ray_dir;
+	t_vec2d			dir;
 	t_vec2d			step;
 	t_vec2d			delta_dist;
 	double			perp_wall_dist;
@@ -187,7 +191,9 @@ char				*map_loader_grid_create_line(t_game_object **grid,
 												t_map *map, char **split);
 char				*map_loader_parse_grid(t_engine *eng, t_map *map,
 											char **split);
+
 int					map_is_empty_at(t_map *map, int x, int y);
+int					map_get_object_type_at(t_map *map, int x, int y);
 
 void				map_dump_object(t_game_object object);
 void				map_dump(t_map *map);
@@ -195,6 +201,11 @@ void				map_dump(t_map *map);
 t_image				*image_create(t_engine *eng, int width, int height);
 t_image				*image_load(t_engine *eng, char *path);
 
+void				image_clear(t_image *image);
+
+void				image_get_pixel_raw(int rgb[], t_image *img, int x, int y);
+void				image_set_pixel_raw(int rgb[], t_image *img, int x, int y);
+int					image_get_pixel(t_image *image, int x, int y);
 void				image_set_pixel(t_image *image, int x, int y, int color);
 void				image_draw_vertical_line(t_drawer_line_args args, int x,
 											int y_start, int y_end);
@@ -211,5 +222,9 @@ void				ray_compute_result(t_engine *engine, t_ray *ray,
 									t_vec2i *map_pos, int height);
 void				ray_compute(t_engine *engine, t_ray *ray, int height,
 								int x);
+
+int					fps_counter_get(void);
+void				fps_counter_end(void);
+void				fps_counter_start(void);
 
 #endif

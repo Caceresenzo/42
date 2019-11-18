@@ -23,7 +23,7 @@ void
 	ray_compute_pre(t_engine *engine, t_ray *ray, t_vec2d *pos,
 					t_vec2i *map_pos)
 {
-	if (ray->ray_dir.x < 0)
+	if (ray->dir.x < 0)
 	{
 		ray->step.x = -1;
 		ray->side_dist.x = (pos->x - map_pos->x) * ray->delta_dist.x;
@@ -33,7 +33,7 @@ void
 		ray->step.x = 1;
 		ray->side_dist.x = (map_pos->x + 1.0 - pos->x) * ray->delta_dist.x;
 	}
-	if (ray->ray_dir.y < 0)
+	if (ray->dir.y < 0)
 	{
 		ray->step.y = -1;
 		ray->side_dist.y = (pos->y - map_pos->y) * ray->delta_dist.y;
@@ -62,7 +62,7 @@ void
 			map_pos->y += ray->step.y;
 			ray->side = 1;
 		}
-		if (engine->map->objs[map_pos->y][map_pos->x].type != OBJ_EMPTY)
+		if (!map_is_empty_at(engine->map, map_pos->x, map_pos->y))
 			ray->hit = 1;
 	}
 }
@@ -80,7 +80,8 @@ void
 		ray->result.start = 0;
 	if (ray->result.end >= height)
 		ray->result.end = height - 1;
-	color = g_object_color[engine->map->objs[map_pos->y][map_pos->x].type];
+	color = map_get_object_type_at(engine->map, map_pos->x, map_pos->y);
+	color = g_object_color[color];
 	if (ray->side == 1)
 		color = color / 2;
 	ray->result.color = color;
@@ -98,9 +99,9 @@ void
 	ray_compute_step(engine, ray, &map_pos);
 	if (ray->side == 0)
 		ray->perp_wall_dist = (map_pos.x - pos->x +
-								(1 - ray->step.x) / 2) / ray->ray_dir.x;
+								(1 - ray->step.x) / 2) / ray->dir.x;
 	else
 		ray->perp_wall_dist = (map_pos.y - pos->y +
-								(1 - ray->step.y) / 2) / ray->ray_dir.y;
+								(1 - ray->step.y) / 2) / ray->dir.y;
 	ray_compute_result(engine, ray, &map_pos, height);
 }

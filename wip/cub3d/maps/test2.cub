@@ -1,6 +1,6 @@
-R 800 800
+R 200 200
 NO ./sponge.png
-SO ./sponge.png
+SO ./redstone_lamp_on.png
 WE ./sponge.png
 EA ./sponge.png
 S ./sponge.png

@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   map_utils.c                                        :+:      :+:    :+:   */
+/*   fps_counter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 12:44:10 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 12:44:10 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/18 18:23:28 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/18 18:23:28 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int
-	map_is_empty_at(t_map *map, int x, int y)
+clock_t g_current_ticks;
+clock_t g_delta_ticks;
+
+void
+	fps_counter_start(void)
 {
-	return (map_get_object_type_at(map, x, y) == OBJ_EMPTY);
+	g_current_ticks = clock();
+}
+
+void
+	fps_counter_end(void)
+{
+	g_delta_ticks = clock() - g_current_ticks;
 }
 
 int
-	map_get_object_type_at(t_map *map, int x, int y)
+	fps_counter_get(void)
 {
-	return (map->objs[y][x].type);
+	if (g_delta_ticks > 0)
+		return (CLOCKS_PER_SEC / g_delta_ticks);
+	return (-1);
 }

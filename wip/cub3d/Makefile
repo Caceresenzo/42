@@ -22,8 +22,12 @@ SRCS	=	engine_handle_error.c \
 			engine_on_mouse_move.c \
 			engine_on_mouse_pressed.c \
 			engine_on_mouse_released.c \
+			fps_counter.c \
 			image.c \
+			image_clear.c \
 			image_draw_line.c \
+			image_get_pixel.c \
+			image_set_pixel.c \
 			keys_manager.c \
 			keys_states.c \
 			main.c \
@@ -40,6 +44,7 @@ SRCS	=	engine_handle_error.c \
 			ray_compute.c \
 			renderer.c \
 			util_color.c 
+
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
 
