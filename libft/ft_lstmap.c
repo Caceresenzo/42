@@ -26,11 +26,13 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	{
 		if (next_old == NULL)
 			break ;
-		CHECK_PTR(next_new->next = ft_lstnew((*f)(next_old->content)));
+		if (!(next_new->next = ft_lstnew((*f)(next_old->content))))
+		{
+			ft_lstclear(&new_list, del);
+			return (NULL);
+		}
 		next_new = next_new->next;
 		next_old = next_old->next;
 	}
-	if (del != NULL)
-		ft_lstclear(&lst, del);
 	return (new_list);
 }

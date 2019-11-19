@@ -14,6 +14,8 @@
 
 void	ft_lstadd_front(t_list **alst, t_list *new)
 {
+	CHECK_PTR_EMPTY(alst);
+	CHECK_PTR_EMPTY(new);
 	new->next = *alst;
 	*alst = new;
 }

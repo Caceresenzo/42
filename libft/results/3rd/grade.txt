@@ -1,0 +1,6 @@
+	
+Hi,
+
+You have been graded 115 on Libft:
+
+libft_basics_1: 24/24 correct functions | libft_basics_2: 10/10 correct functions | libft_bonus: 9/9 correct functions
