@@ -1,0 +1,5 @@
+Hi,
+
+You have been graded 115 on getnextline:
+
+basic_tests: GNL OK | bonus_tests: GNL OK
