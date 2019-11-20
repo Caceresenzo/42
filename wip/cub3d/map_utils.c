@@ -12,6 +12,12 @@
 
 #include "cub3d.h"
 
+t_game_object
+	*map_get_object_at(t_map *map, int x, int y)
+{
+	return (&(map->objs[y][x]));
+}
+
 int
 	map_is_empty_at(t_map *map, int x, int y)
 {
@@ -21,5 +27,5 @@ int
 int
 	map_get_object_type_at(t_map *map, int x, int y)
 {
-	return (map->objs[y][x].type);
+	return (map_get_object_at(map, x, y)->type);
 }

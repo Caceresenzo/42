@@ -41,9 +41,19 @@ SRCS	=	engine_handle_error.c \
 			map_utils.c \
 			mlx_context_initialization.c \
 			player_handle_mouvement.c \
-			ray_compute.c \
+			player_initialization.c \
+			player_initialization_set_direction.c \
+			player_initialization_set_position.c \
+			ray_computer.c \
+			ray_computer_dda.c \
+			ray_computer_distance.c \
+			ray_computer_initialization.c \
+			ray_computer_limiter.c \
+			ray_computer_side_finder.c \
+			ray_renderer.c \
 			renderer.c \
 			util_color.c 
+
 
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
@@ -52,10 +62,10 @@ INCS	= -I. -Ilibft/ -Iminilibx_opengl/
 	${CC} ${FLAGS} -c $< -o ${<:.c=.o} ${INCS}
 	
 %.o: $(PROJECT_ROOT)%.c
-	gcc ${INCS} -c -g $(CPPFLAGS) -o $@ $< 
+	gcc ${INCS} -c -O3 -g3 $(CPPFLAGS) -o $@ $< 
 
 $(NAME): libs ${OBJS}
-	gcc $(OBJS) -g -framework OpenGL -framework AppKit -o $(NAME) ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
+	gcc $(OBJS) -O3 -g3 -framework OpenGL -framework AppKit -o $(NAME) ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
 
 all: $(NAME)
 

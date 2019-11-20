@@ -17,7 +17,7 @@ int
 {
 	char *str;
 
-	printf("EVENT: on_key_pressed: keycode = %d\n", keycode);
+//	printf("EVENT: on_key_pressed: keycode = %d\n", keycode);
 	key_state_set(keycode, STATE_PRESSED);
 	if (keycode == KEY_SPACE)
 		str = ft_strdup(" ");
@@ -36,6 +36,6 @@ int
 		else
 			engine->str = ft_strjoin(engine->str, str);
 	}
-	printf("%s\n", key_get_str(keycode));
+//	printf("%s\n", key_get_str(keycode));
 	return (0);
 }

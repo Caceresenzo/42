@@ -20,8 +20,10 @@ void	*mlx_context_initialize(t_mlx_context *context)
 
 void	*mlx_window_initialize(t_mlx_context *context)
 {
-	CHECK_PTR(context->win = mlx_new_window(context->mlx, context->width,
-												context->height, WINDOW_NAME));
+	context->w_dim.w = MIN(MAX_WINDOW_WIDTH, context->width);
+	context->w_dim.h = MIN(MAX_WINDOW_HEIGHT, context->height);
+	CHECK_PTR(context->win = mlx_new_window(context->mlx, context->w_dim.w,
+											context->w_dim.h, WINDOW_NAME));
 	return (context);
 }
 

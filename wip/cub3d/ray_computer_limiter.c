@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   ray_computer_limiter.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/20 12:49:09 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/20 12:49:09 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+	ray_compute_set_limits(t_ray *ray)
 {
-	int		y;
-	size_t	offset;
-
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
-	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
-	}
+	ray->out.line_height = (int)(ray->height / ray->perp_wall_dist);
+	ray->out.start = -ray->out.line_height / 2 + ray->height / 2;
+	ray->out.end = ray->out.line_height / 2 + ray->height / 2;
+	if (ray->out.start < 0)
+		ray->out.start = 0;
+	if (ray->out.end >= ray->height)
+		ray->out.end = ray->height - 1;
+	ray->out.obj_type =
+			map_get_object_type_at(ray->engine->map, ray->map.x, ray->map.y);
 }

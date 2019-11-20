@@ -58,15 +58,23 @@
 
 # define E(error) ft_strdup(error)
 
+# define PLAYER_ORIENTATION "NSEW"
+
+# define MAX_WINDOW_WIDTH 640
+# define MAX_WINDOW_HEIGHT 480
+
+# define RENDER_SHOW_STATS 0
+
 typedef struct		s_image
 {
 	void			*ptr;
-	char			*pic;
+	int				*pic;
 	int				bpp;
 	int				stride;
 	int				endian;
 	int				width;
 	int				height;
+	int				line_unit;
 }					t_image;
 
 typedef struct		s_game_object
@@ -91,17 +99,24 @@ typedef struct		s_mlx_context
 {
 	void			*mlx;
 	void			*win;
+	t_dim2i			w_dim;
 	int				width;
 	int				height;
 }					t_mlx_context;
+
+typedef struct		s_player_speed
+{
+	double			base;
+	double			value;
+}					t_player_speed;
 
 typedef struct		s_player
 {
 	t_vec2d			pos;
 	t_vec2d			dir;
 	t_vec2d			plane;
-	double			move_speed;
-	double			rot_speed;
+	t_player_speed	move_speed;
+	t_player_speed	rot_speed;
 }					t_player;
 
 typedef struct		s_engine
@@ -120,7 +135,7 @@ typedef struct		s_ray_result
 	int				line_height;
 	int				start;
 	int				end;
-	int				color;
+	int				obj_type;
 }					t_ray_result;
 
 typedef struct		s_ray
@@ -128,20 +143,24 @@ typedef struct		s_ray
 	int				x;
 	t_engine		*engine;
 	t_player		*player;
+	t_vec2d			pos;
+	int				width;
+	int				height;
 	t_vec2d			dir;
+	t_vec2i			map;
 	t_vec2d			step;
-	t_vec2d			delta_dist;
+	t_vec2d			delta;
 	double			perp_wall_dist;
 	double			camera_x;
 	t_vec2d			side_dist;
 	int				side;
 	int				hit;
-	t_ray_result	result;
+	t_ray_result	out;
 }					t_ray;
 
 typedef struct		s_g_obj_data_player
 {
-	int				dir;
+	char			dir;
 }					t_g_obj_data_player;
 
 typedef	struct		s_drawer_line_args
@@ -194,6 +213,7 @@ char				*map_loader_parse_grid(t_engine *eng, t_map *map,
 
 int					map_is_empty_at(t_map *map, int x, int y);
 int					map_get_object_type_at(t_map *map, int x, int y);
+t_game_object		*map_get_object_at(t_map *map, int x, int y);
 
 void				map_dump_object(t_game_object object);
 void				map_dump(t_map *map);
@@ -210,21 +230,40 @@ void				image_set_pixel(t_image *image, int x, int y, int color);
 void				image_draw_vertical_line(t_drawer_line_args args, int x,
 											int y_start, int y_end);
 
+char				*player_initialize(t_engine *engine);
+
+char				*player_init_set_position(t_map *map,
+														t_player *player);
+char				*player_init_set_direction(t_player *player,
+													t_g_obj_data_player *data);
 int					player_handle_mouvement(t_map *map, t_player *player);
 
 void				render_scene(t_engine *engine);
+void				render_scene_smart(t_engine *engine, int show_stats);
+void				render_display_fps(t_engine *engine);
 
-void				ray_compute_pre(t_engine *engine, t_ray *ray, t_vec2d *pos,
-									t_vec2i *map_pos);
-void				ray_compute_step(t_engine *engine, t_ray *ray,
-									t_vec2i *map_pos);
-void				ray_compute_result(t_engine *engine, t_ray *ray,
-									t_vec2i *map_pos, int height);
-void				ray_compute(t_engine *engine, t_ray *ray, int height,
-								int x);
+void				ray_render_scene(t_engine *engine);
 
-int					fps_counter_get(void);
+void				ray_compute_initialize_struct(t_ray *ray_ptr,
+													t_engine *engine);
+void				ray_compute(t_ray *ray_ptr);
+void				ray_compute_initialize(t_ray *ray);
+void				ray_compute_find_side(t_ray *ray);
+void				ray_compute_dda(t_ray *ray);
+void				ray_compute_distance(t_ray *ray);
+void				ray_compute_set_limits(t_ray *ray);
+
 void				fps_counter_end(void);
 void				fps_counter_start(void);
+int					fps_counter_get(void);
+double				fps_counter_get_tick(void);
+
+int					mlx_put_image_to_window_scale(void *mlx_ptr, void *win_ptr,
+													void *img_ptr,
+													int sx, int sy,
+													int sw, int sh,
+													int dx, int dy,
+													int dw, int dh,
+													unsigned int color);
 
 #endif

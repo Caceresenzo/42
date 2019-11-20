@@ -16,7 +16,6 @@ char
 	*map_loader_grid_bind_object(t_game_object *current, char *str)
 {
 	int		type;
-	int		dir;
 	void	*data;
 
 	type = -1;
@@ -27,12 +26,12 @@ char
 		type = OBJ_WALL;
 	else if (ft_strncmp(str, "2", 2) == 0)
 		type = OBJ_OBJ;
-	else if (ft_strlen(str) == 1 && (dir = ft_isinstr(str[0], "NSEW")) != -1)
+	else if (ft_strlen(str) == 1 && ft_isinstr(str[0], "NSEW") != -1)
 	{
 		type = OBJ_PLAYER;
 		data = malloc(sizeof(t_g_obj_data_player));
 		CHECK_PTR_DEF(data, E("Failed to malloc() [bind object]"));
-		((t_g_obj_data_player *)data)->dir = dir;
+		((t_g_obj_data_player *)data)->dir = str[0];
 	}
 	else
 		return (ft_strjoin("Unknown game object type: ", str));

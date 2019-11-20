@@ -15,14 +15,17 @@
 #define HOOK(event, callback) mlx_hook(eng.ctx.win, event, 0, callback, &eng);
 
 static void
-	i_engine_init_module(t_engine *engine)
+	engine_init_module(t_engine *engine)
 {
+	char	*error;
+
+	error = NULL;
 	key_state_initialize();
 	engine->dirty = 1;
-	engine->player.pos = (t_vec2d){ 5, 5 };
-	engine->player.dir = (t_vec2d){ -1, 0 };
-	engine->player.plane = (t_vec2d){ 0, 0.66 };
+	error = player_initialize(engine);
 	map_dump(engine->map);
+	if (error != NULL)
+		engine_handle_error(error);
 }
 
 int
@@ -34,7 +37,7 @@ int
 	map_load(&eng, path);
 	CHECK_PTR_DEF(mlx_window_initialize(&eng.ctx), -1);
 	CHECK_PTR_DEF(mlx_canvas_initialize(&eng, eng.map, &(eng.canvas)), -1);
-	i_engine_init_module(&eng);
+	engine_init_module(&eng);
 	HOOK(X_EVENT_KEY_PRESS, &engine_on_key_pressed);
 	HOOK(X_EVENT_KEY_RELEASE, &engine_on_key_released);
 	HOOK(X_EVENT_MOUSE_PRESS, &engine_on_mouse_pressed);

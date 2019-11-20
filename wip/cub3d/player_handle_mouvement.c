@@ -12,34 +12,34 @@
 
 #include "cub3d.h"
 
-void
-	i_player_handle_collision(t_map *map, t_player *p, int sign)
+static void
+	i_player_handle_move(t_map *map, t_player *player, int sign)
 {
 	double	x;
 	double	y;
 
-	x = (p->dir.x * p->move_speed) * sign;
-	y = (p->dir.y * p->move_speed) * sign;
-	if (map_is_empty_at(map, p->pos.x + x, p->pos.y))
-		p->pos.x += x;
-	if (map_is_empty_at(map, p->pos.x, p->pos.y + y))
-		p->pos.y += y;
+	x = (player->dir.x * player->move_speed.value) * sign;
+	y = (player->dir.y * player->move_speed.value) * sign;
+	if (map_is_empty_at(map, player->pos.x + x, player->pos.y))
+		player->pos.x += x;
+	if (map_is_empty_at(map, player->pos.x, player->pos.y + y))
+		player->pos.y += y;
 }
 
-void
-	i_player_handle_rotation(t_map *map, t_player *p, int sign)
+static void
+	i_player_handle_rotation(t_player *plyer, int sign, double amount)
 {
 	double	old_dir_x;
 	double	old_plane_x;
 	double	speed;
 
-	old_dir_x = p->dir.x;
-	old_plane_x = p->plane.x;
-	speed = p->rot_speed * sign;
-	p->dir.x = p->dir.x * cos(speed) - p->dir.y * sin(speed);
-	p->dir.y = old_dir_x * sin(speed) + p->dir.y * cos(speed);
-	p->plane.x = p->plane.x * cos(speed) - p->plane.y * sin(speed);
-	p->plane.y = old_plane_x * sin(speed) + p->plane.y * cos(speed);
+	old_dir_x = plyer->dir.x;
+	old_plane_x = plyer->plane.x;
+	speed = amount * sign;
+	plyer->dir.x = plyer->dir.x * cos(speed) - plyer->dir.y * sin(speed);
+	plyer->dir.y = old_dir_x * sin(speed) + plyer->dir.y * cos(speed);
+	plyer->plane.x = plyer->plane.x * cos(speed) - plyer->plane.y * sin(speed);
+	plyer->plane.y = old_plane_x * sin(speed) + plyer->plane.y * cos(speed);
 }
 
 int
@@ -47,14 +47,16 @@ int
 {
 	int		has_moved;
 
+	player->move_speed.value = fps_counter_get_tick() * player->move_speed.base;
+	player->rot_speed.value = fps_counter_get_tick() * player->rot_speed.base;
 	has_moved = 0;
 	if (key_state_get(KEY_ARROW_UP) && (has_moved = 1))
-		i_player_handle_collision(map, player, 1);
+		i_player_handle_move(map, player, 1);
 	if (key_state_get(KEY_ARROW_DOWN) && (has_moved = 1))
-		i_player_handle_collision(map, player, -1);
+		i_player_handle_move(map, player, -1);
 	if (key_state_get(KEY_ARROW_LEFT) && (has_moved = 1))
-		i_player_handle_rotation(map, player, 1);
+		i_player_handle_rotation(player, 1, player->rot_speed.value);
 	if (key_state_get(KEY_ARROW_RIGHT) && (has_moved = 1))
-		i_player_handle_rotation(map, player, -1);
+		i_player_handle_rotation(player, -1, player->rot_speed.value);
 	return (has_moved);
 }

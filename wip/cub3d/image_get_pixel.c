@@ -17,7 +17,7 @@ void
 {
 	size_t	offset;
 
-	offset = (y * image->stride) + (x * image->bpp);
+	offset = (y * image->line_unit) + x;
 	rgb[2] = image->pic[offset + 0];
 	rgb[1] = image->pic[offset + 1];
 	rgb[0] = image->pic[offset + 2];
