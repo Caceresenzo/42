@@ -12,17 +12,32 @@
 
 #include "cub3d.h"
 
+#define MODE_FORWARD_BACKWARD 0
+#define MODE_LEFT_RIGHT 1
+
 static void
-	i_player_handle_move(t_map *map, t_player *player, int sign)
+	i_player_handle_move(t_map *map, t_player *player, int sign, int mode)
 {
 	double	x;
 	double	y;
 
-	x = (player->dir.x * player->move_speed.value) * sign;
-	y = (player->dir.y * player->move_speed.value) * sign;
-	if (map_is_empty_at(map, player->pos.x + x, player->pos.y))
+	if (mode == MODE_FORWARD_BACKWARD)
+	{
+		x = player->dir.x;
+		y = player->dir.y;
+	}
+	else if (mode == MODE_LEFT_RIGHT)
+	{
+		x = -player->dir.y * sin(M_PI / 2);
+		y = player->dir.x * sin(M_PI / 2);
+	}
+	else
+		return ;
+	x = (x * player->move_speed.value) * sign;
+	y = (y * player->move_speed.value) * sign;
+	if (!map_is_solid_at(map, player->pos.x + x, player->pos.y))
 		player->pos.x += x;
-	if (map_is_empty_at(map, player->pos.x, player->pos.y + y))
+	if (!map_is_solid_at(map, player->pos.x, player->pos.y + y))
 		player->pos.y += y;
 }
 
@@ -50,13 +65,19 @@ int
 	player->move_speed.value = fps_counter_get_tick() * player->move_speed.base;
 	player->rot_speed.value = fps_counter_get_tick() * player->rot_speed.base;
 	has_moved = 0;
-	if (key_state_get(KEY_ARROW_UP) && (has_moved = 1))
-		i_player_handle_move(map, player, 1);
-	if (key_state_get(KEY_ARROW_DOWN) && (has_moved = 1))
-		i_player_handle_move(map, player, -1);
-	if (key_state_get(KEY_ARROW_LEFT) && (has_moved = 1))
+	if (key_state_get(KEY_SHIFT))
+		player->move_speed.value *= player->sprint_mult;
+	if (key_state_get(KEY_FORWARD) && (has_moved = 1))
+		i_player_handle_move(map, player, 1, MODE_FORWARD_BACKWARD);
+	if (key_state_get(KEY_BACKWARD) && (has_moved = 1))
+		i_player_handle_move(map, player, -1, MODE_FORWARD_BACKWARD);
+	if (key_state_get(KEY_LEFT) && (has_moved = MODE_LEFT_RIGHT))
+		i_player_handle_move(map, player, 1, 1);
+	if (key_state_get(KEY_RIGHT) && (has_moved = MODE_LEFT_RIGHT))
+		i_player_handle_move(map, player, -1, 1);
+	if (key_state_get(KEY_ROTATION_LEFT) && (has_moved = 1))
 		i_player_handle_rotation(player, 1, player->rot_speed.value);
-	if (key_state_get(KEY_ARROW_RIGHT) && (has_moved = 1))
+	if (key_state_get(KEY_ROTATION_RIGHT) && (has_moved = 1))
 		i_player_handle_rotation(player, -1, player->rot_speed.value);
 	return (has_moved);
 }

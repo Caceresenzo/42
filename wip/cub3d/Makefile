@@ -17,7 +17,6 @@ SRCS	=	bmp_encoder.c \
 			bmp_encoder_initializer.c \
 			bmp_encoder_write_header.c \
 			bmp_encoder_write_image_data.c \
-			bmp_write_header.c \
 			buffer_blit.c \
 			buffer_create.c \
 			buffer_destroy.c \
@@ -44,6 +43,7 @@ SRCS	=	bmp_encoder.c \
 			main.c \
 			map_dumper.c \
 			map_loader.c \
+			map_loader_finalizer.c \
 			map_loader_set_color.c \
 			map_loader_set_grid.c \
 			map_loader_set_resolution.c \
@@ -63,9 +63,16 @@ SRCS	=	bmp_encoder.c \
 			ray_computer_limiter.c \
 			ray_computer_side_finder.c \
 			ray_renderer.c \
+			ray_renderer_default.c \
+			ray_renderer_sprites.c \
+			ray_renderer_walls.c \
+			ray_sprite_computer.c \
+			ray_sprite_computer_limiter.c \
+			ray_sprite_computer_matrix.c \
+			ray_sprite_precomputer_order.c \
 			renderer.c \
-			util_color.c 
-
+			util_color.c
+			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
 

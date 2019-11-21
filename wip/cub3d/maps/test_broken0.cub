@@ -3,11 +3,11 @@ NO ./sponge.png
 SO ./sponge.png
 WE ./sponge.png
 EA ./sponge.png
-S ./wool_colored_yellow.png
+S ./sponge.png
 F 220,100,0
 C 225,30,0
-1 1 1 1 1 1
-1 2 0 0 2 1
+1 1 1 1 1 11
+1 0 0 0 0 1
 1 0 0 0 0 1
 1 0 0 0 N 1
 1 1 1 1 1 1

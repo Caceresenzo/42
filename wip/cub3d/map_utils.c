@@ -25,6 +25,15 @@ int
 }
 
 int
+	map_is_solid_at(t_map *map, int x, int y)
+{
+	int		type;
+
+	type = map_get_object_type_at(map, x, y);
+	return (type == OBJ_WALL || type == OBJ_SPRITE);
+}
+
+int
 	map_get_object_type_at(t_map *map, int x, int y)
 {
 	return (map_get_object_at(map, x, y)->type);

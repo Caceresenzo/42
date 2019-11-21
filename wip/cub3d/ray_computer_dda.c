@@ -29,7 +29,8 @@ void
 			ray->map.y += ray->step.y;
 			ray->side = 1;
 		}
-		if (!map_is_empty_at(ray->engine->map, ray->map.x, ray->map.y))
+		if (map_get_object_type_at(ray->engine->map, ray->map.x, ray->map.y)
+				== OBJ_WALL)
 			ray->hit = 1;
 	}
 }

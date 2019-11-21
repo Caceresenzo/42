@@ -18,7 +18,8 @@ void
 	ray_ptr->engine = engine;
 	ray_ptr->player = &(engine->player);
 	ray_ptr->width = engine->ctx.width;
-	ray_ptr->height = engine->ctx.height;
+	ray_ptr->h = engine->ctx.height;
+	ray_ptr->zbuffer = malloc(ray_ptr->width * sizeof(double));
 }
 
 void

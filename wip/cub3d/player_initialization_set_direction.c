@@ -13,8 +13,7 @@
 #include "cub3d.h"
 
 char
-	*player_init_set_direction(t_player *player,
-											t_g_obj_data_player *data)
+	*player_init_set_direction(t_player *player, t_g_obj_data_player *data)
 {
 	if (data->dir == 'N')
 	{

@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_computer_limiter.c                             :+:      :+:    :+:   */
+/*   ray_renderer_default.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/20 12:49:09 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/20 12:49:09 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 13:51:14 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 13:51:14 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 void
-	ray_compute_set_limits(t_ray *ray)
+	ray_renderer_draw_default(t_engine *engine, t_ray *ray)
 {
-	ray->out.height = (int)(ray->h / ray->perp_wall_dist);
-	ray->out.start = -ray->out.height / 2 + ray->h / 2;
-	ray->out.end = ray->out.height / 2 + ray->h / 2;
-	if (ray->out.start < 0)
-		ray->out.start = 0;
-	if (ray->out.end >= ray->h)
-		ray->out.end = ray->h - 1;
-	ray->out.obj_type =
-			map_get_object_type_at(ray->engine->map, ray->map.x, ray->map.y);
+	int		y;
+	size_t	offset;
+
+	y = ray->out.start;
+	offset = y * engine->canvas->line_unit + ray->x;
+	while (y < ray->out.end)
+	{
+		engine->canvas->pic[offset] = (y + ray->x) % 4 < 2 ? 0xC71585 : 0x0;
+		offset += engine->canvas->line_unit;
+		y++;
+	}
 }

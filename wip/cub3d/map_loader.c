@@ -78,6 +78,7 @@ t_map
 	map->wall_texs[EAST] = NULL;
 	map->size.w = 0;
 	map->size.h = 0;
+	map->sprts = NULL;
 	return (map);
 }
 
@@ -104,5 +105,5 @@ t_map
 		if (!returned)
 			break ;
 	}
-	return (eng->map);
+	return (map_finalize(eng->map));
 }

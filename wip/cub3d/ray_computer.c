@@ -20,4 +20,5 @@ void
 	ray_compute_dda(ray_ptr);
 	ray_compute_distance(ray_ptr);
 	ray_compute_set_limits(ray_ptr);
+	ray_ptr->zbuffer[ray_ptr->x] = ray_ptr->perp_wall_dist;
 }

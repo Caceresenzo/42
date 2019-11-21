@@ -15,8 +15,9 @@
 void
 	player_initialization_set_speed(t_player *player)
 {
+	player->sprint_mult = 1.5;
 	player->move_speed.base = 2.5;
-	player->rot_speed.base = 2.5;
+	player->rot_speed.base = 1.5;
 }
 
 char

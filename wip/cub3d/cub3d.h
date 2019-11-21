@@ -63,16 +63,24 @@
 
 # define OBJ_EMPTY					0
 # define OBJ_WALL					1
-# define OBJ_OBJ					2
+# define OBJ_SPRITE					2
 # define OBJ_PLAYER					3
 
 # define E(error)					ft_strdup(error)
 
 # define RENDER_SHOW_STATS			1
 
+# define KEY_FORWARD				KEY_W
+# define KEY_BACKWARD				KEY_S
+# define KEY_LEFT					KEY_A
+# define KEY_RIGHT					KEY_D
+# define KEY_ROTATION_LEFT			KEY_ARROW_LEFT
+# define KEY_ROTATION_RIGHT			KEY_ARROW_RIGHT
+
 typedef struct		s_game_object
 {
 	int				type;
+	t_vec2d			pos;
 	void			*data;
 }					t_game_object;
 
@@ -86,6 +94,10 @@ typedef struct		s_map
 	int				roof_color;
 	int				floor_color;
 	t_dim2i			size;
+	t_game_object	**sprts;
+	int				*spr_ordr;
+	double			*spr_dist;
+	size_t			sprite_count;
 }					t_map;
 
 typedef struct		s_mlx_context
@@ -101,6 +113,7 @@ typedef struct		s_mlx_context
 typedef struct		s_player_speed
 {
 	double			base;
+	double			boost_mult;
 	double			value;
 }					t_player_speed;
 
@@ -109,6 +122,7 @@ typedef struct		s_player
 	t_vec2d			pos;
 	t_vec2d			dir;
 	t_vec2d			plane;
+	double			sprint_mult;
 	t_player_speed	move_speed;
 	t_player_speed	rot_speed;
 }					t_player;
@@ -126,11 +140,21 @@ typedef struct		s_engine
 
 typedef struct		s_ray_result
 {
-	int				line_height;
+	int				height;
 	int				start;
 	int				end;
 	int				obj_type;
 }					t_ray_result;
+
+typedef struct		s_ray_result_spr
+{
+	int				h;
+	int				w;
+	int				start_y;
+	int				end_y;
+	int				start_x;
+	int				end_x;
+}					t_ray_result_s;
 
 typedef struct		s_ray
 {
@@ -139,7 +163,7 @@ typedef struct		s_ray
 	t_player		*player;
 	t_vec2d			pos;
 	int				width;
-	int				height;
+	int				h;
 	t_vec2d			dir;
 	t_vec2i			map;
 	t_vec2d			step;
@@ -149,7 +173,14 @@ typedef struct		s_ray
 	t_vec2d			side_dist;
 	int				side;
 	int				hit;
+	double			*zbuffer;
+	t_vec2d			spr;
+	double			inv_d;
+	t_vec2d			trsnf;
+	int				sprite_screen_x;
+	int				v_mv_scrn;
 	t_ray_result	out;
+	t_ray_result_s	sout;
 }					t_ray;
 
 typedef struct		s_g_obj_data_player
@@ -172,6 +203,7 @@ int					engine_on_mouse_move(int x, int y, t_engine *engine);
 int					engine_on_exit(t_engine *engine);
 
 void				*engine_handle_error(char *error);
+void				*engine_handle_error_w_errno(char *error);
 
 void				*mlx_context_initialize(t_mlx_context *context);
 void				*mlx_window_initialize(t_engine *engine,
@@ -195,14 +227,18 @@ char				*map_loader_set_sprite_texture(t_engine *eng, t_map *map,
 char				*map_loader_set_wall_texture(t_engine *eng, t_map *map,
 											char *key, char *path);
 
-char				*map_loader_grid_bind_object(t_game_object *current,
-												char *str);
+char				*map_loader_grid_bind_object(t_map *map, size_t index,
+										t_game_object *current, char *str);
 char				*map_loader_grid_create_line(t_game_object **grid,
 												t_map *map, char **split);
 char				*map_loader_parse_grid(t_engine *eng, t_map *map,
 											char **split);
 
+t_map				*map_finalize(t_map *map);
+
 int					map_is_empty_at(t_map *map, int x, int y);
+int					map_is_solid_at(t_map *map, int x, int y);
+
 int					map_get_object_type_at(t_map *map, int x, int y);
 t_game_object		*map_get_object_at(t_map *map, int x, int y);
 
@@ -231,6 +267,22 @@ void				ray_compute_find_side(t_ray *ray);
 void				ray_compute_dda(t_ray *ray);
 void				ray_compute_distance(t_ray *ray);
 void				ray_compute_set_limits(t_ray *ray);
+
+void				ray_sprite_precomputer_order(t_player *player, t_map *map);
+void				ray_sprite_compute(t_ray *r, t_game_object *spr);
+void				ray_sprite_compute_matrix(t_ray *ray, t_game_object *spr);
+void				ray_sprite_compute_set_limits(t_ray *ray);
+
+void				ray_renderer_draw_default(t_engine *engine, t_ray *ray);
+
+void				ray_renderer_draw_wall(t_engine *engine, t_ray *ray);
+void				ray_renderer_wall_draw_texture(t_ray *ray, t_vec2i *tex_pos,
+													t_image *tex);
+t_image				*ray_renderer_wall_texture_finder(t_map *map, t_ray *ray);
+
+void				ray_renderer_sprite_draw(t_engine *engine, t_ray *ray);
+void				ray_renderer_sprite_draw_texture(t_engine *engine, t_ray *r,
+											t_image *spr_tex, t_image *canvas);
 
 void				fps_counter_end(void);
 void				fps_counter_start(void);

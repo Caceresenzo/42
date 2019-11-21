@@ -56,7 +56,7 @@ void
 	fps = ft_itoa(fps_counter_get());
 	full = ft_strjoin("FPS: ", fps);
 	mlx_string_put(engine->ctx.mlx, engine->ctx.win, 50, 50, 0xFFFFFF, full);
-	printf("FPS: %s (%f)\n", fps, fps_counter_get_tick());
+//	printf("FPS: %s (%f)\n", fps, fps_counter_get_tick());
 	free(fps);
 	free(full);
 }

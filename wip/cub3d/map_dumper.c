@@ -29,6 +29,31 @@ void
 }
 
 void
+	map_dump_sprites(t_map *map)
+{
+	int				index;
+	t_game_object	*sprite;
+
+	if (map->sprts == NULL)
+		ft_putstr_fd("no sprite", OUT);
+	else
+	{
+		index = 0;
+		while ((sprite = map->sprts[index]) != NULL)
+		{
+			ft_putstr_fd("sprite[", OUT);
+			ft_putnbr_fd(index, OUT);
+			ft_putstr_fd("]: [", OUT);
+			ft_putnbr_fd(sprite->pos.x, OUT);
+			ft_putchar_fd(',', OUT);
+			ft_putnbr_fd(sprite->pos.y, OUT);
+			ft_putstr_fd("], ", OUT);
+			index++;
+		}
+	}
+}
+
+void
 	map_dump(t_map *map)
 {
 	int				i;
@@ -46,5 +71,7 @@ void
 		ft_putchar_fd('\n', OUT);
 		i++;
 	}
+	ft_putchar_fd('\n', OUT);
+	map_dump_sprites(map);
 	ft_putchar_fd('\n', OUT);
 }

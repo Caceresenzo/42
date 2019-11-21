@@ -18,6 +18,17 @@ void
 	ft_putendl_fd("Error", ERR);
 	ft_putstr_fd(error, ERR);
 	free(error);
+	ft_putchar_fd('\n', ERR);
+	exit(1);
+	return (NULL);
+}
+
+void
+	*engine_handle_error_w_errno(char *error)
+{
+	ft_putendl_fd("Error", ERR);
+	ft_putstr_fd(error, ERR);
+	free(error);
 	if (errno != 0)
 	{
 		ft_putstr_fd(", reason: ", ERR);

@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bmp_write_header.c                                 :+:      :+:    :+:   */
+/*   ray_sprite_computer.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/20 17:12:51 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/20 17:12:51 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 16:07:58 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 16:07:58 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 void
-	bmp_write_header(int fd, t_image *image)
+	ray_sprite_compute(t_ray *ray, t_game_object *sprite_obj)
 {
-	ft_putstr_fd("BM", fd);
-	ft_putmem_fd("\x7a\x03\x00\x00\x00\x00\x00\x00", 8, fd);
-	ft_putmem_fd("\x00\x00\x00\x00", 4, fd);
-	ft_putmem_fd("\x00\x00\x00\x00", 4, fd);
+	ray_sprite_compute_matrix(ray, sprite_obj);
+	ray_sprite_compute_set_limits(ray);
 }

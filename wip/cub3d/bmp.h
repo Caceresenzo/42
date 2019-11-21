@@ -46,6 +46,8 @@ typedef struct		s_bmp_encoder
 int					bmp_encode(int fd, t_image *image);
 size_t				bmp_encode_write_header(t_bmp_encoder *encoder,
 											t_buffer *buffer);
+void				bmp_encode_write_image_data(t_bmp_encoder *encoder,
+											t_buffer *buffer, size_t pos);
 
 void				bmp_encoder_initialize(t_bmp_encoder *encoder,
 											t_image *image);

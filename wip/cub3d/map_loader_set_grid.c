@@ -13,7 +13,8 @@
 #include "cub3d.h"
 
 char
-	*map_loader_grid_bind_object(t_game_object *current, char *str)
+	*map_loader_grid_bind_object(t_map *map, size_t index,
+								t_game_object *current, char *str)
 {
 	int		type;
 	void	*data;
@@ -25,7 +26,7 @@ char
 	else if (ft_strncmp(str, "1", 2) == 0)
 		type = OBJ_WALL;
 	else if (ft_strncmp(str, "2", 2) == 0)
-		type = OBJ_OBJ;
+		type = OBJ_SPRITE;
 	else if (ft_strlen(str) == 1 && ft_isinstr(str[0], "NSEW") != -1)
 	{
 		type = OBJ_PLAYER;
@@ -36,6 +37,7 @@ char
 	else
 		return (ft_strjoin("Unknown game object type: ", str));
 	current->type = type;
+	current->pos = (t_vec2d) { 1.0 * index, 1.0 * map->size.h };
 	current->data = data;
 	return (NULL);
 }
@@ -53,7 +55,8 @@ char
 	index = 0;
 	while (index < map->size.w)
 	{
-		error = map_loader_grid_bind_object(&(objects[index]), split[index]);
+		error = map_loader_grid_bind_object(map, index, &(objects[index]),
+											split[index]);
 		if (error != NULL)
 			break ;
 		index++;

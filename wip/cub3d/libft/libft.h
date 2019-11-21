@@ -118,4 +118,9 @@ int					ft_isinstr(char c, char *charset);
 
 int					ft_lsr(int x, int n);
 
+void				ft_swap_double(double *a, double *b);
+void				ft_swap_int(int *a, int *b);
+
+void				ft_sort_comp(int *order, double *dist, int amount);
+
 #endif

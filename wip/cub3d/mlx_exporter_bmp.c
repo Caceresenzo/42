@@ -26,6 +26,7 @@ void
 	if (result)
 		ft_putendl_fd("Exported file: "EXPORT_FILE, OUT);
 	else
-		engine_handle_error("Failed to export rendered image: "EXPORT_FILE);
+		engine_handle_error_w_errno("Failed to export rendered image: "\
+				EXPORT_FILE);
 	close(fd);
 }
