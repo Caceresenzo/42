@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   buffer_create.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 11:09:39 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 11:09:39 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "image.h"
+#include "buffer.h"
 
-void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+t_buffer	*buffer_create(size_t length)
 {
-	int		y;
-	size_t	offset;
+	t_buffer *buffer;
 
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
+	CHECK_MALLOC(buffer, sizeof(t_buffer));
+	buffer->length = length;
+	buffer->data = ft_calloc(length, sizeof(char));
+	if (buffer->data == NULL)
 	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
+		free(buffer);
+		buffer = NULL;
 	}
+	return (buffer);
 }

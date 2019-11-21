@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   image_create.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 10:44:49 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 10:44:49 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "image.h"
 
-void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+t_image
+	*image_create(void *mlx_ptr, int width, int height)
 {
-	int		y;
-	size_t	offset;
+	t_image *img;
 
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
-	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
-	}
+	CHECK_MALLOC(img, sizeof(t_image));
+	CHECK_PTR(img->ptr = mlx_new_image(mlx_ptr, width, height));
+	CHECK_PTR(img->pic = (int *)mlx_get_data_addr(img->ptr, &img->bpp,
+											&img->stride, &img->endian));
+	img->width = width;
+	img->height = height;
+	img->line_unit = img->stride / sizeof(int);
+	img->bpp /= 8;
+	return (img);
 }

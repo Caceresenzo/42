@@ -18,6 +18,13 @@ void
 	ft_putendl_fd("Error", ERR);
 	ft_putstr_fd(error, ERR);
 	free(error);
+	if (errno != 0)
+	{
+		ft_putstr_fd(", reason: ", ERR);
+		ft_putendl_fd(strerror(errno), ERR);
+	}
+	else
+		ft_putchar_fd('\n', ERR);
 	exit(1);
 	return (NULL);
 }

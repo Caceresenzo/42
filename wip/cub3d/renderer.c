@@ -16,7 +16,7 @@ void
 	render_scene(t_engine *engine)
 {
 	ray_render_scene(engine);
-	if (engine->ctx.win != NULL)
+	if (engine->ctx.graphics)
 		mlx_put_image_to_window_scale(engine->ctx.mlx, engine->ctx.win,
 							engine->canvas->ptr,
 							0, 0, engine->ctx.width, engine->ctx.height,

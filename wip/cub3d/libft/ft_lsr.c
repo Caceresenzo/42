@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   ft_lsr.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 11:56:25 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 11:56:25 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "image.h"
+/*
+** From:
+** https://stackoverflow.com/a/5253269/7292958
+*/
 
-void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+int
+	ft_lsr(int x, int n)
 {
-	int		y;
-	size_t	offset;
-
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
-	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
-	}
+	return (int)((unsigned int)x >> n);
 }

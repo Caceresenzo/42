@@ -13,7 +13,19 @@
 PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 NAME	=   cub3d
-SRCS	=	engine_handle_error.c \
+SRCS	=	bmp_encoder.c \
+			bmp_encoder_initializer.c \
+			bmp_encoder_write_header.c \
+			bmp_encoder_write_image_data.c \
+			bmp_write_header.c \
+			buffer_blit.c \
+			buffer_create.c \
+			buffer_destroy.c \
+			buffer_write_ascii.c \
+			buffer_write_int_32_le.c \
+			buffer_write_uint_16_le.c \
+			buffer_write_uint_32_le.c \
+			engine_handle_error.c \
 			engine_initialization.c \
 			engine_loop.c \
 			engine_on_exit.c \
@@ -23,11 +35,10 @@ SRCS	=	engine_handle_error.c \
 			engine_on_mouse_pressed.c \
 			engine_on_mouse_released.c \
 			fps_counter.c \
-			image.c \
 			image_clear.c \
+			image_create.c \
 			image_draw_line.c \
-			image_get_pixel.c \
-			image_set_pixel.c \
+			image_load.c \
 			keys_manager.c \
 			keys_states.c \
 			main.c \
@@ -40,6 +51,7 @@ SRCS	=	engine_handle_error.c \
 			map_texture_loader.c \
 			map_utils.c \
 			mlx_context_initialization.c \
+			mlx_exporter_bmp.c \
 			player_handle_mouvement.c \
 			player_initialization.c \
 			player_initialization_set_direction.c \
@@ -53,7 +65,6 @@ SRCS	=	engine_handle_error.c \
 			ray_renderer.c \
 			renderer.c \
 			util_color.c 
-
 
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
@@ -78,3 +89,7 @@ clean:
 	rm -fr cub3d $(OBJS)
 	rm -rf .*.o
 	rm -rf .*.dylib
+
+fullclean: clean
+	make clean -C ${PROJECT_ROOT}/minilibx_mms_beta
+	make clean -C ${PROJECT_ROOT}/libft

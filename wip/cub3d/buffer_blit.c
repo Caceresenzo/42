@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   buffer_blit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 11:19:11 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 11:19:11 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "image.h"
+#include "buffer.h"
 
-void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+/*
+** From:
+** https://github.com/feross/buffer/blob/master/index.js#L1766
+*/
+
+size_t
+	buffer_blit(t_buffer *buffer, unsigned char *s, size_t offset, size_t len)
 {
-	int		y;
-	size_t	offset;
+	size_t	index;
 
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
+	index = 0;
+	while (index < len)
 	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
+		if (index + offset >= buffer->length)
+			break ;
+		buffer->data[index + offset] = s[index];
+		index++;
 	}
+	return (index + offset);
 }

@@ -94,6 +94,8 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 
+void				ft_putmem_fd(void *s, size_t len, int fd);
+
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **alst, t_list *new);
 int					ft_lstsize(t_list *lst);
@@ -113,5 +115,7 @@ size_t				ft_itoa_base_compute_number_size(long number, size_t radix);
 size_t				ft_split_length(char **array);
 void				ft_split_free(char ***d3array);
 int					ft_isinstr(char c, char *charset);
+
+int					ft_lsr(int x, int n);
 
 #endif

@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   bmp_write_header.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/20 17:12:51 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/20 17:12:51 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "image.h"
+#include "cub3d.h"
 
 void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+	bmp_write_header(int fd, t_image *image)
 {
-	int		y;
-	size_t	offset;
-
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
-	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
-	}
+	ft_putstr_fd("BM", fd);
+	ft_putmem_fd("\x7a\x03\x00\x00\x00\x00\x00\x00", 8, fd);
+	ft_putmem_fd("\x00\x00\x00\x00", 4, fd);
+	ft_putmem_fd("\x00\x00\x00\x00", 4, fd);
 }

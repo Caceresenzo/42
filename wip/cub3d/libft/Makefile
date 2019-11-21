@@ -50,6 +50,8 @@ SRCS	=	ft_charmult.c \
 			ft_tolower.c \
 			ft_toupper.c \
 			ft_isinstr.c \
+			ft_putmem_fd.c \
+			ft_lsr.c \
 			get_next_line.c
 SRCS_B	=   ft_lstadd_back.c \
 			ft_lstadd_front.c \

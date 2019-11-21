@@ -1,30 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   buffer_destroy.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 12:22:56 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 12:22:56 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "image.h"
+#include "buffer.h"
 
 void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+	buffer_destroy(t_buffer **buffer_ptr)
 {
-	int		y;
-	size_t	offset;
-
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
-	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
-	}
+	free((*buffer_ptr)->data);
+	(*buffer_ptr)->length = 0;
+	free(*buffer_ptr);
+	*buffer_ptr = NULL;
 }

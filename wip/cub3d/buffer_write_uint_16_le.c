@@ -1,30 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_draw_line.c                                  :+:      :+:    :+:   */
+/*   buffer_write_uint_16_le.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:55:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:55:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/21 12:09:28 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/21 12:09:28 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "image.h"
+#include "buffer.h"
 
-void
-	image_draw_vertical_line(t_drawer_line_args args, int x, int y_start,
-								int y_end)
+/*
+** From:
+** https://github.com/feross/buffer/blob/master/index.js#L1343
+*/
+
+size_t
+	buffer_write_uint_16_le(t_buffer *buffer, unsigned int value, size_t offset)
 {
-	int		y;
-	size_t	offset;
-
-	y = y_start;
-	offset = y * args.image->line_unit + x;
-	while (y < y_end)
-	{
-		args.image->pic[offset] = args.color;
-		offset += args.image->line_unit;
-		y++;
-	}
+	value = +value;
+	offset = ft_lsr(offset, 0);
+	buffer->data[offset + 0] = value & 0xFF;
+	buffer->data[offset + 1] = ft_lsr(value, 8) & 0xFF;
+	return (offset + 2);
 }

@@ -35,16 +35,21 @@ int
 
 	CHECK_PTR_DEF(mlx_context_initialize(&eng.ctx), -1);
 	map_load(&eng, path);
-	CHECK_PTR_DEF(mlx_window_initialize(&eng.ctx), -1);
-	CHECK_PTR_DEF(mlx_canvas_initialize(&eng, eng.map, &(eng.canvas)), -1);
 	engine_init_module(&eng);
-	HOOK(X_EVENT_KEY_PRESS, &engine_on_key_pressed);
-	HOOK(X_EVENT_KEY_RELEASE, &engine_on_key_released);
-	HOOK(X_EVENT_MOUSE_PRESS, &engine_on_mouse_pressed);
-	HOOK(X_EVENT_MOUSE_RELEASE, &engine_on_mouse_released);
-	HOOK(X_EVENT_MOUSE_MOVE, &engine_on_mouse_move);
-	HOOK(X_EVENT_EXIT, &engine_on_exit);
-	mlx_loop_hook(eng.ctx.mlx, &engine_loop, &eng);
-	mlx_loop(eng.ctx.mlx);
+	CHECK_PTR_DEF(mlx_canvas_initialize(&eng, eng.map, &(eng.canvas)), -1);
+	if (save_arg)
+		mlx_export_bmp(&eng);
+	else
+	{
+		CHECK_PTR_DEF(mlx_window_initialize(&eng, &eng.ctx), -1);
+		HOOK(X_EVENT_KEY_PRESS, &engine_on_key_pressed);
+		HOOK(X_EVENT_KEY_RELEASE, &engine_on_key_released);
+		HOOK(X_EVENT_MOUSE_PRESS, &engine_on_mouse_pressed);
+		HOOK(X_EVENT_MOUSE_RELEASE, &engine_on_mouse_released);
+		HOOK(X_EVENT_MOUSE_MOVE, &engine_on_mouse_move);
+		HOOK(X_EVENT_EXIT, &engine_on_exit);
+		mlx_loop_hook(eng.ctx.mlx, &engine_loop, &eng);
+		mlx_loop(eng.ctx.mlx);
+	}
 	return (0);
 }

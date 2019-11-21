@@ -13,19 +13,31 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include <stddef.h>
 # include <stdio.h>
 # include <math.h>
 # include <fcntl.h>
 # include <time.h>
+# include <string.h>
+# include <errno.h>
 
 # include "minilibx_mms_beta/mlx.h"
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
 
 # include "maths.h"
+# include "image.h"
 # include "keys.h"
+# include "buffer.h"
+# include "bmp.h"
 
-# define WINDOW_NAME				"Hello World"
+# define WINDOW_NAME				"cub3d"
+# define WINDOW_NAME_BASE			WINDOW_NAME" - "
+
+# define MAX_WINDOW_WIDTH			640
+# define MAX_WINDOW_HEIGHT			480
+
+# define EXPORT_FILE				WINDOW_NAME".bmp"
 
 # define X_EVENT_KEY_PRESS			2
 # define X_EVENT_KEY_RELEASE		3
@@ -34,48 +46,29 @@
 # define X_EVENT_MOUSE_MOVE			6
 # define X_EVENT_EXIT				17
 
-# define TEXTURE_WIDTH 64
-# define TEXTURE_HEIGHT 64
+# define P_RESOLUTION				"R"
+# define P_TEX_NORTH				"NO"
+# define P_TEX_SOUTH				"SO"
+# define P_TEX_WEST					"WE"
+# define P_TEX_EAST					"EA"
+# define P_SPRITE					"S"
+# define P_FLOOR_COLOR				"F"
+# define P_ROOF_COLOR				"C"
 
-# define P_RESOLUTION "R"
-# define P_TEX_NORTH "NO"
-# define P_TEX_SOUTH "SO"
-# define P_TEX_WEST "WE"
-# define P_TEX_EAST "EA"
-# define P_SPRITE "S"
-# define P_FLOOR_COLOR "F"
-# define P_ROOF_COLOR "C"
+# define ORIENTATIONS				"NSEW"
+# define NORTH						0
+# define SOUTH						1
+# define WEST						2
+# define EAST						3
 
-# define NORTH 0
-# define SOUTH 1
-# define WEST 2
-# define EAST 3
+# define OBJ_EMPTY					0
+# define OBJ_WALL					1
+# define OBJ_OBJ					2
+# define OBJ_PLAYER					3
 
-# define OBJ_EMPTY 0
-# define OBJ_WALL 1
-# define OBJ_OBJ 2
-# define OBJ_PLAYER 3
+# define E(error)					ft_strdup(error)
 
-# define E(error) ft_strdup(error)
-
-# define PLAYER_ORIENTATION "NSEW"
-
-# define MAX_WINDOW_WIDTH 640
-# define MAX_WINDOW_HEIGHT 480
-
-# define RENDER_SHOW_STATS 0
-
-typedef struct		s_image
-{
-	void			*ptr;
-	int				*pic;
-	int				bpp;
-	int				stride;
-	int				endian;
-	int				width;
-	int				height;
-	int				line_unit;
-}					t_image;
+# define RENDER_SHOW_STATS			1
 
 typedef struct		s_game_object
 {
@@ -102,6 +95,7 @@ typedef struct		s_mlx_context
 	t_dim2i			w_dim;
 	int				width;
 	int				height;
+	int				graphics;
 }					t_mlx_context;
 
 typedef struct		s_player_speed
@@ -163,12 +157,6 @@ typedef struct		s_g_obj_data_player
 	char			dir;
 }					t_g_obj_data_player;
 
-typedef	struct		s_drawer_line_args
-{
-	t_image			*image;
-	int				color;
-}					t_drawer_line_args;
-
 int					engine_initialize(char *path, int save_arg);
 void				*engine_hooks(t_engine *engine);
 int					engine_loop(t_engine *engine);
@@ -186,9 +174,12 @@ int					engine_on_exit(t_engine *engine);
 void				*engine_handle_error(char *error);
 
 void				*mlx_context_initialize(t_mlx_context *context);
-void				*mlx_window_initialize(t_mlx_context *context);
+void				*mlx_window_initialize(t_engine *engine,
+											t_mlx_context *context);
 void				*mlx_canvas_initialize(t_engine *engine, t_map *map,
 											t_image **canvas_ptr);
+
+void				mlx_export_bmp(t_engine *engine);
 
 int					color_assemble(int red, int green, int blue);
 void				color_dismentle(int color, int *red, int *green, int *blue);
@@ -217,18 +208,6 @@ t_game_object		*map_get_object_at(t_map *map, int x, int y);
 
 void				map_dump_object(t_game_object object);
 void				map_dump(t_map *map);
-
-t_image				*image_create(t_engine *eng, int width, int height);
-t_image				*image_load(t_engine *eng, char *path);
-
-void				image_clear(t_image *image);
-
-void				image_get_pixel_raw(int rgb[], t_image *img, int x, int y);
-void				image_set_pixel_raw(int rgb[], t_image *img, int x, int y);
-int					image_get_pixel(t_image *image, int x, int y);
-void				image_set_pixel(t_image *image, int x, int y, int color);
-void				image_draw_vertical_line(t_drawer_line_args args, int x,
-											int y_start, int y_end);
 
 char				*player_initialize(t_engine *engine);
 

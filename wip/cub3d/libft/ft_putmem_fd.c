@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_get_pixel.c                                  :+:      :+:    :+:   */
+/*   ft_putmem_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 17:48:14 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 17:48:14 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/05 13:46:37 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/05 13:46:37 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void
-	image_get_pixel_raw(int rgb[], t_image *image, int x, int y)
+void	ft_putmem_fd(void *s, size_t len, int fd)
 {
-	size_t	offset;
-
-	offset = (y * image->line_unit) + x;
-	rgb[2] = image->pic[offset + 0];
-	rgb[1] = image->pic[offset + 1];
-	rgb[0] = image->pic[offset + 2];
-}
-
-int
-	image_get_pixel(t_image *image, int x, int y)
-{
-	int		rgb[3];
-
-	image_get_pixel_raw(rgb, image, x, y);
-	return (color_assemble(rgb[0], rgb[1], rgb[2]));
+	CHECK_PTR_EMPTY(s);
+	write(fd, s, len);
 }

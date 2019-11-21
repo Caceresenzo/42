@@ -17,7 +17,7 @@ char
 {
 	t_image	*image;
 
-	image = image_load(eng, path);
+	image = image_load(eng->ctx.mlx, path);
 	CHECK_PTR_DEF(image, ft_strjoin("Failed to load texture path: ", path));
 	map->sprite = image;
 	return (NULL);
@@ -43,7 +43,7 @@ char
 		side = EAST;
 	if (side == -1)
 		return (ft_strjoin("Unknown config key: ", key));
-	image = image_load(eng, path);
+	image = image_load(eng->ctx.mlx, path);
 	CHECK_PTR_DEF(image, ft_strjoin("Failed to load texture path: ", path));
 	map->wall_texs[side] = image;
 	return (NULL);
