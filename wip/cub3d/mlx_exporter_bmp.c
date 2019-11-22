@@ -18,9 +18,10 @@ void
 	int		fd;
 	int		result;
 
-	fd = open(EXPORT_FILE, O_WRONLY);
+	fd = open(EXPORT_FILE, 664);
 	if (fd < 0)
-		engine_handle_error(E("Failed to open export file: "EXPORT_FILE));
+		engine_handle_error_w_errno(E("Failed to open export file: "
+				EXPORT_FILE));
 	render_scene(engine);
 	result = bmp_encode(fd, engine->canvas);
 	if (result)

@@ -12,35 +12,45 @@
 
 #include "cub3d.h"
 
+static char
+	*i_player_init_set_position_check(t_map *map, t_player *player,
+										t_vec2i *vec, int *found)
+{
+	t_game_object	*obj;
+	char			*error;
+
+	if ((obj = &(map->objs[vec->y][vec->x]))->type == OBJ_PLAYER)
+	{
+		if (*found)
+			return (E("Multiple player"));
+		player->pos = (t_vec2d) { vec->x, vec->y };
+		if ((error = player_init_set_direction(player, obj->data)))
+			return (error);
+		*found = 1;
+	}
+	return (NULL);
+}
+
 char
 	*player_init_set_position(t_map *map, t_player *player)
 {
-	size_t			i;
-	size_t			j;
-	t_game_object	*obj;
+	t_vec2i			vec;
 	int				found;
 	char			*error;
 
-	i = 0;
+	vec.y = 0;
 	found = 0;
-	while (i < map->size.h)
+	while (vec.y < map->size.h)
 	{
-		j = 0;
-		while (j < map->size.w)
+		vec.x = 0;
+		while (vec.x < map->size.w)
 		{
-			if ((obj = &(map->objs[i][j]))->type == OBJ_PLAYER)
-			{
-				if (found)
-					return (E("Multiple player"));
-				player->pos = (t_vec2d) { j, i };
-				if ((error = player_init_set_direction(player, obj->data)))
-					return (error);
-				found = 1;
-				fflush(stdout);
-			}
-			j++;
+			error = i_player_init_set_position_check(map, player, &vec, &found);
+			if (error)
+				return (error);
+			vec.x += 1;
 		}
-		i++;
+		vec.y += 1;
 	}
 	if (found)
 		return (NULL);

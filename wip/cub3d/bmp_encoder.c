@@ -12,6 +12,8 @@
 
 #include "bmp.h"
 
+#include <stdio.h>
+
 int
 	bmp_encode(int fd, t_image *image)
 {

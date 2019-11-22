@@ -38,6 +38,7 @@ char
 		return (ft_strjoin("Unknown game object type: ", str));
 	current->type = type;
 	current->pos = (t_vec2d) { 1.0 * index, 1.0 * map->size.h };
+	current->flooded = 0;
 	current->data = data;
 	return (NULL);
 }

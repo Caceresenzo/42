@@ -15,6 +15,24 @@
 #define MODE_FORWARD_BACKWARD 0
 #define MODE_LEFT_RIGHT 1
 
+/*
+** For left or right movement:
+**		x = dir.x * cos(PI / 2) - dir.y * sin(PI / 2)
+**		y = dir.x * sin(PI / 2) + dir.y * cos(PI / 2)
+**
+** But:
+**		cos(PI / 2) = 0
+**		sin(PI / 2) = 1
+**
+** So:
+**		x = dir.x * 0 - dir.y * 1
+**		y = dir.x * 1 + dir.y * 0
+**
+** Finally:
+**		x = -dir.y
+**		y = dir.x
+*/
+
 static void
 	i_player_handle_move(t_map *map, t_player *player, int sign, int mode)
 {
@@ -28,8 +46,8 @@ static void
 	}
 	else if (mode == MODE_LEFT_RIGHT)
 	{
-		x = -player->dir.y * sin(M_PI / 2);
-		y = player->dir.x * sin(M_PI / 2);
+		x = -player->dir.y;
+		y = player->dir.x;
 	}
 	else
 		return ;

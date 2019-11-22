@@ -81,6 +81,7 @@ typedef struct		s_game_object
 {
 	int				type;
 	t_vec2d			pos;
+	int				flooded:1;
 	void			*data;
 }					t_game_object;
 
@@ -236,8 +237,11 @@ char				*map_loader_parse_grid(t_engine *eng, t_map *map,
 
 t_map				*map_finalize(t_map *map);
 
+int					map_sealing_check(t_map *map, t_vec2i start_pos);
+
 int					map_is_empty_at(t_map *map, int x, int y);
 int					map_is_solid_at(t_map *map, int x, int y);
+int					map_is_sealing_at(t_map *map, int x, int y);
 
 int					map_get_object_type_at(t_map *map, int x, int y);
 t_game_object		*map_get_object_at(t_map *map, int x, int y);

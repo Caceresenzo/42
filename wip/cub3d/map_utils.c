@@ -25,6 +25,12 @@ int
 }
 
 int
+	map_is_sealing_at(t_map *map, int x, int y)
+{
+	return (map_get_object_type_at(map, x, y) == OBJ_WALL);
+}
+
+int
 	map_is_solid_at(t_map *map, int x, int y)
 {
 	int		type;
