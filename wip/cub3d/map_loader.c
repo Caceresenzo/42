@@ -41,23 +41,33 @@ static char
 }
 
 static char
-	*i_map_loader_parse_line(t_engine *eng, t_map *map, char *line)
+	*i_map_loader_parse_line(t_engine *eng, t_map *map, char *line, int *fully)
 {
 	char	**split;
 	char	*key;
-	char	*r;
+	size_t	length;
+	char	*error;
 
-	CHECK_PTR_DEF(split = ft_split(line, ' '), ft_strdup("Failed to malloc()"));
-	r = NULL;
-	if (ft_strlen(key = split[0]) != 0)
+	CHECK_PTR_DEF(split = ft_split(line, ' '), EMALLOC("line parser"));
+	error = NULL;
+	key = split[0];
+	if (*fully == 2 && key != NULL)
+		return (E("More content after map data"));
+	if (key == NULL)
 	{
-		if (map->objs || (!map->objs && split[0][0] == '1'))
-			r = map_loader_parse_grid(eng, map, split);
-		else
-			r = i_map_loader_interpret_key(eng, map, line, split);
+		if (*fully == 1)
+			*fully = 2;
+		return (NULL);
 	}
+	if (map->objs || (!map->objs && ft_isinstr(split[0][0], "012") != -1))
+	{
+		error = map_loader_parse_grid(eng, map, split);
+		*fully = 1;
+	}
+	else
+		error = i_map_loader_interpret_key(eng, map, line, split);
 	ft_split_free(&split);
-	return (r);
+	return (error);
 }
 
 t_map
@@ -79,6 +89,9 @@ t_map
 	map->size.w = 0;
 	map->size.h = 0;
 	map->sprts = NULL;
+	map->spr_ordr = NULL;
+	map->spr_dist = NULL;
+	map->sprite_count = 0;
 	return (map);
 }
 
@@ -87,21 +100,23 @@ t_map
 {
 	int		fd;
 	int		returned;
+	int		fully;
 	char	*line;
 	char	*error;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-		return (engine_handle_error(ft_strjoin("Failed to read file: ", path)));
+		return (engine_error_raison(ft_strjoin("Failed to read file: ", path)));
 	CHECK_PTR(eng->map = map_create(path));
 	eng->map->objs = NULL;
+	fully = 0;
 	while (1)
 	{
 		returned = get_next_line(fd, &line);
-		error = i_map_loader_parse_line(eng, eng->map, line);
+		error = i_map_loader_parse_line(eng, eng->map, line, &fully);
 		free(line);
 		if (error != NULL)
-			engine_handle_error(error);
+			engine_error(error);
 		if (!returned)
 			break ;
 	}

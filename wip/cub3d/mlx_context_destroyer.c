@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray_compute.c                                      :+:      :+:    :+:   */
+/*   mlx_context_destroyer.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/18 14:48:01 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/18 14:48:01 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/12 15:00:52 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/12 15:00:52 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 void
-	ray_compute(t_ray *ray_ptr)
+	mlx_context_window_destroy(t_mlx_context *context)
 {
-	ray_compute_initialize(ray_ptr);
-	ray_compute_find_side(ray_ptr);
-	ray_compute_dda(ray_ptr);
-	ray_compute_distance(ray_ptr);
-	ray_compute_set_limits(ray_ptr);
-	if (ray_ptr->zbuffer)
-		ray_ptr->zbuffer[ray_ptr->x] = ray_ptr->perp_wall_dist;
+	if (context->graphics)
+		mlx_destroy_window(context->mlx, context->win);
+	context->graphics = 0;
 }

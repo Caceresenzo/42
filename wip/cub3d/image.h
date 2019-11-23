@@ -41,5 +41,7 @@ void			image_clear(t_image *image);
 
 void			image_draw_vertical_line(t_drawer_line_args args, int x,
 											int y_start, int y_end);
+void			image_destroy(void *mlx_ptr, t_image *image_ptr);
+void			image_destroy_null(void *mlx_ptr, t_image **image_ptr);
 
 #endif

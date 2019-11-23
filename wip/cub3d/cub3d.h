@@ -67,6 +67,7 @@
 # define OBJ_PLAYER					3
 
 # define E(error)					ft_strdup(error)
+# define EMALLOC(location)			E("Failed to malloc() ["location"]")
 
 # define RENDER_SHOW_STATS			1
 
@@ -203,8 +204,10 @@ int					engine_on_mouse_pressed(int button, int x, int y,
 int					engine_on_mouse_move(int x, int y, t_engine *engine);
 int					engine_on_exit(t_engine *engine);
 
-void				*engine_handle_error(char *error);
-void				*engine_handle_error_w_errno(char *error);
+int					engine_handle_exit(t_engine *engine);
+
+void				*engine_error(char *error);
+void				*engine_error_raison(char *error);
 
 void				*mlx_context_initialize(t_mlx_context *context);
 void				*mlx_window_initialize(t_engine *engine,
@@ -236,6 +239,10 @@ char				*map_loader_parse_grid(t_engine *eng, t_map *map,
 											char **split);
 
 t_map				*map_finalize(t_map *map);
+
+void				map_destroy(void *mlx_ptr, t_map **map_ptr);
+void				map_destroy_textures(void *mlx_ptr, t_map *map);
+void				map_destroy_grid(t_map *map);
 
 int					map_sealing_check(t_map *map, t_vec2i start_pos);
 

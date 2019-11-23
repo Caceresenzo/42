@@ -20,14 +20,14 @@ void
 
 	fd = open(EXPORT_FILE, 664);
 	if (fd < 0)
-		engine_handle_error_w_errno(E("Failed to open export file: "
+		engine_error_raison(E("Failed to open export file: "
 				EXPORT_FILE));
 	render_scene(engine);
 	result = bmp_encode(fd, engine->canvas);
 	if (result)
 		ft_putendl_fd("Exported file: "EXPORT_FILE, OUT);
 	else
-		engine_handle_error_w_errno("Failed to export rendered image: "\
+		engine_error_raison("Failed to export rendered image: "\
 				EXPORT_FILE);
 	close(fd);
 }

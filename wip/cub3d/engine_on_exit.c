@@ -16,11 +16,6 @@ int
 	engine_on_exit(t_engine *engine)
 {
 	printf("EVENT: engine_on_exit\n");
-	if (engine->ctx.win)
-	{
-		mlx_destroy_window(engine->ctx.mlx, engine->ctx.win);
-		engine->ctx.win = NULL;
-		exit(0);
-	}
+	engine_handle_exit(engine);
 	return (0);
 }

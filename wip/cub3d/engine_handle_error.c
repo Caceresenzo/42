@@ -13,7 +13,7 @@
 #include "cub3d.h"
 
 void
-	*engine_handle_error(char *error)
+	*engine_error(char *error)
 {
 	ft_putendl_fd("Error", ERR);
 	ft_putstr_fd(error, ERR);
@@ -24,7 +24,7 @@ void
 }
 
 void
-	*engine_handle_error_w_errno(char *error)
+	*engine_error_raison(char *error)
 {
 	ft_putendl_fd("Error", ERR);
 	ft_putstr_fd(error, ERR);

@@ -21,14 +21,14 @@ int		main(int argc, char **argv)
 	{
 		if (ft_strncmp(argv[2], "-save", 6) != 0)
 		{
-			engine_handle_error(ft_strjoin("Unsupported argument: ", argv[2]));
+			engine_error(ft_strjoin("Unsupported argument: ", argv[2]));
 			return (1);
 		}
 		argc--;
 	}
 	if (argc != 2)
 	{
-		engine_handle_error(ft_strdup("No file specified"));
+		engine_error(ft_strdup("No file specified"));
 		return (1);
 	}
 	return (engine_initialize(argv[1], save_arg));

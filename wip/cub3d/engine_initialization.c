@@ -25,12 +25,13 @@ static void
 	error = player_initialize(engine);
 	if (error == NULL)
 	{
-		if (!map_sealing_check(engine->map, (t_vec2i) { engine->player.pos.x, engine->player.pos.y }))
+		if (!map_sealing_check(engine->map,
+					(t_vec2i) { engine->player.pos.x, engine->player.pos.y }))
 			error = E("Map is not sealed");
 	}
 	map_dump(engine->map);
 	if (error != NULL)
-		engine_handle_error(error);
+		engine_error(error);
 }
 
 int
@@ -56,5 +57,5 @@ int
 		mlx_loop_hook(eng.ctx.mlx, &engine_loop, &eng);
 		mlx_loop(eng.ctx.mlx);
 	}
-	return (0);
+	return (engine_handle_exit(&eng));
 }

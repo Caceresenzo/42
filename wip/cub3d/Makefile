@@ -24,6 +24,7 @@ SRCS	=	bmp_encoder.c \
 			buffer_write_int_32_le.c \
 			buffer_write_uint_16_le.c \
 			buffer_write_uint_32_le.c \
+			engine_exit_handler.c \
 			engine_handle_error.c \
 			engine_initialization.c \
 			engine_loop.c \
@@ -36,11 +37,13 @@ SRCS	=	bmp_encoder.c \
 			fps_counter.c \
 			image_clear.c \
 			image_create.c \
+			image_destroy.c \
 			image_draw_line.c \
 			image_load.c \
 			keys_manager.c \
 			keys_states.c \
 			main.c \
+			map_destroy.c \
 			map_dumper.c \
 			map_loader.c \
 			map_loader_finalizer.c \
@@ -51,6 +54,7 @@ SRCS	=	bmp_encoder.c \
 			map_sealing_checker.c \
 			map_texture_loader.c \
 			map_utils.c \
+			mlx_context_destroyer.c \
 			mlx_context_initialization.c \
 			mlx_exporter_bmp.c \
 			player_handle_mouvement.c \
@@ -72,7 +76,7 @@ SRCS	=	bmp_encoder.c \
 			ray_sprite_computer_matrix.c \
 			ray_sprite_precomputer_order.c \
 			renderer.c \
-			util_color.c 
+			util_color.c
 			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/

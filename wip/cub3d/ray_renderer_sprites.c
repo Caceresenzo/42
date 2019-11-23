@@ -18,6 +18,8 @@ void
 	t_map	*map;
 	size_t	index;
 
+	if (!ray->zbuffer)
+		return ;
 	map = eng->map;
 	if (map->sprite_count == 0)
 		return ;
@@ -29,6 +31,8 @@ void
 		ray_renderer_sprite_draw_texture(eng, ray, map->sprite, eng->canvas);
 		index++;
 	}
+	free(ray->zbuffer);
+	ray->zbuffer = NULL;
 }
 
 /*

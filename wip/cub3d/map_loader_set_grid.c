@@ -31,7 +31,7 @@ char
 	{
 		type = OBJ_PLAYER;
 		data = malloc(sizeof(t_g_obj_data_player));
-		CHECK_PTR_DEF(data, E("Failed to malloc() [bind object]"));
+		CHECK_PTR_DEF(data, EMALLOC("bind object"));
 		((t_g_obj_data_player *)data)->dir = str[0];
 	}
 	else
@@ -52,7 +52,7 @@ char
 
 	error = NULL;
 	objects = malloc(map->size.w * sizeof(t_game_object));
-	CHECK_PTR_DEF(objects, E("Failed to malloc() [create line]"));
+	CHECK_PTR_DEF(objects, EMALLOC("create line"));
 	index = 0;
 	while (index < map->size.w)
 	{
@@ -79,14 +79,14 @@ char
 	t_game_object	*new;
 	char			*error;
 
-	error = NULL;
-	length = ft_split_length(split);
+	if (!(length = ft_split_length(split)))
+		return (NULL);
 	if (length != map->size.w && map->size.w != 0)
-		return (ft_strdup("Map width not constant"));
+		return (E("Map width not constant"));
 	map->size.w = length;
 	old = map->objs;
-	CHECK_PTR_DEF(map->objs = malloc((map->size.h + 1) *
-			sizeof(t_game_object *)), E("Failed to malloc() [parse grid]"));
+	if (!(map->objs = malloc((map->size.h + 1) * sizeof(t_game_object *))))
+		return (EMALLOC("parse grid"));
 	ft_memcpy(map->objs, old, map->size.h * sizeof(t_game_object *));
 	error = map_loader_grid_create_line(&new, map, split);
 	map->objs[map->size.h] = new;
