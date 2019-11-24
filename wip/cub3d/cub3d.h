@@ -69,7 +69,7 @@
 # define E(error)					ft_strdup(error)
 # define EMALLOC(location)			E("Failed to malloc() ["location"]")
 
-# define RENDER_SHOW_STATS			1
+# define RENDER_SHOW_STATS			0
 
 # define KEY_FORWARD				KEY_W
 # define KEY_BACKWARD				KEY_S
@@ -203,16 +203,19 @@ int					engine_on_mouse_pressed(int button, int x, int y,
 int					engine_on_mouse_move(int x, int y, t_engine *engine);
 int					engine_on_exit(t_engine *engine);
 
-int					engine_handle_exit(t_engine *engine);
+int					engine_handle_exit(t_engine *engine, int auto_exit);
 
 void				*engine_error(char *error);
 void				*engine_error_raison(char *error);
 
+void				engine_global_set(t_engine *engine);
+t_engine			*engine_global_get(void);
+int					engine_global_is_set(void);
+
 void				*mlx_context_initialize(t_mlx_context *context);
 void				*mlx_window_initialize(t_engine *engine,
 											t_mlx_context *context);
-void				*mlx_canvas_initialize(t_engine *engine, t_map *map,
-											t_image **canvas_ptr);
+void				*mlx_canvas_initialize(t_engine *eng, t_image **canvas_ptr);
 
 void				mlx_export_bmp(t_engine *engine);
 
@@ -292,8 +295,8 @@ void				ray_renderer_wall_draw_texture(t_ray *ray, t_vec2i *tex_pos,
 t_image				*ray_renderer_wall_texture_finder(t_map *map, t_ray *ray);
 
 void				ray_renderer_sprite_draw(t_engine *engine, t_ray *ray);
-void				ray_renderer_sprite_draw_texture(t_engine *engine, t_ray *r,
-											t_image *spr_tex, t_image *canvas);
+void				ray_renderer_sprite_draw_texture(t_ray *r, t_image *img,
+													t_image *canvas);
 
 void				fps_counter_end(void);
 void				fps_counter_start(void);

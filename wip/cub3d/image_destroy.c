@@ -31,6 +31,7 @@ void
 void
 	image_destroy_null(void *mlx_ptr, t_image **image_ptr)
 {
+	CHECK_PTR_EMPTY(image_ptr);
 	image_destroy(mlx_ptr, *image_ptr);
 	*image_ptr = NULL;
 }

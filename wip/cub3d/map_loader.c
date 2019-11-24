@@ -45,19 +45,17 @@ static char
 {
 	char	**split;
 	char	*key;
-	size_t	length;
 	char	*error;
 
 	CHECK_PTR_DEF(split = ft_split(line, ' '), EMALLOC("line parser"));
 	error = NULL;
 	key = split[0];
 	if (*fully == 2 && key != NULL)
-		return (E("More content after map data"));
+		return (E("More content after map data") + (int)ft_split_free(&split));
 	if (key == NULL)
 	{
-		if (*fully == 1)
-			*fully = 2;
-		return (NULL);
+		*fully = *fully == 1 ? 2 : *fully;
+		return (0 + ft_split_free(&split));
 	}
 	if (map->objs || (!map->objs && ft_isinstr(split[0][0], "012") != -1))
 	{

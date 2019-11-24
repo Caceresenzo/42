@@ -47,11 +47,11 @@ char
 	*map_loader_grid_create_line(t_game_object **grid, t_map *map, char **split)
 {
 	t_game_object	*objects;
-	size_t			index;
+	int				index;
 	char			*error;
 
 	error = NULL;
-	objects = malloc(map->size.w * sizeof(t_game_object));
+	objects = ft_calloc(map->size.w, sizeof(t_game_object));
 	CHECK_PTR_DEF(objects, EMALLOC("create line"));
 	index = 0;
 	while (index < map->size.w)
@@ -62,11 +62,6 @@ char
 			break ;
 		index++;
 	}
-	if (error != NULL)
-	{
-		free(objects);
-		objects = NULL;
-	}
 	*grid = objects;
 	return (error);
 }
@@ -74,11 +69,12 @@ char
 char
 	*map_loader_parse_grid(t_engine *eng, t_map *map, char **split)
 {
-	size_t			length;
+	int				length;
 	t_game_object	**old;
 	t_game_object	*new;
 	char			*error;
 
+	FAKE_USE(eng);
 	if (!(length = ft_split_length(split)))
 		return (NULL);
 	if (length != map->size.w && map->size.w != 0)
@@ -92,11 +88,6 @@ char
 	map->objs[map->size.h] = new;
 	if (old != NULL)
 		free(old);
-	if (error != NULL)
-	{
-		free(map->objs);
-		map->objs = NULL;
-	}
 	map->size.h++;
 	return (error);
 }

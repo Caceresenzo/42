@@ -1,21 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_on_mouse_released.c                         :+:      :+:    :+:   */
+/*   engine_global.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 17:23:38 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 17:23:38 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/24 11:34:02 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/24 11:34:02 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int
-	engine_on_mouse_released(int button, int x, int y, t_engine *engine)
+t_engine	*g_engine = NULL;
+
+void
+	engine_global_set(t_engine *engine)
 {
-	FAKE_USE(engine);
-	printf("EVENT: on_mouse_released: button = %d, x = %d, y = %d\n", button, x, y);
-	return (0);
+	g_engine = engine;
+}
+
+t_engine
+	*engine_global_get(void)
+{
+	return (g_engine);
+}
+
+int
+	engine_global_is_set(void)
+{
+	return (g_engine != NULL);
 }

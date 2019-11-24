@@ -31,6 +31,9 @@
 ** Finally:
 **		x = -dir.y
 **		y = dir.x
+**
+** Or:
+** 		You can just use the already computed "plane" variable.
 */
 
 static void
@@ -46,8 +49,8 @@ static void
 	}
 	else if (mode == MODE_LEFT_RIGHT)
 	{
-		x = -player->dir.y;
-		y = player->dir.x;
+		x = -player->plane.x;
+		y = -player->plane.y;
 	}
 	else
 		return ;

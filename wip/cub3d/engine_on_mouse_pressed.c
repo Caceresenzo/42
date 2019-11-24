@@ -15,6 +15,7 @@
 int
 	engine_on_mouse_pressed(int button, int x, int y, t_engine *engine)
 {
+	FAKE_USE(engine);
 	printf("EVENT: on_mouse_pressed: button = %d, x = %d, y = %d\n", button, x, y);
 	return (0);
 }

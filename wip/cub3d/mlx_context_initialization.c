@@ -33,7 +33,7 @@ void	*mlx_window_initialize(t_engine *engine, t_mlx_context *context)
 	return (context);
 }
 
-void	*mlx_canvas_initialize(t_engine *eng, t_map *map, t_image **canvas_ptr)
+void	*mlx_canvas_initialize(t_engine *eng, t_image **canvas_ptr)
 {
 	t_image *img;
 

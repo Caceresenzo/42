@@ -16,6 +16,6 @@ int
 	engine_on_exit(t_engine *engine)
 {
 	printf("EVENT: engine_on_exit\n");
-	engine_handle_exit(engine);
+	engine_handle_exit(engine, 1);
 	return (0);
 }

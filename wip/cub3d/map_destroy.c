@@ -20,9 +20,11 @@ void
 	map = *map_ptr;
 	ft_free_and_release((void **)&(map->spr_ordr));
 	ft_free_and_release((void **)&(map->spr_dist));
-	map_destroy_grid(map);
+	if (map->objs)
+		map_destroy_grid(map);
+	image_destroy_null(mlx_ptr, &(map->sprite));
 	map_destroy_textures(mlx_ptr, map);
-	*map_ptr = NULL;
+	ft_free_and_release((void **)map_ptr);
 }
 
 void
@@ -50,14 +52,11 @@ void
 		vec.x = 0;
 		while (vec.x < map->size.w)
 		{
-			obj = map->objs[vec.y] + vec.x;
-			obj->type = 0;
-			obj->flooded = 0;
-			obj->pos = (t_vec2d) { 0, 0 };
-			ft_free_and_release((void **)&(obj->data));
+			if ((obj = &(map->objs[vec.y][vec.x])))
+				free(obj->data);
 			vec.x += 1;
 		}
-		ft_free_and_release((void **)&(map->objs[vec.y]));
+		free(map->objs[vec.y]);
 		vec.y += 1;
 	}
 	ft_free_and_release((void **)&(map->objs));

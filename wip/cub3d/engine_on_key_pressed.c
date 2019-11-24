@@ -15,9 +15,10 @@
 int
 	engine_on_key_pressed(int keycode, t_engine *engine)
 {
+	FAKE_USE(engine);
 	printf("EVENT: on_key_pressed: keycode = %d\n", keycode);
 	key_state_set(keycode, STATE_PRESSED);
 	if (keycode == KEY_ESCAPE)
-		engine_handle_exit(engine);
+		engine_handle_exit(engine, 1);
 	return (0);
 }

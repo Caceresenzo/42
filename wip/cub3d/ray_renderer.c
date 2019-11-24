@@ -46,4 +46,6 @@ void
 		ray.x += 1;
 	}
 	ray_renderer_sprite_draw(engine, &ray);
+	free(ray.zbuffer);
+	ray.zbuffer = NULL;
 }

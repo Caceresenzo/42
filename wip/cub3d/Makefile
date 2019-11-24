@@ -25,6 +25,7 @@ SRCS	=	bmp_encoder.c \
 			buffer_write_uint_16_le.c \
 			buffer_write_uint_32_le.c \
 			engine_exit_handler.c \
+			engine_global.c \
 			engine_handle_error.c \
 			engine_initialization.c \
 			engine_loop.c \

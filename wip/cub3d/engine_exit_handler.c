@@ -13,10 +13,13 @@
 #include "cub3d.h"
 
 int
-	engine_handle_exit(t_engine *engine)
+	engine_handle_exit(t_engine *engine, int auto_exit)
 {
-	map_destroy(engine->ctx.mlx, &(engine->map));
-	image_destroy_null(engine->ctx.mlx, &(engine->canvas));
-	exit(0);
+	if (engine->map)
+		map_destroy(engine->ctx.mlx, &(engine->map));
+	if (engine->canvas)
+		image_destroy_null(engine->ctx.mlx, &(engine->canvas));
+	if (auto_exit)
+		exit(0);
 	return (0);
 }

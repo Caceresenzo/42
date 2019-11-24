@@ -28,11 +28,9 @@ void
 	while (index < map->sprite_count)
 	{
 		ray_sprite_compute(ray, map->sprts[map->spr_ordr[index]]);
-		ray_renderer_sprite_draw_texture(eng, ray, map->sprite, eng->canvas);
+		ray_renderer_sprite_draw_texture(ray, map->sprite, eng->canvas);
 		index++;
 	}
-	free(ray->zbuffer);
-	ray->zbuffer = NULL;
 }
 
 /*
@@ -43,8 +41,7 @@ void
 */
 
 void
-	ray_renderer_sprite_draw_texture(t_engine *engine, t_ray *r,
-									t_image *spr_tex, t_image *canvas)
+	ray_renderer_sprite_draw_texture(t_ray *r, t_image *img, t_image *canvas)
 {
 	t_vec2i	tex;
 	t_vec2i	p;
@@ -54,7 +51,7 @@ void
 	while (p.x < r->sout.end_x)
 	{
 		tex.x = (int)(256 * (p.x - (-r->sout.w / 2 + r->sprite_screen_x))
-				* spr_tex->width / r->sout.w) / 256;
+				* img->width / r->sout.w) / 256;
 		if (r->trsnf.y > 0 && p.x > 0 &&
 				p.x < r->width && r->trsnf.y < r->zbuffer[p.x])
 		{
@@ -62,8 +59,8 @@ void
 			while (p.y < r->sout.end_y)
 			{
 				a.x = (p.y - r->v_mv_scrn) * 256 - r->h * 128 + r->sout.h * 128;
-				tex.y = ((a.x * spr_tex->height) / r->sout.h) / 256;
-				a.y = spr_tex->pic[spr_tex->width * tex.y + tex.x];
+				tex.y = ((a.x * img->height) / r->sout.h) / 256;
+				a.y = img->pic[img->width * tex.y + tex.x];
 				if ((a.y & 0X00FFFFFF) != 0)
 					canvas->pic[(p.y * canvas->line_unit) + (p.x)] = a.y;
 				p.y += 1;

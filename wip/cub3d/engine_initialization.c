@@ -34,15 +34,26 @@ static void
 		engine_error(error);
 }
 
+static void
+	engine_init_members(t_engine *engine)
+{
+	engine->canvas = NULL;
+	engine->map = NULL;
+	engine->dirty = 1;
+	engine->was_dirty = 0;
+}
+
 int
 	engine_initialize(char *path, int save_arg)
 {
 	t_engine	eng;
 
+	engine_init_members(&eng);
+	engine_global_set(&eng);
 	CHECK_PTR_DEF(mlx_context_initialize(&eng.ctx), -1);
 	map_load(&eng, path);
 	engine_init_module(&eng);
-	CHECK_PTR_DEF(mlx_canvas_initialize(&eng, eng.map, &(eng.canvas)), -1);
+	CHECK_PTR_DEF(mlx_canvas_initialize(&eng, &(eng.canvas)), -1);
 	if (save_arg)
 		mlx_export_bmp(&eng);
 	else
@@ -57,5 +68,5 @@ int
 		mlx_loop_hook(eng.ctx.mlx, &engine_loop, &eng);
 		mlx_loop(eng.ctx.mlx);
 	}
-	return (engine_handle_exit(&eng));
+	return (engine_handle_exit(&eng, 1));
 }
