@@ -78,14 +78,13 @@ t_map
 	CHECK_MALLOC(map, sizeof(t_map));
 	map->file = file;
 	map->objs = NULL;
-	map->resolution.x = 0;
-	map->resolution.y = 0;
-	map->roof_color = 0x000000;
-	map->floor_color = 0x000000;
+	map->roof_color = -1;
+	map->floor_color = -1;
 	map->wall_texs[NORTH] = NULL;
 	map->wall_texs[SOUTH] = NULL;
 	map->wall_texs[WEST] = NULL;
 	map->wall_texs[EAST] = NULL;
+	map->sprite = NULL;
 	map->size.w = 0;
 	map->size.h = 0;
 	map->sprts = NULL;

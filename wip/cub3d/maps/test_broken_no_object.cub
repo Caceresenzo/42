@@ -1,0 +1,8 @@
+R 800 400
+NO ./sponge.png
+SO ./sponge.png
+WE ./sponge.png
+EA ./sponge.png
+S ./sponge.png
+C 225,30,0
+F 225,30,0

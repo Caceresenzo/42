@@ -43,6 +43,7 @@ SRCS	=	bmp_encoder.c \
 			keys_manager.c \
 			keys_states.c \
 			main.c \
+			map_content_checker.c \
 			map_destroy.c \
 			map_dumper.c \
 			map_loader.c \
@@ -52,7 +53,6 @@ SRCS	=	bmp_encoder.c \
 			map_loader_set_resolution.c \
 			map_loader_set_texture.c \
 			map_sealing_checker.c \
-			map_texture_loader.c \
 			map_utils.c \
 			mlx_context_destroyer.c \
 			mlx_context_initialization.c \

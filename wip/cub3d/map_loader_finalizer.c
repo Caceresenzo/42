@@ -66,6 +66,7 @@ t_map
 	*map_finalize(t_map *map)
 {
 	size_t	count;
+	char	*error;
 
 	if ((count = i_map_finalizer_count(map, OBJ_SPRITE)))
 	{
@@ -73,5 +74,7 @@ t_map
 		CHECK_PTR(map->spr_ordr = ft_calloc(count, sizeof(int)));
 		CHECK_PTR(map->spr_dist = ft_calloc(count, sizeof(double)));
 	}
+	if ((error = map_content_check(map)))
+		engine_error(error);
 	return (map);
 }

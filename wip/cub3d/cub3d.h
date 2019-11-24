@@ -89,7 +89,6 @@ typedef struct		s_game_object
 typedef struct		s_map
 {
 	char			*file;
-	t_vec2i			resolution;
 	t_game_object	**objs;
 	t_image			*wall_texs[4];
 	t_image			*sprite;
@@ -245,6 +244,7 @@ void				map_destroy_textures(void *mlx_ptr, t_map *map);
 void				map_destroy_grid(t_map *map);
 
 int					map_sealing_check(t_map *map, t_vec2i start_pos);
+char				*map_content_check(t_map *map);
 
 int					map_is_empty_at(t_map *map, int x, int y);
 int					map_is_solid_at(t_map *map, int x, int y);
