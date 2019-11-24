@@ -28,6 +28,7 @@
 # include "maths.h"
 # include "image.h"
 # include "keys.h"
+# include "mouse.h"
 # include "buffer.h"
 # include "bmp.h"
 
@@ -71,12 +72,17 @@
 
 # define RENDER_SHOW_STATS			0
 
-# define KEY_FORWARD				KEY_W
+# define KEY_FORWARD				KEY_Z
+# define KEY_FORWARD2				KEY_W
 # define KEY_BACKWARD				KEY_S
-# define KEY_LEFT					KEY_A
+# define KEY_LEFT					KEY_Q
+# define KEY_LEFT2					KEY_A
 # define KEY_RIGHT					KEY_D
 # define KEY_ROTATION_LEFT			KEY_ARROW_LEFT
 # define KEY_ROTATION_RIGHT			KEY_ARROW_RIGHT
+
+# define MOUSE_BUTTON_HOOK			MOUSE_BUTTON_RIGHT
+# define MOUSE_SENSIBILITY			2
 
 typedef struct		s_game_object
 {

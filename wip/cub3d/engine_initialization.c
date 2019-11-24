@@ -21,6 +21,7 @@ static void
 
 	error = NULL;
 	key_state_initialize();
+	mouse_button_state_initialize();
 	engine->dirty = 1;
 	error = player_initialize(engine);
 	if (error == NULL)

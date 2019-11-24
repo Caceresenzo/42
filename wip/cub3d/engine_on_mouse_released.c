@@ -17,5 +17,6 @@ int
 {
 	FAKE_USE(engine);
 	printf("EVENT: on_mouse_released: button = %d, x = %d, y = %d\n", button, x, y);
+	mouse_button_state_set(button, STATE_RELEASED);
 	return (0);
 }

@@ -58,6 +58,8 @@ SRCS	=	bmp_encoder.c \
 			mlx_context_destroyer.c \
 			mlx_context_initialization.c \
 			mlx_exporter_bmp.c \
+			mouse_buttons_states.c \
+			mouse_positions.c \
 			player_handle_mouvement.c \
 			player_initialization.c \
 			player_initialization_set_direction.c \
@@ -77,7 +79,7 @@ SRCS	=	bmp_encoder.c \
 			ray_sprite_computer_matrix.c \
 			ray_sprite_precomputer_order.c \
 			renderer.c \
-			util_color.c
+			util_color.c 
 			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/

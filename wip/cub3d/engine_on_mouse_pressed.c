@@ -17,5 +17,7 @@ int
 {
 	FAKE_USE(engine);
 	printf("EVENT: on_mouse_pressed: button = %d, x = %d, y = %d\n", button, x, y);
+	mouse_button_state_set(button, STATE_PRESSED);
+	mouse_pos_last_click_update(x, y);
 	return (0);
 }

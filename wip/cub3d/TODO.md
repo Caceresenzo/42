@@ -4,4 +4,4 @@
 
 # Bonus
 
- - Try hooking the mouse ?
+ - Minimap ?

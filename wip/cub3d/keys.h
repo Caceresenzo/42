@@ -113,5 +113,6 @@ void	key_state_initialize(void);
 
 int		key_state_set(int keycode, int state);
 int		key_state_get(int keycode);
+int		key_state_get2(int keycode1, int keycode2);
 
 #endif

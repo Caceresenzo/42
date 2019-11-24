@@ -15,6 +15,8 @@
 #define MODE_FORWARD_BACKWARD 0
 #define MODE_LEFT_RIGHT 1
 
+#define KEYS(key1, key2)
+
 /*
 ** For left or right movement:
 **		x = dir.x * cos(PI / 2) - dir.y * sin(PI / 2)
@@ -78,6 +80,20 @@ static void
 	plyer->plane.y = old_plane_x * sin(speed) + plyer->plane.y * cos(speed);
 }
 
+static void
+	i_player_handle_mouse_rotation(t_player *player)
+{
+	int		off;
+	t_vec2i	current;
+
+	current = mouse_pos_current_get();
+	off = mouse_pos_last_click_get().x - current.x;
+	off = MAX(-1, MIN(off, 1)) * MOUSE_SENSIBILITY;
+	if (off != 0)
+		mouse_pos_last_click_update(current.x, current.y);
+	i_player_handle_rotation(player, off, player->rot_speed.value);
+}
+
 int
 	player_handle_mouvement(t_map *map, t_player *player)
 {
@@ -88,17 +104,22 @@ int
 	has_moved = 0;
 	if (key_state_get(KEY_SHIFT))
 		player->move_speed.value *= player->sprint_mult;
-	if (key_state_get(KEY_FORWARD) && (has_moved = 1))
+	if (key_state_get2(KEY_FORWARD, KEY_FORWARD2) && (has_moved = 1))
 		i_player_handle_move(map, player, 1, MODE_FORWARD_BACKWARD);
 	if (key_state_get(KEY_BACKWARD) && (has_moved = 1))
 		i_player_handle_move(map, player, -1, MODE_FORWARD_BACKWARD);
-	if (key_state_get(KEY_LEFT) && (has_moved = MODE_LEFT_RIGHT))
-		i_player_handle_move(map, player, 1, 1);
-	if (key_state_get(KEY_RIGHT) && (has_moved = MODE_LEFT_RIGHT))
-		i_player_handle_move(map, player, -1, 1);
-	if (key_state_get(KEY_ROTATION_LEFT) && (has_moved = 1))
-		i_player_handle_rotation(player, 1, player->rot_speed.value);
-	if (key_state_get(KEY_ROTATION_RIGHT) && (has_moved = 1))
-		i_player_handle_rotation(player, -1, player->rot_speed.value);
+	if (key_state_get2(KEY_LEFT, KEY_LEFT2) && (has_moved = 1))
+		i_player_handle_move(map, player, 1, MODE_LEFT_RIGHT);
+	if (key_state_get(KEY_RIGHT) && (has_moved = 1))
+		i_player_handle_move(map, player, -1, MODE_LEFT_RIGHT);
+	if (mouse_button_state_get(MOUSE_BUTTON_HOOK) && (has_moved = 1))
+		i_player_handle_mouse_rotation(player);
+	else
+	{
+		if (key_state_get(KEY_ROTATION_LEFT) && (has_moved = 1))
+			i_player_handle_rotation(player, 1, player->rot_speed.value);
+		if (key_state_get(KEY_ROTATION_RIGHT) && (has_moved = 1))
+			i_player_handle_rotation(player, -1, player->rot_speed.value);
+	}
 	return (has_moved);
 }
