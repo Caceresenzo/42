@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_loop.c                                      :+:      :+:    :+:   */
+/*   image_pixel_set.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 15:54:24 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 15:54:24 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/24 14:38:17 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/24 14:38:17 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "image.h"
 
-int
-	engine_loop(t_engine *engine)
+void
+	image_pixel_set(t_image *image, int x, int y, int color)
 {
-	int		dirty[2];
-
-	dirty[0] = player_handle_action(engine->map, &(engine->player));
-	dirty[1] = player_handle_mouvement(engine->map, &(engine->player));
-	engine->dirty = engine->dirty || dirty[0] || dirty[1];
-	render_scene_smart(engine, RENDER_SHOW_STATS);
-	return (0);
+	if (x < 0 || x >= image->width || y < 0 || y >= image->height)
+		return ;
+	image->pic[(y * image->line_unit) + x] = color;
 }

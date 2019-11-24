@@ -31,4 +31,6 @@ typedef struct		s_dim2i
 	int				h;
 }					t_dim2i;
 
+void				vector2i_add(t_vec2i *dest, t_vec2i a, t_vec2i b);
+
 #endif

@@ -89,6 +89,7 @@ t_map
 	map->spr_ordr = NULL;
 	map->spr_dist = NULL;
 	map->sprite_count = 0;
+	map->render_minimap = 0;
 	return (map);
 }
 

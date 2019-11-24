@@ -1,9 +1,9 @@
 R 640 480
-NO ./wool_colored_light_blue.png
-SO ./wool_colored_lime.png
-WE ./wool_colored_red.png
-EA ./wool_colored_yellow.png
-S ./pillar.png
+NO ./maps/textures/wool_colored_light_blue.png
+SO ./maps/textures/wool_colored_lime.png
+WE ./maps/textures/wool_colored_red.png
+EA ./maps/textures/wool_colored_yellow.png
+S ./maps/textures/pillar.png
 F 220,100,0
  
 C 225,30,0

@@ -3,5 +3,3 @@
 # Mandatory
 
 # Bonus
-
- - Minimap ?

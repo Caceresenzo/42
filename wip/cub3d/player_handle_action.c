@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_loop.c                                      :+:      :+:    :+:   */
+/*   player_handle_action.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 15:54:24 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 15:54:24 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/18 12:37:10 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/18 12:37:10 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 int
-	engine_loop(t_engine *engine)
+	player_handle_action(t_map *map, t_player *player)
 {
-	int		dirty[2];
+	int		has_changed;
 
-	dirty[0] = player_handle_action(engine->map, &(engine->player));
-	dirty[1] = player_handle_mouvement(engine->map, &(engine->player));
-	engine->dirty = engine->dirty || dirty[0] || dirty[1];
-	render_scene_smart(engine, RENDER_SHOW_STATS);
-	return (0);
+	FAKE_USE(player);
+	has_changed = 0;
+	if (map->render_minimap != key_state_get(KEY_MINIMAP) && (has_changed = 1))
+		map->render_minimap = key_state_get(KEY_MINIMAP);
+	return (has_changed);
 }

@@ -24,6 +24,7 @@ SRCS	=	bmp_encoder.c \
 			buffer_write_int_32_le.c \
 			buffer_write_uint_16_le.c \
 			buffer_write_uint_32_le.c \
+			color_invert.c \
 			engine_exit_handler.c \
 			engine_global.c \
 			engine_handle_error.c \
@@ -41,6 +42,8 @@ SRCS	=	bmp_encoder.c \
 			image_destroy.c \
 			image_draw_line.c \
 			image_load.c \
+			image_pixel_get.c \
+			image_pixel_set.c \
 			keys_manager.c \
 			keys_states.c \
 			main.c \
@@ -55,11 +58,17 @@ SRCS	=	bmp_encoder.c \
 			map_loader_set_texture.c \
 			map_sealing_checker.c \
 			map_utils.c \
+			minimap_renderer.c \
+			minimap_renderer_block.c \
+			minimap_renderer_map.c \
+			minimap_renderer_outline.c \
+			minimap_renderer_player.c \
 			mlx_context_destroyer.c \
 			mlx_context_initialization.c \
 			mlx_exporter_bmp.c \
 			mouse_buttons_states.c \
 			mouse_positions.c \
+			player_handle_action.c \
 			player_handle_mouvement.c \
 			player_initialization.c \
 			player_initialization_set_direction.c \

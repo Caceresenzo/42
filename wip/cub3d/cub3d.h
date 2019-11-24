@@ -35,8 +35,8 @@
 # define WINDOW_NAME				"cub3d"
 # define WINDOW_NAME_BASE			WINDOW_NAME" - "
 
-# define MAX_WINDOW_WIDTH			640
-# define MAX_WINDOW_HEIGHT			480
+# define MAX_WINDOW_WIDTH			2048
+# define MAX_WINDOW_HEIGHT			1080
 
 # define EXPORT_FILE				WINDOW_NAME".bmp"
 
@@ -70,7 +70,8 @@
 # define E(error)					ft_strdup(error)
 # define EMALLOC(location)			E("Failed to malloc() ["location"]")
 
-# define RENDER_SHOW_STATS			0
+# define RENDER_SHOW_STATS			1
+# define RENDER_DO_FRAMING			0
 
 # define KEY_FORWARD				KEY_Z
 # define KEY_FORWARD2				KEY_W
@@ -80,9 +81,12 @@
 # define KEY_RIGHT					KEY_D
 # define KEY_ROTATION_LEFT			KEY_ARROW_LEFT
 # define KEY_ROTATION_RIGHT			KEY_ARROW_RIGHT
+# define KEY_MINIMAP				KEY_SPACE
 
 # define MOUSE_BUTTON_HOOK			MOUSE_BUTTON_RIGHT
 # define MOUSE_SENSIBILITY			2
+
+# define MINIMAP_RES				16
 
 typedef struct		s_game_object
 {
@@ -105,6 +109,7 @@ typedef struct		s_map
 	int				*spr_ordr;
 	double			*spr_dist;
 	size_t			sprite_count;
+	int				render_minimap;
 }					t_map;
 
 typedef struct		s_mlx_context
@@ -228,6 +233,8 @@ void				mlx_export_bmp(t_engine *engine);
 int					color_assemble(int red, int green, int blue);
 void				color_dismentle(int color, int *red, int *green, int *blue);
 
+int					color_invert(int color);
+
 t_map				*map_load(t_engine *eng, char *path);
 
 char				*map_loader_set_color(char *key, char *colors,
@@ -271,6 +278,8 @@ char				*player_init_set_position(t_map *map,
 														t_player *player);
 char				*player_init_set_direction(t_player *player,
 													t_g_obj_data_player *data);
+
+int					player_handle_action(t_map *map, t_player *player);
 int					player_handle_mouvement(t_map *map, t_player *player);
 
 void				render_scene(t_engine *engine);
@@ -316,5 +325,16 @@ int					mlx_put_image_to_window_scale(void *mlx_ptr, void *win_ptr,
 													int dx, int dy,
 													int dw, int dh,
 													unsigned int color);
+
+void				minimap_render(t_image *canvas, t_player *player,
+									t_map *map);
+void				minimap_render_outline(t_image *canvas, t_map *map,
+											t_vec2i offset);
+void				minimap_render_block(t_image *canvas, t_vec2i pos,
+										int color, t_vec2i offset);
+void				minimap_render_map(t_image *canvas, t_map *map,
+										t_vec2i offset);
+void				minimap_render_player(t_image *canvas, t_player *player,
+											t_vec2i offset);
 
 #endif

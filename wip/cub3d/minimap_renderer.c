@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_loop.c                                      :+:      :+:    :+:   */
+/*   minimap_renderer.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 15:54:24 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 15:54:24 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/24 14:37:01 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/24 14:37:01 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int
-	engine_loop(t_engine *engine)
+void
+	minimap_render(t_image *canvas, t_player *player, t_map *map)
 {
-	int		dirty[2];
+	t_vec2i			vec;
+	t_vec2i			offset;
+	t_game_object	*obj;
 
-	dirty[0] = player_handle_action(engine->map, &(engine->player));
-	dirty[1] = player_handle_mouvement(engine->map, &(engine->player));
-	engine->dirty = engine->dirty || dirty[0] || dirty[1];
-	render_scene_smart(engine, RENDER_SHOW_STATS);
-	return (0);
+	offset = (t_vec2i) { (map->size.w + 1) * MINIMAP_RES, MINIMAP_RES };
+	offset.x = canvas->width - offset.x;
+	minimap_render_outline(canvas, map, offset);
+	minimap_render_map(canvas, map, offset);
+	minimap_render_player(canvas, player, offset);
 }

@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_loop.c                                      :+:      :+:    :+:   */
+/*   color_invert.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 15:54:24 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 15:54:24 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/24 14:56:54 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/24 14:56:54 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 int
-	engine_loop(t_engine *engine)
+	color_invert(int color)
 {
-	int		dirty[2];
-
-	dirty[0] = player_handle_action(engine->map, &(engine->player));
-	dirty[1] = player_handle_mouvement(engine->map, &(engine->player));
-	engine->dirty = engine->dirty || dirty[0] || dirty[1];
-	render_scene_smart(engine, RENDER_SHOW_STATS);
-	return (0);
+	return (0xFFFFFF - color);
 }

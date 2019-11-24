@@ -16,6 +16,8 @@ void
 	render_scene(t_engine *engine)
 {
 	ray_render_scene(engine);
+	if (engine->map->render_minimap)
+		minimap_render(engine->canvas, &(engine->player), engine->map);
 	if (engine->ctx.graphics)
 		mlx_put_image_to_window_scale(engine->ctx.mlx, engine->ctx.win,
 							engine->canvas->ptr,
@@ -29,6 +31,12 @@ void
 {
 	if (engine->dirty)
 	{
+		if (RENDER_DO_FRAMING)
+		{
+			if (engine->canvas)
+				image_destroy_null(engine->ctx.mlx, &(engine->canvas));
+			mlx_canvas_initialize(engine, &(engine->canvas));
+		}
 		fps_counter_start();
 		render_scene(engine);
 		fps_counter_end();
