@@ -69,43 +69,13 @@ static char
 }
 
 t_map
-	*map_create(char *file)
+	*i_map_load_from_fd(t_engine *eng, int fd)
 {
-	t_map	*map;
-
-	CHECK_MALLOC(map, sizeof(t_map));
-	map->file = file;
-	map->objs = NULL;
-	map->roof_color = -1;
-	map->floor_color = -1;
-	map->wall_texs[NORTH] = NULL;
-	map->wall_texs[SOUTH] = NULL;
-	map->wall_texs[WEST] = NULL;
-	map->wall_texs[EAST] = NULL;
-	map->sprite = NULL;
-	map->size.w = 0;
-	map->size.h = 0;
-	map->sprts = NULL;
-	map->spr_ordr = NULL;
-	map->spr_dist = NULL;
-	map->sprite_count = 0;
-	map->render_minimap = 0;
-	return (map);
-}
-
-t_map
-	*map_load(t_engine *eng, char *path)
-{
-	int		fd;
 	int		returned;
 	int		fully;
 	char	*line;
 	char	*error;
 
-	fd = open(path, O_RDONLY);
-	if (fd < 0)
-		return (engine_error_raison(ft_strjoin("Failed to read file: ", path)));
-	CHECK_PTR(eng->map = map_create(path));
 	eng->map->objs = NULL;
 	fully = 0;
 	while (1)
@@ -119,4 +89,25 @@ t_map
 			break ;
 	}
 	return (map_finalize(eng->map));
+}
+
+t_map
+	*map_load(t_engine *eng, char *path)
+{
+	int		fd;
+	t_map	*map;
+
+	fd = open(path, O_RDONLY);
+	if (fd < 0)
+		return (engine_error_raison(ft_strjoin("Failed to read file: ", path)));
+	if (!map_loader_check_file_extension(path))
+	{
+		close(fd);
+		return (engine_error(ft_strjoin("Invalid file extension, ",
+						"only \""CUB3D_FILE_EXTENSION"\" is accepted")));
+	}
+	CHECK_PTR(eng->map = map_create(path));
+	map = i_map_load_from_fd(eng, fd);
+	close(fd);
+	return (map);
 }

@@ -44,6 +44,7 @@ SRCS	=	bmp_encoder.c \
 			image_load.c \
 			image_pixel_get.c \
 			image_pixel_set.c \
+			image_value_ranger.c \
 			keys_manager.c \
 			keys_states.c \
 			main.c \
@@ -51,6 +52,8 @@ SRCS	=	bmp_encoder.c \
 			map_destroy.c \
 			map_dumper.c \
 			map_loader.c \
+			map_loader_create.c \
+			map_loader_file_extension.c \
 			map_loader_finalizer.c \
 			map_loader_set_color.c \
 			map_loader_set_grid.c \
@@ -88,7 +91,7 @@ SRCS	=	bmp_encoder.c \
 			ray_sprite_computer_matrix.c \
 			ray_sprite_precomputer_order.c \
 			renderer.c \
-			util_color.c 
+			util_color.c
 			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/

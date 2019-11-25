@@ -19,12 +19,16 @@ void
 	int		y;
 	size_t	offset;
 
+	if (x < 0 || x >= args.image->width)
+		return ;
 	if (y_start > y_end)
 	{
 		y = y_end;
 		y_end = y_start;
 		y_start = y;
 	}
+	image_range_value_y(args.image, &y_start);
+	image_range_value_y(args.image, &y_end);
 	y = y_start;
 	offset = y * args.image->line_unit + x;
 	while (y < y_end)
@@ -42,12 +46,16 @@ void
 	int		x;
 	size_t	offset;
 
+	if (y < 0 || y >= args.image->height)
+		return ;
 	if (x_start > x_end)
 	{
 		x = x_end;
 		x_end = x_start;
 		x_start = x;
 	}
+	image_range_value_x(args.image, &x_start);
+	image_range_value_x(args.image, &x_end);
 	x = x_start;
 	offset = y * args.image->line_unit + x;
 	while (x < x_end)

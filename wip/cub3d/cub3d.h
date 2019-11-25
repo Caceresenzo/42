@@ -38,6 +38,9 @@
 # define MAX_WINDOW_WIDTH			2048
 # define MAX_WINDOW_HEIGHT			1080
 
+# define CUB3D_FILE_EXTENSION		".cub"
+# define CUB3D_USAGE				"usage: ./cub3d <map> [-save]"
+
 # define EXPORT_FILE				WINDOW_NAME".bmp"
 
 # define X_EVENT_KEY_PRESS			2
@@ -235,8 +238,10 @@ void				color_dismentle(int color, int *red, int *green, int *blue);
 
 int					color_invert(int color);
 
+t_map				*map_create(char *file);
 t_map				*map_load(t_engine *eng, char *path);
 
+int					map_loader_check_file_extension(char *path);
 char				*map_loader_set_color(char *key, char *colors,
 											int *color_ptr);
 char				*map_loader_set_resolution(char *key, char **resolutions,

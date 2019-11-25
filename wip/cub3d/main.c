@@ -17,6 +17,11 @@ int		main(int argc, char **argv)
 	int		save_arg;
 
 	errno = 0;
+	if (argc == 1)
+	{
+		ft_putendl_fd(CUB3D_USAGE, ERR);
+		return (1);
+	}
 	if ((save_arg = (argc == 3)))
 	{
 		if (ft_strncmp(argv[2], "-save", 6) != 0)

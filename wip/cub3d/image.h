@@ -48,6 +48,9 @@ void			image_draw_vertical_line(t_drawer_line_args args, int x,
 void			image_draw_horizontal_line(t_drawer_line_args args, int x_start,
 											int x_end, int y);
 
+void			image_range_value_x(t_image *image, int *x);
+void			image_range_value_y(t_image *image, int *y);
+
 void			image_destroy(void *mlx_ptr, t_image *image_ptr);
 void			image_destroy_null(void *mlx_ptr, t_image **image_ptr);
 
