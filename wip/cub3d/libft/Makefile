@@ -55,6 +55,7 @@ SRCS	=	ft_charmult.c \
 			ft_swap_double.c \
 			ft_swap_int.c \
 			ft_sort_comp.c \
+			ft_free_and_release.c \
 			get_next_line.c
 SRCS_B	=   ft_lstadd_back.c \
 			ft_lstadd_front.c \

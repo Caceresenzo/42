@@ -113,7 +113,7 @@ char				*ft_charmult(char c, size_t times);
 char				*ft_itoa_base(long n, char *base);
 size_t				ft_itoa_base_compute_number_size(long number, size_t radix);
 size_t				ft_split_length(char **array);
-void				ft_split_free(char ***d3array);
+void				*ft_split_free(char ***d3array);
 int					ft_isinstr(char c, char *charset);
 
 int					ft_lsr(int x, int n);
@@ -122,5 +122,7 @@ void				ft_swap_double(double *a, double *b);
 void				ft_swap_int(int *a, int *b);
 
 void				ft_sort_comp(int *order, double *dist, int amount);
+
+void				ft_free_and_release(void **ptr_ptr);
 
 #endif

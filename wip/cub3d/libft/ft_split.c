@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <stdio.h>
 
 static size_t	internal_ft_split_compute_items(char const *s, char c)
 {
@@ -91,13 +90,13 @@ size_t			ft_split_length(char **array)
 	return (length);
 }
 
-void			ft_split_free(char ***d3array)
+void			*ft_split_free(char ***d3array)
 {
 	size_t	length;
 	size_t	index;
 
-	CHECK_PTR_EMPTY(d3array);
-	CHECK_PTR_EMPTY(*d3array);
+	CHECK_PTR(d3array);
+	CHECK_PTR(*d3array);
 	length = ft_split_length(*d3array);
 	index = 0;
 	while (index < length)
@@ -107,4 +106,5 @@ void			ft_split_free(char ***d3array)
 	}
 	free(*d3array);
 	*d3array = NULL;
+	return (NULL);
 }
