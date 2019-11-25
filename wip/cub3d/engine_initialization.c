@@ -30,7 +30,6 @@ static void
 					(t_vec2i) { engine->player.pos.x, engine->player.pos.y }))
 			error = E("Map is not sealed");
 	}
-	map_dump(engine->map);
 	if (error != NULL)
 		engine_error(error);
 }

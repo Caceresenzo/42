@@ -15,9 +15,7 @@
 void
 	minimap_render(t_image *canvas, t_player *player, t_map *map)
 {
-	t_vec2i			vec;
 	t_vec2i			offset;
-	t_game_object	*obj;
 
 	offset = (t_vec2i) { (map->size.w + 1) * MINIMAP_RES, MINIMAP_RES };
 	offset.x = canvas->width - offset.x;

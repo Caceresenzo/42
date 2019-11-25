@@ -10,6 +10,11 @@
 #                                                                              #
 # **************************************************************************** #
 
+C_YELLOW_B=\033[1;33m
+C_LIGHT_RED_B=\033[0;91m
+C_WHITE=\033[0;97m
+C_RESET=\033[0;39m
+
 PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 NAME	=   cub3d
@@ -95,15 +100,15 @@ SRCS	=	bmp_encoder.c \
 			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
+FLAGS	= -Wall -Wextra -Werror -O3 -g3
+FRWRKS	= -framework OpenGL -framework AppKit
+LIBS_P	= ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
 
 .c.o :
 	${CC} ${FLAGS} -c $< -o ${<:.c=.o} ${INCS}
-	
-%.o: $(PROJECT_ROOT)%.c
-	gcc ${INCS} -c -O3 -g3 $(CPPFLAGS) -o $@ $< 
 
 $(NAME): libs ${OBJS}
-	gcc $(OBJS) -O3 -g3 -framework OpenGL -framework AppKit -o $(NAME) ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
+	gcc $(OBJS) ${FLAGS} ${FRWRKS} -o $(NAME) ${LIBS_P}
 
 all: $(NAME)
 
@@ -116,7 +121,22 @@ clean:
 	rm -fr cub3d $(OBJS)
 	rm -rf .*.o
 	rm -rf .*.dylib
+    
+fclean: clean
+	$(RM) $(NAME)
+    
+re: fclean all
 
-fullclean: clean
+bonus: all
+
+libs-clean:
 	make clean -C ${PROJECT_ROOT}/minilibx_mms_beta
-	make clean -C ${PROJECT_ROOT}/libft
+	make fclean -C ${PROJECT_ROOT}/libft
+
+norm:
+	norminette *.[ch]
+
+test: all
+	sh ./tests/test_unit.sh
+
+.PHONY: all bonus clean fclean re .c.o libs libs-clean

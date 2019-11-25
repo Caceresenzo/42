@@ -1,5 +1,5 @@
 R 800 400
-S ./maps/textures/sponge.png
+S ./tests/maps/textures/sponge.png
 C 225,30,0
 F 225,30,0
 1 1 1 1 1 1
