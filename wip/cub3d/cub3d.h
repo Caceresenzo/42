@@ -21,7 +21,7 @@
 # include <string.h>
 # include <errno.h>
 
-# include "minilibx_mms_beta/mlx.h"
+# include <mlx.h>
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
 
@@ -73,9 +73,6 @@
 # define E(error)					ft_strdup(error)
 # define EMALLOC(location)			E("Failed to malloc() ["location"]")
 
-# define RENDER_SHOW_STATS			1
-# define RENDER_DO_FRAMING			0
-
 # define KEY_FORWARD				KEY_Z
 # define KEY_FORWARD2				KEY_W
 # define KEY_BACKWARD				KEY_S
@@ -90,6 +87,13 @@
 # define MOUSE_SENSIBILITY			2
 
 # define MINIMAP_RES				16
+
+# ifndef BONUS
+#  define BONUS 1
+# endif
+
+# define RENDER_SHOW_STATS			BONUS
+# define RENDER_DO_FRAMING			0
 
 typedef struct		s_game_object
 {

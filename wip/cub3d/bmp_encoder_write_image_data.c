@@ -13,14 +13,6 @@
 #include "bmp.h"
 #include "maths.h"
 
-/*
-** if (encoder.extra_bytes > 0)
-** {
-** 		size_t fillOffset = pos + y * row_bytes + encoder.width * 3;
-** 		buffer_fill(buffer, 0, fillOffset, fillOffset + encoder.extra_bytes);
-** }
-*/
-
 void
 	bmp_encode_write_image_data(t_bmp_encoder *encoder, t_buffer *buffer,
 								size_t pos)

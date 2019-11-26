@@ -22,11 +22,11 @@ void
 {
 	g_mouse_last_click_position.x = x;
 	g_mouse_last_click_position.y = y;
-	mouse_position_current_update(x, y);
+	mouse_pos_current_update(x, y);
 }
 
 void
-	mouse_position_current_update(int x, int y)
+	mouse_pos_current_update(int x, int y)
 {
 	g_mouse_current_position.x = x;
 	g_mouse_current_position.y = y;
@@ -42,4 +42,10 @@ t_vec2i
 	mouse_pos_current_get(void)
 {
 	return (g_mouse_current_position);
+}
+
+void
+	mouse_pos_update_last_to_current(void)
+{
+	g_mouse_last_click_position = g_mouse_current_position;
 }

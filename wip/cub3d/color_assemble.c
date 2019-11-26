@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   engine_on_mouse_released.c                         :+:      :+:    :+:   */
+/*   color_assemble.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/12 17:23:38 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/12 17:23:38 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/26 12:04:19 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/26 12:04:19 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 int
-	engine_on_mouse_released(int button, int x, int y, t_engine *engine)
+	color_assemble(int red, int green, int blue)
 {
-	FAKE_USE(engine);
-	FAKE_USE(x);
-	FAKE_USE(y);
-	mouse_button_state_set(button, STATE_RELEASED);
-	return (0);
+	int		color;
+
+	color = red;
+	color = (color << 8) + green;
+	color = (color << 8) + blue;
+	return (color);
 }

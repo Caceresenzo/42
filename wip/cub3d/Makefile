@@ -29,6 +29,8 @@ SRCS	=	bmp_encoder.c \
 			buffer_write_int_32_le.c \
 			buffer_write_uint_16_le.c \
 			buffer_write_uint_32_le.c \
+			color_assemble.c \
+			color_dismentle.c \
 			color_invert.c \
 			engine_exit_handler.c \
 			engine_global.c \
@@ -95,17 +97,17 @@ SRCS	=	bmp_encoder.c \
 			ray_sprite_computer_limiter.c \
 			ray_sprite_computer_matrix.c \
 			ray_sprite_precomputer_order.c \
-			renderer.c \
-			util_color.c
+			renderer.c 
 			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
 FLAGS	= -Wall -Wextra -Werror -O3 -g3
 FRWRKS	= -framework OpenGL -framework AppKit
 LIBS_P	= ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
+BONUS	= 0
 
-.c.o :
-	${CC} ${FLAGS} -c $< -o ${<:.c=.o} ${INCS}
+%.o: $(PROJECT_ROOT)%.c
+	${CC} ${FLAGS} -c $(CPPFLAGS) -o $@ $< ${INCS} -D BONUS=${BONUS}
 
 $(NAME): libs ${OBJS}
 	gcc $(OBJS) ${FLAGS} ${FRWRKS} -o $(NAME) ${LIBS_P}
@@ -127,7 +129,9 @@ fclean: clean
     
 re: fclean all
 
-bonus: all
+bonus:
+	echo ${FILE}
+	make re BONUS=1 -C ${PROJECT_ROOT}
 
 libs-clean:
 	make clean -C ${PROJECT_ROOT}/minilibx_mms_beta
@@ -139,4 +143,4 @@ norm:
 test: all
 	sh ./tests/test_unit.sh
 
-.PHONY: all bonus clean fclean re .c.o libs libs-clean
+.PHONY: all bonus clean fclean re .c.o libs libs-clean norm test

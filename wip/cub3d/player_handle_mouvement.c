@@ -90,7 +90,7 @@ static void
 	off = mouse_pos_last_click_get().x - current.x;
 	off = MAX(-1, MIN(off, 1)) * MOUSE_SENSIBILITY;
 	if (off != 0)
-		mouse_pos_last_click_update(current.x, current.y);
+		mouse_pos_update_last_to_current();
 	i_player_handle_rotation(player, off, player->rot_speed.value);
 }
 
@@ -102,7 +102,7 @@ int
 	player->move_speed.value = fps_counter_get_tick() * player->move_speed.base;
 	player->rot_speed.value = fps_counter_get_tick() * player->rot_speed.base;
 	has_moved = 0;
-	if (key_state_get(KEY_SHIFT))
+	if (key_state_get(KEY_SHIFT) && BONUS)
 		player->move_speed.value *= player->sprint_mult;
 	if (key_state_get2(KEY_FORWARD, KEY_FORWARD2) && (has_moved = 1))
 		i_player_handle_move(map, player, 1, MODE_FORWARD_BACKWARD);
@@ -112,7 +112,7 @@ int
 		i_player_handle_move(map, player, 1, MODE_LEFT_RIGHT);
 	if (key_state_get(KEY_RIGHT) && (has_moved = 1))
 		i_player_handle_move(map, player, -1, MODE_LEFT_RIGHT);
-	if (mouse_button_state_get(MOUSE_BUTTON_HOOK) && (has_moved = 1))
+	if (mouse_button_state_get(MOUSE_BUTTON_HOOK) && BONUS && (has_moved = 1))
 		i_player_handle_mouse_rotation(player);
 	else
 	{

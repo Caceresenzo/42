@@ -16,7 +16,6 @@ int
 	engine_on_key_released(int keycode, t_engine *engine)
 {
 	FAKE_USE(engine);
-	printf("EVENT: on_key_released: keycode = %d\n", keycode);
 	key_state_set(keycode, STATE_RELEASED);
 	return (0);
 }

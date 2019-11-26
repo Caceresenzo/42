@@ -16,7 +16,7 @@ void
 	render_scene(t_engine *engine)
 {
 	ray_render_scene(engine);
-	if (engine->map->render_minimap)
+	if (engine->map->render_minimap && BONUS)
 		minimap_render(engine->canvas, &(engine->player), engine->map);
 	if (engine->ctx.graphics)
 		mlx_put_image_to_window_scale(engine->ctx.mlx, engine->ctx.win,
@@ -64,7 +64,6 @@ void
 	fps = ft_itoa(fps_counter_get());
 	full = ft_strjoin("FPS: ", fps);
 	mlx_string_put(engine->ctx.mlx, engine->ctx.win, 50, 50, 0xFFFFFF, full);
-	printf("FPS: %s (%f)\n", fps, fps_counter_get_tick());
 	free(fps);
 	free(full);
 }

@@ -41,7 +41,7 @@ function check()
 	for file in $files
 	do
 		g_test_count=$((g_test_count+1))
-		printf "\033[4G%s\033[10G\033[0;36m'%s'" "🔎" $file
+		printf "\033[4G%s\033[10G\033[0;36m'%s'" "🔎" "$file"
 		{ ./cub3d $file $flags ; } &> /dev/null &
 		pid=$!
 		loop=0

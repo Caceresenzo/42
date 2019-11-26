@@ -37,7 +37,9 @@ int		mouse_button_last_get(void);
 void	mouse_pos_last_click_update(int x, int y);
 t_vec2i	mouse_pos_last_click_get(void);
 
-void	mouse_position_current_update(int x, int y);
+void	mouse_pos_current_update(int x, int y);
 t_vec2i	mouse_pos_current_get(void);
+
+void	mouse_pos_update_last_to_current(void);
 
 #endif
