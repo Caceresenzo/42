@@ -12,11 +12,8 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_f_pourcent(t_ft_printf_settings *settings,
-							t_ft_printf_flags *flags, size_t *index)
+char	*ft_printf_formatter_pourcent(t_ft_printf_bundle *bundle)
 {
-	FAKE_USE(settings);
-	FAKE_USE(flags);
-	FAKE_USE(index);
-	return (ft_chrtostr('%'));
+	FAKE_USE(bundle);
+	return (ft_chartostr('%'));
 }

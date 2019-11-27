@@ -11,7 +11,11 @@
 # **************************************************************************** #
 
 NAME	=   libft.a
-SRCS	=	ft_atoi.c \
+SRCS	=	ft_charmult.c \
+			ft_chrtostr.c \
+			ft_emptystr.c \
+			ft_itoa_base.c \
+			ft_atoi.c \
 			ft_bzero.c \
 			ft_calloc.c \
 			ft_isalnum.c \
@@ -44,7 +48,15 @@ SRCS	=	ft_atoi.c \
 			ft_strtrim.c \
 			ft_substr.c \
 			ft_tolower.c \
-			ft_toupper.c 
+			ft_toupper.c \
+			ft_isinstr.c \
+			ft_putmem_fd.c \
+			ft_lsr.c \
+			ft_swap_double.c \
+			ft_swap_int.c \
+			ft_sort_comp.c \
+			ft_free_and_release.c \
+			get_next_line.c
 SRCS_B	=   ft_lstadd_back.c \
 			ft_lstadd_front.c \
 			ft_lstclear.c \

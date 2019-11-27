@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-char	*ft_chrtostr(char c)
+char	*ft_chartostr(char c)
 {
 	char	*str;
 

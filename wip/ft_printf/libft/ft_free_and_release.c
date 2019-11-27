@@ -1,30 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_flag_initializer.c                       :+:      :+:    :+:   */
+/*   ft_free_and_release.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 16:48:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/07 16:48:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/22 15:36:04 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/22 15:36:04 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-void	ft_printf_flag_initialize(t_ft_printf_flags *flags)
+void
+	ft_free_and_release(void **ptr_ptr)
 {
-	flags->letter = '\0';
-	flags->valid = 0;
-	flags->minus_sign_used = 0;
-	flags->side = 0;
-	flags->padding_char = ' ';
-	flags->hashtag = 0;
-	flags->width_enabled = 0;
-	flags->width = 0;
-	flags->width_negative = 0;
-	flags->precision_enabled = 0;
-	flags->precision = 0;
-	flags->precision_negative = 0;
-	flags->hex__upper = 0;
+	free(*ptr_ptr);
+	*ptr_ptr = NULL;
 }

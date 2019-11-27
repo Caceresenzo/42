@@ -12,38 +12,77 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_flag_handle_width(t_ft_printf_flags *flags, char *formatted)
+char
+	*ft_printf_flag_handle_width(t_ft_printf_bundle *bundle, char *formatted)
 {
 	size_t	length;
 	int		required;
 	char	*padding;
 	char	*str;
 
-	if (flags->precision_enabled)
-		flags->padding_char = ' ';
+	if ((bundle->flags->precision_enabled || bundle->flags->precision_negative)
+			&& bundle->flags->letter != 's' && bundle->flags->letter != '%'
+			&& (ft_tolower(bundle->flags->letter) != 'x'
+					|| bundle->flags->precision < bundle->flags->width))
+	{
+		bundle->flags->padding_char = ' ';
+	}
 	length = ft_strlen(formatted);
-	required = flags->width - length;
+	required = bundle->flags->width - length;
 	if (required <= 0)
 		return (formatted);
-	padding = ft_charmult(flags->padding_char, required);
+	padding = ft_charmult(bundle->flags->padding_char, required);
 	CHECK_PTR_DEF(padding, formatted);
-	if (flags->side)
+	if (bundle->flags->side)
 		str = ft_strjoin(formatted, padding);
 	else
 		str = ft_strjoin(padding, formatted);
+	bundle->forced_length = required + length;
 	free(padding);
 	return (str);
 }
 
-char	*ft_printf_flag_handle(t_ft_printf_flags *flags, char *formatted)
+char
+	*ft_printf_flag_handle_width_m(t_ft_printf_bundle *bundle, char *formatted)
+{
+	size_t	length;
+	int		required;
+	char	*padding;
+	char	*str;
+
+	if (bundle->flags->precision_enabled
+			&& bundle->flags->precision != 0 && bundle->flags->letter != 'c')
+		bundle->flags->padding_char = ' ';
+	length = bundle->forced_length;
+	required = bundle->flags->width - length;
+	if (required <= 0)
+		return (formatted);
+	padding = ft_charmult(bundle->flags->padding_char, required);
+	CHECK_PTR_DEF(padding, formatted);
+	if (bundle->flags->side)
+		str = ft_memjoin(formatted, length, padding, required);
+	else
+		str = ft_memjoin(padding, required, formatted, length);
+	bundle->forced_length = required + length;
+	free(padding);
+	return (str);
+}
+
+char
+	*ft_printf_flag_handle(t_ft_printf_bundle *bundle, char *formatted)
 {
 	char *str;
 
-	if (!flags->valid)
+	if (!bundle->flags->valid)
 		return (formatted);
 	str = formatted;
-	if (flags->width_enabled)
-		str = ft_printf_flag_handle_width(flags, str);
+	if (bundle->flags->width_enabled)
+	{
+		if (bundle->forced_length == -1)
+			str = ft_printf_flag_handle_width(bundle, str);
+		else
+			str = ft_printf_flag_handle_width_m(bundle, str);
+	}
 	if (str != formatted)
 		free(formatted);
 	return (str);

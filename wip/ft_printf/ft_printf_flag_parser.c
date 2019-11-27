@@ -36,8 +36,6 @@ static void		i_ft_printf_flag_parse_width(t_ft_printf_settings *settings,
 {
 	int		value;
 
-	if (flags->width_enabled)
-		return ;
 	flags->width_enabled = 1;
 	value = i_ft_printf_flag_parse_value(settings, str, index);
 	if (value < 0)
@@ -45,6 +43,7 @@ static void		i_ft_printf_flag_parse_width(t_ft_printf_settings *settings,
 		flags->side = !flags->side;
 		value *= -1;
 		flags->width_negative = 1;
+		flags->padding_char = ' ';
 	}
 	flags->width = value;
 }
@@ -57,8 +56,6 @@ static void		i_ft_printf_flag_parse_precision(size_t *index,
 	int		value;
 
 	*index += 1;
-	if (flags->precision_enabled)
-		return ;
 	flags->precision_enabled = 1;
 	value = i_ft_printf_flag_parse_value(settings, str, index);
 	if (value < 0)
@@ -91,7 +88,8 @@ static void		i_ft_printf_flag_parse_commit(t_ft_printf_settings *settings,
 	}
 	else
 	{
-		i_ft_printf_flag_parse_width(settings, flags, str, index);
+		if ((current = str[*index]) != '.')
+			i_ft_printf_flag_parse_width(settings, flags, str, index);
 		if ((current = str[*index]) == '.')
 			i_ft_printf_flag_parse_precision(index, settings, flags, str);
 	}
@@ -115,7 +113,6 @@ void			ft_printf_flag_parse(t_ft_printf_settings *settings,
 		i_ft_printf_flag_parse_commit(settings, flags, str, &index);
 		index++;
 	}
-	i_ft_printf_flag_parse_commit(settings, flags, str, &index);
 	free(str);
 	ft_printf_flag_validate(flags);
 }

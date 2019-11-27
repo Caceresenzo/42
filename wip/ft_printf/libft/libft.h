@@ -32,7 +32,14 @@
 # define OUT 1
 # define ERR 2
 
-# define HANDLE_UNICODE 1
+# define BASE_DECIMAL "0123456789"
+# define BASE_HEX_LOW "0123456789abcdef"
+# define BASE_HEX_UP "0123456789ABCDEF"
+
+# define FAKE_USE(var) ((void) var);
+
+# define ABS(number) (number < 0 ? -number : number)
+# define ZERO_IF_NEG(number) (number <= 0 ? 0 : number)
 
 typedef struct		s_list
 {
@@ -87,6 +94,8 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 
+void				ft_putmem_fd(void *s, size_t len, int fd);
+
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **alst, t_list *new);
 int					ft_lstsize(t_list *lst);
@@ -97,5 +106,23 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
+
+char				*ft_emptystr(void);
+char				*ft_chartostr(char c);
+char				*ft_charmult(char c, size_t times);
+char				*ft_itoa_base(long n, char *base);
+size_t				ft_itoa_base_compute_number_size(long number, size_t radix);
+size_t				ft_split_length(char **array);
+void				*ft_split_free(char ***d3array);
+int					ft_isinstr(char c, char *charset);
+
+int					ft_lsr(int x, int n);
+
+void				ft_swap_double(double *a, double *b);
+void				ft_swap_int(int *a, int *b);
+
+void				ft_sort_comp(int *order, double *dist, int amount);
+
+void				ft_free_and_release(void **ptr_ptr);
 
 #endif

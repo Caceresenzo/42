@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_flag_initializer.c                       :+:      :+:    :+:   */
+/*   ft_printf_format_char.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 16:48:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/07 16:48:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/11/07 14:07:16 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/11/07 14:07:16 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_printf_flag_initialize(t_ft_printf_flags *flags)
+char	*ft_printf_formatter_empty(t_ft_printf_bundle *bundle)
 {
-	flags->letter = '\0';
-	flags->valid = 0;
-	flags->minus_sign_used = 0;
-	flags->side = 0;
-	flags->padding_char = ' ';
-	flags->hashtag = 0;
-	flags->width_enabled = 0;
-	flags->width = 0;
-	flags->width_negative = 0;
-	flags->precision_enabled = 0;
-	flags->precision = 0;
-	flags->precision_negative = 0;
-	flags->hex__upper = 0;
+	if (bundle->flags->precision_enabled)
+		bundle->flags->precision_enabled = 0;
+	bundle->forced_length = 1;
+	return (ft_chartostr(bundle->flags->letter));
 }

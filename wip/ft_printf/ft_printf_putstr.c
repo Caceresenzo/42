@@ -12,12 +12,27 @@
 
 #include "ft_printf.h"
 
-void	ft_printf_putstr(char *str, t_ft_printf_settings *settings)
+void	ft_printf_putstr(char *str, t_ft_printf_settings *settings, int length)
 {
+	int		index;
+
 	CHECK_PTR_EMPTY(str);
-	while (*str)
+	if (length == -1)
 	{
-		ft_putchar_fd(*str++, FT_PRINTF_FD);
-		settings->written += 1;
+		while (*str)
+		{
+			ft_putchar_fd(*str++, settings->fd);
+			settings->written += 1;
+		}
+	}
+	else
+	{
+		index = 0;
+		while (index < length)
+		{
+			ft_putchar_fd(str[index], settings->fd);
+			settings->written += 1;
+			index++;
+		}
 	}
 }

@@ -12,13 +12,11 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_f_char(t_ft_printf_settings *settings,
-							t_ft_printf_flags *flags, size_t *index)
+char	*ft_printf_formatter_char(t_ft_printf_bundle *bundle)
 {
 	char	c;
 
-	FAKE_USE(flags);
-	FAKE_USE(index);
-	c = (char)va_arg(settings->parameters, int);
-	return (ft_chrtostr(c));
+	c = (char)va_arg(bundle->settings->parameters, int);
+	bundle->forced_length = 1;
+	return (ft_chartostr(c));
 }

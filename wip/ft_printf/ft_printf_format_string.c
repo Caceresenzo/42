@@ -12,16 +12,14 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_f_string(t_ft_printf_settings *settings,
-							t_ft_printf_flags *flags, size_t *index)
+char	*ft_printf_formatter_string(t_ft_printf_bundle *bundle)
 {
 	char	*str;
 
-	FAKE_USE(index);
-	str = va_arg(settings->parameters, char *);
+	str = va_arg(bundle->settings->parameters, char *);
 	if (str == NULL)
 		str = "(null)";
-	if (flags->precision_enabled)
-		return (ft_substr(str, 0, flags->precision));
+	if (bundle->flags->precision_enabled && !bundle->flags->precision_negative)
+		return (ft_substr(str, 0, bundle->flags->precision));
 	return (ft_strdup(str));
 }

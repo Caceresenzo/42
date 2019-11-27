@@ -12,39 +12,18 @@
 
 #include "ft_printf.h"
 
-static char	*internal_ft_printf_f_pointer_precision(t_ft_printf_flags *flags,
-													char *ptr_str)
+char		*ft_printf_formatter_pointer(t_ft_printf_bundle *bundle)
 {
-	char	*str;
-	int		length;
+	unsigned long	ptr;
+	char			*itoa;
+	char			*str;
+	char			*final;
 
-	length = 0;
-	if (flags->width_enabled && flags->padding_char == '0')
-		length = flags->width - 2;
-	if (flags->precision_enabled)
-		length = flags->precision;
-	str = ft_charmult('0', ZERO_IF_NEG((int)(length - ft_strlen(ptr_str))));
-	return (str);
-}
-
-char		*ft_printf_f_pointer(t_ft_printf_settings *settings,
-							t_ft_printf_flags *flags, size_t *index)
-{
-	long	ptr;
-	char	*str;
-	char	*precision;
-	char	*joined;
-	char	*final;
-
-	FAKE_USE(index);
-	ptr = va_arg(settings->parameters, long);
-	str = ft_itoa_base(ptr, BASE_HEX_LOW);
-	precision = internal_ft_printf_f_pointer_precision(flags, str);
-	joined = ft_strjoin(precision, str);
-	final = ft_strjoin("0x", ptr == 0 && flags->precision_enabled &&
-						flags->precision == 0 ? "" : joined);
+	ptr = (unsigned long)va_arg(bundle->settings->parameters, void *);
+	itoa = ft_itoa_u_base(ptr, BASE_HEX_LOW);
+	str = ft_printf_padder_add_number_precision(bundle, itoa, 2);
+	final = ft_strjoin("0x", ptr == 0 && bundle->flags->precision_enabled &&
+						bundle->flags->precision == 0 ? "" : str);
 	free(str);
-	free(precision);
-	free(joined);
 	return (final);
 }

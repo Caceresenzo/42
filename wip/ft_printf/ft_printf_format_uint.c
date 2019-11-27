@@ -12,15 +12,16 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_f_uint(t_ft_printf_settings *settings,
-							t_ft_printf_flags *flags, size_t *index)
+char	*ft_printf_formatter_uint(t_ft_printf_bundle *bundle)
 {
 	unsigned int	decimal;
+	char			*itoa;
 
-	FAKE_USE(flags);
-	FAKE_USE(index);
-	decimal = va_arg(settings->parameters, unsigned int);
-	if (ft_printf_f_decimal_should_be_empty(decimal == 0, flags))
+	decimal = va_arg(bundle->settings->parameters, unsigned int);
+	if (ft_printf_f_decimal_should_be_empty(decimal == 0, bundle->flags))
 		return (ft_emptystr());
-	return (ft_itoa_base(decimal, BASE_DECIMAL));
+	itoa = ft_itoa_u_base(decimal, BASE_DECIMAL);
+	if (itoa && bundle->flags->precision_enabled)
+		return (ft_printf_padder_add_number_precision(bundle, itoa, 0));
+	return (itoa);
 }
