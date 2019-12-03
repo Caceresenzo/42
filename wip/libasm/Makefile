@@ -14,7 +14,8 @@ PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 NAME	=   libasm
 LIB		=   $(NAME).a
-SRCS	=	ft_strlen.s
+SRCS	=	ft_strlen.s \
+			ft_strcpy.s
 OBJS	=	$(SRCS:.s=.o)
 LIBC	= ar -rcs
 

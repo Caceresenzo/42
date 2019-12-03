@@ -20,5 +20,6 @@
 # include <stdlib.h>
 
 void	test_ft_strlen(void);
+void	test_ft_strcpy(void);
 
 #endif

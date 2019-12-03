@@ -15,6 +15,11 @@
 
 # include <stddef.h>
 
+/*
+** http://www.lacl.fr/tan/asm
+*/
+
 extern size_t	ft_strlen(const char *s);
+extern char		*ft_strcpy(char *dst, const char *src);
 
 #endif

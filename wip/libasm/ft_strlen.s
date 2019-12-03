@@ -1,7 +1,5 @@
-; http://www.lacl.fr/tan/asm
-
 global _ft_strlen
-section .text						; Or disable for default
+section .text
 
 _ft_strlen:
 	mov r12, rdi					; // Argument 1: (char *) s
@@ -15,5 +13,5 @@ _ft_strlen:
 		inc r12						; s++
 		jmp loop					; goto: loop
 	endloop:
-	mov rax, rcx					; returned value = counter
+	mov rax, rcx					; set returned value = counter
 	ret								; do return

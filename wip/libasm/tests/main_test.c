@@ -16,4 +16,5 @@ int
 	main(void)
 {
 	test_ft_strlen();
+	test_ft_strcpy();
 }

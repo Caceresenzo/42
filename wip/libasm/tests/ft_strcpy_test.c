@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen_test.c                                   :+:      :+:    :+:   */
+/*   ft_strcpy_test.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,31 +14,26 @@
 #include "../libasm.h"
 
 void
-	test_ft_strlen(void)
+	test_ft_strcpy(void)
 {
 	static char *strs[] = {
 		"Hello",
 		"World",
 		"From",
 		"42",
-		"",
-		NULL
+		""
 	};
 	size_t		index;
-	char		*str;
-	size_t		length;
+	char		*src;
+	char		dst[1000];
 
-	strs[5] = calloc(UINT_MAX, sizeof(char));
-	memset(strs[5], 'a', (long)UINT_MAX - 1);
 	index = 0;
 	while (index < 5)
 	{
-		str = strs[index];
-		length = strlen(str);
+		src = strs[index];
 		printf("--------------\n");
-		printf("strlen    : %zu\n", length);
-		printf("ft_strlen : %zu\n", ft_strlen(str));
-		printf("string    : \"%s\"\n", length <= 50 ? str : "[...]");
+		printf("strcpy    : %s\n", strcpy(dst, src));
+		printf("ft_strcpy : %s\n", ft_strcpy(dst, src));
 		index++;
 	}
 }
