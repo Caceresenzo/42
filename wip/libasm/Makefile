@@ -17,7 +17,8 @@ LIB		=   $(NAME).a
 SRCS	=	ft_strlen.s \
 			ft_strcpy.s \
 			ft_strcmp.s \
-			ft_write.s
+			ft_write.s \
+			ft_read.s
 OBJS	=	$(SRCS:.s=.o)
 LIBC	= ar -rcs
 
