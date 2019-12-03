@@ -16,7 +16,7 @@
 void
 	test_ft_strcpy(void)
 {
-	static char *strs[] = {
+	static char *cpy_strs[] = {
 		"Hello",
 		"World",
 		"From",
@@ -30,7 +30,7 @@ void
 	index = 0;
 	while (index < 5)
 	{
-		src = strs[index];
+		src = cpy_strs[index];
 		printf("--------------\n");
 		printf("strcpy    : %s\n", strcpy(dst, src));
 		printf("ft_strcpy : %s\n", ft_strcpy(dst, src));

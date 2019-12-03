@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen_test.c                                   :+:      :+:    :+:   */
+/*   ft_strcmp_test.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,31 +14,36 @@
 #include "../libasm.h"
 
 void
-	test_ft_strlen(void)
+	test_ft_strcmp(void)
 {
-	static char *len_strs[] = {
+	static char *cmp_strs[] = {
 		"Hello",
 		"World",
 		"From",
 		"42",
 		"",
-		NULL
+		"Biggy\x80 char"
 	};
 	size_t		index;
+	size_t		jndex;
 	char		*str;
+	char		*str_cmp;
 	size_t		length;
 
-	len_strs[5] = calloc(UINT_MAX, sizeof(char));
-	memset(len_strs[5], 'a', (long)UINT_MAX - 1);
 	index = 0;
 	while (index < 6)
 	{
-		str = len_strs[index];
-		length = strlen(str);
-		printf("--------------\n");
-		printf("strlen    : %zu\n", length);
-		printf("ft_strlen : %zu\n", ft_strlen(str));
-		printf("string    : \"%s\"\n", length <= 50 ? str : "[...]");
+		str = cmp_strs[index];
+		jndex = 0;
+		while (jndex < 6)
+		{
+			str_cmp = cmp_strs[jndex];
+			printf("--------------\n");
+			printf("strcmp    : %d\n", strcmp(str, str_cmp));
+			printf("ft_strcmp : %d\n", ft_strcmp(str, str_cmp));
+			printf("cmp       : \"%s\" [%d] (%d) with \"%s\" (%d)\n", str, str[0], (int) str, str_cmp, (int) str_cmp);
+			jndex++;
+		}
 		index++;
 	}
 }

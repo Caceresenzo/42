@@ -7,8 +7,8 @@ _ft_strcpy:
 	mov rax, r12					; set returned value = dst
 	loop:
 		cmp BYTE [r13], 0			; cmp: *src == 0
-		jne copy					; if true: goto increment
-		je endloop					; if false: goto endloop
+		je endloop					; if true: goto endloop
+		jne copy					; if false: goto copy
 	copy:
 		mov r13, r12				; *dst = *src
 		inc r12						; dst++

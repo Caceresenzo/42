@@ -3,15 +3,14 @@ section .text
 
 _ft_strlen:
 	mov r12, rdi					; // Argument 1: (char *) s
-	mov rcx, 0						; counter = 0
+	mov rax, 0						; set returned value = 0
 	loop:
 		cmp BYTE [r12], 0			; cmp: *s == 0
-		jne increment				; if true: goto increment
-		je endloop					; if false: goto endloop
+		je endloop					; if true: goto endloop
+		jne increment				; if false: goto increment
 	increment:
-		inc rcx						; counter++
+		inc rax						; returned value++
 		inc r12						; s++
 		jmp loop					; goto: loop
 	endloop:
-	mov rax, rcx					; set returned value = counter
 	ret								; do return
