@@ -10,9 +10,12 @@ _ft_write:
 	mov r12, rdi					; // Argument 1: (int) fildes
 	mov r13, rsi					; // Argument 2: (void *) buf
 	mov r14, rdx					; // Argument 3: (size_t) nbyte
+
 	mov rax, 0x2000004				; set to syscall #4: write
+
 	mov rdi, r12					; passing parameter: file descriptor
 	mov rsi, r13					; passing parameter: buffer
 	mov rdx, r14					; passing parameter: length
 	syscall							; do syscall
+
 	ret								; do return

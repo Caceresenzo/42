@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "tests.h"
-#include "../libasm.h"
 
 void
 	test_ft_strcmp(void)

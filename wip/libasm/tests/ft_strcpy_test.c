@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "tests.h"
-#include "../libasm.h"
 
 void
 	test_ft_strcpy(void)
@@ -25,15 +24,20 @@ void
 	};
 	size_t		index;
 	char		*src;
+	char		*cpy;
 	char		dst[1000];
 
 	index = 0;
-	while (index < 5)
+	while (index < 4)
 	{
 		src = cpy_strs[index];
 		printf("--------------\n");
-		printf("strcpy    : %s\n", strcpy(dst, src));
-		printf("ft_strcpy : %s\n", ft_strcpy(dst, src));
+		printf("source    : %s (%p)\n", src, src);
+		cpy = strcpy(dst, src);
+		printf("strcpy    : %s (%p)\n", cpy, cpy);
+		bzero(dst, 1000);
+		cpy = ft_strcpy(dst, src);
+		printf("ft_strcpy : %s (%p)\n", cpy, cpy);
 		index++;
 	}
 }

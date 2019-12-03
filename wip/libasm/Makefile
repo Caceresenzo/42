@@ -18,12 +18,13 @@ SRCS	=	ft_strlen.s \
 			ft_strcpy.s \
 			ft_strcmp.s \
 			ft_write.s \
-			ft_read.s
+			ft_read.s \
+			ft_strdup.s
 OBJS	=	$(SRCS:.s=.o)
 LIBC	= ar -rcs
 
 %.o: $(PROJECT_ROOT)%.s
-	nasm -f macho64 $< -o $@ 
+	nasm -lc -f macho64 $< -o $@ 
 
 $(NAME): ${OBJS}
 	${LIBC} $(LIB) $(OBJS)
@@ -39,7 +40,11 @@ fclean: clean
 re: fclean all
 
 test: re
-	gcc tests/*.c $(OBJS) -o test
+	gcc -include libasm.h tests/*.c $(OBJS) -o test -D NOTIFY=1
 	./test
+	gcc -include libasm.h tests/*.c $(OBJS) -o test -D NOTIFY=0
+	./test
+	@echo ""
+	./test | hexdump
 
 .PHONY: all bonus clean fclean re
