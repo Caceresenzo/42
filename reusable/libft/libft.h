@@ -25,6 +25,7 @@
 # define OUT 1
 # define ERR 2
 
+# define BASE_BINARY "01"
 # define BASE_DECIMAL "0123456789"
 # define BASE_HEX_LOW "0123456789abcdef"
 # define BASE_HEX_UP "0123456789ABCDEF"
@@ -36,6 +37,13 @@ typedef struct		s_list
 	void			*content;
 	struct s_list	*next;
 }					t_list;
+
+long long int		ft_abs(long long int number);
+long long int		ft_max(long long int a, long long int b);
+long long int		ft_min(long long int a, long long int b);
+long long int		ft_zero_if_neg(long long int number);
+
+void				ft_fake_use(void *something);
 
 void				*ft_memset(void *b, int c, size_t len);
 void				*ft_memcpy(void *dst, const void *src, size_t n);

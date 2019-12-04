@@ -11,12 +11,14 @@
 # **************************************************************************** #
 
 NAME	=   libft.a
-SRCS	=	./ft_atoi.c \
+SRCS	=	./ft_abs.c \
+			./ft_atoi.c \
 			./ft_bzero.c \
 			./ft_calloc.c \
 			./ft_chrmult.c \
 			./ft_chrtostr.c \
 			./ft_emptystr.c \
+			./ft_fake_use.c \
 			./ft_free_and_release.c \
 			./ft_isalnum.c \
 			./ft_isalpha.c \
@@ -40,6 +42,7 @@ SRCS	=	./ft_atoi.c \
 			./ft_lstmap.c \
 			./ft_lstnew.c \
 			./ft_lstsize.c \
+			./ft_max.c \
 			./ft_memccpy.c \
 			./ft_memchr.c \
 			./ft_memcmp.c \
@@ -47,6 +50,7 @@ SRCS	=	./ft_atoi.c \
 			./ft_memjoin.c \
 			./ft_memmove.c \
 			./ft_memset.c \
+			./ft_min.c \
 			./ft_putchar_fd.c \
 			./ft_putendl_fd.c \
 			./ft_putnbr_fd.c \
@@ -73,6 +77,7 @@ SRCS	=	./ft_atoi.c \
 			./ft_swap_int.c \
 			./ft_tolower.c \
 			./ft_toupper.c \
+			./ft_zero_if_neg.c \
 			./get_next_line.c
 OBJS	= $(SRCS:.c=.o)
 RM		= rm -f
