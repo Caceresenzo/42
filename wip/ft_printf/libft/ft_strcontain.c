@@ -1,19 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putmem_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strcontain.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/05 13:46:37 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/05 13:46:37 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/04 12:08:04 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/04 12:08:06 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putmem_fd(void *s, size_t len, int fd)
+int
+	ft_strcontain(const char *str, char c)
 {
-	CHECK_PTR_EMPTY(s);
-	write(fd, s, len);
+	while (*str)
+	{
+		if (*str == c)
+			return (1);
+		str++;
+	}
+	return (0);
 }

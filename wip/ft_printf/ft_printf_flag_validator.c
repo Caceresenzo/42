@@ -12,7 +12,8 @@
 
 #include "ft_printf.h"
 
-void	ft_printf_flag_validate(t_ft_printf_flags *flags)
+void
+	ft_printf_flag_validate(t_ft_printf_flags *flags)
 {
 	if (flags->valid)
 		return ;

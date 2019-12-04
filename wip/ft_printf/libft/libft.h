@@ -13,33 +13,30 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 
+# include <fcntl.h>
+# include <limits.h>
 # include <stddef.h>
-# include <unistd.h>
+# include <stdio.h>
 # include <stdlib.h>
-
-# define IS_WSPACE(c) (c==' '||c=='\t'||c=='\n'||c=='\r'||c=='\f'||c=='\v')
-# define UCHAR unsigned char
-
-# define CHECK_PTR_DEF(ptr, def) if (!(ptr)) return (def);
-# define CHECK_PTR(ptr) CHECK_PTR_DEF(ptr, NULL);
-# define CHECK_PTR_EMPTY(ptr) if (!(ptr)) return ;
-# define CHECK_MALLOC(var, size) CHECK_PTR((var = malloc(size)))
-
-# define MIN(a, b) (((a) < (b)) ? (a) : (b))
-# define MAX(a, b) (((a) > (b)) ? (a) : (b))
+# include <string.h>
+# include <unistd.h>
 
 # define IN 0
 # define OUT 1
 # define ERR 2
 
+# define BASE_BINARY "01"
 # define BASE_DECIMAL "0123456789"
+# define BASE_OCTAL "01234567"
 # define BASE_HEX_LOW "0123456789abcdef"
 # define BASE_HEX_UP "0123456789ABCDEF"
 
-# define FAKE_USE(var) ((void) var);
+# define FT_STRJOIN_FREE_DONT 0
+# define FT_STRJOIN_FREE_FIRST 1
+# define FT_STRJOIN_FREE_SECOND 2
+# define FT_STRJOIN_FREE_BOTH 3
 
-# define ABS(number) (number < 0 ? -number : number)
-# define ZERO_IF_NEG(number) (number <= 0 ? 0 : number)
+typedef unsigned char	t_uchar;
 
 typedef struct		s_list
 {
@@ -47,12 +44,20 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+long long int		ft_abs(long long int number);
+long long int		ft_max(long long int a, long long int b);
+long long int		ft_min(long long int a, long long int b);
+long long int		ft_zero_if_neg(long long int number);
+
+void				ft_fake_use(void *something);
+
 void				*ft_memset(void *b, int c, size_t len);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 void				*ft_memccpy(void *dst, const void *src, int c, size_t n);
 void				*ft_memmove(void *dst, const void *src, size_t len);
 void				*ft_memchr(const void *s, int c, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
+char				*ft_memjoin(void *s1, size_t l1, void *s2, size_t l2);
 
 void				*ft_calloc(size_t count, size_t size);
 
@@ -69,7 +74,10 @@ int					ft_strncmp(const char *s1, const char *s2, size_t n);
 size_t				ft_strlen(const char *s);
 char				*ft_strdup(const char *s1);
 
-int					ft_atoi(const char *str);
+char				*ft_emptystr(void);
+
+char				*ft_chrmult(char c, size_t times);
+char				*ft_chrtostr(char c);
 
 int					ft_toupper(int c);
 int					ft_tolower(int c);
@@ -79,22 +87,36 @@ int					ft_isdigit(int c);
 int					ft_isalnum(int c);
 int					ft_isascii(int c);
 int					ft_isprint(int c);
+int					ft_iswspace(int c);
+int					ft_islower(int c);
+int					ft_isupper(int c);
+int					ft_isinstr(char c, char *charset);
 
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin_sided(char const *s1, char const *s2, int side);
+char				*ft_strjoin_free(char *s1, char *s2, int flag);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
+size_t				ft_split_length(char **array);
+void				*ft_split_free(char ***split_ptr);
+char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+int					ft_strcontain(const char *str, char c);
+
+int					ft_atoi(const char *str);
 
 char				*ft_itoa(int n);
-
-char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+size_t				ft_itoa_nsize(long number);
+char				*ft_itoa_base(long n, char *base);
+size_t				ft_itoa_base_nsize(long number, size_t radix);
+char				*ft_itoa_u_base(unsigned long n, char *base);
+size_t				ft_itoa_u_base_nsize(unsigned long number, size_t radix);
 
 void				ft_putchar_fd(char c, int fd);
+void				ft_putuchar_fd(int c, int fd);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
-
-void				ft_putmem_fd(void *s, size_t len, int fd);
 
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **alst, t_list *new);
@@ -106,15 +128,6 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 							void (*del)(void *));
-
-char				*ft_emptystr(void);
-char				*ft_chartostr(char c);
-char				*ft_charmult(char c, size_t times);
-char				*ft_itoa_base(long n, char *base);
-size_t				ft_itoa_base_compute_number_size(long number, size_t radix);
-size_t				ft_split_length(char **array);
-void				*ft_split_free(char ***d3array);
-int					ft_isinstr(char c, char *charset);
 
 int					ft_lsr(int x, int n);
 

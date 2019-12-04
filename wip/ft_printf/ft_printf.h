@@ -19,17 +19,8 @@
 # include "libft/libft.h"
 
 # define FT_PRINTF_CHAR_FORMAT '%'
-# define FT_PRINTF_SUPPORTED_TYPES "cspdiuxX%"
+# define FT_PRINTF_SUPPORTED_TYPES "cspdiuxX%o"
 # define FT_PRINTF_FD OUT
-
-# define BASE_DECIMAL "0123456789"
-# define BASE_HEX_LOW "0123456789abcdef"
-# define BASE_HEX_UP "0123456789ABCDEF"
-
-# define FAKE_USE(var) ((void) var);
-
-# define ABS(number) (number < 0 ? -number : number)
-# define ZERO_IF_NEG(number) (number <= 0 ? 0 : number)
 
 typedef	struct	s_ft_printf_settings
 {
@@ -77,8 +68,7 @@ void			ft_printf_putstr(char *str, t_ft_printf_settings *settings,
 								int length);
 
 void			ft_printf_flag_initialize(t_ft_printf_flags *flags);
-void			ft_printf_flag_parse(t_ft_printf_settings *settings,
-										t_ft_printf_flags *flags, size_t start,
+void			ft_printf_flag_parse(t_ft_printf_bundle *bundle, size_t start,
 										size_t end);
 char			*ft_printf_flag_handle(t_ft_printf_bundle *bundle,
 										char *formatted);
@@ -94,6 +84,7 @@ char			*ft_printf_formatter_decimal(t_ft_printf_bundle *bundle);
 char			*ft_printf_formatter_uint(t_ft_printf_bundle *bundle);
 char			*ft_printf_formatter_hex_int(t_ft_printf_bundle *bundle);
 char			*ft_printf_formatter_pourcent(t_ft_printf_bundle *bundle);
+char			*ft_printf_formatter_octal_int(t_ft_printf_bundle *bundle);
 char			*ft_printf_formatter_empty(t_ft_printf_bundle *bundle);
 
 int				ft_printf_f_decimal_should_be_empty(int equal_zero,
@@ -107,14 +98,6 @@ char			*ft_printf_padder_add_number_precision(t_ft_printf_bundle *b,
 											char *abs_itoa, int negative);
 int				ft_printf_which_unit(t_ft_printf_flags *flags, int negative);
 
-char			*ft_itoa_base(long n, char *base);
-char			*ft_itoa_u_base(unsigned long n, char *base);
-
-char			*ft_memjoin(void *s1, size_t length1, void *s2, size_t length2);
-
-char			*ft_emptystr(void);
-
-char			*ft_chartostr(char c);
-char			*ft_charmult(char c, size_t times);
+int				ft_printf_is_flag_char(char c);
 
 #endif

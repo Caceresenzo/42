@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_charmult.c                                      :+:      :+:    :+:   */
+/*   ft_split_length.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 17:45:01 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/07 17:45:01 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/04 13:43:00 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/04 13:43:02 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-char	*ft_charmult(char c, size_t times)
+size_t
+	ft_split_length(char **array)
 {
-	char	*str;
+	size_t	length;
 
-	CHECK_MALLOC(str, (times + 1) * sizeof(char));
-	ft_memset(str, c, times);
-	str[times] = '\0';
-	return (str);
+	if (!array)
+		return (0);
+	length = 0;
+	while (array[length])
+		length++;
+	return (length);
 }

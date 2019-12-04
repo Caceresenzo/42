@@ -27,7 +27,7 @@ int
 		{
 			if (flags->padding_char == '0' && flags->precision == 0)
 				return (flags->precision > flags->width ?
-					ZERO_IF_NEG(flags->width - negative) : flags->precision);
+					ft_zero_if_neg(flags->width - negative) : flags->precision);
 			else
 				return (flags->precision);
 		}

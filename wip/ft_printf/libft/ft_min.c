@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_chrtostr.c                                      :+:      :+:    :+:   */
+/*   ft_min.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 15:53:43 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/07 15:53:43 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/04 13:51:52 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/04 13:51:54 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-char	*ft_chartostr(char c)
+long long int
+	ft_min(long long int a, long long int b)
 {
-	char	*str;
-
-	CHECK_MALLOC(str, 2 * sizeof(char));
-	str[0] = c;
-	str[1] = '\0';
-	return (str);
+	if (a < b)
+		return (a);
+	return (b);
 }

@@ -24,14 +24,13 @@ char
 	length = ft_strlen(abs_itoa);
 	required = ft_printf_which_unit(bundle->flags, negative);
 	required -= length;
-	required = ZERO_IF_NEG(required);
+	required = ft_zero_if_neg(required);
 	if (negative == 1)
 		required += negative;
-	CHECK_PTR_DEF(zeros = ft_charmult('0', required), abs_itoa);
-	str = ft_strjoin(zeros, abs_itoa);
+	if (!(zeros = ft_chrmult('0', required)))
+		return (abs_itoa);
+	str = ft_strjoin_free(zeros, abs_itoa, FT_STRJOIN_FREE_BOTH);
 	if (negative == 1)
 		str[0] = '-';
-	free(abs_itoa);
-	free(zeros);
 	return (str);
 }

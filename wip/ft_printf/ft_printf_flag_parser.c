@@ -12,107 +12,107 @@
 
 #include "ft_printf.h"
 
-static int		i_ft_printf_flag_parse_value(t_ft_printf_settings *settings,
-												char *str, size_t *index)
+static int
+	i_ft_printf_flag_parse_value(t_ft_printf_bundle *bundle, char *str)
 {
 	int		value;
 
-	if (str[*index] == '*')
+	if (str[*(bundle->index)] == '*')
 	{
-		value = va_arg(settings->parameters, int);
-		*index += 1;
+		value = va_arg(bundle->settings->parameters, int);
+		*(bundle->index) += 1;
 	}
 	else
 	{
-		value = ft_atoi(str + *index);
-		*index += ft_itoa_base_compute_number_size(value, 10) - 1;
+		value = ft_atoi(str + *(bundle->index));
+		*(bundle->index) += ft_itoa_base_nsize(value, 10) - 1;
 	}
 	return (value);
 }
 
-static void		i_ft_printf_flag_parse_width(t_ft_printf_settings *settings,
-												t_ft_printf_flags *flags,
-												char *str, size_t *index)
+static void
+	i_ft_printf_flag_parse_width(t_ft_printf_bundle *bundle, char *str)
 {
 	int		value;
 
-	flags->width_enabled = 1;
-	value = i_ft_printf_flag_parse_value(settings, str, index);
+	bundle->flags->width_enabled = 1;
+	value = i_ft_printf_flag_parse_value(bundle, str);
 	if (value < 0)
 	{
-		flags->side = !flags->side;
+		bundle->flags->side = !bundle->flags->side;
 		value *= -1;
-		flags->width_negative = 1;
-		flags->padding_char = ' ';
+		bundle->flags->width_negative = 1;
+		bundle->flags->padding_char = ' ';
 	}
-	flags->width = value;
+	bundle->flags->width = value;
 }
 
-static void		i_ft_printf_flag_parse_precision(size_t *index,
-												t_ft_printf_settings *settings,
-												t_ft_printf_flags *flags,
-												char *str)
+static void
+	i_ft_printf_flag_parse_precision(t_ft_printf_bundle *bundle, char *str)
 {
 	int		value;
 
-	*index += 1;
-	flags->precision_enabled = 1;
-	value = i_ft_printf_flag_parse_value(settings, str, index);
+	*(bundle->index) += 1;
+	bundle->flags->precision_enabled = 1;
+	value = i_ft_printf_flag_parse_value(bundle, str);
 	if (value < 0)
 	{
 		value *= -1;
-		flags->precision_negative = 1;
+		bundle->flags->precision_negative = 1;
 	}
-	flags->precision = value;
+	bundle->flags->precision = value;
 }
 
-static void		i_ft_printf_flag_parse_commit(t_ft_printf_settings *settings,
-										t_ft_printf_flags *flags, char *str,
-										size_t *index)
+static void
+	i_ft_printf_flag_parse_commit(t_ft_printf_bundle *bundle, char *str)
 {
 	char	current;
 
-	current = str[*index];
+	current = str[*(bundle->index)];
 	if (current == '-')
 	{
-		flags->minus_sign_used = 1;
-		flags->padding_char = ' ';
-		flags->side = 1;
+		bundle->flags->minus_sign_used = 1;
+		bundle->flags->padding_char = ' ';
+		bundle->flags->side = 1;
 	}
 	else if (current == '#')
-		flags->hashtag = 1;
+		bundle->flags->hashtag = 1;
 	else if (current == '0')
 	{
-		if (!flags->minus_sign_used)
-			flags->padding_char = '0';
+		if (!bundle->flags->minus_sign_used)
+			bundle->flags->padding_char = '0';
 	}
 	else
 	{
-		if ((current = str[*index]) != '.')
-			i_ft_printf_flag_parse_width(settings, flags, str, index);
-		if ((current = str[*index]) == '.')
-			i_ft_printf_flag_parse_precision(index, settings, flags, str);
+		if ((current = str[*(bundle->index)]) != '.')
+			i_ft_printf_flag_parse_width(bundle, str);
+		if ((current = str[*(bundle->index)]) == '.')
+			i_ft_printf_flag_parse_precision(bundle, str);
 	}
 }
 
-void			ft_printf_flag_parse(t_ft_printf_settings *settings,
-										t_ft_printf_flags *flags, size_t start,
-										size_t end)
+void
+	ft_printf_flag_parse(t_ft_printf_bundle *bundle, size_t start, size_t end)
 {
 	size_t	length;
 	char	*str;
 	size_t	index;
+	size_t	*old_index;
 
 	length = end - start;
-	CHECK_PTR_EMPTY(str = malloc((length + 1) * sizeof(char)));
-	ft_memcpy(str, settings->format + start, length);
+	if (!(str = malloc((length + 1) * sizeof(char))))
+		return ;
+	ft_memcpy(str, bundle->settings->format + start, length);
 	str[length] = '\0';
 	index = 0;
+	old_index = bundle->index;
+	bundle->index = &index;
 	while (index < length)
 	{
-		i_ft_printf_flag_parse_commit(settings, flags, str, &index);
+		i_ft_printf_flag_parse_commit(bundle, str);
 		index++;
 	}
+	bundle->index = old_index;
 	free(str);
-	ft_printf_flag_validate(flags);
+	ft_printf_flag_validate(bundle->flags);
 }

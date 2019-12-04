@@ -12,7 +12,8 @@
 
 #include "ft_printf.h"
 
-void	ft_printf_flag_initialize(t_ft_printf_flags *flags)
+void
+	ft_printf_flag_initialize(t_ft_printf_flags *flags)
 {
 	flags->letter = '\0';
 	flags->valid = 0;

@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_charmult.c                                      :+:      :+:    :+:   */
+/*   ft_islower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/07 17:45:01 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/07 17:45:01 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/04 11:52:55 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/04 11:52:59 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_charmult(char c, size_t times)
+int
+	ft_islower(int c)
 {
-	char	*str;
-
-	CHECK_MALLOC(str, (times + 1) * sizeof(char));
-	ft_memset(str, c, times);
-	str[times] = '\0';
-	return (str);
+	return (c >= 'a' && c <= 'z');
 }

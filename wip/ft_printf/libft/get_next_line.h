@@ -13,18 +13,27 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-
 # include "libft.h"
 
 # define GNL_READ 1
 # define GNL_END_REACHED 0
 # define GNL_ERROR -1
 
-int		get_next_line(int fd, char **line);
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 128
+# endif
 
-void	*ft_memcpy(void *dst, const void *src, size_t n);
+typedef struct		s_gnl_holder
+{
+	int				initialized;
+	int				reached;
+	unsigned char	buffer[BUFFER_SIZE];
+	size_t			byte_read;
+	size_t			offset;
+	unsigned char	*stored;
+	size_t			stored_length;
+}					t_gnl_holder;
+
+int					get_next_line(int fd, char **line);
 
 #endif

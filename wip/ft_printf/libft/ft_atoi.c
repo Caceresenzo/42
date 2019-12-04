@@ -12,7 +12,8 @@
 
 #include "libft.h"
 
-int		ft_atoi(const char *str)
+int
+	ft_atoi(const char *str)
 {
 	size_t				index;
 	int					negative;
@@ -21,7 +22,7 @@ int		ft_atoi(const char *str)
 	index = 0;
 	negative = 1;
 	result = 0;
-	while (IS_WSPACE(str[index]))
+	while (ft_iswspace(str[index]))
 		index++;
 	if (str[index] == '+' || str[index] == '-')
 		if (str[index++] == '-')

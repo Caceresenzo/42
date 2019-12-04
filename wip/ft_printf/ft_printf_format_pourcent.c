@@ -12,8 +12,9 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_formatter_pourcent(t_ft_printf_bundle *bundle)
+char
+	*ft_printf_formatter_pourcent(t_ft_printf_bundle *bundle)
 {
-	FAKE_USE(bundle);
-	return (ft_chartostr('%'));
+	ft_fake_use(&bundle);
+	return (ft_chrtostr('%'));
 }

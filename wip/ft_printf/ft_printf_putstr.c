@@ -16,15 +16,15 @@ void	ft_printf_putstr(char *str, t_ft_printf_settings *settings, int length)
 {
 	int		index;
 
-	CHECK_PTR_EMPTY(str);
+	if (!str || length == 0)
+		return ;
 	if (length == -1)
-	{
 		while (*str)
 		{
-			ft_putchar_fd(*str++, settings->fd);
+			ft_putchar_fd(*str, settings->fd);
 			settings->written += 1;
+			str++;
 		}
-	}
 	else
 	{
 		index = 0;

@@ -12,12 +12,13 @@
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+size_t
+	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
 	size_t index;
 
-	CHECK_PTR_DEF(dst, 0);
-	CHECK_PTR_DEF(src, 0);
+	if (!dst || !src)
+		return (0);
 	index = 0;
 	if (dstsize != 0)
 	{

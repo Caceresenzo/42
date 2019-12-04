@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memjoin.c                                       :+:      :+:    :+:   */
+/*   ft_strjoin_sided.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/27 15:58:36 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/11/27 15:58:36 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/04 16:18:39 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/04 16:18:39 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-char	*ft_memjoin(void *s1, size_t length1, void *s2, size_t length2)
+char
+	*ft_strjoin_sided(char const *s1, char const *s2, int side)
 {
-	char	*str;
-
-	CHECK_PTR(s1);
-	CHECK_PTR(s2);
-	CHECK_MALLOC(str, length1 + length2);
-	ft_memcpy(str, s1, length1);
-	ft_memcpy(str + length1, s2, length2);
-	return (str);
+	if (side)
+		return (ft_strjoin(s2, s1));
+	return (ft_strjoin(s1, s2));
 }

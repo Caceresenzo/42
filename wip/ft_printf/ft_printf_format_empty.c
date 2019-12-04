@@ -12,10 +12,11 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_formatter_empty(t_ft_printf_bundle *bundle)
+char
+	*ft_printf_formatter_empty(t_ft_printf_bundle *bundle)
 {
 	if (bundle->flags->precision_enabled)
 		bundle->flags->precision_enabled = 0;
 	bundle->forced_length = 1;
-	return (ft_chartostr(bundle->flags->letter));
+	return (ft_chrtostr(bundle->flags->letter));
 }

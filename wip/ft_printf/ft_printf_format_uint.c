@@ -12,7 +12,8 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_formatter_uint(t_ft_printf_bundle *bundle)
+char
+	*ft_printf_formatter_uint(t_ft_printf_bundle *bundle)
 {
 	unsigned int	decimal;
 	char			*itoa;

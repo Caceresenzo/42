@@ -12,7 +12,8 @@
 
 #include "libft.h"
 
-static size_t	internal_ft_split_compute_items(char const *s, char c)
+static size_t
+	i_ft_split_compute_items(char const *s, char c)
 {
 	size_t	index;
 	size_t	count;
@@ -36,8 +37,8 @@ static size_t	internal_ft_split_compute_items(char const *s, char c)
 	return (count + (length != 0 ? 1 : 0));
 }
 
-static void		internal_ft_split_do(char const *s, char c, char **array,
-										size_t item_count)
+static void
+	i_ft_split_do(char const *s, char c, char **array, size_t item_count)
 {
 	char	*str;
 	size_t	array_index;
@@ -53,10 +54,10 @@ static void		internal_ft_split_do(char const *s, char c, char **array,
 		{
 			if (length != 0)
 			{
-				CHECK_PTR_EMPTY(str = ft_calloc(length + 1, sizeof(char)));
+				if (!(str = ft_calloc(length + 1, sizeof(char))))
+					return ;
 				ft_memcpy(str, s + index - length, length);
-				array[array_index] = str;
-				array_index++;
+				array[array_index++] = str;
 			}
 			length = 0;
 		}
@@ -66,45 +67,18 @@ static void		internal_ft_split_do(char const *s, char c, char **array,
 	}
 }
 
-char			**ft_split(char const *s, char c)
+char
+	**ft_split(char const *s, char c)
 {
 	size_t	item_count;
 	char	**array;
 
-	CHECK_PTR(s);
-	item_count = internal_ft_split_compute_items(s, c);
-	CHECK_MALLOC(array, (item_count + 1) * sizeof(char *));
-	internal_ft_split_do(s, c, array, item_count);
+	if (!s)
+		return (NULL);
+	item_count = i_ft_split_compute_items(s, c);
+	if (!(array = malloc((item_count + 1) * sizeof(char *))))
+		return (NULL);
+	i_ft_split_do(s, c, array, item_count);
 	array[item_count] = NULL;
 	return (array);
-}
-
-size_t			ft_split_length(char **array)
-{
-	size_t	length;
-
-	CHECK_PTR_DEF(array, 0);
-	length = 0;
-	while (array[length])
-		length++;
-	return (length);
-}
-
-void			*ft_split_free(char ***d3array)
-{
-	size_t	length;
-	size_t	index;
-
-	CHECK_PTR(d3array);
-	CHECK_PTR(*d3array);
-	length = ft_split_length(*d3array);
-	index = 0;
-	while (index < length)
-	{
-		free((*d3array)[index]);
-		index++;
-	}
-	free(*d3array);
-	*d3array = NULL;
-	return (NULL);
 }

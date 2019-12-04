@@ -12,7 +12,8 @@
 
 #include "ft_printf.h"
 
-char	*ft_printf_formatter_string(t_ft_printf_bundle *bundle)
+char
+	*ft_printf_formatter_string(t_ft_printf_bundle *bundle)
 {
 	char	*str;
 

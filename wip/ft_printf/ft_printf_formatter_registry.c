@@ -13,7 +13,7 @@
 #include "ft_printf.h"
 
 char	*g_formatter_key = FT_PRINTF_SUPPORTED_TYPES;
-char	*(*g_formatters[9])(t_ft_printf_bundle *) = {
+char	*(*g_formatters[10])(t_ft_printf_bundle *) = {
 	&ft_printf_formatter_char,
 	&ft_printf_formatter_string,
 	&ft_printf_formatter_pointer,
@@ -22,7 +22,8 @@ char	*(*g_formatters[9])(t_ft_printf_bundle *) = {
 	&ft_printf_formatter_uint,
 	&ft_printf_formatter_hex_int,
 	&ft_printf_formatter_hex_int,
-	&ft_printf_formatter_pourcent
+	&ft_printf_formatter_pourcent,
+	&ft_printf_formatter_octal_int
 };
 
 void

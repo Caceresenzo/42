@@ -12,11 +12,13 @@
 
 #include "libft.h"
 
-char	*ft_chartostr(char c)
+char
+	*ft_chrtostr(char c)
 {
 	char	*str;
 
-	CHECK_MALLOC(str, 2 * sizeof(char));
+	if (!(str = malloc(2 * sizeof(char))))
+		return (NULL);
 	str[0] = c;
 	str[1] = '\0';
 	return (str);

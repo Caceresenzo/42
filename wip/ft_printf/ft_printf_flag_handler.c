@@ -21,7 +21,7 @@ char
 	char	*str;
 
 	if ((bundle->flags->precision_enabled || bundle->flags->precision_negative)
-			&& bundle->flags->letter != 's' && bundle->flags->letter != '%'
+			&& bundle->flags->letter != 's' && bundle->flags->letter != 'o' && bundle->flags->letter != '%'
 			&& (ft_tolower(bundle->flags->letter) != 'x'
 					|| bundle->flags->precision < bundle->flags->width))
 	{
@@ -31,12 +31,10 @@ char
 	required = bundle->flags->width - length;
 	if (required <= 0)
 		return (formatted);
-	padding = ft_charmult(bundle->flags->padding_char, required);
-	CHECK_PTR_DEF(padding, formatted);
-	if (bundle->flags->side)
-		str = ft_strjoin(formatted, padding);
-	else
-		str = ft_strjoin(padding, formatted);
+	padding = ft_chrmult(bundle->flags->padding_char, required);
+	if (!padding)
+		return (formatted);
+	str = ft_strjoin_sided(padding, formatted, bundle->flags->side);
 	bundle->forced_length = required + length;
 	free(padding);
 	return (str);
@@ -57,8 +55,9 @@ char
 	required = bundle->flags->width - length;
 	if (required <= 0)
 		return (formatted);
-	padding = ft_charmult(bundle->flags->padding_char, required);
-	CHECK_PTR_DEF(padding, formatted);
+	padding = ft_chrmult(bundle->flags->padding_char, required);
+	if (!padding)
+		return (formatted);
 	if (bundle->flags->side)
 		str = ft_memjoin(formatted, length, padding, required);
 	else

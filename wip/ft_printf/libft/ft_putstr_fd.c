@@ -12,12 +12,14 @@
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void
+	ft_putstr_fd(char *s, int fd)
 {
-	unsigned char *str;
+	t_uchar		*str;
 
-	CHECK_PTR_EMPTY(s);
-	str = (unsigned char *)s;
+	if (!s)
+		return ;
+	str = (t_uchar *)s;
 	while (*str)
 		ft_putchar_fd(*str++, fd);
 }
