@@ -4,9 +4,6 @@ extern _malloc
 extern _ft_strlen
 extern _ft_strcpy
 
-extern _notify
-extern _notifys
-
 section .text
 
 _ft_strdup:

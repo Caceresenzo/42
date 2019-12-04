@@ -7,6 +7,10 @@ section .text
 ; https://stackoverflow.com/a/48845698/7292958 (reason of the 0x2000000 offset)
 
 _ft_write:
+	push r12
+	push r13
+	push r14
+	
 	mov r12, rdi					; // Argument 1: (int) fildes
 	mov r13, rsi					; // Argument 2: (void *) buf
 	mov r14, rdx					; // Argument 3: (size_t) nbyte
@@ -17,5 +21,9 @@ _ft_write:
 	mov rsi, r13					; passing parameter: buffer
 	mov rdx, r14					; passing parameter: length
 	syscall							; do syscall
+
+	pop r14
+	pop r13
+	pop r12
 
 	ret								; do return

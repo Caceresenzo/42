@@ -1,8 +1,4 @@
 global _ft_strcpy
-
-extern _notify
-extern _notifys
-
 section .text
 
 _ft_strcpy:
@@ -14,6 +10,7 @@ _ft_strcpy:
 	mov r13, rsi					; // Argument 2: (const char *) src
 
 	mov r14, r12					; start = dst
+
 	loop:
 		
 		cmp r13b, 0					; cmp: (unsigned char)*src == 0
