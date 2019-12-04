@@ -15,7 +15,8 @@
 void
 	image_destroy(void *mlx_ptr, t_image *image)
 {
-	CHECK_PTR_EMPTY(image);
+	if (!image)
+		return ;
 	mlx_destroy_image(mlx_ptr, image->ptr);
 	image->bpp = 0;
 	image->endian = 0;
@@ -31,7 +32,8 @@ void
 void
 	image_destroy_null(void *mlx_ptr, t_image **image_ptr)
 {
-	CHECK_PTR_EMPTY(image_ptr);
+	if (!image_ptr)
+		return ;
 	image_destroy(mlx_ptr, *image_ptr);
 	*image_ptr = NULL;
 }

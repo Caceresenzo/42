@@ -12,7 +12,8 @@
 
 #include "libft.h"
 
-size_t			ft_itoa_base_compute_number_size(long number, size_t radix)
+size_t
+	ft_itoa_base_nsize(long number, size_t radix)
 {
 	size_t	size;
 
@@ -27,17 +28,19 @@ size_t			ft_itoa_base_compute_number_size(long number, size_t radix)
 	return (size);
 }
 
-char			*ft_itoa_base(long n, char *base)
+char
+	*ft_itoa_base(long n, char *base)
 {
-	long	number;
-	size_t	radix;
-	char	*array;
-	size_t	size;
+	long long	number;
+	size_t		radix;
+	char		*array;
+	size_t		size;
 
 	number = n;
 	radix = ft_strlen(base);
-	size = ft_itoa_base_compute_number_size(n, radix);
-	CHECK_MALLOC(array, (size + 1) * sizeof(char));
+	size = ft_itoa_base_nsize(n, radix);
+	if (!(array = malloc((size + 1) * sizeof(char))))
+		return (NULL);
 	if (number < 0)
 	{
 		array[0] = '-';

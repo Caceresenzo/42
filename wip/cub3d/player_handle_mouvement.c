@@ -15,8 +15,6 @@
 #define MODE_FORWARD_BACKWARD 0
 #define MODE_LEFT_RIGHT 1
 
-#define KEYS(key1, key2)
-
 /*
 ** For left or right movement:
 **		x = dir.x * cos(PI / 2) - dir.y * sin(PI / 2)
@@ -88,7 +86,7 @@ static void
 
 	current = mouse_pos_current_get();
 	off = mouse_pos_last_click_get().x - current.x;
-	off = MAX(-1, MIN(off, 1)) * MOUSE_SENSIBILITY;
+	off = ft_max(-1, ft_min(off, 1)) * MOUSE_SENSIBILITY;
 	if (off != 0)
 		mouse_pos_update_last_to_current();
 	i_player_handle_rotation(player, off, player->rot_speed.value);

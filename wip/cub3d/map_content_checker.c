@@ -12,21 +12,24 @@
 
 #include "cub3d.h"
 
-#define TEX_CHECK(tex, word) if (!tex) return (E("No texture for side: "word));
-#define COLOR_CHECK(c, word) if (c == -1) return (E("No color for the: "word));
-
 char
 	*map_content_check(t_map *map)
 {
-	TEX_CHECK(map->wall_texs[NORTH], "NORTH");
-	TEX_CHECK(map->wall_texs[SOUTH], "SOUTH");
-	TEX_CHECK(map->wall_texs[WEST], "WEST");
-	TEX_CHECK(map->wall_texs[EAST], "EAST");
-	COLOR_CHECK(map->floor_color, "FLOOR");
-	COLOR_CHECK(map->roof_color, "ROOF");
+	if (!map->wall_texs[0])
+		return (e("No texture for side: NORTH"));
+	if (!map->wall_texs[1])
+		return (e("No texture for side: SOUTH"));
+	if (!map->wall_texs[2])
+		return (e("No texture for side: WEST"));
+	if (!map->wall_texs[3])
+		return (e("No texture for side: EAST"));
+	if (map->floor_color == -1)
+		return (e("No color for the: FLOOR"));
+	if (map->roof_color == -1)
+		return (e("No color for the: ROOF"));
 	if (map->sprite_count != 0 && map->sprite == NULL)
-		return (E("No sprite texture despite having some on the map"));
+		return (e("No sprite texture despite having some on the map"));
 	if (map->objs == NULL)
-		return (E("No object"));
+		return (e("No object"));
 	return (NULL);
 }

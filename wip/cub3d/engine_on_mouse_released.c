@@ -15,9 +15,9 @@
 int
 	engine_on_mouse_released(int button, int x, int y, t_engine *engine)
 {
-	FAKE_USE(engine);
-	FAKE_USE(x);
-	FAKE_USE(y);
+	ft_fake_use(&engine);
+	ft_fake_use(&x);
+	ft_fake_use(&y);
 	mouse_button_state_set(button, STATE_RELEASED);
 	return (0);
 }

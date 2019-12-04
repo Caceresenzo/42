@@ -17,10 +17,8 @@ char
 								t_game_object *current, char *str)
 {
 	int		type;
-	void	*data;
 
 	type = -1;
-	data = NULL;
 	if (ft_strncmp(str, "0", 2) == 0)
 		type = OBJ_EMPTY;
 	else if (ft_strncmp(str, "1", 2) == 0)
@@ -30,16 +28,16 @@ char
 	else if (ft_strlen(str) == 1 && ft_isinstr(str[0], "NSEW") != -1)
 	{
 		type = OBJ_PLAYER;
-		data = malloc(sizeof(t_g_obj_data_player));
-		CHECK_PTR_DEF(data, EMALLOC("bind object"));
-		((t_g_obj_data_player *)data)->dir = str[0];
+		current->data = malloc(sizeof(t_g_obj_data_player));
+		if (!current->data)
+			return (emalloc("bind object"));
+		((t_g_obj_data_player *)current->data)->dir = str[0];
 	}
 	else
 		return (ft_strjoin("Unknown game object type: ", str));
 	current->type = type;
 	current->pos = (t_vec2d) { 1.0 * index, 1.0 * map->size.h };
 	current->flooded = 0;
-	current->data = data;
 	return (NULL);
 }
 
@@ -52,7 +50,8 @@ char
 
 	error = NULL;
 	objects = ft_calloc(map->size.w, sizeof(t_game_object));
-	CHECK_PTR_DEF(objects, EMALLOC("create line"));
+	if (!objects)
+		return (emalloc("create line"));
 	index = 0;
 	while (index < map->size.w)
 	{
@@ -74,15 +73,15 @@ char
 	t_game_object	*new;
 	char			*error;
 
-	FAKE_USE(eng);
+	ft_fake_use(&eng);
 	if (!(length = ft_split_length(split)))
 		return (NULL);
 	if (length != map->size.w && map->size.w != 0)
-		return (E("Map width not constant"));
+		return (e("Map width not constant"));
 	map->size.w = length;
 	old = map->objs;
 	if (!(map->objs = malloc((map->size.h + 1) * sizeof(t_game_object *))))
-		return (EMALLOC("parse grid"));
+		return (emalloc("parse grid"));
 	ft_memcpy(map->objs, old, map->size.h * sizeof(t_game_object *));
 	error = map_loader_grid_create_line(&new, map, split);
 	map->objs[map->size.h] = new;

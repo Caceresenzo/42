@@ -17,10 +17,12 @@ t_image
 {
 	t_image *img;
 
-	CHECK_MALLOC(img, sizeof(t_image));
-	CHECK_PTR(img->ptr = mlx_new_image(mlx_ptr, width, height));
-	CHECK_PTR(img->pic = (int *)mlx_get_data_addr(img->ptr, &img->bpp,
-											&img->stride, &img->endian));
+	if (!(img = malloc(sizeof(t_image))))
+		return (NULL);
+	if (!(img->ptr = mlx_new_image(mlx_ptr, width, height))
+		|| !(img->pic = (int *)mlx_get_data_addr(img->ptr, &img->bpp,
+												&img->stride, &img->endian)))
+		return (NULL);
 	img->width = width;
 	img->height = height;
 	img->line_unit = img->stride / sizeof(int);

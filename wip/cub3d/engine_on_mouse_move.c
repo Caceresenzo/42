@@ -15,7 +15,7 @@
 int
 	engine_on_mouse_move(int x, int y, t_engine *engine)
 {
-	FAKE_USE(engine);
+	ft_fake_use(&engine);
 	mouse_pos_current_update(x, y);
 	return (0);
 }

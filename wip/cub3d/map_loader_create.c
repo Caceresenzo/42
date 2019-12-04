@@ -17,7 +17,8 @@ t_map
 {
 	t_map	*map;
 
-	CHECK_MALLOC(map, sizeof(t_map));
+	if (!(map = malloc(sizeof(t_map))))
+		return (NULL);
 	map->file = file;
 	map->objs = NULL;
 	map->roof_color = -1;

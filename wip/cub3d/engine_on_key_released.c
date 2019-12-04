@@ -15,7 +15,7 @@
 int
 	engine_on_key_released(int keycode, t_engine *engine)
 {
-	FAKE_USE(engine);
+	ft_fake_use(&engine);
 	key_state_set(keycode, STATE_RELEASED);
 	return (0);
 }

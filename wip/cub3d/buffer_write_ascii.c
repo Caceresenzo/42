@@ -20,7 +20,7 @@
 static char
 	buffer_ascii_map(unsigned int index, char old)
 {
-	FAKE_USE(index);
+	ft_fake_use(&index);
 	return (((unsigned char)old) & 0xFF);
 }
 
@@ -31,7 +31,8 @@ size_t
 	size_t			new_pos;
 
 	bytes = (unsigned char *)ft_strmapi(s, &buffer_ascii_map);
-	CHECK_PTR_DEF(bytes, (size_t)-1);
+	if (!bytes)
+		return ((size_t)-1);
 	new_pos = buffer_blit(buffer, bytes, offset, length);
 	free(bytes);
 	return (new_pos);

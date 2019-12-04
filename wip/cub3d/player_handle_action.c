@@ -17,7 +17,7 @@ int
 {
 	int		has_changed;
 
-	FAKE_USE(player);
+	ft_fake_use(&player);
 	has_changed = 0;
 	if (map->render_minimap != key_state_get(KEY_MINIMAP) && (has_changed = 1))
 		map->render_minimap = key_state_get(KEY_MINIMAP);

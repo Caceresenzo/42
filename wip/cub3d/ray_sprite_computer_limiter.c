@@ -15,14 +15,14 @@
 void
 	ray_sprite_compute_set_limits(t_ray *r)
 {
-	r->sout.h = ABS((int)(r->h / (r->trsnf.y))) / 1;
+	r->sout.h = ft_abs((int)(r->h / (r->trsnf.y))) / 1;
 	r->sout.start_y = -r->sout.h / 2 + r->h / 2 + r->v_mv_scrn;
 	if (r->sout.start_y < 0)
 		r->sout.start_y = 0;
 	r->sout.end_y = r->sout.h / 2 + r->h / 2 + r->v_mv_scrn;
 	if (r->sout.end_y >= r->h)
 		r->sout.end_y = r->h - 1;
-	r->sout.w = ABS((int)(r->h / (r->trsnf.y))) / 1;
+	r->sout.w = ft_abs((int)(r->h / (r->trsnf.y))) / 1;
 	r->sout.start_x = -r->sout.w / 2 + r->sprite_screen_x;
 	if (r->sout.start_x < 0)
 		r->sout.start_x = 0;

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 /*
+** Logical Shift Right, a simple right bit shifting but that complete with zeros
 ** From:
 ** https://stackoverflow.com/a/5253269/7292958
 */

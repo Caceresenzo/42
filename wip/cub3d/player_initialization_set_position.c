@@ -22,7 +22,7 @@ static char
 	if ((obj = &(map->objs[vec->y][vec->x]))->type == OBJ_PLAYER)
 	{
 		if (*found)
-			return (E("Multiple player"));
+			return (e("Multiple player"));
 		player->pos = (t_vec2d) { vec->x, vec->y };
 		if ((error = player_init_set_direction(player, obj->data)))
 			return (error);
@@ -54,5 +54,5 @@ char
 	}
 	if (found)
 		return (NULL);
-	return (E("No player found"));
+	return (e("No player found"));
 }

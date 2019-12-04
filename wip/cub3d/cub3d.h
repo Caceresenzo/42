@@ -33,7 +33,7 @@
 # include "bmp.h"
 
 # define WINDOW_NAME				"cub3d"
-# define WINDOW_NAME_BASE			WINDOW_NAME" - "
+# define WINDOW_NAME_BASE			"cub3d - "
 
 # define MAX_WINDOW_WIDTH			2048
 # define MAX_WINDOW_HEIGHT			1080
@@ -41,7 +41,7 @@
 # define CUB3D_FILE_EXTENSION		".cub"
 # define CUB3D_USAGE				"usage: ./cub3d <map> [-save]"
 
-# define EXPORT_FILE				WINDOW_NAME".bmp"
+# define EXPORT_FILE				"cub3d.bmp"
 
 # define X_EVENT_KEY_PRESS			2
 # define X_EVENT_KEY_RELEASE		3
@@ -69,9 +69,6 @@
 # define OBJ_WALL					1
 # define OBJ_SPRITE					2
 # define OBJ_PLAYER					3
-
-# define E(error)					ft_strdup(error)
-# define EMALLOC(location)			E("Failed to malloc() ["location"]")
 
 # define KEY_FORWARD				KEY_Z
 # define KEY_FORWARD2				KEY_W
@@ -208,7 +205,6 @@ typedef struct		s_g_obj_data_player
 }					t_g_obj_data_player;
 
 int					engine_initialize(char *path, int save_arg);
-void				*engine_hooks(t_engine *engine);
 int					engine_loop(t_engine *engine);
 
 int					engine_on_key_pressed(int keycode, t_engine *engine);
@@ -226,7 +222,7 @@ int					engine_handle_exit(t_engine *engine, int auto_exit);
 void				*engine_error(char *error);
 void				*engine_error_raison(char *error);
 
-void				engine_global_set(t_engine *engine);
+t_engine			*engine_global_set(t_engine *engine);
 t_engine			*engine_global_get(void);
 int					engine_global_is_set(void);
 
@@ -345,5 +341,8 @@ void				minimap_render_map(t_image *canvas, t_map *map,
 										t_vec2i offset);
 void				minimap_render_player(t_image *canvas, t_player *player,
 											t_vec2i offset);
+
+char				*e(const char *error);
+char				*emalloc(const char *location);
 
 #endif

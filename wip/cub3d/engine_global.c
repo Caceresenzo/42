@@ -14,10 +14,11 @@
 
 t_engine	*g_engine = NULL;
 
-void
-	engine_global_set(t_engine *engine)
+t_engine
+	*engine_global_set(t_engine *engine)
 {
 	g_engine = engine;
+	return (engine);
 }
 
 t_engine

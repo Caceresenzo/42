@@ -12,11 +12,13 @@
 
 #include "buffer.h"
 
-t_buffer	*buffer_create(size_t length)
+t_buffer
+	*buffer_create(size_t length)
 {
 	t_buffer *buffer;
 
-	CHECK_MALLOC(buffer, sizeof(t_buffer));
+	if (!(buffer = malloc(sizeof(t_buffer))))
+		return (NULL);
 	buffer->length = length;
 	buffer->data = ft_calloc(length, sizeof(char));
 	if (buffer->data == NULL)

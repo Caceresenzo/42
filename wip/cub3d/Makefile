@@ -43,6 +43,7 @@ SRCS	=	bmp_encoder.c \
 			engine_on_mouse_move.c \
 			engine_on_mouse_pressed.c \
 			engine_on_mouse_released.c \
+			error_quick.c \
 			fps_counter.c \
 			image_clear.c \
 			image_create.c \
@@ -97,7 +98,7 @@ SRCS	=	bmp_encoder.c \
 			ray_sprite_computer_limiter.c \
 			ray_sprite_computer_matrix.c \
 			ray_sprite_precomputer_order.c \
-			renderer.c 
+			renderer.c
 			
 OBJS	= $(SRCS:.c=.o)
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/

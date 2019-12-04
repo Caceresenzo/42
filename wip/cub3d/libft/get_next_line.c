@@ -12,82 +12,93 @@
 
 #include "get_next_line.h"
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 128
-#endif
-
-unsigned char	*internal_gnl_store(unsigned char c, int force)
+static int
+	i_gnl_initialize(t_gnl_holder *holder, int force, int return_value)
 {
-	static unsigned char	*stored = NULL;
-	static size_t			stored_length = 0;
-	unsigned char			*new;
-
-	CHECK_MALLOC(new, (stored_length + 1 + force) * sizeof(char));
-	if (stored != NULL)
+	if (!(holder->initialized == 1 && !force))
 	{
-		ft_memcpy(new, stored, stored_length);
-		free(stored);
+		holder->initialized = 1;
+		holder->reached = 0;
+		holder->offset = BUFFER_SIZE;
+		holder->stored = NULL;
+		holder->stored_length = 0;
+	}
+	return (return_value);
+}
+
+static t_uchar
+	*i_gnl_store(t_gnl_holder *holder, int force)
+{
+	t_uchar		c;
+	t_uchar		*new;
+
+	c = holder->buffer[holder->offset];
+	holder->offset += 1;
+	if (!(new = malloc((holder->stored_length + 1) * sizeof(char))))
+		return (NULL);
+	if (holder->stored != NULL)
+	{
+		ft_memcpy(new, holder->stored, holder->stored_length);
+		free(holder->stored);
 	}
 	if (c == '\n' || force)
 	{
-		new[stored_length] = '\0';
-		new[stored_length + force] = '\0';
-		stored = NULL;
-		stored_length = 0;
+		new[holder->stored_length] = '\0';
+		holder->stored = NULL;
+		holder->stored_length = 0;
 		return (new);
 	}
-	new[stored_length] = c;
-	stored_length++;
-	stored = new;
+	new[holder->stored_length] = c;
+	holder->stored_length += 1;
+	holder->stored = new;
 	return (NULL);
 }
 
-int				internal_gnl_handle(unsigned char buffer[BUFFER_SIZE],
-									size_t byte_read, char **return_line,
-									size_t *offset)
+static int
+	i_gnl_handle(t_gnl_holder *holder, char **return_line)
 {
-	unsigned char	*line;
-	int				force;
+	t_uchar		*line;
+	int			force;
 
-	while (*offset < BUFFER_SIZE)
+	while (holder->offset + 1 < BUFFER_SIZE + 1)
 	{
-		force = *offset >= byte_read;
-		line = internal_gnl_store(buffer[*offset], force);
-		*offset += 1;
+		force = holder->offset >= holder->byte_read;
+		line = i_gnl_store(holder, force);
 		if (line != NULL)
 		{
 			if (force)
-				*offset = BUFFER_SIZE;
+				holder->reached = 1;
 			*return_line = (char *)line;
-			return (1 + force);
+			return (1);
 		}
 	}
 	return (0);
 }
 
-int				get_next_line(int fd, char **line)
+int
+	get_next_line(int fd, char **line)
 {
-	static unsigned char	buffer[BUFFER_SIZE];
-	static size_t			byte_read = 0;
-	static size_t			offset = BUFFER_SIZE;
-	int						code;
+	static t_gnl_holder	holders[OPEN_MAX];
+	t_gnl_holder		*holder;
 
-	if (line == NULL)
-		return (GNL_END_REACHED);
+	if (line == NULL || BUFFER_SIZE == 0 || fd < 0)
+		return (GNL_ERROR);
 	*line = NULL;
+	holder = (holders + fd);
+	i_gnl_initialize(holder, 0, 0);
 	while (1)
 	{
-		if (offset == BUFFER_SIZE)
+		if (holder->offset == BUFFER_SIZE)
 		{
-			byte_read = read(fd, buffer, BUFFER_SIZE);
-			offset = 0;
+			holder->byte_read = read(fd, holder->buffer, BUFFER_SIZE);
+			holder->offset = 0;
 		}
-		if (byte_read == (size_t)-1)
+		if (holder->byte_read == (size_t)-1)
 			return (GNL_ERROR);
-		if ((code = internal_gnl_handle(buffer, byte_read, line, &offset)))
+		if (i_gnl_handle(holder, line))
 		{
-			if (byte_read == 0 || code == 2)
-				return (GNL_END_REACHED);
+			if (holder->byte_read == 0 || holder->reached)
+				return (i_gnl_initialize(holder, 1, GNL_END_REACHED));
 			return (GNL_READ);
 		}
 	}

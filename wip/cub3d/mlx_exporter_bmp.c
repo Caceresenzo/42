@@ -20,7 +20,7 @@ void
 
 	fd = open(EXPORT_FILE, O_WRONLY | O_CREAT, 0664);
 	if (fd < 0)
-		engine_error_raison(E("Failed to open export file: "EXPORT_FILE));
+		engine_error_raison(e("Failed to open export file: "EXPORT_FILE));
 	render_scene(engine);
 	result = bmp_encode(fd, engine->canvas);
 	if (result)

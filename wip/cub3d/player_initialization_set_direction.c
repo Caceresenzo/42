@@ -36,6 +36,6 @@ char
 		player->plane = (t_vec2d) { 0, -0.66 };
 	}
 	else
-		return (E("What? Unknown rotation value"));
+		return (e("What? Unknown rotation value"));
 	return (NULL);
 }

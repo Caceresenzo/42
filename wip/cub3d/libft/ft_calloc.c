@@ -12,13 +12,15 @@
 
 #include "libft.h"
 
-void	*ft_calloc(size_t count, size_t size)
+void
+	*ft_calloc(size_t count, size_t size)
 {
 	void	*array;
 	size_t	required;
 
 	required = count * size;
-	CHECK_MALLOC(array, required);
+	if (!(array = malloc(required)))
+		return (NULL);
 	ft_memset(array, 0, required);
 	return (array);
 }

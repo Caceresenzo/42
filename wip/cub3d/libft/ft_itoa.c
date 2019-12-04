@@ -12,7 +12,8 @@
 
 #include "libft.h"
 
-static size_t	internat_ft_itoa_compute_number_size(long number)
+size_t
+	ft_itoa_nsize(long number)
 {
 	size_t	size;
 
@@ -27,15 +28,17 @@ static size_t	internat_ft_itoa_compute_number_size(long number)
 	return (size);
 }
 
-char			*ft_itoa(int n)
+char
+	*ft_itoa(int n)
 {
 	long	number;
 	char	*array;
 	size_t	size;
 
 	number = n;
-	size = internat_ft_itoa_compute_number_size(n);
-	CHECK_MALLOC(array, (size + 1) * sizeof(char));
+	size = ft_itoa_nsize(n);
+	if (!(array = malloc((size + 1) * sizeof(char))))
+		return (NULL);
 	if (number < 0)
 	{
 		array[0] = '-';

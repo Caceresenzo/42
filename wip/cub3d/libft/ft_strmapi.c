@@ -12,16 +12,19 @@
 
 #include "libft.h"
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+char
+	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
 	size_t	index;
 	size_t	length;
 	char	*str;
 
-	CHECK_PTR(s);
+	if (!s)
+		return (NULL);
 	index = 0;
 	length = ft_strlen(s);
-	CHECK_PTR(str = ft_calloc(length + 1, sizeof(char)));
+	if (!(str = ft_calloc(length + 1, sizeof(char))))
+		return (NULL);
 	while (index < length)
 	{
 		str[index] = (*f)(index, s[index]);

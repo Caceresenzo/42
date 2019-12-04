@@ -12,8 +12,6 @@
 
 #include "cub3d.h"
 
-#define HOOK(event, callback) mlx_hook(eng.ctx.win, event, 0, callback, &eng);
-
 static void
 	engine_init_module(t_engine *engine)
 {
@@ -28,7 +26,7 @@ static void
 	{
 		if (!map_sealing_check(engine->map,
 					(t_vec2i) { engine->player.pos.x, engine->player.pos.y }))
-			error = E("Map is not sealed");
+			error = e("Map is not sealed");
 	}
 	if (error != NULL)
 		engine_error(error);
@@ -43,30 +41,38 @@ static void
 	engine->was_dirty = 0;
 }
 
+static void
+	engine_hook(int event, int (*callback)(), t_engine *engine)
+{
+	mlx_hook(engine->ctx.win, event, 0, callback, engine);
+}
+
 int
 	engine_initialize(char *path, int save_arg)
 {
-	t_engine	eng;
+	t_engine	engine;
 
-	engine_init_members(&eng);
-	engine_global_set(&eng);
-	CHECK_PTR_DEF(mlx_context_initialize(&eng.ctx), -1);
-	map_load(&eng, path);
-	engine_init_module(&eng);
-	CHECK_PTR_DEF(mlx_canvas_initialize(&eng, &(eng.canvas)), -1);
+	engine_init_members(engine_global_set(&engine));
+	if (!mlx_context_initialize(&engine.ctx))
+		return (-1);
+	map_load(&engine, path);
+	engine_init_module(&engine);
+	if (!mlx_canvas_initialize(&engine, &(engine.canvas)))
+		return (-1);
 	if (save_arg)
-		mlx_export_bmp(&eng);
+		mlx_export_bmp(&engine);
 	else
 	{
-		CHECK_PTR_DEF(mlx_window_initialize(&eng, &eng.ctx), -1);
-		HOOK(X_EVENT_KEY_PRESS, &engine_on_key_pressed);
-		HOOK(X_EVENT_KEY_RELEASE, &engine_on_key_released);
-		HOOK(X_EVENT_MOUSE_PRESS, &engine_on_mouse_pressed);
-		HOOK(X_EVENT_MOUSE_RELEASE, &engine_on_mouse_released);
-		HOOK(X_EVENT_MOUSE_MOVE, &engine_on_mouse_move);
-		HOOK(X_EVENT_EXIT, &engine_on_exit);
-		mlx_loop_hook(eng.ctx.mlx, &engine_loop, &eng);
-		mlx_loop(eng.ctx.mlx);
+		if (!mlx_window_initialize(&engine, &engine.ctx))
+			return (-1);
+		engine_hook(X_EVENT_KEY_PRESS, &engine_on_key_pressed, &engine);
+		engine_hook(X_EVENT_KEY_RELEASE, &engine_on_key_released, &engine);
+		engine_hook(X_EVENT_MOUSE_PRESS, &engine_on_mouse_pressed, &engine);
+		engine_hook(X_EVENT_MOUSE_RELEASE, &engine_on_mouse_released, &engine);
+		engine_hook(X_EVENT_MOUSE_MOVE, &engine_on_mouse_move, &engine);
+		engine_hook(X_EVENT_EXIT, &engine_on_exit, &engine);
+		mlx_loop_hook(engine.ctx.mlx, &engine_loop, &engine);
+		mlx_loop(engine.ctx.mlx);
 	}
-	return (engine_handle_exit(&eng, 1));
+	return (engine_handle_exit(&engine, 1));
 }

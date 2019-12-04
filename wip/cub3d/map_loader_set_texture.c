@@ -19,11 +19,12 @@ char
 	char	*trim;
 
 	if (path == NULL)
-		return (E("No texture path found for the sprite"));
+		return (e("No texture path found for the sprite"));
 	trim = ft_strtrim(path, " ");
 	trim = trim == NULL ? path : trim;
 	image = image_load(eng->ctx.mlx, trim);
-	CHECK_PTR_DEF(image, ft_strjoin("Failed to load texture path: ", trim));
+	if (!image)
+		return (ft_strjoin("Failed to load texture path: ", trim));
 	map->sprite = image;
 	if (trim != path)
 		free(trim);
@@ -53,8 +54,8 @@ char
 		side = EAST;
 	if (side == -1)
 		return (ft_strjoin("Unknown config key: ", key));
-	image = image_load(eng->ctx.mlx, trim);
-	CHECK_PTR_DEF(image, ft_strjoin("Failed to load texture path: ", trim));
+	if (!(image = image_load(eng->ctx.mlx, trim)))
+		return (ft_strjoin("Failed to load texture path: ", trim));
 	map->wall_texs[side] = image;
 	if (trim != path)
 		free(trim);

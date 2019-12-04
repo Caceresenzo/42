@@ -40,7 +40,8 @@ static t_map
 	t_vec2i	vec;
 
 	index = 0;
-	CHECK_MALLOC(map->sprts, (count + 1) * sizeof(t_game_object *));
+	if (!(map->sprts = malloc((count + 1) * sizeof(t_game_object *))))
+		return (NULL);
 	vec = (t_vec2i) { 0, 0 };
 	while (vec.y < map->size.h)
 	{
@@ -71,8 +72,9 @@ t_map
 	if ((count = i_map_finalizer_count(map, OBJ_SPRITE)))
 	{
 		map = map_finalizer_store_sprites(map, count);
-		CHECK_PTR(map->spr_ordr = ft_calloc(count, sizeof(int)));
-		CHECK_PTR(map->spr_dist = ft_calloc(count, sizeof(double)));
+		if (!(map->spr_ordr = ft_calloc(count, sizeof(int)))
+			|| !(map->spr_dist = ft_calloc(count, sizeof(double))))
+			return (NULL);
 	}
 	if ((error = map_content_check(map)))
 		engine_error(error);
