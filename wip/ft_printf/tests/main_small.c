@@ -6,21 +6,53 @@ int main(int argc, char **argv)
 	int r1;
 	int r2;
 
-	r1 = printf("%03*.*o", 3, -15, 0);
+	r1 = printf("%0#3*.*", 10, -15, 123);
 	fflush(stdout);
 	write(1, "\n", 1);
-	r2 = ft_printf("%03*.*o", 3, -15, 0);
+	r2 = ft_printf("%0#3*.*", 10, -15, 123);
 	write(1, "\n", 1);
 	if (r1 != r2)
 		printf("return err: %d != %d\n", r1, r2);
 
-	r1 = printf("%03*.o", 3, 0);
-	fflush(stdout);
-	write(1, "\n", 1);
-	r2 = ft_printf("%03*.o", 3, 0);
-	write(1, "\n", 1);
-	if (r1 != r2)
-		printf("return err: %d != %d\n", r1, r2);
+//	r1 = printf("%#03*.*o", 3, -15, 0);
+//	fflush(stdout);
+//	write(1, "\n", 1);
+//	r2 = ft_printf("%#03*.*o", 3, -15, 0);
+//	write(1, "\n", 1);
+//	if (r1 != r2)
+//		printf("return err: %d != %d\n", r1, r2);
+//
+//	r1 = printf("%#03*.o", 3, 0);
+//	fflush(stdout);
+//	write(1, "\n", 1);
+//	r2 = ft_printf("%#03*.o", 3, 0);
+//	write(1, "\n", 1);
+//	if (r1 != r2)
+//		printf("return err: %d != %d\n", r1, r2);
+//
+//	r1 = printf("%#03*.x", 3, 0);
+//	fflush(stdout);
+//	write(1, "\n", 1);
+//	r2 = ft_printf("%#03*.x", 3, 0);
+//	write(1, "\n", 1);
+//	if (r1 != r2)
+//		printf("return err: %d != %d\n", r1, r2);
+//
+//	r1 = printf("%#03*.10o", 0, 123);
+//	fflush(stdout);
+//	write(1, "\n", 1);
+//	r2 = ft_printf("%#03*.10o", 0, 123);
+//	write(1, "\n", 1);
+//	if (r1 != r2)
+//		printf("return err: %d != %d\n", r1, r2);
+//
+//	r1 = printf("%#03*.10o", 0, -123);
+//	fflush(stdout);
+//	write(1, "\n", 1);
+//	r2 = ft_printf("%#03*.10o", 0, -123);
+//	write(1, "\n", 1);
+//	if (r1 != r2)
+//		printf("return err: %d != %d\n", r1, r2);
 
 //	r1 = printf("%-54lc", (char)176);
 //	fflush(stdout);

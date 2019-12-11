@@ -12,7 +12,8 @@
 
 #include "ft_printf.h"
 
-void	ft_printf_putstr(char *str, t_ft_printf_settings *settings, int length)
+void
+	ft_printf_putstr(char *str, t_ft_printf_settings *settings, int length)
 {
 	int		index;
 
@@ -20,19 +21,11 @@ void	ft_printf_putstr(char *str, t_ft_printf_settings *settings, int length)
 		return ;
 	if (length == -1)
 		while (*str)
-		{
-			ft_putchar_fd(*str, settings->fd);
-			settings->written += 1;
-			str++;
-		}
+			ft_printf_putchar(settings, *str++);
 	else
 	{
 		index = 0;
 		while (index < length)
-		{
-			ft_putchar_fd(str[index], settings->fd);
-			settings->written += 1;
-			index++;
-		}
+			ft_printf_putchar(settings, str[index++]);
 	}
 }

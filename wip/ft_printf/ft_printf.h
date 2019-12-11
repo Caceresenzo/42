@@ -28,6 +28,7 @@ typedef	struct	s_ft_printf_settings
 	const char	*format;
 	va_list		parameters;
 	int			fd;
+	int			end;
 }				t_ft_printf_settings;
 
 typedef	struct	s_ft_printf_flags
@@ -66,6 +67,7 @@ void			ft_printf_format_process(t_ft_printf_bundle bundle,
 
 void			ft_printf_putstr(char *str, t_ft_printf_settings *settings,
 								int length);
+void			ft_printf_putchar(t_ft_printf_settings *settings, char c);
 
 void			ft_printf_flag_initialize(t_ft_printf_flags *flags);
 void			ft_printf_flag_parse(t_ft_printf_bundle *bundle, size_t start,
@@ -73,7 +75,8 @@ void			ft_printf_flag_parse(t_ft_printf_bundle *bundle, size_t start,
 char			*ft_printf_flag_handle(t_ft_printf_bundle *bundle,
 										char *formatted);
 
-void			ft_printf_flag_validate(t_ft_printf_flags *flags);
+void			ft_printf_flag_validate(t_ft_printf_flags *flags,
+										int *should_end);
 
 void			*ft_printf_formatter_get(char key);
 
@@ -95,8 +98,9 @@ size_t			ft_itoa_base_compute_number_size(long number, size_t radix);
 void			ft_printf_debug_dump_flag(t_ft_printf_flags *flags);
 
 char			*ft_printf_padder_add_number_precision(t_ft_printf_bundle *b,
-											char *abs_itoa, int negative);
-int				ft_printf_which_unit(t_ft_printf_flags *flags, int negative);
+											char *abs_itoa, int negative,
+											int offset);
+int				ft_printf_which_unit(t_ft_printf_flags *flags, int offset);
 
 int				ft_printf_is_flag_char(char c);
 

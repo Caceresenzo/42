@@ -114,5 +114,5 @@ void
 	}
 	bundle->index = old_index;
 	free(str);
-	ft_printf_flag_validate(bundle->flags);
+	ft_printf_flag_validate(bundle->flags, &(bundle->settings->end));
 }

@@ -34,9 +34,8 @@ char
 
 	ptr = (unsigned long)va_arg(bundle->settings->parameters, void *);
 	itoa = ft_itoa_u_base(ptr, BASE_HEX_LOW);
-	str = ft_printf_padder_add_number_precision(bundle, itoa, 2);
-	str = ft_strjoin_free("0x",
-					ft_printf_formatter_pointer_second_part(str, ptr, bundle),
-					FT_STRJOIN_FREE_SECOND);
+	str = ft_printf_padder_add_number_precision(bundle, itoa, 0, 2);
+	str = ft_printf_formatter_pointer_second_part(str, ptr, bundle);
+	str = ft_strjoin_free("0x", str, FT_STRJOIN_FREE_SECOND);
 	return (str);
 }

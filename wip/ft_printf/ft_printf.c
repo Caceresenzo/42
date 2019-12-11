@@ -12,7 +12,8 @@
 
 #include "ft_printf.h"
 
-int		ft_dprintf(int fd, const char *format, ...)
+int
+	ft_dprintf(int fd, const char *format, ...)
 {
 	t_ft_printf_settings settings;
 
@@ -25,7 +26,8 @@ int		ft_dprintf(int fd, const char *format, ...)
 	return (settings.written);
 }
 
-int		ft_printf(const char *format, ...)
+int
+	ft_printf(const char *format, ...)
 {
 	t_ft_printf_settings settings;
 

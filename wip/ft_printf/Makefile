@@ -13,32 +13,32 @@
 NAME		= libftprintf.a
 LIBFT		= libft
 LIBFT_LIB	= libft.a
-SRCS		=	ft_printf.c \
-				ft_printf_debugger.c \
-				ft_printf_flag_handler.c \
-				ft_printf_flag_initializer.c \
-				ft_printf_flag_parser.c \
-				ft_printf_flag_validator.c \
-				ft_printf_format_char.c \
-				ft_printf_format_decimal.c \
-				ft_printf_format_empty.c \
-				ft_printf_format_hex_int.c \
-				ft_printf_format_octal_int.c \
-				ft_printf_format_pointer.c \
-				ft_printf_format_pourcent.c \
-				ft_printf_format_string.c \
-				ft_printf_format_uint.c \
-				ft_printf_formatter.c \
-				ft_printf_formatter_registry.c \
-				ft_printf_handler.c \
-				ft_printf_is_flag_char.c \
-				ft_printf_padder.c \
-				ft_printf_putstr.c \
-				ft_printf_which_unit.c
+SRCS		=	./ft_printf.c \
+				./ft_printf_flag_handler.c \
+				./ft_printf_flag_initializer.c \
+				./ft_printf_flag_parser.c \
+				./ft_printf_flag_validator.c \
+				./ft_printf_format_char.c \
+				./ft_printf_format_decimal.c \
+				./ft_printf_format_empty.c \
+				./ft_printf_format_hex_int.c \
+				./ft_printf_format_octal_int.c \
+				./ft_printf_format_pointer.c \
+				./ft_printf_format_pourcent.c \
+				./ft_printf_format_string.c \
+				./ft_printf_format_uint.c \
+				./ft_printf_formatter.c \
+				./ft_printf_formatter_registry.c \
+				./ft_printf_handler.c \
+				./ft_printf_is_flag_char.c \
+				./ft_printf_padder.c \
+				./ft_printf_putchar.c \
+				./ft_printf_putstr.c \
+				./ft_printf_which_unit.c
 OBJS		= $(SRCS:.c=.o)
 RM			= rm -f
 LIBC		= ar -rcs
-FLAGS		= -Wall -Wextra -Werror
+FLAGS		= -Wall -Wextra -Werror -O3 -g3
 INCS		= .
 COMPILER	= cc
 
@@ -62,4 +62,4 @@ clean:
     
 re: fclean all
 
-.PHONY: all clean fclean re .c.o libft
+.PHONY: all clean fclean re .c.o

@@ -26,7 +26,7 @@ void
 	while ((flags.letter = settings->format[*index]))
 	{
 		formatter = ft_printf_formatter_get(flags.letter);
-		if (formatter != NULL || ft_printf_is_flag_char(flags.letter))
+		if (formatter != NULL || !ft_printf_is_flag_char(flags.letter))
 			break ;
 		*index += 1;
 	}

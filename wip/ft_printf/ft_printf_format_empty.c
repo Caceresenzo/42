@@ -17,6 +17,8 @@ char
 {
 	if (bundle->flags->precision_enabled)
 		bundle->flags->precision_enabled = 0;
+	if (bundle->flags->letter == '\0')
+		return (ft_emptystr());
 	bundle->forced_length = 1;
 	return (ft_chrtostr(bundle->flags->letter));
 }

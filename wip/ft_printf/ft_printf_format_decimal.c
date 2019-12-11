@@ -28,6 +28,6 @@ char
 	if (ft_printf_f_decimal_should_be_empty(decimal == 0, bundle->flags))
 		return (ft_emptystr());
 	str = ft_itoa_base(ft_abs(decimal), BASE_DECIMAL);
-	str = ft_printf_padder_add_number_precision(bundle, str, decimal < 0);
+	str = ft_printf_padder_add_number_precision(bundle, str, decimal < 0, 0);
 	return (str);
 }

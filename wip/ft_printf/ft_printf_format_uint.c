@@ -23,6 +23,6 @@ char
 		return (ft_emptystr());
 	itoa = ft_itoa_u_base(decimal, BASE_DECIMAL);
 	if (itoa && bundle->flags->precision_enabled)
-		return (ft_printf_padder_add_number_precision(bundle, itoa, 0));
+		return (ft_printf_padder_add_number_precision(bundle, itoa, 0, 0));
 	return (itoa);
 }

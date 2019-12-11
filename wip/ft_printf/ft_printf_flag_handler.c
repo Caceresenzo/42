@@ -19,17 +19,18 @@ char
 	int		required;
 	char	*padding;
 	char	*str;
+	char	letter;
 
+	letter = ft_tolower(bundle->flags->letter);
 	if ((bundle->flags->precision_enabled || bundle->flags->precision_negative)
-			&& bundle->flags->letter != 's' && bundle->flags->letter != 'o' && bundle->flags->letter != '%'
-			&& (ft_tolower(bundle->flags->letter) != 'x'
-					|| bundle->flags->precision < bundle->flags->width))
+			&& !ft_strcontain("s%", letter) && ((letter != 'x' && letter != 'o')
+			|| bundle->flags->precision < bundle->flags->width))
 	{
 		bundle->flags->padding_char = ' ';
 	}
 	length = ft_strlen(formatted);
 	required = bundle->flags->width - length;
-	if (required <= 0)
+	if (required < 0)
 		return (formatted);
 	padding = ft_chrmult(bundle->flags->padding_char, required);
 	if (!padding)
@@ -53,7 +54,7 @@ char
 		bundle->flags->padding_char = ' ';
 	length = bundle->forced_length;
 	required = bundle->flags->width - length;
-	if (required <= 0)
+	if (required < 0)
 		return (formatted);
 	padding = ft_chrmult(bundle->flags->padding_char, required);
 	if (!padding)
