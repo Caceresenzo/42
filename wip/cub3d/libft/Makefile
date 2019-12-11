@@ -78,7 +78,8 @@ SRCS	=	./ft_abs.c \
 			./ft_tolower.c \
 			./ft_toupper.c \
 			./ft_zero_if_neg.c \
-			./get_next_line.c
+			./get_next_line.c \
+			./ft_strcmp.c
 OBJS	= $(SRCS:.c=.o)
 RM		= rm -f
 LIBC	= ar -rcs

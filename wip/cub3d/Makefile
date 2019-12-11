@@ -17,7 +17,7 @@ C_RESET=\033[0;39m
 
 PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-NAME	=   cub3d
+NAME	=   Cub3D
 SRCS	=	bmp_encoder.c \
 			bmp_encoder_initializer.c \
 			bmp_encoder_write_header.c \
@@ -101,16 +101,20 @@ SRCS	=	bmp_encoder.c \
 			renderer.c
 			
 OBJS	= $(SRCS:.c=.o)
+CC		= cc
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
 FLAGS	= -Wall -Wextra -Werror -O3 -g3
 FRWRKS	= -framework OpenGL -framework AppKit
 LIBS_P	= ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
-BONUS	= 0
+
+BONUS			= 0
+EXPERIMENTAL	= 0
 
 %.o: $(PROJECT_ROOT)%.c
-	${CC} ${FLAGS} -c $(CPPFLAGS) -o $@ $< ${INCS} -D BONUS=${BONUS}
+	${CC} ${FLAGS} -c $(CPPFLAGS) -o $@ $< ${INCS} -D BONUS=${BONUS} -D EXPERIMENTAL=${EXPERIMENTAL}
 
-$(NAME): libs ${OBJS}
+$(NAME): ${OBJS}
+	make libs -C ${PROJECT_ROOT}
 	gcc $(OBJS) ${FLAGS} ${FRWRKS} -o $(NAME) ${LIBS_P}
 
 all: $(NAME)

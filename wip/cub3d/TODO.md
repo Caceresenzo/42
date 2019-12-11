@@ -4,6 +4,12 @@
 
 # Might be a good idea to
 
-- Add support for loading both .png and .xpm image file by checking the extension
-
 # Bonus
+
+# New bug found
+
+### Resolvable
+
+### Unresolvable
+
+- Minilibx: crash if window is too small (bug don't append with older version)

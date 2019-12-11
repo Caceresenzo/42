@@ -12,15 +12,29 @@
 
 #include "image.h"
 
+void
+	*(*image_get_mlx_loader(char *path))(void *, char *, int *, int *)
+{
+	char	*extension;
+
+	extension = ft_strrchr(path, '.');
+	if (extension == NULL)
+		return (&mlx_png_file_to_image);
+	if (ft_strcmp(extension, XPM_EXTENSION) == 0)
+		return (&mlx_xpm_file_to_image);
+	return (&mlx_png_file_to_image);
+}
+
 t_image
 	*image_load(void *mlx_ptr, char *path)
 {
 	t_image *img;
+	void	*(*loader)(void *, char *, int *, int *);
 
-	if (!(img = malloc(sizeof(t_image))))
+	if (!path || !(img = malloc(sizeof(t_image))))
 		return (NULL);
-	if (!(img->ptr = mlx_png_file_to_image(mlx_ptr, path, &img->width,
-											&img->height))
+	loader = image_get_mlx_loader(path);
+	if (!(img->ptr = (*loader)(mlx_ptr, path, &img->width, &img->height))
 		|| !(img->pic = (int *)mlx_get_data_addr(img->ptr, &img->bpp,
 												&img->stride, &img->endian)))
 		return (NULL);

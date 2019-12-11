@@ -23,21 +23,20 @@ func _mlx_bridge_transfer<T : AnyObject>(ptr : UnsafeRawPointer) -> T {
     return Unmanaged<T>.fromOpaque(ptr).takeRetainedValue()
 }
 
+
+let MLX_SYNC_IMAGE_WRITABLE = Int32(1)
+let MLX_SYNC_WIN_FLUSH_CMD = Int32(2)
+let MLX_SYNC_WIN_CMD_COMPLETED = Int32(3)
+
+
+
 /// C decl
-
-
 
 
 @_cdecl("mlx_init")
 public func mlx_init_swift() -> UnsafeRawPointer
 {
 	let mm = MlxMain()	
-/**
-	withUnsafePointer(to: &mm) {
-	    print(" mlx init ptr: \($0)")
-	  }
-**/
-
 	return (_mlx_bridge_retained(obj:mm))
 }
 
@@ -54,14 +53,8 @@ public func mlx_loop_swift(_ mlxptr:UnsafeRawPointer)
 @_cdecl("mlx_new_window")
 public func mlx_new_window_swift(_ mlxptr:UnsafeRawPointer, Width w:UInt32, Height h:UInt32, Title t:UnsafePointer<CChar>) -> UnsafeRawPointer
 {
-		/// print("Got mlx ptr \(mlxptr) ")
 		let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
 		let mw = MlxWin(device: mlx.device, width: Int(w), height: Int(h), title: String(cString: t))
-
-/**		withUnsafePointer(to: &mlx) {
-		    print(" got mlx init back bridge ptr: \($0)")
-	  	 }
-**/
 		mw.setNotifs()
 		mlx.addWinToList(mw)
 		return (_mlx_bridge_retained(obj:mw))
@@ -158,6 +151,7 @@ public func mlx_new_image(_ mlxptr:UnsafeRawPointer, _ width:Int32, _ height:Int
 	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
 	let img = MlxImg(d:mlx.device, w:Int(width), h:Int(height))
 	mlx.addImgToList(img)
+///	print(CFGetRetainCount(img))
 	return (_mlx_bridge_retained(obj:img))
 
 }
@@ -194,27 +188,50 @@ public func mlx_put_image_to_window_scale_swift(_ mlxptr:UnsafeRawPointer, _ win
 public func mlx_do_sync_swift(_ mlxptr:UnsafeRawPointer) -> Int32
 {
 	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
-	mlx.winList.forEach { $0.flushPixels() }
 	mlx.winList.forEach { $0.flushImages() }
 	mlx.winList.forEach { $0.waitForGPU() }
 	return Int32(0)
 }
 
+@_cdecl("mlx_sync")
+public func mlx_sync_swift(_ what:Int32, _ param:UnsafeRawPointer) -> Int32
+{
+    switch what
+    {
+	case MLX_SYNC_IMAGE_WRITABLE:
+		let img:MlxImg = _mlx_bridge(ptr:param); while img.onGPU > 0 {} 
+	case MLX_SYNC_WIN_FLUSH_CMD:
+		let win:MlxWin = _mlx_bridge(ptr:param); win.flushImages()
+	case MLX_SYNC_WIN_CMD_COMPLETED:
+	        let win:MlxWin = _mlx_bridge(ptr:param); win.flushImages(); win.waitForGPU()
+	default:
+		break
+    }
+    return Int32(0)
+}
+
 @_cdecl("mlx_destroy_window")
 public func mlx_destroy_window_swift(_ mlxptr:UnsafeRawPointer, _ winptr:UnsafeRawPointer) -> Int32
 {
+	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
 	/// bridge_transfer to get the retain, at end of this func should release the MlxWin object, because no ref anymore.
 	let win:MlxWin = _mlx_bridge_transfer(ptr:winptr)
+	win.flushImages()
+	win.waitForGPU()
 	win.destroyWinE()
+	mlx.winList.removeAll(where: { $0 === win} )
 	return Int32(0)
 }
 
 @_cdecl("mlx_destroy_image")
 public func mlx_destroy_image_swift(_ mlxptr:UnsafeRawPointer, _ imgptr:UnsafeRawPointer) -> Int32
 {
-
+	let mlx:MlxMain = _mlx_bridge(ptr:mlxptr)
 	/// bridge_transfer to get the retain, at end of this func should release the MlxImg object, because no ref anymore.
-	let _:MlxImg = _mlx_bridge_transfer(ptr:imgptr)
+	let img:MlxImg = _mlx_bridge_transfer(ptr:imgptr)
+	mlx.winList.forEach { $0.flushImages() }
+	while img.onGPU > 0 {}
+	mlx.imgList.removeAll(where: { $0 === img} )
 	return Int32(0)
 }
 

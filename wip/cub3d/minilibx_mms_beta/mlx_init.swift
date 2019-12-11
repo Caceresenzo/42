@@ -67,7 +67,6 @@ public class MlxMain {
     {
         return { (cfRunloopObserver, cfrunloopactivity, info) -> Void in
 	    let mlx:MlxMain = _mlx_bridge(ptr:info!)
-	    mlx.winList.forEach { $0.flushPixels() }
 	    mlx.winList.forEach { $0.flushImages() }
 ///         mlx.doCallLoopHook()
         }

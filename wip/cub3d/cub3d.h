@@ -21,7 +21,7 @@
 # include <string.h>
 # include <errno.h>
 
-# include <mlx.h>
+# include "minilibx_mms_beta/mlx.h"
 # include "libft/libft.h"
 # include "libft/get_next_line.h"
 
@@ -32,16 +32,16 @@
 # include "buffer.h"
 # include "bmp.h"
 
-# define WINDOW_NAME				"cub3d"
-# define WINDOW_NAME_BASE			"cub3d - "
+# define WINDOW_NAME				"Cub3D"
+# define WINDOW_NAME_BASE			"Cub3D - "
 
-# define MAX_WINDOW_WIDTH			2048
-# define MAX_WINDOW_HEIGHT			1080
+# define MAX_WINDOW_WIDTH			2560
+# define MAX_WINDOW_HEIGHT			1440
 
 # define CUB3D_FILE_EXTENSION		".cub"
 # define CUB3D_USAGE				"usage: ./cub3d <map> [-save]"
 
-# define EXPORT_FILE				"cub3d.bmp"
+# define EXPORT_FILE				"Cub3D.bmp"
 
 # define X_EVENT_KEY_PRESS			2
 # define X_EVENT_KEY_RELEASE		3
@@ -87,6 +87,10 @@
 
 # ifndef BONUS
 #  define BONUS 1
+# endif
+
+# ifndef EXPERIMENTAL
+#  define EXPERIMENTAL 0
 # endif
 
 # define RENDER_SHOW_STATS			BONUS

@@ -58,8 +58,8 @@ class WinEvent: NSWindow
 	if (idx == 6 || idx == 32)
 	{
 		if (fptr != nil) ///  == nullptr)
-		   { self.acceptsMouseMovedEvents = false }
-		else { self.acceptsMouseMovedEvents = true }
+		   { self.acceptsMouseMovedEvents = true }
+		else { self.acceptsMouseMovedEvents = false }
 	}
   }
 
@@ -210,7 +210,7 @@ public class MlxWin
 {
   var winE: WinEvent
 
-  var device: MTLDevice
+  unowned var device: MTLDevice
   var mview: MTKView
   var md: MTKVDelegate
 
@@ -231,7 +231,8 @@ public class MlxWin
 
     winE.contentView = mview
     winE.title = t
-    winE.makeKeyAndOrderFront(self)
+    winE.isReleasedWhenClosed = false
+    winE.makeKeyAndOrderFront(nil)
   }
 
 /// winEvent calls
@@ -247,11 +248,10 @@ public class MlxWin
 /// mtkviewdelegate calls
   public func clearWin()  {  md.clearWin() }
   public func pixelPut(_ x:Int32, _ y:Int32, _ color:UInt32)  {  md.pixelPut(x, y, color) }
-  public func putImageScale(image img:MlxImg, sx srcx:Int32, sy srcy:Int32, sw srcw:Int32, sh srch:Int32, dx posx:Int32, dy posy:Int32, dw dest_w:Int32, dh dest_h:Int32, c color:UInt32) { md.putImageScale(img, srcx, srcy, srcw, srch, posx, posy, dest_w, dest_h, color) }
+  public func putImageScale(image img:MlxImg, sx srcx:Int32, sy srcy:Int32, sw srcw:Int32, sh srch:Int32, dx posx:Int32, dy posy:Int32, dw dest_w:Int32, dh dest_h:Int32, c color:UInt32) { md.flushPixels(); md.putImageScale(img, srcx, srcy, srcw, srch, posx, posy, dest_w, dest_h, color) }
 ///  	      			  	      	  print("putimagescale \(srcx) \(srcy) \(srcw) \(srch) \(posx) \(posy) \(dest_w) \(dest_h) \(color)") }
-  public func putImage(image img:MlxImg, x posx:Int32, y posy:Int32) { md.putImage(img, posx, posy) }
+  public func putImage(image img:MlxImg, x posx:Int32, y posy:Int32) { md.flushPixels(); md.putImage(img, posx, posy) }
   public func waitForGPU() { md.waitForGPU() }
-  public func flushPixels() { md.flushPixels() }
   public func flushImages() { md.flushImages() }
 
 }
@@ -306,14 +306,15 @@ struct textureList
 {
    var uniformBuffer: MTLBuffer!
    var uniform_data:UnsafeMutablePointer<Float>
-   var texture:MTLTexture
+   unowned var image:MlxImg
 }
 
 
 class MTKVDelegate: NSObject, MTKViewDelegate
 {
-  var device: MTLDevice
-  var mview: MTKView
+  unowned var device: MTLDevice
+  unowned var mview: MTKView
+  let vrect: CGRect
   var commandQueue: MTLCommandQueue!
   var pipelineState: MTLRenderPipelineState!
 /// 3 params to pipeline
@@ -329,7 +330,7 @@ class MTKVDelegate: NSObject, MTKViewDelegate
   var pixel_image:MlxImg
   var pixel_count:Int
 
-  var drawable_texture: MTLTexture
+  unowned var drawable_texture: MTLTexture
 
   var doClear = false
 
@@ -374,7 +375,7 @@ class MTKVDelegate: NSObject, MTKViewDelegate
     var dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
     vertexBuffer = device.makeBuffer(bytes: vertexData, length: dataSize, options: []) 
 
-    let vrect = view.frame
+    vrect = view.frame
 
     drawable_texture = view.currentDrawable!.texture
 
@@ -390,7 +391,7 @@ class MTKVDelegate: NSObject, MTKViewDelegate
     { 
       let uniformBuffer = device.makeBuffer(bytes: uniformData, length: dataSize, options: [])!
       let uniform_data = (uniformBuffer.contents()).assumingMemoryBound(to:Float.self)
-      texture_list.append(textureList(uniformBuffer:uniformBuffer, uniform_data:uniform_data, texture:pixel_image.texture)) }
+      texture_list.append(textureList(uniformBuffer:uniformBuffer, uniform_data:uniform_data, image:pixel_image)) }
 
     super.init()
    }
@@ -398,17 +399,29 @@ class MTKVDelegate: NSObject, MTKViewDelegate
 
   func clearWin()
   {
+	flushImages()
 	doClear = true
-	mview.draw()
+	///  mview.draw()
+	///  next flush images should call draw(), even if there is no image to put
   }
 
   func pixelPut(_ x:Int32, _ y:Int32, _ color:UInt32)
   {
-	pixel_image.texture_data[Int(y)*pixel_image.texture_sizeline/4+Int(x)] = color
-	pixel_count += 1
-	if (pixel_count >= 200000)
+	if (pixel_count == 0)
 	{
-		flushPixels()
+	  while (pixel_image.onGPU > 0)
+	  {
+	     if (GPUbatch > 0) { waitForGPU() }
+	     else { flushImages() }
+	  }
+	  for i in 0...pixel_image.texture_height*pixel_image.texture_sizeline/4-1
+	    { pixel_image.texture_data[i] = UInt32(0xFF000000) }
+	}
+	let t = (x&(Int32(vrect.size.width-1)-x))&(y&(Int32(vrect.size.height-1)-y))
+	if t >= 0
+	{
+		pixel_image.texture_data[Int(y)*pixel_image.texture_sizeline/4+Int(x)] = color
+		pixel_count += 1
 	}
   }
 
@@ -416,21 +429,18 @@ class MTKVDelegate: NSObject, MTKViewDelegate
   {
 	if (pixel_count > 0)
 	{
-	  
 	  self.putImage(pixel_image, 0, 0)
-	  self.flushImages()
-	  for i in 0...pixel_image.texture_height*pixel_image.texture_sizeline/4-1
-	    { pixel_image.texture_data[i] = UInt32(0xFF000000) }
 	  pixel_count = 0
 	}
   }
 
   func flushImages()
   {
-	if (texture_list_count > 0)
+	flushPixels()
+	if (texture_list_count > 0 || doClear)
 	 {
 	    mview.draw()
-	  }
+	 }
   }
 
   func putImage(_ img:MlxImg, _ x:Int32, _ y:Int32)
@@ -463,9 +473,11 @@ class MTKVDelegate: NSObject, MTKViewDelegate
 	texture_list[texture_list_count].uniform_data[14] = Float((color>>0)&0xFF)/255.0;
 	texture_list[texture_list_count].uniform_data[15] = Float((color>>24)&0xFF)/255.0;
 
-	texture_list[texture_list_count].texture = img.texture
+	texture_list[texture_list_count].image = img
+	img.onGPU += 1
+	
 	texture_list_count += 1
-	if (texture_list_count >= 256)
+	if (texture_list_count == 255) /// keep 1 slot for put_pixels image
 	{
 		flushImages()
 	}
@@ -489,6 +501,9 @@ class MTKVDelegate: NSObject, MTKViewDelegate
 	if let renderPassDescriptor = view.currentRenderPassDescriptor
 	 {
 		renderPassDescriptor.colorAttachments[0].storeAction = .store
+
+/// clear or draw back prev buffer
+
 		if (doClear)
 		{
 		  renderPassDescriptor.colorAttachments[0].loadAction = .clear
@@ -500,13 +515,12 @@ class MTKVDelegate: NSObject, MTKViewDelegate
 		else
 		{
 
-/// first draw back prev buffer
 		  let commandBEncoder = commandBuffer.makeBlitCommandEncoder()!
 	 	  commandBEncoder.copy(from:drawable_texture, sourceSlice:0, sourceLevel:0, sourceOrigin: MTLOriginMake(0,0,0), sourceSize: MTLSizeMake(drawable_texture.width, drawable_texture.height, 1),  to:view.currentDrawable!.texture, destinationSlice:0, destinationLevel:0, destinationOrigin: MTLOriginMake(0,0,0))
 	 	  commandBEncoder.endEncoding()
+		}
 
-
-/// then draw the images
+/// then draw the images if any.
 		  renderPassDescriptor.colorAttachments[0].loadAction = .load
 
 		  var i = 0
@@ -516,13 +530,16 @@ class MTKVDelegate: NSObject, MTKViewDelegate
 		   commandEncoder.setRenderPipelineState(pipelineState)
 		   commandEncoder.setVertexBuffer(vertexBuffer, offset: 0, index: 0)
 		   commandEncoder.setVertexBuffer(texture_list[i].uniformBuffer, offset: 0, index: 1)
-		   commandEncoder.setFragmentTexture(texture_list[i].texture, index: 0)
+		   commandEncoder.setFragmentTexture(texture_list[i].image.texture, index: 0)
 		   commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 6, instanceCount:2)
 		   commandEncoder.endEncoding()
+		   ({ j in
+		      commandBuffer.addCompletedHandler { cb in self.texture_list[j].image.onGPU -= 1 }
+		   })(i)
 		   i += 1
   		  }
 		  texture_list_count = 0
-                }	
+
          }
 	commandBuffer.addCompletedHandler { cb in self.GPUbatch -= 1 }
 	commandBuffer.present(view.currentDrawable!)

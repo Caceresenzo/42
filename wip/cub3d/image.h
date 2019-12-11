@@ -16,6 +16,9 @@
 # include "minilibx_mms_beta/mlx.h"
 # include "libft/libft.h"
 
+# define PNG_EXTENSION ".png"
+# define XPM_EXTENSION ".xpm"
+
 typedef struct	s_image
 {
 	void		*ptr;

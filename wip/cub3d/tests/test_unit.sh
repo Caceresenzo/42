@@ -1,6 +1,8 @@
 reset
 rm -f *.bmp
 
+executable=Cub3D
+
 g_test_count=0
 g_test_success_count=0
 g_bmp_files_present=0
@@ -42,17 +44,17 @@ function check()
 	do
 		g_test_count=$((g_test_count+1))
 		printf "\033[4G%s\033[10G\033[0;36m'%s'" "🔎" "$file"
-		{ ./cub3d $file $flags ; } &> /dev/null &
+		{ ./$executable $file $flags ; } &> /dev/null &
 		pid=$!
 		loop=0
 		forced=0
-		while ps | grep -e "cub3d" | grep -v grep > /dev/null
+		while ps | grep -e "$executable" | grep -v grep > /dev/null
 		do
 			sleep 0.1
 			loop=$((loop+1))
 			if [ $loop == $timeout ]
 			then
-				kill -9 $(ps | grep -e "cub3d" | grep -v grep | cut -c-5)
+				kill -9 $(ps | grep -e "$executable" | grep -v grep | cut -c-5)
 				signal=0
 				forced=1
 			fi
@@ -131,7 +133,7 @@ echo "\n\033[0G\033[0;97mTesting valid map\033[0m\n"
 check "./tests/maps/scene_valid_*" 0 "" 15 true
 
 echo "\n\033[0G\033[0;97mTesting valid map (with -save flag)\033[0m\n"
-check "./tests/maps/scene_valid_*" 0 "-save" 30 true
+check "./tests/maps/scene_valid_*" 0 "-save" 80 true
 
 printf "\033[4G%s\033[10G\033[0;36mChecking BMP files..." "🔎"
 check_bmp_files

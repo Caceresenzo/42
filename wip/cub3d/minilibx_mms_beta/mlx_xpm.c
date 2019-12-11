@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <string.h>
 
-#include "mlx.h"
+#include "../minilibx_mms_beta/mlx.h"
 
 typedef struct  s_xpm_col
 {
@@ -24,7 +24,7 @@ struct  s_col_name
 };
 
 //extern struct s_col_name mlx_col_name[];
-#include "mlx_rgb.c"
+#include "../minilibx_mms_beta/mlx_rgb.c"
 
 
 #define	RETURN	{ if (colors) free(colors); if (tab) free(tab); \

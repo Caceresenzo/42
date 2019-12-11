@@ -61,6 +61,7 @@ int	mlx_pixel_put(void *mlx_ptr, void *win_ptr, int x, int y, int color);
 **  origin for x & y is top left corner of the window
 **  y down is positive
 **  color is 0xAARRGGBB format
+**  x and y must fit into the size of the window, no control is done on the values
 */
 
 
@@ -139,5 +140,15 @@ int     mlx_mouse_get_pos(void *win_ptr, int *x, int *y);
 int	mlx_do_key_autorepeatoff(void *mlx_ptr);
 int	mlx_do_key_autorepeaton(void *mlx_ptr);
 int	mlx_do_sync(void *mlx_ptr);
+
+#define MLX_SYNC_IMAGE_WRITABLE		1
+#define MLX_SYNC_WIN_FLUSH_CMD		2
+#define MLX_SYNC_WIN_CMD_COMPLETED	3
+int	mlx_sync(int what, void *param);
+/*
+** image_writable can loop forever if no flush occurred. Flush is always done by mlx_loop.
+** cmd_completed first flush then wait for completion.
+** mlx_do_sync equals cmd_completed for all windows.
+*/
 
 #endif /* MLX_H */

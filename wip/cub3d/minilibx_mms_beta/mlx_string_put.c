@@ -1,7 +1,6 @@
 
-#include "mlx.h"
-
-#include "font.c"
+#include "../minilibx_mms_beta/font.c"
+#include "../minilibx_mms_beta/mlx.h"
 
 #define ATLAS_NB_CHAR 95
 
