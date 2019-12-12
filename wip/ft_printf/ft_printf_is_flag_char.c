@@ -15,7 +15,7 @@
 int
 	ft_printf_is_flag_char(char c)
 {
-	if (ft_isdigit(c) || ft_strcontain("#-.*+ ", c))
+	if (ft_isdigit(c) || ft_strcontain("#-.*+ lh", c))
 		return (1);
 	return (0);
 }

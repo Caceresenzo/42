@@ -1,6 +1,6 @@
 echo "usage: sh run.sh [small]"
 
-files="../libft/libft.a -g ../ft_*.c"
+files="../libft/libft.a -g ../ft_*.c ./ft_printf_debugger.c"
 
 if [ "$1" == "small" ]
 then

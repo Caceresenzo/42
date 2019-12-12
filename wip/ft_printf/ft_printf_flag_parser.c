@@ -39,7 +39,7 @@ static void
 	value = i_ft_printf_flag_parse_value(bundle, str);
 	if (value < 0)
 	{
-		bundle->flags->side = !bundle->flags->side;
+		bundle->flags->side = 1;
 		value *= -1;
 		bundle->flags->width_negative = 1;
 		bundle->flags->padding_char = ' ';

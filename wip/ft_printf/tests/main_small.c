@@ -6,13 +6,14 @@ int main(int argc, char **argv)
 	int r1;
 	int r2;
 
-	r1 = printf("%0#3*.*", 10, -15, 123);
+	r1 = /*    */printf("!%-40lc!", (char)143);
 	fflush(stdout);
 	write(1, "\n", 1);
-	r2 = ft_printf("%0#3*.*", 10, -15, 123);
+	r2 = /* */ft_printf("!%-40lc!", (char)143);
 	write(1, "\n", 1);
 	if (r1 != r2)
 		printf("return err: %d != %d\n", r1, r2);
+//	r2 = ft_printf("Hello %c !", 'a');
 
 //	r1 = printf("%#03*.*o", 3, -15, 0);
 //	fflush(stdout);

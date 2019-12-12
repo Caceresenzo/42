@@ -32,20 +32,20 @@ void
 	}
 	if (start != *index)
 		ft_printf_flag_parse(&bundle, start, *index);
-	ft_printf_format_process(bundle, formatter);
+	ft_printf_format_process(&bundle, formatter);
 }
 
 void
-	ft_printf_format_process(t_ft_printf_bundle bundle,
+	ft_printf_format_process(t_ft_printf_bundle *bundle,
 							char *(*formatter)(t_ft_printf_bundle *))
 {
 	char	*str;
 
 	if (formatter == NULL)
 		formatter = &ft_printf_formatter_empty;
-	*(bundle.index) += 1;
-	str = (*(formatter))(&bundle);
-	str = ft_printf_flag_handle(&bundle, str);
-	ft_printf_putstr(str, bundle.settings, bundle.forced_length);
+	*(bundle->index) += 1;
+	str = (*(formatter))(bundle);
+	str = ft_printf_flag_handle(bundle, str);
+	ft_printf_putstr(str, bundle->settings, bundle->forced_length);
 	free(str);
 }

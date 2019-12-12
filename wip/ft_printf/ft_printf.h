@@ -62,7 +62,7 @@ int				ft_printf(const char *format, ...);
 void			ft_printf_handle(t_ft_printf_settings *settings);
 
 void			ft_printf_format(t_ft_printf_settings *settings, size_t *index);
-void			ft_printf_format_process(t_ft_printf_bundle bundle,
+void			ft_printf_format_process(t_ft_printf_bundle *bundle,
 							char *(*formatter)(t_ft_printf_bundle *));
 
 void			ft_printf_putstr(char *str, t_ft_printf_settings *settings,

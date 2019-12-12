@@ -89,5 +89,5 @@ int		main(int argc, char **argv)
 {
 	do_tests();
 	printf("Final score: %d/%d\n", g_test_count_passed, g_test_count);
-	while (1) ;
+//	while (1) ;
 }

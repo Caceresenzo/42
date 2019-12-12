@@ -19,6 +19,6 @@ void
 		return ;
 	flags->valid = (flags->width_enabled || flags->precision_enabled
 					|| flags->hex__upper || flags->hashtag);
-	if (!(flags->valid = flags->valid && flags->letter != '\0'))
-		*should_end = 1;
+	flags->valid = flags->valid && flags->letter != '\0';
+	*should_end = flags->letter == '\0';
 }
