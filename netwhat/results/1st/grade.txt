@@ -1,0 +1,5 @@
+Hi,
+
+You have been graded 95 on netwhat:
+
+default: Everything went well and your mark is: 95
