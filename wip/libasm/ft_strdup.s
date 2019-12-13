@@ -1,10 +1,9 @@
 global _ft_strdup
+section .text
 
 extern _malloc
 extern _ft_strlen
 extern _ft_strcpy
-
-section .text
 
 ; Memory Map
 ; +----------+------------+--------------+----------+------+----+--------+

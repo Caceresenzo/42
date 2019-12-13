@@ -1,37 +1,49 @@
 global _ft_strcpy
 section .text
 
+; Memory Map
+; +----------+-------+--------------+---------+------+----+--------+
+; |  origin  | local |     type     |  size   | from | to | offset |
+; +----------+-------+--------------+---------+------+----+--------+
+; | argument | dst   | char *       | 8 (ptr) |    0 |  8 |     24 |
+; | argument | src   | const char * | 8 (ptr) |    8 | 16 |     16 |
+; | variable | start | char *       | 8 (ptr) |   16 | 24 |      8 |
+; +----------+-------+--------------+---------+------+----+--------+
+
 _ft_strcpy:
-	push r12
-	push r13
-	push r14
-	
-	mov r12, rdi					; // Argument 1: (char *) dst
-	mov r13, rsi					; // Argument 2: (const char *) src
+	push	rbp							; Saving register: rbp
 
-	mov r14, r12					; start = dst
+	mov		rbp, rsp					; Saving stack pointer: rsp
+	sub		rsp, 32						; Reserving space (% 16)
 
-	loop:
-		
-		cmp r13b, 0					; cmp: (unsigned char)*src == 0
-		jne copy					; if false: goto copy
-		je endloop					; if true: goto endloop
+	mov		QWORD [rbp - 24], rdi		; Storing in [ 0 to 8 ] <- arg1: (char *) dst
+	mov		QWORD [rbp - 16], rsi		; Storing in [ 8 to 16 ] <- arg2: (const char *) src
+
+	mov		rax, QWORD [rbp - 24]		; rax = [ 0 to 8 ] -> dst
+	mov		QWORD [rbp - 8], rax		; Storing in [ 16 to 24 ] <- rax
+
+	loop:		
+		mov		rax, QWORD [rbp - 16]	; rax = [ 8 to 16 ] -> src
+		movzx	eax, BYTE [rax]			; Casted content of rax as BYTE
+		cmp		eax, 0					; Condition
+		jne		copy					; if (*src != 0): goto copy
+		jmp		endloop					; goto endloop
 
 	copy:
-		mov rsi, r13				; mov: source = src
-		mov rdi, r12				; mov: destination = dst
-		movsb						; move string byte: *source = *destination
-		inc r12						; dst++
-		inc r13						; src++
-		jmp loop					; goto: loop
+		mov		rax, QWORD [rbp - 16]	; rax = src
+		movzx	edx, BYTE [rax]			; edx = *src
+		mov		rax, QWORD [rbp - 24]	; rax = dst
+		mov		BYTE [rax], dl			; *rax = dl --> *dst = *src
+		
+		add		QWORD [rbp - 24], 1		; Increment memory stored in [ 0 to 8 ] -> dst
+		add		QWORD [rbp - 16], 1		; Increment memory stored in [ 8 to 16 ] -> src
+		jmp		loop					; goto: loop
 
 	endloop:
-		mov r13, 0					; *dst = '\0'
+		mov	 rax, QWORD [rbp - 24]		; rax = [ 0 to 8 ] -> dst
+		mov	 BYTE [rax], 0				; *rax = '\0'
+		
+	mov		rax, QWORD [rbp - 8]		; Setting returned value to [ 16 to 24 ]
 
-	mov rax, r14					; set returned value = start
-
-	pop r14
-	pop r13
-	pop r12
-	
-	ret								; do return
+	leave								; Releasing space
+	ret									; Returning
