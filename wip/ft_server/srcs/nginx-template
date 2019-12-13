@@ -1,3 +1,6 @@
+ssl_certificate     common.crt;
+ssl_certificate_key common.key;
+
 server {
 	listen 80 default_server;
 	listen [::]:80 default_server;
