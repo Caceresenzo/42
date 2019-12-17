@@ -20,10 +20,12 @@ SRCS	=	ft_strlen.s \
 			ft_write.s \
 			ft_read.s \
 			ft_strdup.s
+SRCS_B	=	ft_atoi_base.s
 OBJS	=	$(SRCS:.s=.o)
+OBJS_B	=	$(SRCS_B:.s=.o)
 LIBC	= ar -rcs
 
-%.o: $(PROJECT_ROOT)%.s
+.s.o:
 	nasm -lc -f macho64 $< -o $@ 
 
 $(NAME): ${OBJS}
@@ -31,20 +33,23 @@ $(NAME): ${OBJS}
 
 all: $(NAME)
 
+bonus: ${OBJS} $(OBJS_B)
+	${LIBC} $(LIB) $(OBJS) $(OBJS_B)
+
 clean:
-	rm -fr $(NAME) $(OBJS)
+	rm -f $(NAME) $(OBJS)
     
 fclean: clean
 	$(RM) $(NAME)
     
 re: fclean all
 
-test: re
-	gcc -include libasm.h tests/*.c $(OBJS) -o test -D NOTIFY=1
+test: re bonus
+	gcc -include libasm.h debug/*.c tests/*.c tests/*/*.c $(OBJS) $(OBJS_B) -g3 -o test -D NOTIFY=1
 	./test
-	gcc -include libasm.h tests/*.c $(OBJS) -o test -D NOTIFY=0
-	./test
-	@echo ""
-	./test | hexdump
+#	gcc -include libasm.h tests/*.c $(OBJS) -g3 -o test -D NOTIFY=0
+#	./test
+#	@echo ""
+#	./test | hexdump
 
 .PHONY: all bonus clean fclean re

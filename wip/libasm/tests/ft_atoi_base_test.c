@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy_test.c                                   :+:      :+:    :+:   */
+/*   ft_read_test.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,31 +13,25 @@
 #include "tests.h"
 
 void
-	test_ft_strcpy(void)
+	atoi_test(char *str, char *base)
 {
-	static char *cpy_strs[] = {
-		"Hello",
-		"World",
-		"From",
-		"42",
-		""
-	};
-	size_t		index;
-	char		*src;
-	char		*cpy;
-	char		dst[1000];
+	printf("%20d %d\n", ft_atoi_base_2(str, base), ft_atoi_base(str, base));
+}
 
-	index = 0;
-	while (index < 4)
-	{
-		src = cpy_strs[index];
-		printf("--------------\n");
-		printf("source    : %s (%p)\n", src, src);
-		cpy = strcpy(dst, src);
-		printf("strcpy    : %s (%p)\n", cpy, cpy);
-		bzero(dst, 500);
-		cpy = ft_strcpy(dst, src);
-		printf("ft_strcpy : %s (%p)\n", cpy, cpy);
-		index++;
-	}
+void
+	test_ft_atoi_base(void)
+{
+	printf("%20s %s\n", "WORKING", "ASSEMBLY");
+	atoi_test("   -123", "01");
+	atoi_test("   -123", "01234567890");
+	atoi_test("-123000", "0123456789");
+	atoi_test(" +1230000000", "0123456789ABCDEF");
+	atoi_test("   -123", "01");
+	atoi_test("-123000", "0123456789");
+	atoi_test(" \n +2147483647", "0123456789");
+	atoi_test("  -2147483648", "0123456789");
+	atoi_test("--ff", "0123456789abcdef");
+	atoi_test("10", "011");
+	atoi_test("10111", "0\v541");
+	atoi_test("10111", "+0\v541");
 }

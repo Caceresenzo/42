@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test.c                                        :+:      :+:    :+:   */
+/*   notify_empty.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/03 13:33:23 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/12/03 13:33:23 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/17 16:26:56 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/17 16:26:56 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
-#include "../debug/notifier.h"
+#include "notifier.h"
 
-int
-	main(void)
+void
+	notifyempty(void)
 {
-	if (NOTIFY)
-	{
-		test_ft_strlen();
-		test_ft_strcpy();
-		test_ft_strcmp();
-		test_ft_write();
-		test_ft_read();
-		test_ft_strdup();
-		test_ft_atoi_base();
-	}
-	else
-	{
-		write(1, ft_strdup("This is very long"), strlen("This is very long"));
-	}
+	write(1, NULL, 0);
 }

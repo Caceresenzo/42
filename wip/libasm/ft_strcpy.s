@@ -22,14 +22,14 @@ _ft_strcpy:
 	mov		rax, QWORD [rbp - 24]		; rax = [ 0 to 8 ] -> dst
 	mov		QWORD [rbp - 8], rax		; Storing in [ 16 to 24 ] <- rax
 
-	loop:
+	.loop:
 		mov		rax, QWORD [rbp - 16]	; rax = [ 8 to 16 ] -> src
 		movzx	eax, BYTE [rax]			; Casted content of rax as BYTE
 		cmp		eax, 0					; Condition
-		jne		copy					; if (*src != 0): goto copy
-		jmp		endloop					; goto endloop
+		jne		.copy					; if (*src != 0): goto copy
+		jmp		.endloop				; goto endloop
 
-	copy:
+	.copy:
 		mov		rax, QWORD [rbp - 16]	; rax = src
 		movzx	edx, BYTE [rax]			; edx = *src
 		mov		rax, QWORD [rbp - 24]	; rax = dst
@@ -37,9 +37,9 @@ _ft_strcpy:
 		
 		add		QWORD [rbp - 24], 1		; Increment memory stored in [ 0 to 8 ] -> dst
 		add		QWORD [rbp - 16], 1		; Increment memory stored in [ 8 to 16 ] -> src
-		jmp		loop					; goto: loop
+		jmp		.loop					; goto: loop
 
-	endloop:
+	.endloop:
 		mov	 rax, QWORD [rbp - 24]		; rax = [ 0 to 8 ] -> dst
 		mov	 BYTE [rax], 0				; *rax = '\0'
 		

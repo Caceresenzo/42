@@ -21,27 +21,27 @@ _ft_strcmp:
 
 	mov		QWORD [rbp - 8], 0			; Storing in [ 16 to 24 ] <- 'diff' = 0
 
-	loop:
+	.loop:
 		mov		rax, QWORD [rbp - 24]	; rax = [ 0 to 8 ] -> s1
 		movzx	eax, BYTE [rax]			; Casted content of rax as BYTE
 		mov		rdx, QWORD [rbp - 16]	; rdx = [ 8 to 16 ] -> s2
 		movzx	edx, BYTE [rdx]			; Casted content of rdx as BYTE
 
 		cmp		eax, 0					; Condition
-		jne		check_diff				; if (*s1 != 0): goto check_diff
-		jmp		endloop					; goto endloop
+		jne		.check_diff				; if (*s1 != 0): goto check_diff
+		jmp		.endloop				; goto endloop
 
-	check_diff:
+	.check_diff:
 		cmp		eax, edx				; Condition
-		jne		endloop					; if (*s1 != *s2): goto endloop
-		jmp		increment				; goto increment
+		jne		.endloop				; if (*s1 != *s2): goto endloop
+		jmp		.increment				; goto increment
 
-	increment:
+	.increment:
 		add		QWORD [rbp - 24], 1		; Increment memory stored in [ 0 to 8 ] -> s1
 		add		QWORD [rbp - 16], 1		; Increment memory stored in [ 8 to 16 ] -> s2
-		jmp		loop					; goto: loop
+		jmp		.loop					; goto: loop
 
-	endloop:
+	.endloop:
 		mov		QWORD [rbp - 8], rax	; Storing in [ 16 to 24 ] value *s1
 		sub		QWORD [rbp - 8], rdx	; Substracting from [ 16 to 24 ] valur *2 --> *s1 - *s2
 		

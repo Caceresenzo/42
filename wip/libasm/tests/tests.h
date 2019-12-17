@@ -23,15 +23,15 @@
 
 # include "../libasm.h"
 
-# ifndef NOTIFY
-#  define NOTIFY 1
-# endif
-
 void	test_ft_strlen(void);
 void	test_ft_strcpy(void);
 void	test_ft_strcmp(void);
 void	test_ft_write(void);
 void	test_ft_read(void);
 void	test_ft_strdup(void);
+
+void	test_ft_atoi_base(void);
+
+int		ft_atoi_base_2(char *str, char *base);
 
 #endif
