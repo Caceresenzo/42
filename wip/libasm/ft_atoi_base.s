@@ -1,6 +1,4 @@
 global _ft_atoi_base
-global _ft_atoi_base_is_whitespace
-global _ft_atoi_base_resolve
 section .text
 
 extern _ft_strlen
@@ -32,6 +30,16 @@ extern _ft_strlen
 ; | variable | index | long         | 8 (long) |   16 | 24 |      8 |
 ; +----------+-------+--------------+----------+------+----+--------+
 
+; Memory Map: _ft_atoi_base_is_base_valid
+; +----------+---------+--------------+----------+------+----+--------+
+; |  origin  |  local  |     type     |   size   | from | to | offset |
+; +----------+---------+--------------+----------+------+----+--------+
+; | argument | base    | const char * | 8 (ptr)  |    0 |  8 |     32 |
+; | variable | current | char *       | 8 (ptr)  |    8 | 16 |     24 |
+; | variable | index   | size_t       | 8 (long) |   16 | 24 |     16 |
+; | variable | jndex   | size_t       | 8 (long) |   24 | 32 |      8 |
+; +----------+---------+--------------+----------+------+----+--------+
+
 _ft_atoi_base:
 	push	rbp							; Saving register: rbp
 	
@@ -43,6 +51,13 @@ _ft_atoi_base:
 
 	mov		QWORD [rbp - 16], 1			; Storing in [ 24 to 32 ] <- 'negative' = 1
 	mov		QWORD [rbp - 8], 0			; Storing in [ 32 to 40 ] <- 'result' = 0
+
+	mov		rax, QWORD [rbp - 32]		; rax = [ 8 to 16 ] -> 'base'
+	mov		rdi, rax					; Setting argument 's' = rax
+	call	_ft_atoi_base_is_base_valid	; Calling _ft_atoi_base_is_base_valid
+
+	cmp		rax, 0
+	je		.endloop
 
 	mov		rax, QWORD [rbp - 32]		; rax = [ 8 to 16 ] -> 'base'
 	mov		rdi, rax					; Setting argument 's' = rax
@@ -63,22 +78,26 @@ _ft_atoi_base:
 	.endloop_whitespace:
 		;
 
-	mov		rax, QWORD [rbp - 40]		; rax = [ 0 to 8 ] -> str
-	movzx	eax, BYTE [rax]				; Casted content of rdi as BYTE
-
-	cmp		eax, 43						; Condition
-	je		.increment					; if (*str == '+'): goto increment
-	cmp		eax, 45						; Condition
-	je		.negate						; if (*str == '-'): goto negate
+	.loop_sign:
+		mov		rax, QWORD [rbp - 40]	; rax = [ 0 to 8 ] -> str
+		movzx	eax, BYTE [rax]			; Casted content of rdi as BYTE
 	
-	jmp		.endsign					; else: goto endsign
-	
+		cmp		eax, 43					; Condition
+		je		.increment				; if (*str == '+'): goto increment
+		cmp		eax, 45					; Condition
+		je		.negate					; if (*str == '-'): goto negate
+		
+		jmp		.endsign				; else: goto endsign
+		
 	.negate:
-		mov		QWORD [rbp - 16], -1	; Storing in [ 24 to 32 ] <- 'negative' = -1
-	
+		mov		rax, QWORD [rbp - 16]
+		imul	rax, rax, -1			; Storing in [ 24 to 32 ] <- 'negative' = -1
+		mov		QWORD [rbp - 16], rax
+		
 	.increment:
 		add		QWORD [rbp - 40], 1		; Increment memory stored in [ 0 to 8 ] -> 'str'
-	
+		jmp		.loop_sign				; goto: loop_sign
+		
 	.endsign:
 		;
 
@@ -90,13 +109,11 @@ _ft_atoi_base:
 		movzx	esi, BYTE [rsi]			; Casted as BYTE
 
 		call	_ft_atoi_base_resolve	; Calling _ft_atoi_base_resolve
+
 		cmp		rax, -1					; Condition
 		je		.endloop				; if (returned == -1): goto endloop
 		
-		mov		rdx, QWORD [rbp - 32]	; rdx = [ 8 to 16 ] -> 'base'
-		add		rdx, rax				; rdx += returned --> base[returned]
-		movzx	edx, BYTE [rdx]			; Casted rax context as BYTE
-		sub		rdx, 48					; rax -= '0'
+		mov		rdx, rax				; rdx = rax -> 'returned'
 
 		mov		rax, QWORD [rbp - 8]	; rdx = [ 32 to 40 ] -> 'result'
 		imul	rax, QWORD [rbp - 24]	; rdx *= [ 16 to 20 ] --> rdx *= radix
@@ -150,17 +167,16 @@ _ft_atoi_base_is_whitespace:
 	.true:
 		mov		rax, 1					; Setting returned value to 1 ('true')
 		jmp		.end					; goto: end
-	
+
 	.false:
-		mov		rax, 0					; Setting returned value to 1 ('end')
+		mov		rax, 0					; Setting returned value to 0 ('false')
 		jmp		.end					; goto: end
-	
+
 	.end:
 		;
 
 	leave								; Releasing space
 	ret									; Returning
-	
 
 _ft_atoi_base_resolve:
 	push	rbp							; Saving register: rbp
@@ -197,6 +213,117 @@ _ft_atoi_base_resolve:
 		;
 
 	mov		rax, QWORD [rbp - 8]		; Setting returned value to [ 12 to 20 ]
+
+	leave								; Releasing space
+	ret									; Returning
+
+_ft_atoi_base_is_base_valid:
+	push	rbp							; Saving register: rbp
+	
+	mov		rbp, rsp					; Saving stack pointer: rsp
+	sub		rsp, 32						; Reserving space (% 16)
+
+	mov		QWORD [rbp - 32], rdi		; Storing in [ 0 to 8 ] <- arg1: (const char) c
+	
+	mov		QWORD [rbp - 24], rdi		; Storing in [ 8 to 16 ] <- 
+
+	cmp		QWORD [rbp - 32], 0			; Condition
+	je		.false						; if (base == NULL): goto false
+	
+	mov		rax, QWORD [rbp - 32]		; rax = [ 0 to 8 ] -> 'base'
+	mov		rdi, rax					; Setting argument 's' = rax
+	call	_ft_strlen					; Calling ft_strlen
+	
+	cmp		rax, 1						; Condition
+	jle		.false						; if (returned <= 1): goto false
+
+	.loop_content:		
+		mov		rax, QWORD [rbp - 24]	; rax = [ 0 to 8 ] -> 'current'
+		movzx	eax, BYTE [rax]			; Casted content of rax as BYTE
+
+		cmp		eax, 0					; Condition
+		je		.endloop_content		; if (*current == '\0'): goto loop_content
+	
+		cmp		eax, 43					; Condition
+		je		.false					; if (*current == '+'): goto false
+		cmp		eax, 45					; Condition
+		je		.false					; if (*current == '-'): goto false
+
+		mov		edi, eax				; rdi = [ 0 to 8 ] -> rax
+		call	_ft_atoi_base_is_whitespace; Calling _ft_atoi_base_is_whitespace
+		
+		cmp		rax, 1					; Condition
+		je		.false					; if (returned == 1): goto false
+
+		add		QWORD [rbp - 24], 1		; Increment memory stored in [ 0 to 8 ] -> 'current'
+
+		jmp		.loop_content			; goto: loop_content
+
+	.endloop_content:
+		;
+	
+	mov		QWORD [rbp - 16], -1		; Storing in [ 16 to 24 ] <- 'index' = -1
+	jmp		.loop_duplicate_1			; goto: loop_duplicate_1
+	
+	.loop_duplicate_2:
+		mov		rax, QWORD [rbp - 24]	; rax = [ 8 to 16 ] -> 'current'
+		sub		rax, QWORD [rbp - 32]	; rax -= [ 0 to 8 ] -> 'base'
+		
+		mov		rdx, QWORD [rbp - 8]	; rdx = [ 24 to 32 ] -> 'jndex'
+
+		cmp		rdx, rax				; Condition
+		jge		.endloop_duplicate_2	; if (!(jndex < current - base)): goto endloop_duplicate_2
+		
+		mov		rax, QWORD [rbp - 32]	; rax = [ 0 to 8 ] = 'base'
+		add		rax, QWORD [rbp - 16]	; rax += [ 16 to 24 ] = 'index' // base[index]
+		mov		rdx, QWORD [rbp - 32]	; rdx = [ 0 to 8 ] = 'base'
+		add		rdx, QWORD [rbp - 8]	; rdx += [ 24 to 32 ] = 'jndex' // base[jndex]
+
+		movzx	eax, BYTE [rax]			; rax = *rax
+		movzx	edx, BYTE [rdx]			; rdx = *rdx
+
+		cmp		eax, edx				; Condition
+		je		.false					; if (base[index] == base[jndex]): goto false
+		
+		add		QWORD [rbp - 8], 1		; Increment memory stored in [ 24 to 32 ] -> 'jndex'
+		jmp		.loop_duplicate_2		; goto: loop_duplicate_2
+	
+	.endloop_duplicate_2:
+		jmp		.loop_duplicate_1		; goto: loop_duplicate_1
+
+	.loop_duplicate_1:
+		mov		rax, QWORD [rbp - 24]	; rax = [ 8 to 16 ] -> 'current'
+		sub		rax, QWORD [rbp - 32]	; rax -= [ 0 to 8 ] -> 'base'
+		
+		mov		rdx, QWORD [rbp - 16]	; rdx = [ 16 to 24 ] -> 'index'
+		add		rdx, 1					; rdx += 1
+		
+		cmp		rdx, rax				; Condition
+		jge		.endloop_duplicate_1	; if (!(index < current - base)): goto endloop_duplicate_1
+		
+		add		QWORD [rbp - 16], 1		; Increment memory stored in [ 16 to 24 ] -> 'index'
+		
+		mov		rax, QWORD [rbp - 16]	; rax = [ 16 to 24 ] -> 'index'
+		add		rax, 1					; rax += 1
+		mov		QWORD [rbp - 8], rax	; Storing in [ 24 to 32 ] <- 'jndex' = rax
+
+		jmp		.loop_duplicate_2		; goto: loop_duplicate_1
+	
+	.endloop_duplicate_1:
+		;
+
+	jmp		.true						; goto: true
+
+	.true:
+		mov		rax, 1					; Setting returned value to 1 ('true')
+		jmp		.end					; goto: end
+	
+	.false:
+		mov		rax, 0					; Setting returned value to 0 ('false')
+		jmp		.end					; goto: end
+	
+	.end:
+		;
 
 	leave								; Releasing space
 	ret									; Returning
