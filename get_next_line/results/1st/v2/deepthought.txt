@@ -1,0 +1,60 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+e2r7p3.42.fr
+Darwin 18.6.0 x86_64
+$> date
+Fri Dec  6 16:58:02 CET 2019
+$> gcc --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/c++/4.2.1
+Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+Target: x86_64-apple-darwin18.6.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+$> clang --version
+Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+Target: x86_64-apple-darwin18.6.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: intra/2019/activities/42cursus_get_next_line/ecaceres
+
+= Git history ==================================================================
+$> git -C /tmp/tmpHJpMIV/user log --pretty='%H - %an, %ad : %s'
+e8aa1c06e1c97cfe858fc2965d5ed3efa89050d5 - Enzo CACERES, Wed Nov 20 11:05:15 2019 +0100 : everything
+
+= Collected files ==========================================
+$> ls -lAR /tmp/tmpHJpMIV/user
+total 56
+-rw-r--r--  1 root  wheel   557 Dec  6 16:58 __GIT_HISTORY
+-rw-r--r--  1 root  wheel  2864 Dec  6 16:58 get_next_line.c
+-rw-r--r--  1 root  wheel  1807 Dec  6 16:58 get_next_line.h
+-rw-r--r--  1 root  wheel  2870 Dec  6 16:58 get_next_line_bonus.c
+-rw-r--r--  1 root  wheel  1819 Dec  6 16:58 get_next_line_bonus.h
+-rw-r--r--  1 root  wheel  1172 Dec  6 16:58 get_next_line_utils.c
+-rw-r--r--  1 root  wheel  1178 Dec  6 16:58 get_next_line_utils_bonus.c
+
+= basic_tests ==================================================================
+>>>>>>>>>>> 1
+>>>>>>>>>>> 2
+>>>>>>>>>>> 3
+>>>>>>>>>>> 4
+
+>>>>>>>>>>> 5
+
+>>>>>>>>>>> 1
+>>>>>>>>>>> 2
+>>>>>>>>>>> 3
+>>>>>>>>>>> 4
+
+GNL OK
+Grade: 100
+
+= bonus_tests ==================================================================
+>>>>>>>>>>> 1
+
+GNL OK
+Grade: 15
+
+= Final grade: 115 =============================================================
