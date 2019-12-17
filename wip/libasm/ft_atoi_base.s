@@ -17,11 +17,11 @@ extern _ft_strlen
 ; +----------+----------+--------------+----------+------+----+--------+
 
 ; Memory Map: _ft_atoi_base_is_whitespace
-; +----------+-------+--------------+----------+------+----+--------+
-; |  origin  | local |     type     |   size   | from | to | offset |
-; +----------+-------+--------------+----------+------+----+--------+
-; | argument | c     | char         | 1 (byte) |    0 |  1 |      8 |
-; +----------+-------+--------------+----------+------+----+--------+
+; +----------+-------+------+----------+------+----+--------+
+; |  origin  | local | type |   size   | from | to | offset |
+; +----------+-------+------+----------+------+----+--------+
+; | argument | c     | char | 1 (byte) |    0 |  1 |      8 |
+; +----------+-------+------+----------+------+----+--------+
 
 ; Memory Map: _ft_atoi_base_resolve
 ; +----------+-------+--------------+----------+------+----+--------+
@@ -49,7 +49,7 @@ _ft_atoi_base:
 	call	_ft_strlen					; Calling ft_strlen
 	mov		QWORD [rbp - 24], rax		; Storing in [ 16 to 20 ] <- 'radix' = return: (size_t)
 
-	.loop_whitespace
+	.loop_whitespace:
 		mov		rdi, QWORD [rbp - 40]	; rdi = [ 0 to 8 ] -> str
 		movzx	edi, BYTE [rdi]			; Casted content of rdi as BYTE
 		call	_ft_atoi_base_is_whitespace; Calling _ft_atoi_base_is_whitespace
@@ -60,15 +60,15 @@ _ft_atoi_base:
 		add		QWORD [rbp - 40], 1		; Increment memory stored in [ 0 to 8 ] -> 'str'
 		jmp		.loop_whitespace
 	
-	.endloop_whitespace
+	.endloop_whitespace:
 		;
 
 	mov		rax, QWORD [rbp - 40]		; rax = [ 0 to 8 ] -> str
 	movzx	eax, BYTE [rax]				; Casted content of rdi as BYTE
 
-	cmp		BYTE eax, 43				; Condition
+	cmp		eax, 43						; Condition
 	je		.increment					; if (*str == '+'): goto increment
-	cmp		BYTE eax, 45				; Condition
+	cmp		eax, 45						; Condition
 	je		.negate						; if (*str == '-'): goto negate
 	
 	jmp		.endsign					; else: goto endsign
@@ -155,7 +155,7 @@ _ft_atoi_base_is_whitespace:
 		mov		rax, 0					; Setting returned value to 1 ('end')
 		jmp		.end					; goto: end
 	
-	.end
+	.end:
 		;
 
 	leave								; Releasing space

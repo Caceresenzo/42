@@ -22,7 +22,7 @@ _ft_strcpy:
 	mov		rax, QWORD [rbp - 24]		; rax = [ 0 to 8 ] -> dst
 	mov		QWORD [rbp - 8], rax		; Storing in [ 16 to 24 ] <- rax
 
-	loop:		
+	loop:
 		mov		rax, QWORD [rbp - 16]	; rax = [ 8 to 16 ] -> src
 		movzx	eax, BYTE [rax]			; Casted content of rax as BYTE
 		cmp		eax, 0					; Condition

@@ -5,7 +5,7 @@ section .text
 ; +----------+--------+--------+----------+------+----+--------+
 ; |  origin  | local  |  type  |   size   | from | to | offset |
 ; +----------+--------+--------+----------+------+----+--------+
-; | argument | fildes | int    | 4 (ptr)  |    0 |  4 |     28 |
+; | argument | fildes | int    | 4 (int)  |    0 |  4 |     28 |
 ; | argument | buf    | void * | 8 (ptr)  |    4 | 12 |     20 |
 ; | argument | nbyte  | size_t | 8 (long) |   12 | 20 |     12 |
 ; +----------+--------+--------+----------+------+----+--------+
