@@ -1,36 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test.c                                        :+:      :+:    :+:   */
+/*   ft_list_size_test.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/03 13:33:23 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/12/03 13:33:23 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/02 14:55:00 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/02 14:55:00 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libasm.h"
 #include "tests.h"
-#include "../debug/notifier.h"
 
-int
-	main(void)
+void
+	test_ft_list_size(void)
 {
-	if (NOTIFY)
+	t_list	*lst;
+	size_t	index;
+
+	lst = NULL;
+	index = 0;
+	while (index < 10000)
 	{
-		test_ft_strlen();
-		test_ft_strcpy();
-		test_ft_strcmp();
-		test_ft_write();
-		test_ft_read();
-		test_ft_strdup();
-		test_ft_atoi_base();
-		test_ft_list_push_front();
-		test_ft_list_size();
-	}
-	else
-	{
-		write(1, ft_strdup("This is very long"), strlen("This is very long"));
+		ft_list_push_front(&lst, "Hello");
+		if ((index + 1) % 100 == 0)
+			printf("size = %d\n", ft_list_size(lst));
+		index++;
 	}
 }

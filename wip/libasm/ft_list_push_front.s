@@ -3,7 +3,7 @@ section .text
 
 extern _malloc
 
-; Memory Map: ft_list_push_front
+; Memory Map
 ; +----------+------------+-----------+---------+------+----+--------+
 ; |  origin  |   local    |   type    |  size   | from | to | offset |
 ; +----------+------------+-----------+---------+------+----+--------+
@@ -22,8 +22,8 @@ _ft_list_push_front:
 	mov		QWORD [rbp - 16], rsi		; Storing in [ 8 to 16 ] <- arg2: (void *) data
 
 	mov		rdi, 16						; Setting parameter 'size' = sizeof(t_list) = 16
-	call	_malloc
-	mov		QWORD [rbp - 8], rax		; Storing in [ 16 to 24 ] <- 'lst' = rax
+	call	_malloc						; Calling malloc
+	mov		QWORD [rbp - 8], rax		; Storing return in [ 16 to 24 ] <- 'lst' = rax
 
 	cmp		rax, 0						; Condition
 	je		.return						; if (returned == NULL): goto return

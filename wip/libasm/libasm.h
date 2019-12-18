@@ -40,5 +40,6 @@ extern ssize_t	ft_read(int fildes, void *buf, size_t nbyte);
 extern int		ft_atoi_base(const char *str, const char *base);
 
 void			ft_list_push_front(t_list **begin_list, void *data);
+int				ft_list_size(t_list *begin_list);
 
 #endif
