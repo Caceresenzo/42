@@ -23,6 +23,9 @@
 
 # include "../libasm.h"
 
+int		ft_atoi_base_2(char *str, char *base);
+t_list	*ft_create_elem(void *data);
+
 void	test_ft_strlen(void);
 void	test_ft_strcpy(void);
 void	test_ft_strcmp(void);
@@ -31,7 +34,6 @@ void	test_ft_read(void);
 void	test_ft_strdup(void);
 
 void	test_ft_atoi_base(void);
-
-int		ft_atoi_base_2(char *str, char *base);
+void	test_ft_list_push_front(void);
 
 #endif

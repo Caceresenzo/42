@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_test.c                                        :+:      :+:    :+:   */
+/*   ft_create_elem.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/03 13:33:23 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/12/03 13:33:23 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/12/17 17:06:21 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/12/17 17:06:21 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libasm.h"
-#include "tests.h"
-#include "../debug/notifier.h"
+#include <stdlib.h>
 
-int
-	main(void)
+#include "../tests.h"
+
+t_list
+	*ft_create_elem(void *data)
 {
-	if (NOTIFY)
-	{
-		test_ft_strlen();
-		test_ft_strcpy();
-		test_ft_strcmp();
-		test_ft_write();
-		test_ft_read();
-		test_ft_strdup();
-		test_ft_atoi_base();
-		test_ft_list_push_front();
-	}
-	else
-	{
-		write(1, ft_strdup("This is very long"), strlen("This is very long"));
-	}
+	t_list *list;
+
+	list = (t_list *)malloc(sizeof(t_list));
+	list->next = 0;
+	list->data = data;
+	return (list);
 }

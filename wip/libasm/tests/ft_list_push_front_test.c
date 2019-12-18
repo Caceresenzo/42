@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi_base_test.c                                :+:      :+:    :+:   */
+/*   ft_list_push_front_test.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,25 +13,20 @@
 #include "tests.h"
 
 void
-	atoi_test(char *str, char *base)
+	test_ft_list_push_front(void)
 {
-	printf("%20d %d\n", ft_atoi_base_2(str, base), ft_atoi_base(str, base));
-}
+	t_list *lst;
 
-void
-	test_ft_atoi_base(void)
-{
-	printf("%20s %s\n", "WORKING", "ASSEMBLY");
-	atoi_test("   -123", "01");
-	atoi_test("   -123", "01234567890");
-	atoi_test("-123000", "0123456789");
-	atoi_test(" +1230000000", "0123456789ABCDEF");
-	atoi_test("   -123", "01");
-	atoi_test("-123000", "0123456789");
-	atoi_test(" \n +2147483647", "0123456789");
-	atoi_test("  -2147483648", "0123456789");
-	atoi_test("--ff", "0123456789abcdef");
-	atoi_test("10", "011");
-	atoi_test("10111", "0\v541");
-	atoi_test("10111", "+0\v541");
+	lst = NULL;
+	ft_list_push_front(&lst, "Hello");
+	ft_list_push_front(&lst, "World");
+	ft_list_push_front(&lst, "From");
+	ft_list_push_front(&lst, "42");
+	printf("%p\n", lst);
+	fflush(stdout);
+	printf("..%s..\n", (char *)(lst->data));
+	printf("..%s..\n", (char *)(lst->next->data));
+	printf("..%s..\n", (char *)(lst->next->next->data));
+	printf("..%s..\n", (char *)(lst->next->next->next->data));
+	printf("..%p..\n", (char *)(lst->next->next->next->next));
 }
