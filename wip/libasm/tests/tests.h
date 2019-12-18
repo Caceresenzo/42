@@ -24,7 +24,10 @@
 # include "../libasm.h"
 
 int		ft_atoi_base_2(char *str, char *base);
+void	ft_list_sort_2(t_list **begin_list, int (*cmp)());
+
 t_list	*ft_create_elem(void *data);
+void	ft_list_push_back(t_list **begin_list, void *data);
 
 void	test_ft_strlen(void);
 void	test_ft_strcpy(void);
@@ -36,5 +39,6 @@ void	test_ft_strdup(void);
 void	test_ft_atoi_base(void);
 void	test_ft_list_push_front(void);
 void	test_ft_list_size(void);
+void	test_ft_list_sort(void);
 
 #endif

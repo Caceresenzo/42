@@ -22,7 +22,8 @@ SRCS	=	ft_strlen.s \
 			ft_strdup.s
 SRCS_B	=	ft_atoi_base.s \
 			ft_list_push_front.s \
-			ft_list_size.s
+			ft_list_size.s \
+			ft_list_sort.s
 OBJS	=	$(SRCS:.s=.o)
 OBJS_B	=	$(SRCS_B:.s=.o)
 LIBC	= ar -rcs

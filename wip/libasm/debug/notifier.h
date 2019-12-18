@@ -26,5 +26,4 @@ void		notifyl(long l);
 void		notifys(char *str);
 void		notifyempty(void);
 
-
 #endif
