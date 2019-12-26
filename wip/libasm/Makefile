@@ -23,13 +23,15 @@ SRCS	=	ft_strlen.s \
 SRCS_B	=	ft_atoi_base.s \
 			ft_list_push_front.s \
 			ft_list_size.s \
-			ft_list_sort.s
+			ft_list_sort.s \
+			ft_list_remove_if.s
 OBJS	=	$(SRCS:.s=.o)
 OBJS_B	=	$(SRCS_B:.s=.o)
+NASM	= /usr/local/bin/nasm
 LIBC	= ar -rcs
 
 .s.o:
-	nasm -lc -f macho64 $< -o $@ 
+	${NASM} -lc -f macho64 $< -o $@ 
 
 $(NAME): ${OBJS}
 	${LIBC} $(LIB) $(OBJS)
@@ -40,7 +42,7 @@ bonus: ${OBJS} $(OBJS_B)
 	${LIBC} $(LIB) $(OBJS) $(OBJS_B)
 
 clean:
-	rm -f $(NAME) $(OBJS)
+	rm -f $(NAME) $(OBJS) $(OBJS_B)
     
 fclean: clean
 	$(RM) $(NAME)
