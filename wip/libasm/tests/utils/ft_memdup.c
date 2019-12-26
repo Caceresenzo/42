@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen_test.c                                   :+:      :+:    :+:   */
+/*   ft_memdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,24 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#include "libft.h"
 
 void
-	test_ft_strlen(void)
+	*ft_memdup(const void *s, size_t size)
 {
-	size_t		index;
-	char		*str;
-	size_t		length[2];
+	void	*duplicate;
 
-	list_display_header();
-	index = 0;
-	while ((str = g_strings[index]))
-	{
-		length[0] = strlen(str);
-		length[1] = ft_strlen(str);
-		list_display_result("ft_strlen", (void *)length[0],
-										(void *)length[1], LIST_AS_INT);
-		index++;
-	}
-	printf("\n");
+	if (!(duplicate = malloc(size)))
+		return (NULL);
+	return (ft_memcpy(duplicate, s, size));
 }

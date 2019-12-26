@@ -12,29 +12,32 @@
 
 #include "tests.h"
 
+static void
+	direct_print(char *message)
+{
+	printf("%s", message);
+	fflush(stdout);
+}
+
 void
 	test_ft_write(void)
 {
-	static char *len_strs[] = {
-		"Hello",
-		"World",
-		"From",
-		"42",
-		""
-	};
-	size_t		index;
+	ssize_t		wrote[2];
 	char		*str;
-	size_t		length;
+	size_t		index;
 
+	list_display_header();
 	index = 0;
-	while (index < 5)
+	while ((str = g_strings[index]))
 	{
-		str = len_strs[index];
-		length = strlen(str);
-		printf("--------------\n");
-		printf("\nwrite     : %zu\n", write(1, str, length));
-		printf("\nft_write  : %zu\n", ft_write(1, str, length));
-		printf("string    : \"%s\"\n", str);
+		direct_print("ft_write:");
+		wrote[0] = ft_write(0, str, strlen(str));
+		direct_print("\nwrite:");
+		wrote[1] = write(0, str, strlen(str));
+		direct_print("\n");
+		list_display_result("ft_write // returned", (void *)wrote[0],
+											(void *)wrote[1], LIST_AS_INT);
 		index++;
 	}
+	printf("\n");
 }

@@ -15,29 +15,22 @@
 void
 	test_ft_strcpy(void)
 {
-	static char *cpy_strs[] = {
-		"Hello",
-		"World",
-		"From",
-		"42",
-		""
-	};
 	size_t		index;
 	char		*src;
-	char		*cpy;
-	char		dst[1000];
+	char		*cpy[2];
+	char		dst[2][1000];
 
+	list_display_header();
 	index = 0;
-	while (index < 4)
+	while ((src = g_strings[index]))
 	{
-		src = cpy_strs[index];
-		printf("--------------\n");
-		printf("source    : %s (%p)\n", src, src);
-		cpy = strcpy(dst, src);
-		printf("strcpy    : %s (%p)\n", cpy, cpy);
-		bzero(dst, 500);
-		cpy = ft_strcpy(dst, src);
-		printf("ft_strcpy : %s (%p)\n", cpy, cpy);
+		bzero(dst[0], 500);
+		bzero(dst[1], 500);
+		cpy[0] = ft_strcpy(dst[0], src);
+		cpy[1] = strcpy(dst[1], src);
+		list_display_result("ft_strcpy", (void *)cpy[0],
+										(void *)cpy[1], LIST_AS_STRING);
 		index++;
 	}
+	printf("\n");
 }

@@ -14,6 +14,26 @@
 #include "tests.h"
 #include "../debug/notifier.h"
 
+char *g_strings[] = {
+	"This is very very very long",
+	"This is shorter",
+	"Hello",
+	"World",
+	"From",
+	"Biggy\250Char",
+	"42",
+	"",
+	"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in"
+	"malesuada purus. Etiam a scelerisque massa. Ut non euismod elit."
+	"Aliquam bibendum dolor mi, id fringilla tellus pulvinar eu. Fusce"
+	"vel fermentum sem. Cras volutpat, eros eget rhoncus rhoncus, diam"
+	"augue egestas dolor, vitae rutrum nisi felis sed purus. Mauris magna"
+	"ex, mollis non suscipit eu, lacinia ac turpis. Phasellus ac tortor et"
+	"lectus fermentum lobortis eu at mauris. Vestibulum sit amet posuere"
+	"tortor, sit amet consequat amet.",
+	NULL
+};
+
 int
 	main(void)
 {
@@ -29,6 +49,7 @@ int
 		test_ft_list_push_front();
 		test_ft_list_size();
 		test_ft_list_sort();
+		test_ft_list_remove_if();
 	}
 	else
 	{

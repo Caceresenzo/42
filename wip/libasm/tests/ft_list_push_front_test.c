@@ -15,18 +15,16 @@
 void
 	test_ft_list_push_front(void)
 {
-	t_list *lst;
+	t_list *list[2];
 
-	lst = NULL;
-	ft_list_push_front(&lst, "Hello");
-	ft_list_push_front(&lst, "World");
-	ft_list_push_front(&lst, "From");
-	ft_list_push_front(&lst, "42");
-	printf("%p\n", lst);
-	fflush(stdout);
-	printf("..%s..\n", (char *)(lst->data));
-	printf("..%s..\n", (char *)(lst->next->data));
-	printf("..%s..\n", (char *)(lst->next->next->data));
-	printf("..%s..\n", (char *)(lst->next->next->next->data));
-	printf("..%p..\n", (char *)(lst->next->next->next->next));
+	ft_memset(&list, 0, sizeof(list));
+	ft_list_push_front(&(list[0]), "Hello");
+	ft_list_push_front(&(list[0]), "World");
+	ft_list_push_front(&(list[0]), "From");
+	ft_list_push_front(&(list[0]), "42");
+	ft_list_push_front_2(&(list[1]), "Hello");
+	ft_list_push_front_2(&(list[1]), "World");
+	ft_list_push_front_2(&(list[1]), "From");
+	ft_list_push_front_2(&(list[1]), "42");
+	list_display_content("ft_list_push_front", list, LIST_AS_STRING);
 }

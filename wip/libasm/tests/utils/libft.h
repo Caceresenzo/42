@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen_test.c                                   :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/12/02 14:55:00 by ecaceres          #+#    #+#             */
-/*   Updated: 2019/12/02 14:55:00 by ecaceres         ###   ########.fr       */
+/*   Created: 2019/08/01 11:12:23 by ecaceres          #+#    #+#             */
+/*   Updated: 2019/08/01 11:12:23 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tests.h"
+#ifndef LIBFT_H
+# define LIBFT_H
 
-void
-	test_ft_strlen(void)
-{
-	size_t		index;
-	char		*str;
-	size_t		length[2];
+# include <fcntl.h>
+# include <limits.h>
+# include <stddef.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
-	list_display_header();
-	index = 0;
-	while ((str = g_strings[index]))
-	{
-		length[0] = strlen(str);
-		length[1] = ft_strlen(str);
-		list_display_result("ft_strlen", (void *)length[0],
-										(void *)length[1], LIST_AS_INT);
-		index++;
-	}
-	printf("\n");
-}
+typedef unsigned char	t_uchar;
+
+void	*ft_memcpy(void *dst, const void *src, size_t n);
+void	*ft_memdup(const void *s, size_t n);
+void	*ft_memset(void *b, int c, size_t len);
+
+#endif
