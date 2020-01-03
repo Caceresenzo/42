@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include <iostream>
+#include <string>
+#include <sstream>
 
 #include "Phonebook.hpp"
 #include "ContactManager.hpp"
@@ -120,7 +122,10 @@ void
 	{
 		Contact *current = this->contacts[index];
 
-		TableRenderer::renderColumnEntry(std::to_string(index));
+		std::stringstream indexStream;
+		indexStream << index;
+
+		TableRenderer::renderColumnEntry(indexStream.str());
 		TableRenderer::renderBorder(false);
 
 		TableRenderer::renderColumnEntry(current->first_name);
