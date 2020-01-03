@@ -15,6 +15,7 @@
 
 # define ERR_PHONEBOOK_FULL "The Phonebook is full."
 # define ERR_SEARCH_INVALID_INDEX_INPUT "Invalid input."
+# define ERR_SEARCH_OUT_OF_BOUNDS "Input out of bounds."
 
 # define MAX_CONTACT 8
 

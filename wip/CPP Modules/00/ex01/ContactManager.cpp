@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-#include "Phonebook.h"
+#include "Phonebook.hpp"
 #include "ContactManager.hpp"
 #include "Common.hpp"
 #include "TableRenderer.hpp"
@@ -140,12 +140,12 @@ void
 	std::cout << ASK_INDEX;
 
 	std::string read;
-	int index;
-	if (!std::getline(std::cin, read)
-		|| !Common::strict_positive_atoi(read.c_str(), &index, '\n')
-		|| index < 0
-		|| index >= MAX_CONTACT
-		|| index >= this->size())
+	int index = -1;
+
+	bool invalid_input = !std::getline(std::cin, read) || !Common::strict_positive_atoi(read.c_str(), &index, '\n');
+	bool out_of_bound = index < 0 || index >= MAX_CONTACT || index >= this->size();
+
+	if (invalid_input || out_of_bound)
 	{
 		if (std::cin.eof())
 		{
@@ -153,7 +153,14 @@ void
 		}
 		else
 		{
-			std::cout << ERR_SEARCH_INVALID_INDEX_INPUT << std::endl;
+			if (out_of_bound)
+			{
+				std::cout << ERR_SEARCH_OUT_OF_BOUNDS << std::endl;
+			}
+			else
+			{
+				std::cout << ERR_SEARCH_INVALID_INDEX_INPUT << std::endl;
+			}
 		}
 		return ;
 	}
