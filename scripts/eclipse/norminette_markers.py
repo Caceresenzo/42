@@ -1,6 +1,6 @@
 # name			: 42/Norminette Markers
 # description	: Run the norminette
-# onSave		: *.[chpy]$
+# onSave		: *.[ch]{1}$
 
 import re
 
