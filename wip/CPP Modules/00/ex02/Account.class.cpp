@@ -16,6 +16,8 @@
 
 #include "Account.class.hpp"
 
+#define ENSURE_DOUBLE_DIGIT(number) ((number < 10) ? "0" : "") << number
+
 int Account::_nbAccounts = 0;
 int Account::_totalAmount = 0;
 int Account::_totalNbDeposits = 0;
@@ -181,12 +183,12 @@ void
     std::cout
 		<< "["
 		<< (now->tm_year + 1900)
-        << (now->tm_mon + 1)
-        << now->tm_mday
+        << ENSURE_DOUBLE_DIGIT((now->tm_mon + 1))
+        << ENSURE_DOUBLE_DIGIT(now->tm_mday)
 		<< "_"
-        <<  now->tm_hour
-        <<  now->tm_min
-        <<  now->tm_sec
+        << ENSURE_DOUBLE_DIGIT(now->tm_hour)
+        << ENSURE_DOUBLE_DIGIT(now->tm_min)
+        << ENSURE_DOUBLE_DIGIT(now->tm_sec)
         << "] ";
 }
 
