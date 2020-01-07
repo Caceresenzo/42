@@ -19,6 +19,9 @@ with open("main.c", "w") as file:
             line += "\nDO_TEST(__LINE__, \"{}\",{});".format(format.replace("%0", "%0#"), arguments)
         if ("x" in format):
             line += "\nDO_TEST(__LINE__, \"{}\",{});".format(format.replace("x", "X"), arguments)
+        if ("." in format):
+            line += "\nDO_TEST(__LINE__, \"{}\",{});".format(format.replace(".", ".0"), arguments)
+            line += "\nDO_TEST(__LINE__, \"{}\",{});".format(format.replace(".", ".00"), arguments)
         print(line)
         file.write(line + "\n")
     file.write(template_parts[1])

@@ -13,7 +13,8 @@
 NAME		= libftprintf.a
 LIBFT		= libft
 LIBFT_LIB	= libft.a
-SRCS		=	./ft_printf.c \
+SRCS		=	./ft_dprintf.c \
+				./ft_printf.c \
 				./ft_printf_flag_handler.c \
 				./ft_printf_flag_initializer.c \
 				./ft_printf_flag_parser.c \
@@ -34,7 +35,9 @@ SRCS		=	./ft_printf.c \
 				./ft_printf_padder.c \
 				./ft_printf_putchar.c \
 				./ft_printf_putstr.c \
-				./ft_printf_which_unit.c
+				./ft_printf_which_unit.c \
+				./ft_vdprintf.c \
+				./ft_vprintf.c
 OBJS		= $(SRCS:.c=.o)
 RM			= rm -f
 LIBC		= ar -rcs
@@ -62,4 +65,6 @@ clean:
     
 re: fclean all
 
-.PHONY: all clean fclean re .c.o
+bonus: all
+
+.PHONY: all clean fclean re .c.o bonus

@@ -51,8 +51,12 @@ static void
 	i_ft_printf_flag_parse_precision(t_ft_printf_bundle *bundle, char *str)
 {
 	int		value;
+	size_t	zero_skip;
 
 	*(bundle->index) += 1;
+	zero_skip = 0;
+	while ((str[*(bundle->index) + zero_skip]) == '0')
+		zero_skip++;
 	bundle->flags->precision_enabled = 1;
 	value = i_ft_printf_flag_parse_value(bundle, str);
 	if (value < 0)
@@ -61,6 +65,9 @@ static void
 		bundle->flags->precision_negative = 1;
 	}
 	bundle->flags->precision = value;
+	*(bundle->index) += zero_skip;
+	if (value == 0)
+		*(bundle->index) -= 1;
 }
 
 static void
