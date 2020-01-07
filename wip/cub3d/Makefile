@@ -103,7 +103,7 @@ SRCS	=	bmp_encoder.c \
 OBJS	= $(SRCS:.c=.o)
 CC		= cc
 INCS	= -I. -Ilibft/ -Iminilibx_opengl/
-FLAGS	= -Wall -Wextra -Werror -O3 -g3
+FLAGS	= -O3 -g3 #-Wall -Wextra -Werror -O3 -g3
 FRWRKS	= -framework OpenGL -framework AppKit
 LIBS_P	= ${PROJECT_ROOT}/libmlx.dylib ${PROJECT_ROOT}/libft/libft.a
 

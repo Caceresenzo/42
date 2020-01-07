@@ -64,8 +64,9 @@ static char
 	}
 	if (map->objs || (!map->objs && ft_isinstr(split[0][0], "012") != -1))
 	{
-		error = map_loader_parse_grid(eng, map, split);
-		*fully = 1;
+		key = ft_strjoin_split(split);
+		error = map_loader_parse_grid(eng, map, key);
+		free(key + ((*fully = 1) - 1));
 	}
 	else
 		error = i_map_loader_interpret_key(eng, map, line, split);

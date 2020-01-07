@@ -256,11 +256,11 @@ char				*map_loader_set_wall_texture(t_engine *eng, t_map *map,
 											char *key, char *path);
 
 char				*map_loader_grid_bind_object(t_map *map, size_t index,
-										t_game_object *current, char *str);
+										t_game_object *current, char c);
 char				*map_loader_grid_create_line(t_game_object **grid,
-												t_map *map, char **split);
+												t_map *map, char *line);
 char				*map_loader_parse_grid(t_engine *eng, t_map *map,
-											char **split);
+											char *line);
 
 t_map				*map_finalize(t_map *map);
 

@@ -330,7 +330,7 @@ class MTKVDelegate: NSObject, MTKViewDelegate
   var pixel_image:MlxImg
   var pixel_count:Int
 
-  unowned var drawable_texture: MTLTexture
+  var drawable_texture: MTLTexture
 
   var doClear = false
 

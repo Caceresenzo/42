@@ -27,8 +27,14 @@
 
 # define BASE_BINARY "01"
 # define BASE_DECIMAL "0123456789"
+# define BASE_OCTAL "01234567"
 # define BASE_HEX_LOW "0123456789abcdef"
 # define BASE_HEX_UP "0123456789ABCDEF"
+
+# define FT_STRJOIN_FREE_DONT 0
+# define FT_STRJOIN_FREE_FIRST 1
+# define FT_STRJOIN_FREE_SECOND 2
+# define FT_STRJOIN_FREE_BOTH 3
 
 typedef unsigned char	t_uchar;
 
@@ -89,6 +95,9 @@ int					ft_isinstr(char c, char *charset);
 
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strjoin_sided(char const *s1, char const *s2, int side);
+char				*ft_strjoin_free(char *s1, char *s2, int flag);
+char				*ft_strjoin_split(char **split);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
 size_t				ft_split_length(char **array);

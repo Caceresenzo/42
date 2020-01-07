@@ -11,5 +11,3 @@
 ### Resolvable
 
 ### Unresolvable
-
-- Minilibx: crash if window is too small (bug don't append with older version)

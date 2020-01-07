@@ -12,29 +12,34 @@
 
 #include "cub3d.h"
 
+/*
+** Note:
+** ft_strjoin_free: policy #2 --> FT_STRJOIN_FREE_SECOND
+*/
+
 char
 	*map_loader_grid_bind_object(t_map *map, size_t index,
-								t_game_object *current, char *str)
+								t_game_object *current, char c)
 {
 	int		type;
 
 	type = -1;
-	if (ft_strncmp(str, "0", 2) == 0)
+	if (c == '0')
 		type = OBJ_EMPTY;
-	else if (ft_strncmp(str, "1", 2) == 0)
+	else if (c == '1')
 		type = OBJ_WALL;
-	else if (ft_strncmp(str, "2", 2) == 0)
+	else if (c == '2')
 		type = OBJ_SPRITE;
-	else if (ft_strlen(str) == 1 && ft_isinstr(str[0], "NSEW") != -1)
+	else if (ft_isinstr(c, "NSEW") != -1)
 	{
 		type = OBJ_PLAYER;
 		current->data = malloc(sizeof(t_g_obj_data_player));
 		if (!current->data)
 			return (emalloc("bind object"));
-		((t_g_obj_data_player *)current->data)->dir = str[0];
+		((t_g_obj_data_player *)current->data)->dir = c;
 	}
 	else
-		return (ft_strjoin("Unknown game object type: ", str));
+		return (ft_strjoin_free("Unknown game object: ", ft_chrtostr(c), 2));
 	current->type = type;
 	current->pos = (t_vec2d) { 1.0 * index, 1.0 * map->size.h };
 	current->flooded = 0;
@@ -42,7 +47,7 @@ char
 }
 
 char
-	*map_loader_grid_create_line(t_game_object **grid, t_map *map, char **split)
+	*map_loader_grid_create_line(t_game_object **grid, t_map *map, char *line)
 {
 	t_game_object	*objects;
 	int				index;
@@ -56,7 +61,7 @@ char
 	while (index < map->size.w)
 	{
 		error = map_loader_grid_bind_object(map, index, &(objects[index]),
-											split[index]);
+											line[index]);
 		if (error != NULL)
 			break ;
 		index++;
@@ -66,7 +71,7 @@ char
 }
 
 char
-	*map_loader_parse_grid(t_engine *eng, t_map *map, char **split)
+	*map_loader_parse_grid(t_engine *eng, t_map *map, char *line)
 {
 	int				length;
 	t_game_object	**old;
@@ -74,7 +79,7 @@ char
 	char			*error;
 
 	ft_fake_use(&eng);
-	if (!(length = ft_split_length(split)))
+	if (!(length = ft_strlen(line)))
 		return (NULL);
 	if (length != map->size.w && map->size.w != 0)
 		return (e("Map width not constant"));
@@ -83,7 +88,7 @@ char
 	if (!(map->objs = malloc((map->size.h + 1) * sizeof(t_game_object *))))
 		return (emalloc("parse grid"));
 	ft_memcpy(map->objs, old, map->size.h * sizeof(t_game_object *));
-	error = map_loader_grid_create_line(&new, map, split);
+	error = map_loader_grid_create_line(&new, map, line);
 	map->objs[map->size.h] = new;
 	if (old != NULL)
 		free(old);
