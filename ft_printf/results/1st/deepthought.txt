@@ -1,0 +1,812 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+e2r4p17.42.fr
+Darwin 18.6.0 x86_64
+$> date
+Tue Jan  7 13:56:00 CET 2020
+$> gcc --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/c++/4.2.1
+Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+Target: x86_64-apple-darwin18.6.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+$> clang --version
+Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+Target: x86_64-apple-darwin18.6.0
+Thread model: posix
+InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: git@vogsphere-v2.42.fr:vogsphere/intra-uuid-970f523a-a927-4e73-a68b-101aacd3dc66-2897765
+
+= Git history ==================================================================
+$> git -C /tmp/tmpgxg9KI/user log --pretty='%H - %an, %ad : %s'
+f6ec151e7be8ea71c52adb7fbc9f0b1c231d97cb - Enzo CACERES, Tue Jan 7 10:31:31 2020 +0100 : First
+
+= Collected files ==========================================
+$> ls -lAR /tmp/tmpgxg9KI/user
+total 208
+-rwxr-xr-x   1 root  wheel  2132 Jan  7 13:56 Makefile
+-rw-r--r--   1 root  wheel  4996 Jan  7 13:56 __GIT_HISTORY
+-rwxr-xr-x   1 root  wheel  1484 Jan  7 13:56 ft_printf.c
+-rwxr-xr-x   1 root  wheel  3662 Jan  7 13:56 ft_printf.h
+-rwxr-xr-x   1 root  wheel  2859 Jan  7 13:56 ft_printf_flag_handler.c
+-rwxr-xr-x   1 root  wheel  1300 Jan  7 13:56 ft_printf_flag_initializer.c
+-rwxr-xr-x   1 root  wheel  3159 Jan  7 13:56 ft_printf_flag_parser.c
+-rwxr-xr-x   1 root  wheel  1228 Jan  7 13:56 ft_printf_flag_validator.c
+-rwxr-xr-x   1 root  wheel  1098 Jan  7 13:56 ft_printf_format_char.c
+-rwxr-xr-x   1 root  wheel  1461 Jan  7 13:56 ft_printf_format_decimal.c
+-rwxr-xr-x   1 root  wheel  1196 Jan  7 13:56 ft_printf_format_empty.c
+-rwxr-xr-x   1 root  wheel  2262 Jan  7 13:56 ft_printf_format_hex_int.c
+-rwxr-xr-x   1 root  wheel  2009 Jan  7 13:56 ft_printf_format_octal_int.c
+-rwxr-xr-x   1 root  wheel  1625 Jan  7 13:56 ft_printf_format_pointer.c
+-rwxr-xr-x   1 root  wheel  1035 Jan  7 13:56 ft_printf_format_pourcent.c
+-rwxr-xr-x   1 root  wheel  1243 Jan  7 13:56 ft_printf_format_string.c
+-rwxr-xr-x   1 root  wheel  1359 Jan  7 13:56 ft_printf_format_uint.c
+-rwxr-xr-x   1 root  wheel  1887 Jan  7 13:56 ft_printf_formatter.c
+-rw-r--r--   1 root  wheel  1538 Jan  7 13:56 ft_printf_formatter_registry.c
+-rwxr-xr-x   1 root  wheel  1262 Jan  7 13:56 ft_printf_handler.c
+-rw-r--r--   1 root  wheel  1035 Jan  7 13:56 ft_printf_is_flag_char.c
+-rw-r--r--   1 root  wheel  1476 Jan  7 13:56 ft_printf_padder.c
+-rw-r--r--   1 root  wheel  1042 Jan  7 13:56 ft_printf_putchar.c
+-rwxr-xr-x   1 root  wheel  1219 Jan  7 13:56 ft_printf_putstr.c
+-rw-r--r--   1 root  wheel  1862 Jan  7 13:56 ft_printf_which_unit.c
+drwxr-xr-x  75 root  wheel  2400 Jan  7 13:56 libft
+
+/tmp/tmpgxg9KI/user/libft:
+total 592
+-rw-r--r--  1 root  wheel  2699 Jan  7 13:56 Makefile
+-rw-r--r--  1 root  wheel  1015 Jan  7 13:56 ft_abs.c
+-rw-r--r--  1 root  wheel  1310 Jan  7 13:56 ft_atoi.c
+-rw-r--r--  1 root  wheel   971 Jan  7 13:56 ft_bzero.c
+-rw-r--r--  1 root  wheel  1119 Jan  7 13:56 ft_calloc.c
+-rwxr-xr-x  1 root  wheel  1098 Jan  7 13:56 ft_chrmult.c
+-rwxr-xr-x  1 root  wheel  1057 Jan  7 13:56 ft_chrtostr.c
+-rw-r--r--  1 root  wheel  1038 Jan  7 13:56 ft_emptystr.c
+-rw-r--r--  1 root  wheel   971 Jan  7 13:56 ft_fake_use.c
+-rw-r--r--  1 root  wheel   993 Jan  7 13:56 ft_free_and_release.c
+-rw-r--r--  1 root  wheel   981 Jan  7 13:56 ft_isalnum.c
+-rw-r--r--  1 root  wheel   981 Jan  7 13:56 ft_isalpha.c
+-rw-r--r--  1 root  wheel   973 Jan  7 13:56 ft_isascii.c
+-rw-r--r--  1 root  wheel   971 Jan  7 13:56 ft_isdigit.c
+-rw-r--r--  1 root  wheel  1084 Jan  7 13:56 ft_isinstr.c
+-rw-r--r--  1 root  wheel   971 Jan  7 13:56 ft_islower.c
+-rw-r--r--  1 root  wheel   972 Jan  7 13:56 ft_isprint.c
+-rw-r--r--  1 root  wheel   971 Jan  7 13:56 ft_isupper.c
+-rw-r--r--  1 root  wheel  1028 Jan  7 13:56 ft_iswspace.c
+-rw-r--r--  1 root  wheel  1471 Jan  7 13:56 ft_itoa.c
+-rwxr-xr-x  1 root  wheel  1578 Jan  7 13:56 ft_itoa_base.c
+-rwxr-xr-x  1 root  wheel  1526 Jan  7 13:56 ft_itoa_u_base.c
+-rw-r--r--  1 root  wheel  1103 Jan  7 13:56 ft_lsr.c
+-rw-r--r--  1 root  wheel  1120 Jan  7 13:56 ft_lstadd_back.c
+-rw-r--r--  1 root  wheel  1031 Jan  7 13:56 ft_lstadd_front.c
+-rw-r--r--  1 root  wheel  1120 Jan  7 13:56 ft_lstclear.c
+-rw-r--r--  1 root  wheel  1034 Jan  7 13:56 ft_lstdelone.c
+-rw-r--r--  1 root  wheel  1119 Jan  7 13:56 ft_lstiter.c
+-rw-r--r--  1 root  wheel  1099 Jan  7 13:56 ft_lstlast.c
+-rw-r--r--  1 root  wheel  1417 Jan  7 13:56 ft_lstmap.c
+-rw-r--r--  1 root  wheel  1084 Jan  7 13:56 ft_lstnew.c
+-rw-r--r--  1 root  wheel  1072 Jan  7 13:56 ft_lstsize.c
+-rw-r--r--  1 root  wheel  1011 Jan  7 13:56 ft_max.c
+-rw-r--r--  1 root  wheel  1180 Jan  7 13:56 ft_memccpy.c
+-rw-r--r--  1 root  wheel  1124 Jan  7 13:56 ft_memchr.c
+-rw-r--r--  1 root  wheel  1198 Jan  7 13:56 ft_memcmp.c
+-rw-r--r--  1 root  wheel  1153 Jan  7 13:56 ft_memcpy.c
+-rw-r--r--  1 root  wheel  1121 Jan  7 13:56 ft_memjoin.c
+-rw-r--r--  1 root  wheel  1381 Jan  7 13:56 ft_memmove.c
+-rw-r--r--  1 root  wheel  1054 Jan  7 13:56 ft_memset.c
+-rw-r--r--  1 root  wheel  1011 Jan  7 13:56 ft_min.c
+-rw-r--r--  1 root  wheel   971 Jan  7 13:56 ft_putchar_fd.c
+-rw-r--r--  1 root  wheel  1001 Jan  7 13:56 ft_putendl_fd.c
+-rw-r--r--  1 root  wheel  1135 Jan  7 13:56 ft_putnbr_fd.c
+-rw-r--r--  1 root  wheel  1053 Jan  7 13:56 ft_putstr_fd.c
+-rw-r--r--  1 root  wheel  1467 Jan  7 13:56 ft_putuchar_fd.c
+-rw-r--r--  1 root  wheel  1546 Jan  7 13:56 ft_sort_comp.c
+-rw-r--r--  1 root  wheel  2059 Jan  7 13:56 ft_split.c
+-rw-r--r--  1 root  wheel  1213 Jan  7 13:56 ft_split_free.c
+-rw-r--r--  1 root  wheel  1064 Jan  7 13:56 ft_split_length.c
+-rw-r--r--  1 root  wheel  1000 Jan  7 13:56 ft_strchr.c
+-rw-r--r--  1 root  wheel  1034 Jan  7 13:56 ft_strcontain.c
+-rw-r--r--  1 root  wheel  1166 Jan  7 13:56 ft_strdup.c
+-rw-r--r--  1 root  wheel  1260 Jan  7 13:56 ft_strjoin.c
+-rw-r--r--  1 root  wheel  1251 Jan  7 13:56 ft_strjoin_free.c
+-rw-r--r--  1 root  wheel  1054 Jan  7 13:56 ft_strjoin_sided.c
+-rw-r--r--  1 root  wheel  1433 Jan  7 13:56 ft_strlcat.c
+-rw-r--r--  1 root  wheel  1214 Jan  7 13:56 ft_strlcpy.c
+-rw-r--r--  1 root  wheel  1028 Jan  7 13:56 ft_strlen.c
+-rw-r--r--  1 root  wheel  1268 Jan  7 13:56 ft_strmapi.c
+-rw-r--r--  1 root  wheel  1147 Jan  7 13:56 ft_strncmp.c
+-rw-r--r--  1 root  wheel  1398 Jan  7 13:56 ft_strnstr.c
+-rw-r--r--  1 root  wheel  1177 Jan  7 13:56 ft_strrchr.c
+-rw-r--r--  1 root  wheel  1777 Jan  7 13:56 ft_strtrim.c
+-rw-r--r--  1 root  wheel  1283 Jan  7 13:56 ft_substr.c
+-rw-r--r--  1 root  wheel   999 Jan  7 13:56 ft_swap_double.c
+-rw-r--r--  1 root  wheel   988 Jan  7 13:56 ft_swap_int.c
+-rw-r--r--  1 root  wheel   993 Jan  7 13:56 ft_tolower.c
+-rw-r--r--  1 root  wheel   993 Jan  7 13:56 ft_toupper.c
+-rw-r--r--  1 root  wheel  1017 Jan  7 13:56 ft_zero_if_neg.c
+-rw-r--r--  1 root  wheel  2812 Jan  7 13:56 get_next_line.c
+-rw-r--r--  1 root  wheel  1355 Jan  7 13:56 get_next_line.h
+-rw-r--r--  1 root  wheel  4945 Jan  7 13:56 libft.h
+
+= test_spdxiucpercent ==========================================================
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf.c -o ft_printf.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_handler.c -o ft_printf_flag_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_initializer.c -o ft_printf_flag_initializer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_parser.c -o ft_printf_flag_parser.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_validator.c -o ft_printf_flag_validator.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_char.c -o ft_printf_format_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_decimal.c -o ft_printf_format_decimal.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_empty.c -o ft_printf_format_empty.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_hex_int.c -o ft_printf_format_hex_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_octal_int.c -o ft_printf_format_octal_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pointer.c -o ft_printf_format_pointer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pourcent.c -o ft_printf_format_pourcent.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_string.c -o ft_printf_format_string.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_uint.c -o ft_printf_format_uint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter.c -o ft_printf_formatter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter_registry.c -o ft_printf_formatter_registry.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_handler.c -o ft_printf_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_is_flag_char.c -o ft_printf_is_flag_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_padder.c -o ft_printf_padder.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putchar.c -o ft_printf_putchar.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putstr.c -o ft_printf_putstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_which_unit.c -o ft_printf_which_unit.o -I.
+make all -C libft/
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_abs.c -o ft_abs.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_atoi.c -o ft_atoi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_bzero.c -o ft_bzero.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_calloc.c -o ft_calloc.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrmult.c -o ft_chrmult.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrtostr.c -o ft_chrtostr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_emptystr.c -o ft_emptystr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_fake_use.c -o ft_fake_use.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_free_and_release.c -o ft_free_and_release.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalnum.c -o ft_isalnum.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalpha.c -o ft_isalpha.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isascii.c -o ft_isascii.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isdigit.c -o ft_isdigit.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isinstr.c -o ft_isinstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_islower.c -o ft_islower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isprint.c -o ft_isprint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isupper.c -o ft_isupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_iswspace.c -o ft_iswspace.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa.c -o ft_itoa.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_base.c -o ft_itoa_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_u_base.c -o ft_itoa_u_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lsr.c -o ft_lsr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_back.c -o ft_lstadd_back.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_front.c -o ft_lstadd_front.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstclear.c -o ft_lstclear.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstdelone.c -o ft_lstdelone.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstiter.c -o ft_lstiter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstlast.c -o ft_lstlast.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstmap.c -o ft_lstmap.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstnew.c -o ft_lstnew.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstsize.c -o ft_lstsize.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_max.c -o ft_max.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memccpy.c -o ft_memccpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memchr.c -o ft_memchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcmp.c -o ft_memcmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcpy.c -o ft_memcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memjoin.c -o ft_memjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memmove.c -o ft_memmove.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memset.c -o ft_memset.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_min.c -o ft_min.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putchar_fd.c -o ft_putchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putendl_fd.c -o ft_putendl_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putnbr_fd.c -o ft_putnbr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putstr_fd.c -o ft_putstr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putuchar_fd.c -o ft_putuchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_sort_comp.c -o ft_sort_comp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split.c -o ft_split.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_free.c -o ft_split_free.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_length.c -o ft_split_length.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strchr.c -o ft_strchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strcontain.c -o ft_strcontain.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strdup.c -o ft_strdup.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin.c -o ft_strjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcat.c -o ft_strlcat.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcpy.c -o ft_strlcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlen.c -o ft_strlen.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strmapi.c -o ft_strmapi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strncmp.c -o ft_strncmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strnstr.c -o ft_strnstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strrchr.c -o ft_strrchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strtrim.c -o ft_strtrim.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_substr.c -o ft_substr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_double.c -o ft_swap_double.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_int.c -o ft_swap_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_tolower.c -o ft_tolower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_toupper.c -o ft_toupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_zero_if_neg.c -o ft_zero_if_neg.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c get_next_line.c -o get_next_line.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_sided.c -o ft_strjoin_sided.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_free.c -o ft_strjoin_free.o -I.
+ar -rcs libft.a ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_in
+ t.o ./ft_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cp libft/libft.a libftprintf.a
+ar -rcs libftprintf.a ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libftprintf.a
+make fclean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libft.a
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf.c -o ft_printf.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_handler.c -o ft_printf_flag_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_initializer.c -o ft_printf_flag_initializer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_parser.c -o ft_printf_flag_parser.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_validator.c -o ft_printf_flag_validator.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_char.c -o ft_printf_format_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_decimal.c -o ft_printf_format_decimal.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_empty.c -o ft_printf_format_empty.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_hex_int.c -o ft_printf_format_hex_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_octal_int.c -o ft_printf_format_octal_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pointer.c -o ft_printf_format_pointer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pourcent.c -o ft_printf_format_pourcent.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_string.c -o ft_printf_format_string.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_uint.c -o ft_printf_format_uint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter.c -o ft_printf_formatter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter_registry.c -o ft_printf_formatter_registry.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_handler.c -o ft_printf_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_is_flag_char.c -o ft_printf_is_flag_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_padder.c -o ft_printf_padder.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putchar.c -o ft_printf_putchar.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putstr.c -o ft_printf_putstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_which_unit.c -o ft_printf_which_unit.o -I.
+make all -C libft/
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_abs.c -o ft_abs.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_atoi.c -o ft_atoi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_bzero.c -o ft_bzero.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_calloc.c -o ft_calloc.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrmult.c -o ft_chrmult.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrtostr.c -o ft_chrtostr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_emptystr.c -o ft_emptystr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_fake_use.c -o ft_fake_use.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_free_and_release.c -o ft_free_and_release.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalnum.c -o ft_isalnum.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalpha.c -o ft_isalpha.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isascii.c -o ft_isascii.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isdigit.c -o ft_isdigit.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isinstr.c -o ft_isinstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_islower.c -o ft_islower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isprint.c -o ft_isprint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isupper.c -o ft_isupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_iswspace.c -o ft_iswspace.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa.c -o ft_itoa.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_base.c -o ft_itoa_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_u_base.c -o ft_itoa_u_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lsr.c -o ft_lsr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_back.c -o ft_lstadd_back.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_front.c -o ft_lstadd_front.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstclear.c -o ft_lstclear.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstdelone.c -o ft_lstdelone.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstiter.c -o ft_lstiter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstlast.c -o ft_lstlast.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstmap.c -o ft_lstmap.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstnew.c -o ft_lstnew.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstsize.c -o ft_lstsize.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_max.c -o ft_max.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memccpy.c -o ft_memccpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memchr.c -o ft_memchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcmp.c -o ft_memcmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcpy.c -o ft_memcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memjoin.c -o ft_memjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memmove.c -o ft_memmove.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memset.c -o ft_memset.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_min.c -o ft_min.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putchar_fd.c -o ft_putchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putendl_fd.c -o ft_putendl_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putnbr_fd.c -o ft_putnbr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putstr_fd.c -o ft_putstr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putuchar_fd.c -o ft_putuchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_sort_comp.c -o ft_sort_comp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split.c -o ft_split.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_free.c -o ft_split_free.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_length.c -o ft_split_length.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strchr.c -o ft_strchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strcontain.c -o ft_strcontain.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strdup.c -o ft_strdup.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin.c -o ft_strjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcat.c -o ft_strlcat.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcpy.c -o ft_strlcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlen.c -o ft_strlen.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strmapi.c -o ft_strmapi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strncmp.c -o ft_strncmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strnstr.c -o ft_strnstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strrchr.c -o ft_strrchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strtrim.c -o ft_strtrim.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_substr.c -o ft_substr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_double.c -o ft_swap_double.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_int.c -o ft_swap_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_tolower.c -o ft_tolower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_toupper.c -o ft_toupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_zero_if_neg.c -o ft_zero_if_neg.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c get_next_line.c -o get_next_line.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_sided.c -o ft_strjoin_sided.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_free.c -o ft_strjoin_free.o -I.
+ar -rcs libft.a ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_in
+ t.o ./ft_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cp libft/libft.a libftprintf.a
+ar -rcs libftprintf.a ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libftprintf.a
+make fclean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libft.a
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf.c -o ft_printf.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_handler.c -o ft_printf_flag_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_initializer.c -o ft_printf_flag_initializer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_parser.c -o ft_printf_flag_parser.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_validator.c -o ft_printf_flag_validator.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_char.c -o ft_printf_format_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_decimal.c -o ft_printf_format_decimal.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_empty.c -o ft_printf_format_empty.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_hex_int.c -o ft_printf_format_hex_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_octal_int.c -o ft_printf_format_octal_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pointer.c -o ft_printf_format_pointer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pourcent.c -o ft_printf_format_pourcent.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_string.c -o ft_printf_format_string.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_uint.c -o ft_printf_format_uint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter.c -o ft_printf_formatter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter_registry.c -o ft_printf_formatter_registry.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_handler.c -o ft_printf_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_is_flag_char.c -o ft_printf_is_flag_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_padder.c -o ft_printf_padder.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putchar.c -o ft_printf_putchar.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putstr.c -o ft_printf_putstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_which_unit.c -o ft_printf_which_unit.o -I.
+make all -C libft/
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_abs.c -o ft_abs.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_atoi.c -o ft_atoi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_bzero.c -o ft_bzero.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_calloc.c -o ft_calloc.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrmult.c -o ft_chrmult.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrtostr.c -o ft_chrtostr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_emptystr.c -o ft_emptystr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_fake_use.c -o ft_fake_use.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_free_and_release.c -o ft_free_and_release.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalnum.c -o ft_isalnum.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalpha.c -o ft_isalpha.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isascii.c -o ft_isascii.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isdigit.c -o ft_isdigit.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isinstr.c -o ft_isinstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_islower.c -o ft_islower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isprint.c -o ft_isprint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isupper.c -o ft_isupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_iswspace.c -o ft_iswspace.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa.c -o ft_itoa.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_base.c -o ft_itoa_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_u_base.c -o ft_itoa_u_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lsr.c -o ft_lsr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_back.c -o ft_lstadd_back.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_front.c -o ft_lstadd_front.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstclear.c -o ft_lstclear.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstdelone.c -o ft_lstdelone.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstiter.c -o ft_lstiter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstlast.c -o ft_lstlast.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstmap.c -o ft_lstmap.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstnew.c -o ft_lstnew.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstsize.c -o ft_lstsize.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_max.c -o ft_max.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memccpy.c -o ft_memccpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memchr.c -o ft_memchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcmp.c -o ft_memcmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcpy.c -o ft_memcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memjoin.c -o ft_memjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memmove.c -o ft_memmove.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memset.c -o ft_memset.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_min.c -o ft_min.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putchar_fd.c -o ft_putchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putendl_fd.c -o ft_putendl_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putnbr_fd.c -o ft_putnbr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putstr_fd.c -o ft_putstr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putuchar_fd.c -o ft_putuchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_sort_comp.c -o ft_sort_comp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split.c -o ft_split.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_free.c -o ft_split_free.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_length.c -o ft_split_length.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strchr.c -o ft_strchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strcontain.c -o ft_strcontain.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strdup.c -o ft_strdup.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin.c -o ft_strjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcat.c -o ft_strlcat.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcpy.c -o ft_strlcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlen.c -o ft_strlen.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strmapi.c -o ft_strmapi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strncmp.c -o ft_strncmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strnstr.c -o ft_strnstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strrchr.c -o ft_strrchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strtrim.c -o ft_strtrim.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_substr.c -o ft_substr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_double.c -o ft_swap_double.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_int.c -o ft_swap_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_tolower.c -o ft_tolower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_toupper.c -o ft_toupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_zero_if_neg.c -o ft_zero_if_neg.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c get_next_line.c -o get_next_line.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_sided.c -o ft_strjoin_sided.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_free.c -o ft_strjoin_free.o -I.
+ar -rcs libft.a ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_in
+ t.o ./ft_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cp libft/libft.a libftprintf.a
+ar -rcs libftprintf.a ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+-rw-r--r--  1 deepthought  deepthought  291472 Jan  7 12:56 libftprintf.a
+
+clang -Wall -Wextra -Werror -g3   -c -o test_s.o test_s.c
+clang -Wall -Wextra -Werror -g3   -c -o test_d.o test_d.c
+clang -Wall -Wextra -Werror -g3   -c -o test_p.o test_p.c
+clang -Wall -Wextra -Werror -g3   -c -o test_x.o test_x.c
+clang -Wall -Wextra -Werror -g3   -c -o test_i.o test_i.c
+clang -Wall -Wextra -Werror -g3   -c -o test_u.o test_u.c
+clang -Wall -Wextra -Werror -g3   -c -o test_c.o test_c.c
+clang -Wall -Wextra -Werror -g3   -c -o test_mix.o test_mix.c
+clang -Wall -Wextra -Werror -g3   -c -o main.o main.c
+clang -Wall -Wextra -Werror -g3 -o test_printf -L. -lftprintf test_s.o test_d.o test_p.o test_x.o test_i.o test_u.o test_c.o test_mix.o main.o
+
+test_s: [ok]
+test_d: [ok]
+test_p: [ok]
+test_x: [ok]
+test_i: [ok]
+test_u: [ok]
+test_c: [ok]
+test_mix: [ok]
+
+8/8 correct functions
+Grade: 50
+
+= test_fields ==================================================================
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf.c -o ft_printf.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_handler.c -o ft_printf_flag_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_initializer.c -o ft_printf_flag_initializer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_parser.c -o ft_printf_flag_parser.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_validator.c -o ft_printf_flag_validator.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_char.c -o ft_printf_format_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_decimal.c -o ft_printf_format_decimal.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_empty.c -o ft_printf_format_empty.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_hex_int.c -o ft_printf_format_hex_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_octal_int.c -o ft_printf_format_octal_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pointer.c -o ft_printf_format_pointer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pourcent.c -o ft_printf_format_pourcent.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_string.c -o ft_printf_format_string.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_uint.c -o ft_printf_format_uint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter.c -o ft_printf_formatter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter_registry.c -o ft_printf_formatter_registry.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_handler.c -o ft_printf_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_is_flag_char.c -o ft_printf_is_flag_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_padder.c -o ft_printf_padder.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putchar.c -o ft_printf_putchar.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putstr.c -o ft_printf_putstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_which_unit.c -o ft_printf_which_unit.o -I.
+make all -C libft/
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_abs.c -o ft_abs.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_atoi.c -o ft_atoi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_bzero.c -o ft_bzero.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_calloc.c -o ft_calloc.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrmult.c -o ft_chrmult.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrtostr.c -o ft_chrtostr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_emptystr.c -o ft_emptystr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_fake_use.c -o ft_fake_use.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_free_and_release.c -o ft_free_and_release.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalnum.c -o ft_isalnum.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalpha.c -o ft_isalpha.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isascii.c -o ft_isascii.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isdigit.c -o ft_isdigit.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isinstr.c -o ft_isinstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_islower.c -o ft_islower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isprint.c -o ft_isprint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isupper.c -o ft_isupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_iswspace.c -o ft_iswspace.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa.c -o ft_itoa.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_base.c -o ft_itoa_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_u_base.c -o ft_itoa_u_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lsr.c -o ft_lsr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_back.c -o ft_lstadd_back.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_front.c -o ft_lstadd_front.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstclear.c -o ft_lstclear.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstdelone.c -o ft_lstdelone.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstiter.c -o ft_lstiter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstlast.c -o ft_lstlast.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstmap.c -o ft_lstmap.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstnew.c -o ft_lstnew.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstsize.c -o ft_lstsize.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_max.c -o ft_max.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memccpy.c -o ft_memccpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memchr.c -o ft_memchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcmp.c -o ft_memcmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcpy.c -o ft_memcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memjoin.c -o ft_memjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memmove.c -o ft_memmove.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memset.c -o ft_memset.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_min.c -o ft_min.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putchar_fd.c -o ft_putchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putendl_fd.c -o ft_putendl_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putnbr_fd.c -o ft_putnbr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putstr_fd.c -o ft_putstr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putuchar_fd.c -o ft_putuchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_sort_comp.c -o ft_sort_comp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split.c -o ft_split.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_free.c -o ft_split_free.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_length.c -o ft_split_length.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strchr.c -o ft_strchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strcontain.c -o ft_strcontain.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strdup.c -o ft_strdup.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin.c -o ft_strjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcat.c -o ft_strlcat.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcpy.c -o ft_strlcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlen.c -o ft_strlen.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strmapi.c -o ft_strmapi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strncmp.c -o ft_strncmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strnstr.c -o ft_strnstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strrchr.c -o ft_strrchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strtrim.c -o ft_strtrim.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_substr.c -o ft_substr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_double.c -o ft_swap_double.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_int.c -o ft_swap_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_tolower.c -o ft_tolower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_toupper.c -o ft_toupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_zero_if_neg.c -o ft_zero_if_neg.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c get_next_line.c -o get_next_line.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_sided.c -o ft_strjoin_sided.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_free.c -o ft_strjoin_free.o -I.
+ar -rcs libft.a ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_in
+ t.o ./ft_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cp libft/libft.a libftprintf.a
+ar -rcs libftprintf.a ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libftprintf.a
+make fclean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libft.a
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf.c -o ft_printf.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_handler.c -o ft_printf_flag_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_initializer.c -o ft_printf_flag_initializer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_parser.c -o ft_printf_flag_parser.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_validator.c -o ft_printf_flag_validator.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_char.c -o ft_printf_format_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_decimal.c -o ft_printf_format_decimal.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_empty.c -o ft_printf_format_empty.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_hex_int.c -o ft_printf_format_hex_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_octal_int.c -o ft_printf_format_octal_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pointer.c -o ft_printf_format_pointer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pourcent.c -o ft_printf_format_pourcent.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_string.c -o ft_printf_format_string.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_uint.c -o ft_printf_format_uint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter.c -o ft_printf_formatter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter_registry.c -o ft_printf_formatter_registry.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_handler.c -o ft_printf_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_is_flag_char.c -o ft_printf_is_flag_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_padder.c -o ft_printf_padder.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putchar.c -o ft_printf_putchar.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putstr.c -o ft_printf_putstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_which_unit.c -o ft_printf_which_unit.o -I.
+make all -C libft/
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_abs.c -o ft_abs.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_atoi.c -o ft_atoi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_bzero.c -o ft_bzero.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_calloc.c -o ft_calloc.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrmult.c -o ft_chrmult.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrtostr.c -o ft_chrtostr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_emptystr.c -o ft_emptystr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_fake_use.c -o ft_fake_use.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_free_and_release.c -o ft_free_and_release.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalnum.c -o ft_isalnum.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalpha.c -o ft_isalpha.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isascii.c -o ft_isascii.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isdigit.c -o ft_isdigit.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isinstr.c -o ft_isinstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_islower.c -o ft_islower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isprint.c -o ft_isprint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isupper.c -o ft_isupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_iswspace.c -o ft_iswspace.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa.c -o ft_itoa.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_base.c -o ft_itoa_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_u_base.c -o ft_itoa_u_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lsr.c -o ft_lsr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_back.c -o ft_lstadd_back.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_front.c -o ft_lstadd_front.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstclear.c -o ft_lstclear.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstdelone.c -o ft_lstdelone.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstiter.c -o ft_lstiter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstlast.c -o ft_lstlast.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstmap.c -o ft_lstmap.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstnew.c -o ft_lstnew.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstsize.c -o ft_lstsize.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_max.c -o ft_max.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memccpy.c -o ft_memccpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memchr.c -o ft_memchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcmp.c -o ft_memcmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcpy.c -o ft_memcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memjoin.c -o ft_memjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memmove.c -o ft_memmove.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memset.c -o ft_memset.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_min.c -o ft_min.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putchar_fd.c -o ft_putchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putendl_fd.c -o ft_putendl_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putnbr_fd.c -o ft_putnbr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putstr_fd.c -o ft_putstr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putuchar_fd.c -o ft_putuchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_sort_comp.c -o ft_sort_comp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split.c -o ft_split.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_free.c -o ft_split_free.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_length.c -o ft_split_length.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strchr.c -o ft_strchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strcontain.c -o ft_strcontain.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strdup.c -o ft_strdup.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin.c -o ft_strjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcat.c -o ft_strlcat.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcpy.c -o ft_strlcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlen.c -o ft_strlen.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strmapi.c -o ft_strmapi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strncmp.c -o ft_strncmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strnstr.c -o ft_strnstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strrchr.c -o ft_strrchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strtrim.c -o ft_strtrim.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_substr.c -o ft_substr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_double.c -o ft_swap_double.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_int.c -o ft_swap_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_tolower.c -o ft_tolower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_toupper.c -o ft_toupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_zero_if_neg.c -o ft_zero_if_neg.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c get_next_line.c -o get_next_line.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_sided.c -o ft_strjoin_sided.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_free.c -o ft_strjoin_free.o -I.
+ar -rcs libft.a ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_in
+ t.o ./ft_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cp libft/libft.a libftprintf.a
+ar -rcs libftprintf.a ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libftprintf.a
+make fclean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+rm -f libft.a
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf.c -o ft_printf.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_handler.c -o ft_printf_flag_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_initializer.c -o ft_printf_flag_initializer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_parser.c -o ft_printf_flag_parser.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_flag_validator.c -o ft_printf_flag_validator.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_char.c -o ft_printf_format_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_decimal.c -o ft_printf_format_decimal.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_empty.c -o ft_printf_format_empty.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_hex_int.c -o ft_printf_format_hex_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_octal_int.c -o ft_printf_format_octal_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pointer.c -o ft_printf_format_pointer.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_pourcent.c -o ft_printf_format_pourcent.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_string.c -o ft_printf_format_string.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_format_uint.c -o ft_printf_format_uint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter.c -o ft_printf_formatter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_formatter_registry.c -o ft_printf_formatter_registry.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_handler.c -o ft_printf_handler.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_is_flag_char.c -o ft_printf_is_flag_char.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_padder.c -o ft_printf_padder.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putchar.c -o ft_printf_putchar.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_putstr.c -o ft_printf_putstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_printf_which_unit.c -o ft_printf_which_unit.o -I.
+make all -C libft/
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_abs.c -o ft_abs.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_atoi.c -o ft_atoi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_bzero.c -o ft_bzero.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_calloc.c -o ft_calloc.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrmult.c -o ft_chrmult.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_chrtostr.c -o ft_chrtostr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_emptystr.c -o ft_emptystr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_fake_use.c -o ft_fake_use.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_free_and_release.c -o ft_free_and_release.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalnum.c -o ft_isalnum.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isalpha.c -o ft_isalpha.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isascii.c -o ft_isascii.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isdigit.c -o ft_isdigit.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isinstr.c -o ft_isinstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_islower.c -o ft_islower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isprint.c -o ft_isprint.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_isupper.c -o ft_isupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_iswspace.c -o ft_iswspace.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa.c -o ft_itoa.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_base.c -o ft_itoa_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_itoa_u_base.c -o ft_itoa_u_base.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lsr.c -o ft_lsr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_back.c -o ft_lstadd_back.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstadd_front.c -o ft_lstadd_front.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstclear.c -o ft_lstclear.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstdelone.c -o ft_lstdelone.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstiter.c -o ft_lstiter.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstlast.c -o ft_lstlast.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstmap.c -o ft_lstmap.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstnew.c -o ft_lstnew.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_lstsize.c -o ft_lstsize.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_max.c -o ft_max.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memccpy.c -o ft_memccpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memchr.c -o ft_memchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcmp.c -o ft_memcmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memcpy.c -o ft_memcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memjoin.c -o ft_memjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memmove.c -o ft_memmove.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_memset.c -o ft_memset.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_min.c -o ft_min.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putchar_fd.c -o ft_putchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putendl_fd.c -o ft_putendl_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putnbr_fd.c -o ft_putnbr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putstr_fd.c -o ft_putstr_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_putuchar_fd.c -o ft_putuchar_fd.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_sort_comp.c -o ft_sort_comp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split.c -o ft_split.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_free.c -o ft_split_free.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_split_length.c -o ft_split_length.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strchr.c -o ft_strchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strcontain.c -o ft_strcontain.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strdup.c -o ft_strdup.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin.c -o ft_strjoin.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcat.c -o ft_strlcat.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlcpy.c -o ft_strlcpy.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strlen.c -o ft_strlen.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strmapi.c -o ft_strmapi.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strncmp.c -o ft_strncmp.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strnstr.c -o ft_strnstr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strrchr.c -o ft_strrchr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strtrim.c -o ft_strtrim.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_substr.c -o ft_substr.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_double.c -o ft_swap_double.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_swap_int.c -o ft_swap_int.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_tolower.c -o ft_tolower.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_toupper.c -o ft_toupper.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_zero_if_neg.c -o ft_zero_if_neg.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c get_next_line.c -o get_next_line.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_sided.c -o ft_strjoin_sided.o -I.
+cc -Wall -Wextra -Werror -O3 -g3 -c ft_strjoin_free.c -o ft_strjoin_free.o -I.
+ar -rcs libft.a ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_in
+ t.o ./ft_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+cp libft/libft.a libftprintf.a
+ar -rcs libftprintf.a ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+-rw-r--r--  1 deepthought  deepthought  291472 Jan  7 12:56 libftprintf.a
+
+clang -Wall -Wextra -Werror -g3   -c -o test_precision.o test_precision.c
+clang -Wall -Wextra -Werror -g3   -c -o test_zero.o test_zero.c
+clang -Wall -Wextra -Werror -g3   -c -o test_minus.o test_minus.c
+clang -Wall -Wextra -Werror -g3   -c -o test_star.o test_star.c
+clang -Wall -Wextra -Werror -g3   -c -o main.o main.c
+clang -Wall -Wextra -Werror -g3 -o test_printf -L. -lftprintf test_precision.o test_zero.o test_minus.o test_star.o main.o
+
+test_precision: [ok]
+test_zero: [ok]
+test_minus: [ok]
+test_star: [ok]
+
+4/4 correct functions
+Grade: 50
+
+= bonus_test ===================================================================
+rm -f -f ./ft_printf.o ./ft_printf_flag_handler.o ./ft_printf_flag_initializer.o ./ft_printf_flag_parser.o ./ft_printf_flag_validator.o ./ft_printf_format_char.o ./ft_printf_format_decimal.o ./ft_printf_format_empty.o ./ft_printf_format_hex_int.o ./ft_printf_format_octal_int.o ./ft_printf_format_pointer.o ./ft_printf_format_pourcent.o ./ft_printf_format_string.o ./ft_printf_format_uint.o ./ft_printf_formatter.o ./ft_printf_formatter_registry.o ./ft_printf_handler.o ./ft_printf_is_flag_char.o ./ft_printf_padder.o ./ft_printf_putchar.o ./ft_printf_putstr.o ./ft_printf_which_unit.o
+make clean -C libft
+rm -f -f ./ft_abs.o ./ft_atoi.o ./ft_bzero.o ./ft_calloc.o ./ft_chrmult.o ./ft_chrtostr.o ./ft_emptystr.o ./ft_fake_use.o ./ft_free_and_release.o ./ft_isalnum.o ./ft_isalpha.o ./ft_isascii.o ./ft_isdigit.o ./ft_isinstr.o ./ft_islower.o ./ft_isprint.o ./ft_isupper.o ./ft_iswspace.o ./ft_itoa.o ./ft_itoa_base.o ./ft_itoa_u_base.o ./ft_lsr.o ./ft_lstadd_back.o ./ft_lstadd_front.o ./ft_lstclear.o ./ft_lstdelone.o ./ft_lstiter.o ./ft_lstlast.o ./ft_lstmap.o ./ft_lstnew.o ./ft_lstsize.o ./ft_max.o ./ft_memccpy.o ./ft_memchr.o ./ft_memcmp.o ./ft_memcpy.o ./ft_memjoin.o ./ft_memmove.o ./ft_memset.o ./ft_min.o ./ft_putchar_fd.o ./ft_putendl_fd.o ./ft_putnbr_fd.o ./ft_putstr_fd.o ./ft_putuchar_fd.o ./ft_sort_comp.o ./ft_split.o ./ft_split_free.o ./ft_split_length.o ./ft_strchr.o ./ft_strcontain.o ./ft_strdup.o ./ft_strjoin.o ./ft_strlcat.o ./ft_strlcpy.o ./ft_strlen.o ./ft_strmapi.o ./ft_strncmp.o ./ft_strnstr.o ./ft_strrchr.o ./ft_strtrim.o ./ft_substr.o ./ft_swap_double.o ./ft_swap_int.o ./f
+ t_tolower.o ./ft_toupper.o ./ft_zero_if_neg.o ./get_next_line.o ./ft_strjoin_sided.o ./ft_strjoin_free.o
+make: *** No rule to make target `bonus'.  Stop.
+
+Grade: 0
+
+= Final grade: 100 =============================================================
