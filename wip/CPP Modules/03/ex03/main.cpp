@@ -24,16 +24,24 @@ main(void)
 	FragTrap fragTrap("The Fragger");
 	ScavTrap scavTrap("The Scaver");
 	NinjaTrap ninjaTrap("The Ninja");
+	ClapTrap clapTrap("The Original");
 
 	ninjaTrap.ninjaShoebox(fragTrap);
 	ninjaTrap.ninjaShoebox(scavTrap);
 	ninjaTrap.ninjaShoebox(ninjaTrap);
+	ninjaTrap.ninjaShoebox(clapTrap);
+
+	std::cout << std::endl;
 
 	ninjaTrap.ninjaShoebox(fragTrap);
 	ninjaTrap.ninjaShoebox(scavTrap);
 	ninjaTrap.ninjaShoebox(ninjaTrap);
+	ninjaTrap.ninjaShoebox(clapTrap);
+
+	std::cout << std::endl;
 
 	ninjaTrap.ninjaShoebox(fragTrap);
 	ninjaTrap.ninjaShoebox(scavTrap);
 	ninjaTrap.ninjaShoebox(ninjaTrap);
+	ninjaTrap.ninjaShoebox(clapTrap);
 }

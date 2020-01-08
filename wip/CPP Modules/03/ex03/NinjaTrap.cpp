@@ -31,7 +31,7 @@ NinjaTrap::NinjaTrap(std::string name) : ClapTrap(name)
 	this->_rangedAttackDamage = 5;
 	this->_armorDamageReduction = 0;
 
-	std::string specials[3][5] = {
+	std::string specials[4][5] = {
 		{
 			"1_A",
 			"1_B",
@@ -52,6 +52,13 @@ NinjaTrap::NinjaTrap(std::string name) : ClapTrap(name)
 			"3_C",
 			"3_D",
 			"3_E",
+		},
+		{
+			"4_A",
+			"4_B",
+			"4_C",
+			"4_D",
+			"4_E",
 		}
 	};
 
@@ -96,4 +103,10 @@ void
 NinjaTrap::ninjaShoebox(NinjaTrap &target)
 {
 	std::cout << this->_name << ": attacked a NinjaTrap named " << target.getName() << " with " << this->_specials[2][rand() % 5] << "." << std::endl;
+}
+
+void
+NinjaTrap::ninjaShoebox(ClapTrap &target)
+{
+	std::cout << this->_name << ": attacked a ClapTrap named " << target.getName() << " with " << this->_specials[3][rand() % 5] << "." << std::endl;
 }

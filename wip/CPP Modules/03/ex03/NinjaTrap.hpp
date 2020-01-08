@@ -22,7 +22,7 @@
 class NinjaTrap : public ClapTrap
 {
 	private:
-		std::string _specials[3][5];
+		std::string _specials[4][5];
 
 	public:
 		NinjaTrap(void);
@@ -36,6 +36,7 @@ class NinjaTrap : public ClapTrap
 		void ninjaShoebox(FragTrap &target);
 		void ninjaShoebox(ScavTrap &target);
 		void ninjaShoebox(NinjaTrap &target);
+		void ninjaShoebox(ClapTrap &target);
 };
 
 #endif /* NINJATRAP_HPP_ */
