@@ -1,4 +1,4 @@
-ARG VERSION=latest
+ARG VERSION=buster
 
 FROM debian:$VERSION
 ENV AUTHOR=ecaceres
