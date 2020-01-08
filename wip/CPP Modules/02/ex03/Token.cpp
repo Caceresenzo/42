@@ -26,6 +26,15 @@ free_nothing(void *content)
 	(void)content;
 }
 
+Token::Token(void)
+{
+	this->kind = kind_operator;
+	this->value = (void *)(long)'+';
+	this->position = 0;
+
+	this->converted = false;
+}
+
 Token::Token(char operatorChar, size_t positionInString)
 {
 	this->kind = kind_operator;
@@ -100,6 +109,21 @@ Token::~Token(void)
 			break ;
 		}
 	}
+}
+
+Token &
+Token::operator =(const Token &other)
+{
+	if (this != &other)
+	{
+		this->kind = other.kind;
+		this->value = other.value;
+		this->position = other.position;
+
+		this->converted = other.converted;
+	}
+
+	return (*this);
 }
 
 Token **
@@ -220,15 +244,6 @@ Token::asArrayList(void)
 	}
 
 	return (NULL);
-}
-
-Token *
-Token::duplicate(void)
-{
-	Token *token = new Token((Fixed *)this->value, this->position);
-	token->converted = this->converted;
-
-	return (token);
 }
 
 size_t

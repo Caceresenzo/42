@@ -19,6 +19,28 @@ Evaluator::Evaluator(void)
 	this->errorReason = "None";
 }
 
+Evaluator::Evaluator(const Evaluator &other)
+{
+	*this = other;
+}
+
+Evaluator::~Evaluator(void)
+{
+	return ;
+}
+
+Evaluator &
+Evaluator::operator =(const Evaluator &other)
+{
+	if (this != &other)
+	{
+		this->problemPosition = other.problemPosition;
+		this->errorReason = other.errorReason;
+	}
+
+	return (*this);
+}
+
 Fixed
 Evaluator::evaluate(Token *tokens[], size_t position)
 {

@@ -28,7 +28,13 @@ class Parser
 		std::string errorReason;
 
 	public:
+		Parser(void);
 		Parser(Token **tokens);
+		Parser(const Parser &other);
+
+		~Parser(void);
+
+		Parser &operator =(const Parser &other);
 
 		bool parse(void);
 

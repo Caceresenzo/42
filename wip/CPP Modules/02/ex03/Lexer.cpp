@@ -18,6 +18,14 @@
 
 #define ERR_CHECK if (error) { return ; }
 
+Lexer::Lexer(void)
+{
+	this->expression = "";
+	this->index = 0;
+	this->depth = 0;
+	this->error = false;
+};
+
 Lexer::Lexer(std::string expression)
 {
 	this->expression = expression;
@@ -25,6 +33,30 @@ Lexer::Lexer(std::string expression)
 	this->depth = 0;
 	this->error = false;
 };
+
+Lexer::Lexer(const Lexer &other)
+{
+	*this = other;
+}
+
+Lexer::~Lexer(void)
+{
+	return ;
+}
+
+Lexer &
+Lexer::operator =(const Lexer &other)
+{
+	if (this != &other)
+	{
+		this->expression = other.expression;
+		this->index = other.index;
+		this->depth = other.depth;
+		this->error = other.error;
+	}
+
+	return (*this);
+}
 
 char
 Lexer::eat(void)

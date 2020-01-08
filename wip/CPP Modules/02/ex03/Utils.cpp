@@ -12,6 +12,28 @@
 
 #include "Utils.hpp"
 
+Utils::Utils(void)
+{
+	return ;
+}
+
+Utils::Utils(const Utils &other)
+{
+	*this = other;
+}
+
+Utils::~Utils(void)
+{
+	return ;
+}
+
+Utils &
+Utils::operator =(const Utils &other)
+{
+	(void)other;
+	return (*this);
+}
+
 bool
 Utils::isOperator(char c)
 {

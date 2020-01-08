@@ -26,6 +26,11 @@ class Evaluator
 
 	public:
 		Evaluator(void);
+		Evaluator(const Evaluator &other);
+
+		~Evaluator(void);
+
+		Evaluator &operator =(const Evaluator &other);
 
 		Fixed evaluate(Token *tokens[], size_t position = 1);
 		Fixed evaluate(Token *token);

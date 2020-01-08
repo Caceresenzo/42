@@ -34,7 +34,13 @@ class Lexer
 		float readFloat(void);
 
 	public:
+		Lexer(void);
 		Lexer(std::string expression);
+		Lexer(const Lexer &other);
+
+		~Lexer(void);
+
+		Lexer &operator =(const Lexer &other);
 
 		bool analyze(t_list *&lst);
 

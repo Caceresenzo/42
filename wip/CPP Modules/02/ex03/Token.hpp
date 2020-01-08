@@ -30,12 +30,16 @@ class Token
 		bool converted;
 
 	public:
+		Token(void);
 		Token(char operatorChar, size_t positionInString);
 		Token(Fixed *number, size_t positionInString);
 		Token(t_list *lst, size_t positionInString);
 		Token(Token **tokens, size_t positionInString);
+		Token(const Token &other);
 
 		~Token(void);
+
+		Token &operator =(const Token &other);
 
 		Token **convertListToArray(void);
 
@@ -47,8 +51,6 @@ class Token
 		Fixed *asFixed(void);
 		t_list *asList(void);
 		Token **asArrayList(void);
-
-		Token *duplicate(void);
 
 		static size_t size(Token **array);
 };

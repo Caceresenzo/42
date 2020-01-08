@@ -16,6 +16,13 @@
 class Utils
 {
 	public:
+		Utils(void);
+		Utils(const Utils &other);
+
+		~Utils(void);
+
+		Utils &operator =(const Utils &other);
+
 		static bool isOperator(char c);
 		static bool isDigit(char c);
 		static bool isParenthesis(char c);

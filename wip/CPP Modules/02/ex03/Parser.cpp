@@ -12,12 +12,43 @@
 
 #include "Parser.hpp"
 
+Parser::Parser(void)
+{
+	this->tokens = NULL;
+
+	this->problematicToken = NULL;
+	this->errorReason = "None";
+}
+
 Parser::Parser(Token **tokens)
 {
 	this->tokens = tokens;
 
 	this->problematicToken = NULL;
 	this->errorReason = "None";
+}
+
+Parser::Parser(const Parser &other)
+{
+	*this = other;
+}
+
+Parser::~Parser(void)
+{
+	return ;
+}
+
+Parser &
+Parser::operator =(const Parser &other)
+{
+	if (this != &other)
+	{
+		this->tokens = other.tokens;
+		this->problematicToken = other.problematicToken;
+		this->errorReason = other.errorReason;
+	}
+
+	return (*this);
 }
 
 bool

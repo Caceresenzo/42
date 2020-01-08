@@ -22,14 +22,17 @@ P_NAME		= ${NAME}
 	${COMPILER} ${FLAGS} -c $< -o ${<:.cpp=.o}
 
 $(NAME): ${OBJS}
+	make -C libft
 	${COMPILER} ${FLAGS} ./libft/libft.a  $(OBJS) -o $(NAME)
 
 all: $(NAME)
     
 fclean: clean
+	make fclean -C libft
 	$(RM) $(NAME)
     
 clean:
+	make clean -C libft
 	$(RM) -f $(OBJS) $(OBJS_B)
     
 re: fclean all
