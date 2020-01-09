@@ -19,11 +19,8 @@ void
 	if (engine->map->render_minimap && BONUS)
 		minimap_render(engine->canvas, &(engine->player), engine->map);
 	if (engine->ctx.graphics)
-		mlx_put_image_to_window_scale(engine->ctx.mlx, engine->ctx.win,
-							engine->canvas->ptr,
-							0, 0, engine->ctx.width, engine->ctx.height,
-							0, 0, engine->ctx.w_dim.w, engine->ctx.w_dim.h,
-							0xFFFFFF);
+		mlx_put_image_to_window(engine->ctx.mlx, engine->ctx.win,
+							engine->canvas->ptr, 0, 0);
 }
 
 void

@@ -124,7 +124,6 @@ typedef struct		s_mlx_context
 {
 	void			*mlx;
 	void			*win;
-	t_dim2i			w_dim;
 	int				width;
 	int				height;
 	int				graphics;
@@ -326,14 +325,6 @@ void				fps_counter_end(void);
 void				fps_counter_start(void);
 int					fps_counter_get(void);
 double				fps_counter_get_tick(void);
-
-int					mlx_put_image_to_window_scale(void *mlx_ptr, void *win_ptr,
-													void *img_ptr,
-													int sx, int sy,
-													int sw, int sh,
-													int dx, int dy,
-													int dw, int dh,
-													unsigned int color);
 
 void				minimap_render(t_image *canvas, t_player *player,
 									t_map *map);
