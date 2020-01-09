@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_vprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -13,14 +13,14 @@
 #include "ft_printf.h"
 
 int
-	ft_printf(const char *format, ...)
+	ft_vdprintf(int fd, const char *format, va_list args)
 {
 	t_ft_printf_settings settings;
 
 	settings.format = format;
 	settings.written = 0;
-	settings.fd = FT_PRINTF_FD;
-	va_start(settings.parameters, format);
+	settings.fd = fd;
+	va_copy(settings.parameters, args);
 	ft_printf_handle(&settings);
 	va_end(settings.parameters);
 	return (settings.written);

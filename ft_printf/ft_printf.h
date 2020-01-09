@@ -57,6 +57,8 @@ typedef struct	s_ft_printf_bundle
 }				t_ft_printf_bundle;
 
 int				ft_dprintf(int fd, const char *format, ...);
+int				ft_vprintf(const char *format, va_list args);
+int				ft_vdprintf(int fd, const char *format, va_list args);
 int				ft_printf(const char *format, ...);
 
 void			ft_printf_handle(t_ft_printf_settings *settings);
