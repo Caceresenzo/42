@@ -39,7 +39,7 @@
 # define MAX_WINDOW_HEIGHT			1440
 
 # define CUB3D_FILE_EXTENSION		".cub"
-# define CUB3D_USAGE				"usage: ./cub3d <map> [-save]"
+# define CUB3D_USAGE				"usage: ./Cub3D <map> [-save]"
 
 # define EXPORT_FILE				"Cub3D.bmp"
 
