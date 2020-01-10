@@ -36,9 +36,9 @@ static char
 	else if (arg_cmp(key, P_SPRITE, 2))
 		r = (map_loader_set_sprite_texture(eng, map, path));
 	else if (arg_cmp(key, P_FLOOR_COLOR, 2))
-		r = (map_loader_set_color(key, split[1], &map->floor_color));
+		r = (map_loader_set_color(key, split[1], &map->floor_color, "FLOOR"));
 	else if (arg_cmp(key, P_ROOF_COLOR, 2))
-		r = (map_loader_set_color(key, split[1], &map->roof_color));
+		r = (map_loader_set_color(key, split[1], &map->roof_color, "ROOF"));
 	else
 		r = (map_loader_set_wall_texture(eng, map, key, path));
 	return (r);

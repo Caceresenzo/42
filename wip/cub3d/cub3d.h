@@ -246,7 +246,7 @@ t_map				*map_load(t_engine *eng, char *path);
 
 int					map_loader_check_file_extension(char *path);
 char				*map_loader_set_color(char *key, char *colors,
-											int *color_ptr);
+											int *color_ptr, char *name);
 char				*map_loader_set_resolution(char *key, char **resolutions,
 											t_engine *eng);
 char				*map_loader_set_sprite_texture(t_engine *eng, t_map *map,
@@ -279,6 +279,8 @@ t_game_object		*map_get_object_at(t_map *map, int x, int y);
 
 void				map_dump_object(t_game_object object);
 void				map_dump(t_map *map);
+
+char				*map_side_to_str(int side);
 
 char				*player_initialize(t_engine *engine);
 

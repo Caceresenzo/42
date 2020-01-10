@@ -36,26 +36,31 @@ static void
 }
 
 char
-	*map_loader_set_color(char *key, char *colors, int *color_ptr)
+	*map_loader_set_color(char *key, char *colors, int *color_ptr, char *name)
 {
 	char	**rgb;
 	int		ints[3];
 	size_t	length;
 	char	*error;
 
+	if (*color_ptr != -1)
+		return (ft_strjoin("Already assigned color: ", name));
 	rgb = ft_split(colors, ',');
 	length = ft_split_length(rgb);
 	error = NULL;
 	if (length != 3)
-		return (ft_strjoin("Invalid RGB color format for config key: ", key));
-	ints[0] = ft_atoi(rgb[0]);
-	ints[1] = ft_atoi(rgb[1]);
-	ints[2] = ft_atoi(rgb[2]);
-	ft_split_free(&rgb);
-	i_map_check_color_range(key, ints, INDEX_RED, &error);
-	i_map_check_color_range(key, ints, INDEX_GREEN, &error);
-	i_map_check_color_range(key, ints, INDEX_BLUE, &error);
-	if (error == NULL)
-		*color_ptr = color_assemble(ints[0], ints[1], ints[2]);
+		error = ft_strjoin("Invalid RGB color format for config key: ", key);
+	else
+	{
+		ints[0] = ft_atoi(rgb[0]);
+		ints[1] = ft_atoi(rgb[1]);
+		ints[2] = ft_atoi(rgb[2]);
+		ft_split_free(&rgb);
+		i_map_check_color_range(key, ints, INDEX_RED, &error);
+		i_map_check_color_range(key, ints, INDEX_GREEN, &error);
+		i_map_check_color_range(key, ints, INDEX_BLUE, &error);
+		if (error == NULL)
+			*color_ptr = color_assemble(ints[0], ints[1], ints[2]);
+	}
 	return (error);
 }

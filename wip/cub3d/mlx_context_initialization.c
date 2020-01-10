@@ -18,6 +18,8 @@ void
 	if (!(context->mlx = mlx_init()))
 		return (NULL);
 	context->graphics = 0;
+	context->width = -1;
+	context->height = -1;
 	return (context);
 }
 

@@ -42,6 +42,8 @@ char
 	length = ft_split_length(resolutions);
 	if (length != 2)
 		return (ft_strjoin("Invalid resolution format for config key: ", key));
+	if (eng->ctx.width != -1)
+		return (e("Already assigned resolution"));
 	ints[0] = ft_atoi(resolutions[0]);
 	ints[1] = ft_atoi(resolutions[1]);
 	i_map_check_resolution_range(key, ints, INDEX_WIDTH, &error);

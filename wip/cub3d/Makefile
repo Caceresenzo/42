@@ -67,6 +67,7 @@ SRCS	=	bmp_encoder.c \
 			map_loader_set_grid.c \
 			map_loader_set_resolution.c \
 			map_loader_set_texture.c \
+			map_side_to_str.c \
 			map_sealing_checker.c \
 			map_utils.c \
 			minimap_renderer.c \
