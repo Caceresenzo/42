@@ -1,5 +1,5 @@
 reset
-rm -f *.bmp
+rm -rf ./tests/outputs/*
 
 executable=Cub3D
 
@@ -7,6 +7,13 @@ g_test_count=0
 g_test_success_count=0
 g_bmp_files_present=0
 g_norm_passed=1
+
+function category()
+{
+	title=$1
+	
+	echo "\n\033[0G\033[0;97m$title\033[0m\n"
+}
 
 function norm()
 {
@@ -100,16 +107,22 @@ function check()
 			printf "\033[90G%s\033[94G\033[0;31m %s\033[0m" "❌" "$err"
 			printf "\033[110G[expected %d, but got %d]\033[0m\n" "$shoud_exit_with" "$signal"
 		fi
+		if [[ $flags == *"-save"* ]]; then
+			mv Cub3D.bmp ./tests/outputs/$(echo "$file" | tr '/' '_' | sed 's/\._/.\//g')_$(python3 -c 'from time import time; print(int(round(time() * 1000)), end="");').bmp
+		fi
 	done
 }
 
 function check_bmp_files()
 {
-	count=$(ls -l *.bmp | wc -l | tr -d " ")
+	printf "\033[4G%s\033[10G\033[0;36mListing..." "🔎"
+	
+	count=$(ls -l ./tests/outputs/*.bmp | wc -l | tr -d " ")
 	if [ $count -ge 1 ]
 	then
 		g_bmp_files_present=1
 		printf "\033[90G%s\033[94G\033[0;32m %s\033[0m\n" "✅"
+		open ./tests/outputs/*.bmp
 	else
 		printf "\033[90G%s\033[94G\033[0;31m %s\033[0m\n" "❌"
 	fi
@@ -126,19 +139,22 @@ function show_final_score()
 	fi
 }
 
-echo "\n\033[0G\033[0;97mChecking norm\033[0m\n"
+category "Checking norm"
 norm
 
-echo "\n\033[0G\033[0;97mTesting valid map\033[0m\n"
+category "Testing valid map"
 check "./tests/maps/scene_valid_*" 0 "" 15 true
 
-echo "\n\033[0G\033[0;97mTesting valid map (with -save flag)\033[0m\n"
+category "Testing valid map (with -save flag)"
 check "./tests/maps/scene_valid_*" 0 "-save" 80 true
 
-printf "\033[4G%s\033[10G\033[0;36mChecking BMP files..." "🔎"
+category "Testing valid map (with -save flag AND garbage)"
+check "./tests/maps/scene_valid_*" 0 "-save hello i am the garbage" 80 true
+
+category "Checking BMP files"
 check_bmp_files
 
-echo "\n\033[0G\033[0;97mTesting invalid map\033[0m\n"
+category "Testing invalid map"
 check "/i/dont/exists ./tests/maps/scene_broken*.cub" 1 "" 15 false
 
 echo ""
