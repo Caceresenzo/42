@@ -22,6 +22,8 @@ void
 	encoder->rgb_size = encoder->height *
 							(3 * encoder->width + encoder->extra_bytes);
 	encoder->header_info_size = 40;
+	encoder->row_bytes = 3 * encoder->width + encoder->extra_bytes;
+	encoder->buffer_row_bytes = image->stride;
 }
 
 void

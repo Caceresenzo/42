@@ -41,6 +41,8 @@ typedef struct		s_bmp_encoder
 	int				rgb_size;
 	int				header_info_size;
 	t_bmp_header	header;
+	size_t			row_bytes;
+	size_t			buffer_row_bytes;
 }					t_bmp_encoder;
 
 int					bmp_encode(int fd, t_image *image);

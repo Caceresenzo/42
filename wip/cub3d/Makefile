@@ -25,6 +25,7 @@ SRCS	=	bmp_encoder.c \
 			buffer_blit.c \
 			buffer_create.c \
 			buffer_destroy.c \
+			buffer_fill.c \
 			buffer_write_ascii.c \
 			buffer_write_int_32_le.c \
 			buffer_write_uint_16_le.c \

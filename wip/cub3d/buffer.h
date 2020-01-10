@@ -39,4 +39,7 @@ size_t			buffer_write_int_32_le(t_buffer *buffer, int value,
 size_t			buffer_write_uint_16_le(t_buffer *buffer, unsigned int value,
 									size_t offset);
 
+void			buffer_fill(t_buffer *buffer, unsigned char value,
+							size_t start, size_t end);
+
 #endif
