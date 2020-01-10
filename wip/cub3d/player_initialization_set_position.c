@@ -23,7 +23,7 @@ static char
 	{
 		if (*found)
 			return (e("Multiple player"));
-		player->pos = (t_vec2d) { vec->x, vec->y };
+		player->pos = (t_vec2d) { vec->x + 0.5, vec->y + 0.5 };
 		if ((error = player_init_set_direction(player, obj->data)))
 			return (error);
 		*found = 1;
