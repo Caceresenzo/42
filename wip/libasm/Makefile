@@ -12,8 +12,7 @@
 
 PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-NAME	=   libasm
-LIB		=   $(NAME).a
+NAME	=   libasm.a
 SRCS	=	ft_strlen.s \
 			ft_strcpy.s \
 			ft_strcmp.s \
@@ -34,12 +33,12 @@ LIBC	= ar -rcs
 	${NASM} -lc -f macho64 $< -o $@ 
 
 $(NAME): ${OBJS}
-	${LIBC} $(LIB) $(OBJS)
+	${LIBC} $(NAME) $(OBJS)
 
 all: $(NAME)
 
 bonus: ${OBJS} $(OBJS_B)
-	${LIBC} $(LIB) $(OBJS) $(OBJS_B)
+	${LIBC} $(NAME) $(OBJS) $(OBJS_B)
 
 clean:
 	rm -f $(NAME) $(OBJS) $(OBJS_B)
@@ -49,7 +48,7 @@ fclean: clean
     
 re: fclean all
 
-test: re bonus
+test: fclean bonus
 	gcc -include libasm.h debug/*.c tests/*.c tests/*/*.c $(OBJS) $(OBJS_B) -g3 -o test -D NOTIFY=1 -D MORE_DEBUG=0
 	./test || true
 #	gcc -include libasm.h tests/*.c $(OBJS) -g3 -o test -D NOTIFY=0
