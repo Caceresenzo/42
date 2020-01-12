@@ -22,7 +22,7 @@ static void
 	list_generate_sized((t_list **)list, size);
 	result = ft_list_size(list[0]);
 	list_display_header();
-	list_display_result(name, (void *) result, (void *) size, LIST_AS_INT);
+	list_display_result(name, (void *)result, (void *)size, LIST_AS_INT);
 	printf("\n");
 }
 

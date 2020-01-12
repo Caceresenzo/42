@@ -28,7 +28,7 @@ typedef struct	s_list
 }				t_list;
 
 extern void		*malloc(size_t size);
-extern void		*free(void *ptr);
+extern void		free(void *ptr);
 
 extern size_t	ft_strlen(const char *s);
 extern char		*ft_strcpy(char *dst, const char *src);

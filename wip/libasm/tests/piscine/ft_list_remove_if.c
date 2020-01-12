@@ -18,12 +18,12 @@ void
 {
 	t_list	*removed;
 
-	if (begin_list == 0 || (*begin_list == 0) || (*begin_list)->next == 0)
+	if (begin_list == 0 || (*begin_list == 0))
 		return ;
-	if ((*cmp)((*begin_list)->next->data, data_ref) == 0)
+	if ((*cmp)((*begin_list)->data, data_ref) == 0)
 	{
-		removed = (*begin_list)->next;
-		(*begin_list)->next = removed->next;
+		removed = *begin_list;
+		*begin_list = removed->next;
 		(*free_fct)(removed->data);
 		free(removed);
 		ft_list_remove_if_2(begin_list, data_ref, cmp, free_fct);

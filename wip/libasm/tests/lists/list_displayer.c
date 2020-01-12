@@ -45,23 +45,23 @@ void
 void
 	list_display_result(char *name, void *a, void *b, int as)
 {
-	char	*result;
+	char	*rslt;
 
 	if (as == LIST_AS_STRING)
-		result = list_get_result_word(strcmp((char *)a, (char *)b) == 0);
+		rslt = list_get_result_word(strcmp((char *)a, (char *)b) == 0);
 	else if (as == LIST_AS_INT)
-		result = list_get_result_word(a == b);
+		rslt = list_get_result_word(a == b);
 	else if (as == LIST_AS_INT_FROM_PTR)
-		result = list_get_result_word(*((int *)a) == *((int *)b));
+		rslt = list_get_result_word(*((int *)a) == *((int *)b));
 	else
 	{
 		printf("unknown type.\n");
 		return ;
 	}
 	if (as == LIST_AS_STRING)
-		printf(PRE" | %-14s | %40s %s\n", name, result, (char *)a, (char *)b);
+		printf(PRE" | %-14s | %40s %s\n", name, rslt, (char *)a, (char *)b);
 	else if (as == LIST_AS_INT)
-		printf(PRE" | %-14s | %40d %d\n", name, result, (int)a, (int)b);
+		printf(PRE" | %-14s | %40d %d\n", name, rslt, (int)a, (int)b);
 	else if (as == LIST_AS_INT_FROM_PTR)
-		printf(PRE" | %-14s | %40d %d\n", name, result, *((int *)a), *((int *)b));
+		printf(PRE" | %-14s | %40d %d\n", name, rslt, *((int *)a), *((int *)b));
 }

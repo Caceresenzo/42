@@ -18,7 +18,6 @@ void
 	list_generate_sized(list, 26);
 }
 
-
 void
 	list_generate_sized(t_list **list, size_t size)
 {
