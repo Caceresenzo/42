@@ -27,7 +27,7 @@ SRCS_B	=	ft_atoi_base.s \
 			ft_list_remove_if.s
 OBJS	=	$(SRCS:.s=.o)
 OBJS_B	=	$(SRCS_B:.s=.o)
-NASM	= /usr/local/bin/nasm
+NASM	= nasm
 LIBC	= ar -rcs
 
 .s.o:
@@ -50,11 +50,11 @@ fclean: clean
 re: fclean all
 
 test: re bonus
-	gcc -include libasm.h debug/*.c tests/*.c tests/*/*.c $(OBJS) $(OBJS_B) -g3 -o test -D NOTIFY=1
-	./test
+	gcc -include libasm.h debug/*.c tests/*.c tests/*/*.c $(OBJS) $(OBJS_B) -g3 -o test -D NOTIFY=1 -D MORE_DEBUG=0
+	./test || true
 #	gcc -include libasm.h tests/*.c $(OBJS) -g3 -o test -D NOTIFY=0
 #	./test
 #	@echo ""
 #	./test | hexdump
 
-.PHONY: all bonus clean fclean re
+.PHONY: all bonus clean fclean re test

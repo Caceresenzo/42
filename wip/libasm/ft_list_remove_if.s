@@ -27,7 +27,7 @@ _ft_list_remove_if:
 	mov		QWORD [rbp - 32], rcx		; Storing in [ 24 to 32 ] <- arg4: (void (*)(void *)) free_fct
 
 	mov		QWORD [rbp - 24], 0			; Storing in [ 32 to 40 ] <- 'removed' = NULL
-	mov		QWORD [rbp - 16], 0			; Storing in [ 40 to 48 ] <- 'next' = NULL
+	mov		QWORD [rbp - 16], 0			; Storing in [ 40 to 48 ] <- 'next' = NULL		
 
 	mov		rax, QWORD [rbp - 56]		; rax = [ 0 to 8 ] = 'begin_list'
 	cmp		rax, 0						; Condition
@@ -37,11 +37,7 @@ _ft_list_remove_if:
 	cmp		rax, 0						; Condition
 	je		.return						; if (*begin_list == NULL): goto return
 
-	mov		rax, QWORD [rax + 8]		; rax = *'begin_list'->next
-	cmp		rax, 0						; Condition
-	je		.return						; if (*'begin_list'->next == NULL): goto return
-
-	mov		rax, [rax + 0]				; rax = *'begin_list'->next->data
+	mov		rax, QWORD [rax + 0]		; rax = *'begin_list'->data
 	mov		rdi, rax					; Passing parameter: 'arg1'
 	
 	mov		rax, QWORD [rbp - 48]		; rax = [ 8 to 16 ] = 'data_ref'
@@ -64,18 +60,16 @@ _ft_list_remove_if:
 	.remove:
 		mov		rax, QWORD [rbp - 56]	; rax = [ 0 to 8 ] = 'begin_list'
 		mov		rax, QWORD [rax]		; rax = *'begin_list'
-		mov		rax, QWORD [rax + 8]	; rax = *'begin_list->next'
 
-		mov		QWORD [rbp - 24], rax	; Storing in [ 32 to 40 ] <- 'removed' = *'begin_list->next'
+		mov		QWORD [rbp - 24], rax	; Storing in [ 32 to 40 ] <- 'removed' = *'begin_list'
 
 		mov		rax, QWORD [rbp - 56]	; rax = [ 0 to 8 ] = 'begin_list'
-		mov		rax, QWORD [rax]		; rax = *'begin_list'
 		mov		rdx, rax				; rdx = rax
 		
 		mov		rax, QWORD [rbp - 24]	; rax = [ 32 to 40 ] = 'removed'
 		mov		rax, QWORD [rax + 8]	; rax = 'removed'->next
 
-		mov		QWORD [rdx + 8], rax	; Storing in [rdx + 8] <- *'begin_list'->next = 'removed'->next
+		mov		QWORD [rdx], rax		; Storing in [rdx] <- *'begin_list' = 'removed'->next
 		
 		mov		rax, QWORD [rbp - 24]	; rax = [ 32 to 40 ] = 'removed'
 		mov		rax, QWORD [rax + 0]	; rax = 'removed'->data

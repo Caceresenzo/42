@@ -29,6 +29,10 @@
 # define LIST_AS_INT 2
 # define LIST_AS_INT_FROM_PTR 3
 
+# ifndef MORE_DEBUG
+#  define MORE_DEBUG 0
+# endif
+
 extern char	*g_strings[];
 
 int		ft_atoi_base_2(char *str, char *base);
