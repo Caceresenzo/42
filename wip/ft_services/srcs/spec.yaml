@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ft-services
+  labels:
+    app: ft-services
+spec:
+  volumes:
+   - name: nginx-storage
+     emptyDir: {}
+  containers:
+  - name: instrumenter
+    image: alpine
+    volumeMounts:
+    - name: nginx-storage
+      mountPath: /www
+    command: ["/bin/sh"]
+    args:
+      - "-c"
+      - >
+        while true; do
+          echo "<pre>" > /www/listing.html;
+          find /www -type d -exec echo {} \; -exec ls -lA {} \; -exec echo "" \; >> /www/listing.html;
+          echo "<br><hr>" >> /www/listing.html;
+          sleep 1;
+        done
+  - name: nginx
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+      hostPort: 8080
+      name: http
+    volumeMounts:
+     - mountPath: "/usr/share/nginx/html"
+       name: nginx-storage
+  - name: ftps
+    image: fauria/vsftpd
+    ports:
+    - containerPort: 20
+      hostPort: 20
+      name: ftp-data
+    - containerPort: 21
+      hostPort: 21
+      name: ftp
+    - containerPort: 21100
+      hostPort: 21100
+      name: ftp-pasv-21100
+    - containerPort: 21101
+      hostPort: 21101
+      name: ftp-pasv-21101
+    - containerPort: 21102
+      hostPort: 21102
+      name: ftp-pasv-21102
+    - containerPort: 21103
+      hostPort: 21103
+      name: ftp-pasv-21103
+    - containerPort: 21104
+      hostPort: 21104
+      name: ftp-pasv-21104
+    - containerPort: 21105
+      hostPort: 21105
+      name: ftp-pasv-21105
+    - containerPort: 21106
+      hostPort: 21106
+      name: ftp-pasv-21106
+    - containerPort: 21107
+      hostPort: 21107
+      name: ftp-pasv-21107
+    - containerPort: 21108
+      hostPort: 21108
+      name: ftp-pasv-21108
+    - containerPort: 21109
+      hostPort: 21109
+      name: ftp-pasv-21109
+    - containerPort: 21110
+      hostPort: 21110
+      name: ftp-pasv-21110
+    volumeMounts:
+     - mountPath: "/home/vsftpd/user"
+       name: nginx-storage
+    env:
+    - name: FTP_USER
+      value: "user"
+    - name: FTP_PASS
+      value: "pass1234"
+    - name: PASV_ADDRESS
+      value: "192.168.99.108"
+    - name: PASV_MIN_PORT
+      value: "21100"
+    - name: PASV_MAX_PORT
+      value: "21110"
