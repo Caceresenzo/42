@@ -16,6 +16,4 @@ minikube start
 
 minikube dashboard &
 
-kubectl apply -f srcs/spec.yaml
-
-sh srcs/nginx/setup-index.sh
+kubectl apply -k srcs

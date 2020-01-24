@@ -1,0 +1,60 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      containers:
+        - name: wordpress
+          image: wordpress:fpm-alpine
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql
+            - name: WORDPRESS_DB_USER
+              value: "root"
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-passwords
+                  key: root
+            - name: WORDPRESS_DEBUG
+              value: "1"
+          ports:
+           - containerPort: 9000
+          volumeMounts:
+          - name: wordpress-persistent-storage
+            mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pv-claim
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - name: wordpress-http
+      protocol: TCP
+      port: 5050
+      targetPort: 9000
+  selector:
+    app: wordpress
+    tier: frontend
+  type: NodePort
