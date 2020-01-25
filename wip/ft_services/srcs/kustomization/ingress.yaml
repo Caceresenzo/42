@@ -4,7 +4,11 @@ metadata:
   name: ingress
   annotations:
     INGRESS.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
 spec:
+  tls:
+  - secretName: https-tls
   backend:
     serviceName: nginx
     servicePort: 80

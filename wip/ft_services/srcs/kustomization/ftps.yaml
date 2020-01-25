@@ -66,7 +66,7 @@ spec:
               name: ftps-passwords
               key: root
         - name: PASV_ADDRESS
-          value: "192.168.99.100"
+          value: "__ip__"
         - name: PASV_MIN_PORT
           value: "21100"
         - name: PASV_MAX_PORT
@@ -78,3 +78,5 @@ spec:
       - name: ftps-persistent-storage
         persistentVolumeClaim:
           claimName: ftps-pv-claim
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10

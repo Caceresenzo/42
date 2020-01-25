@@ -78,6 +78,10 @@ data:
         root /var/www/html;
         index index.php;
         autoindex on;
+
+        location /grafana/ {
+            proxy_pass "http://grafana:3000/";
+        }
         
         try_files $uri $uri/ =404;
 

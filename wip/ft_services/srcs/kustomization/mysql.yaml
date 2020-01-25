@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:5.6
+          image: woahbase/alpine-mysql
           env:
-            - name: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_ROOT_PWD
               valueFrom:
                 secretKeyRef:
                   name: mysql-passwords
                   key: root
-            - name: MYSQL_DATABASE
+            - name: MYSQL_USER_DB
               value: "wordpress"
           volumeMounts:
           - name: mysql-persistent-storage

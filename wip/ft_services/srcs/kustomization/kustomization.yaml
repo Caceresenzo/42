@@ -5,6 +5,13 @@ secretGenerator:
 - name: ftps-passwords
   literals:
   - root=password
+- name: grafana-passwords
+  literals:
+  - admin=password
+- name: influxdb-passwords
+  literals:
+  - root=password
+  - telegraf=password
 resources:
   - storage.yaml
   - ingress.yaml
@@ -13,3 +20,6 @@ resources:
   - wordpress.yaml
   - mysql.yaml
   - phpmyadmin.yaml
+  - grafana.yaml
+  - influxdb.yaml
+  - telegraf.yaml
