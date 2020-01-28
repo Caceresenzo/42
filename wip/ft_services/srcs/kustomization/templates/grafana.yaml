@@ -32,14 +32,8 @@ spec:
           mountPath: /etc/grafana/grafana.ini
           subPath: grafana.ini
         - name: database
-          mountPath: /grafana.db
+          mountPath: /var/lib/grafana/grafana.db
           subPath: grafana.db
-        command: [ "/bin/sh" ]
-        args:
-         - '-c'
-         - >
-           cp /grafana.db /var/lib/grafana/grafana.db;
-           /run.sh;
       volumes:
       - name: config
         configMap:
@@ -47,12 +41,6 @@ spec:
           items:
           - key: config
             path: grafana.ini
-      - name: database
-        configMap:
-          name: grafana-database
-          items:
-          - key: grafana.db
-            path: grafana.db
       restartPolicy: Always
       terminationGracePeriodSeconds: 5
 ---
@@ -75,6 +63,9 @@ metadata:
   name: grafana-config
   labels:
     tier: backend
+binaryData:
+  database : >-
+    __b64__database__
 data:
   config : |
     [server]

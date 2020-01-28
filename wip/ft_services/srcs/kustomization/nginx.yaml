@@ -25,6 +25,34 @@ spec:
             mountPath: /var/www/html/phpmyadmin
           - name: config
             mountPath: /etc/nginx/conf.d
+          ports:
+           - containerPort: 22
+           - containerPort: 80
+           - containerPort: 443
+          command: [ "/bin/sh" ]
+          args:
+           - '-c'
+           - >
+             echo "Installing OpenSSH";
+             apk add openssh;
+             
+             echo "Configuring SSHD";
+             ssh-keygen -b 521 -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -q -N "";
+             echo "HostKey /etc/ssh/ssh_host_ecdsa_key" >> /etc/ssh/sshd_config;
+             echo "PermitRootLogin yes" >> /etc/ssh/sshd_config;
+             echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config;
+             echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config;
+             echo "Welcome to ft-services NGINX container" > /etc/motd
+             
+             echo "Changing root password";
+             echo -e "password\npassword" | passwd;
+             
+             echo "Running NGINX and SSHD";
+             nginx;
+             /usr/sbin/sshd -D;
+             
+             echo "warning: SSHD hasn't been locking, locking with an infinite sleep loop";
+             while true; do sleep 100; done;
       volumes:
       - name: wordpress-persistent-storage
         persistentVolumeClaim:
@@ -49,6 +77,10 @@ metadata:
     app: nginx
 spec:
   ports:
+    - name: nginx-ssh
+      protocol: TCP
+      port: 22
+      targetPort: 22
     - name: nginx-http
       protocol: TCP
       port: 80

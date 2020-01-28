@@ -30,11 +30,14 @@ spec:
                secretKeyRef:
                  name: mysql-passwords
                  key: root
+         volumeMounts:
+         - name: wordpress-persistent-storage
+           mountPath: /var/www/html
          command: [ "/bin/sh" ]
          args:
           - '-c'
           - >
-            echo $(getent hosts api.wordpress.org) >> /etc/hosts;
+            #echo $(getent hosts api.wordpress.org) >> /etc/hosts2;
             
             cd /var/www/html;
             wp --version;

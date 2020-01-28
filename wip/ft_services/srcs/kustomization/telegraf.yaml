@@ -14,12 +14,13 @@ spec:
       labels:
         app: telegraf
     spec:
+      serviceAccountName: telegraf
       containers:
       - name: telegraf
         image: telegraf:alpine
         env:
         - name: INFLUXDB_DB
-          value: "kube-metrics"
+          value: "kube_metrics"
         - name: INFLUXDB_URL
           value: "http://influxdb:8086"
         - name: INFLUXDB_USER
@@ -51,6 +52,8 @@ metadata:
 data:
   config : |
     [global_tags]
+      env = "$ENV"
+    
     [agent]
       interval = "10s"
       round_interval = true
@@ -60,28 +63,43 @@ data:
       flush_interval = "10s"
       flush_jitter = "0s"
       precision = ""
-      debug = false
+      debug = true
       quiet = false
       logfile = ""
-      hostname = ""
       omit_hostname = true
+
     [[outputs.influxdb]]
+      timeout = "5s"
       urls = ["$INFLUXDB_URL"]
       database = "$INFLUXDB_DB"
       username = "$INFLUXDB_USER"
       password = "$INFLUXDB_USER_PASSWORD"
-    [[inputs.cpu]]
-      percpu = true
-      totalcpu = true
-      collect_cpu_time = false
-      report_active = false
-    [[inputs.disk]]
-      ignore_fs = ["tmpfs", "devtmpfs", "devfs", "overlay", "aufs", "squashfs"]
-    [[inputs.diskio]]
-    [[inputs.kernel]]
-    [[inputs.mem]]
-    [[inputs.processes]]
-    [[inputs.swap]]
-    [[inputs.system]]
-    [[inputs.netstat]]
-    [[inputs.net]]
+      user_agent = "telegraf_ki_k8s"
+      
+    [[outputs.file]]
+      files = ["stdout"] 
+      data_format = "influx"
+
+    [[inputs.kubernetes]]
+      url = "https://__ip__:10250"
+      insecure_skip_verify = true
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: telegraf
+  labels:
+    app: telegraf
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: telegraf
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: telegraf
+  namespace: default

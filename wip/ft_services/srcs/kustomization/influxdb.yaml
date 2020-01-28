@@ -21,7 +21,7 @@ spec:
         - containerPort: 8086
         env:
          - name: INFLUXDB_DB
-           value: "kube-metrics"
+           value: "kube_metrics"
          - name: INFLUXDB_ADMIN_ENABLED
            value: "true"
          - name: INFLUXDB_ADMIN_USER
