@@ -1,5 +1,14 @@
-#export GOINFRE=~/goinfre
-#export MINIKUBE_HOME=$GOINFRE/minikube
+export MAC_42=1
+
+if [[ $MAC_42 -eq 1 ]]
+then
+	export GOINFRE=~/goinfre
+	export MINIKUBE_HOME=$GOINFRE/minikube
+	
+	export SED_EXTRA="_"
+else
+	export SED_EXTRA=""
+fi
 
 export SOURCES=srcs
 
@@ -23,23 +32,26 @@ function redirect_minikube()
 
 	if [[ -d "$to" ]]
 	then
-		echo "Using redirected MINIKUBE home"
+		printf "Using redirected MINIKUBE home\n"
 	else
-		echo "Redirecting MINIKUBE home directory... ($to)"
+		printf "Redirecting MINIKUBE home directory... ($to)\n"
 		mkdir "$to"
 	fi
 }
 
 function start_minikube()
 {
-	#redirect_minikube
+	if [[ $MAC_42 -eq 1 ]]
+	then
+		redirect_minikube $MINIKUBE_HOME
+	fi
 	
 	printf "$FT_SERVICES_PREFIX Check current minikube status... "
 	minikube status | grep -q Running
 	if [[ $? -ne "0" ]]
 	then
 		printf "\e[95mNOT RUNNING\e[0m\n"
-		echo "$FT_SERVICES_PREFIX Starting now..."
+		printf "$FT_SERVICES_PREFIX Starting now...\n"
 	
 		minikube config set vm-driver virtualbox
 		#minikube start --memory 3000 --extra-config=kubelet.authentication-token-webhook=true --extra-config=kubelet.authorization-mode=AlwaysAllow
@@ -48,7 +60,7 @@ function start_minikube()
 		
 		if [[ "$?" -ne "0" ]]
 		then
-			echo "$FT_SERVICES_PREFIX Failed to start minikube (return code != 0)"
+			printf "$FT_SERVICES_PREFIX Failed to start minikube (return code != 0)\n"
 		
 			exit 1
 		fi
@@ -59,7 +71,7 @@ function start_minikube()
 	pids=$(ps aux | grep "[m]inikube dashboard" | cut -c10-15 | tr -d ' ')
 	if [[ "$pids" != "" ]]
 	then
-		echo "$FT_SERVICES_PREFIX Killing old minikube dashboard instances..."
+		printf "$FT_SERVICES_PREFIX Killing old minikube dashboard instances...\n"
 		
 		kill -9 $(echo $pids) || true
 	fi
@@ -77,19 +89,19 @@ function start_minikube()
 		if [[ "$log" = *"error"* ]]
 		then
 			printf " \e[101mFAILED\e[0m\n"
-			echo "Failed to start the dashboard."
+			printf "$FT_SERVICES_PREFIX Failed to start the dashboard.\n"
 	
 			exit 3
 		elif [[ "$log" = *"Opening"* ]]
 		then
 			printf " \e[102mDONE\e[0m\n"
-			echo "Dashboard started!"
+			printf "$FT_SERVICES_PREFIX Dashboard started!\n"
 			
 			break
 		fi
 	done
 
-	echo "$FT_SERVICES_PREFIX Enabling minikube addons..."
+	printf "$FT_SERVICES_PREFIX Enabling minikube addons...\n"
 	
 	minikube addons enable ingress
 	minikube addons enable dashboard
@@ -106,8 +118,8 @@ function generate_tls_certificate()
 
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out "${cert_file}" -keyout "${key_file}" -subj "/C=FR/ST=France/L=France/OU=42/OU=42/CN=42"
 
-	sed -i 's/__b64_cert__/'$(cat $cert_file | base64 | tr -d '\n')'/g' $to
-	sed -i 's/__b64_key__/'$(cat $key_file | base64 | tr -d '\n')'/g' $to
+	sed -i $SED_EXTRA 's/__b64_cert__/'$(cat $cert_file | base64 | tr -d '\n')'/g' $to
+	sed -i $SED_EXTRA 's/__b64_key__/'$(cat $key_file | base64 | tr -d '\n')'/g' $to
 }
 
 function generate_ready_kustomization()
@@ -120,9 +132,14 @@ function generate_ready_kustomization()
 	
 	ip=$(minikube ip)
 
-	echo "$FT_SERVICES_PREFIX Generating kustomization with IP = $ip..."
+	printf "$FT_SERVICES_PREFIX Generating kustomization with IP = $ip...\n"
 	
-	find $to/ -name "*.yaml" -type f -print -exec sed -i 's/__ip__/'$ip'/g' {} \;
+	find $to/ -name "*.yaml" -type f -print -exec sed -i $SED_EXTRA 's/__ip__/'$ip'/g' {} \;
+	
+	if [[ $MAC_42 -eq 1 ]]
+	then
+		rm -rf $to/*.yaml$SED_EXTRA
+	fi
 }
 
 function clear_dir()
@@ -132,13 +149,13 @@ function clear_dir()
 	rm -rf $directory/*.yaml
 }
 
-echo "$FT_SERVICES_PREFIX Hello"
+printf "$FT_SERVICES_PREFIX Hello\n"
 
 if [[ "$OPERATION" != "update" ]] && [[ "$OPERATION" != "delete" ]]
 then
 	start_minikube
 
-	echo "$FT_SERVICES_PREFIX Generating TLS from templates..."
+	printf "$FT_SERVICES_PREFIX Generating TLS from templates...\n"
 	cp $KUSTOMIZATION_TEMPLATES/tls.yaml $KUSTOMIZATION/tls.yaml
 	generate_tls_certificate $CERTIFICATES/common.crt $CERTIFICATES/common.key $KUSTOMIZATION/tls.yaml
 fi
@@ -147,15 +164,15 @@ generate_ready_kustomization $KUSTOMIZATION $KUSTOMIZATION_READY
 
 if [[ "$OPERATION" == "delete" ]]
 then
-	echo "$FT_SERVICES_PREFIX Deleting..."
+	printf "$FT_SERVICES_PREFIX Deleting...\n"
 	
 	kubectl delete configmap grafana-database
 	kubectl delete -k $KUSTOMIZATION_READY
 else
-	echo "$FT_SERVICES_PREFIX Applying..."
+	printf "$FT_SERVICES_PREFIX Applying...\n"
 	
 	kubectl create configmap grafana-database --from-file=./srcs/databases/grafana.db
 	kubectl apply -k $KUSTOMIZATION_READY
 fi
 
-echo "$FT_SERVICES_PREFIX Done!"
+printf "$FT_SERVICES_PREFIX Done!\n"
