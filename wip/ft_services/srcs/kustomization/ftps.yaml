@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ftps
-        image: fauria/vsftpd
+        image: avenus/vsftpd-alpine
         ports:
         - containerPort: 20
           hostPort: 20
@@ -73,7 +73,38 @@ spec:
           value: "21110"
         volumeMounts:
         - name: ftps-persistent-storage
-          mountPath: "/home/vsftpd/root"
+          mountPath: "/root/"
+        - name: ftps-persistent-storage
+          mountPath: "/home/root/"
+        command: [ "/bin/sh" ]
+        args:
+         - '-c'
+         - >
+           echo "Installing OpenSSH";
+           apk update;
+           apk add openssl;
+           
+           echo "Configuring vsFTPd";
+           openssl req -new -x509 -days 365 -nodes -out /etc/ssl/private/vsftpd.cert.pem -keyout /etc/ssl/private/vsftpd.key.pem -subj "/C=FR/ST=France/L=France/OU=42/OU=42/CN=42";
+           chown root:root /etc/ssl/private/vsftpd.cert.*;
+           chmod 600 /etc/ssl/private/vsftpd.cert.*;
+           
+           echo "ssl_enable=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "allow_anon_ssl=NO" >> /etc/vsftpd/vsftpd.conf;
+           echo "force_local_data_ssl=NO" >> /etc/vsftpd/vsftpd.conf;
+           echo "force_local_logins_ssl=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "ssl_tlsv1=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "ssl_sslv2=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "ssl_sslv3=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "rsa_cert_file=/etc/ssl/private/vsftpd.cert.pem" >> /etc/vsftpd/vsftpd.conf;
+           echo "rsa_private_key_file=/etc/ssl/private/vsftpd.key.pem" >> /etc/vsftpd/vsftpd.conf;
+           
+           echo "Running vsFTPd";
+           /usr/sbin/vsftpd.sh;
+           
+           echo "warning: vsFTPd hasn't been locking, locking with an infinite sleep loop";
+           while true; do sleep 100; done;
+           # echo "require_ssl_reuse=NO" >> /etc/vsftpd/vsftpd.conf; # Some FTP Client need this line
       volumes:
       - name: ftps-persistent-storage
         persistentVolumeClaim:

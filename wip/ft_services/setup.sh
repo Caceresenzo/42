@@ -136,7 +136,7 @@ echo "$FT_SERVICES_PREFIX Hello"
 
 if [[ "$OPERATION" != "update" ]] && [[ "$OPERATION" != "delete" ]]
 then
-	#start_minikube
+	start_minikube
 
 	echo "$FT_SERVICES_PREFIX Generating TLS from templates..."
 	cp $KUSTOMIZATION_TEMPLATES/tls.yaml $KUSTOMIZATION/tls.yaml
