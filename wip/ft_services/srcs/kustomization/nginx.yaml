@@ -25,6 +25,14 @@ spec:
             mountPath: /var/www/html/phpmyadmin
           - name: config
             mountPath: /etc/nginx/conf.d
+          - name: tls-key
+            mountPath: /etc/nginx/common.crt
+            subPath: tls.crt
+            readOnly: true
+          - name: tls-key
+            mountPath: /etc/nginx/common.key
+            subPath: tls.key
+            readOnly: true
           ports:
            - containerPort: 22
            - containerPort: 80
@@ -66,6 +74,9 @@ spec:
           items:
           - key: config
             path: site.conf
+      - name: tls-key
+        secret:
+          secretName: https-tls-secrets
       restartPolicy: Always
       terminationGracePeriodSeconds: 5
 ---
@@ -102,7 +113,16 @@ metadata:
     tier: backend
 data:
   config : |
+    ssl_certificate     /etc/nginx/common.crt;
+    ssl_certificate_key /etc/nginx/common.key;
+  
     server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+    
         index index.php index.html;
         error_log /var/log/nginx/error.log;
         access_log /var/log/nginx/access.log;
@@ -110,6 +130,10 @@ data:
         root /var/www/html;
         index index.php;
         autoindex on;
+
+        location /dashboard {
+            return 301 "__dashboard_url__";
+        }
 
         location /grafana/ {
             proxy_pass "http://grafana:3000/";
@@ -119,6 +143,7 @@ data:
 
         location /phpmyadmin {
             location ~ \.php$ {
+                fastcgi_param HTTPS 'on';
                 fastcgi_pass phpmyadmin:5000;
                 fastcgi_split_path_info ^(?:\/phpmyadmin\/)(.+\.php)(.*)$;
                 fastcgi_param SCRIPT_FILENAME "/var/www/html/$fastcgi_script_name";
@@ -128,6 +153,7 @@ data:
 
         location / {
             location ~ \.php$ {
+                fastcgi_param HTTPS 'on';
                 fastcgi_pass wordpress:5050;
                 fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
                 include fastcgi_params;

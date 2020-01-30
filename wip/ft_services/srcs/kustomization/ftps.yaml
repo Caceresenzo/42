@@ -76,18 +76,19 @@ spec:
           mountPath: "/root/"
         - name: ftps-persistent-storage
           mountPath: "/home/root/"
+        - name: tls-key
+          mountPath: /etc/ssl/private/vsftpd.cert.pem
+          subPath: tls.crt
+          readOnly: true
+        - name: tls-key
+          mountPath: /etc/ssl/private/vsftpd.key.pem
+          subPath: tls.key
+          readOnly: true
         command: [ "/bin/sh" ]
         args:
          - '-c'
          - >
-           echo "Installing OpenSSH";
-           apk update;
-           apk add openssl;
-           
            echo "Configuring vsFTPd";
-           openssl req -new -x509 -days 365 -nodes -out /etc/ssl/private/vsftpd.cert.pem -keyout /etc/ssl/private/vsftpd.key.pem -subj "/C=FR/ST=France/L=France/OU=42/OU=42/CN=42";
-           chown root:root /etc/ssl/private/vsftpd.cert.*;
-           chmod 600 /etc/ssl/private/vsftpd.cert.*;
            
            echo "ssl_enable=YES" >> /etc/vsftpd/vsftpd.conf;
            echo "allow_anon_ssl=NO" >> /etc/vsftpd/vsftpd.conf;
@@ -109,5 +110,8 @@ spec:
       - name: ftps-persistent-storage
         persistentVolumeClaim:
           claimName: ftps-pv-claim
+      - name: tls-key
+        secret:
+          secretName: vsftpd-tls-secrets
       restartPolicy: Always
       terminationGracePeriodSeconds: 10

@@ -20,7 +20,7 @@ spec:
           image: phpmyadmin/phpmyadmin:fpm-alpine
           env:
             - name: PMA_ABSOLUTE_URI
-              value: "/phpmyadmin/"
+              value: "https://__ip__/phpmyadmin/"
             - name: PMA_HOST
               value: mysql
             - name: PMA_PORT

@@ -23,3 +23,5 @@ resources:
   - grafana.yaml
   - influxdb.yaml
   - telegraf.yaml
+  - tls-https.yaml
+  - tls-vsftpd.yaml

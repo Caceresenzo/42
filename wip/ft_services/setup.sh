@@ -1,4 +1,4 @@
-export MAC_42=0
+export MAC_42=1
 
 if [[ $MAC_42 -eq 1 ]]
 then
@@ -114,9 +114,23 @@ function generate_tls_certificate()
 	key_file=$2
 	to=$3
 
-ï»¿	rm -rf "${cert_file}" "${key_file}"
+	rm -rf "${cert_file}" "${key_file}"
 
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out "${cert_file}" -keyout "${key_file}" -subj "/C=FR/ST=France/L=France/OU=42/OU=42/CN=42"
+
+	sed -i $SED_EXTRA 's/__b64_cert__/'$(cat $cert_file | base64 | tr -d '\n')'/g' $to
+	sed -i $SED_EXTRA 's/__b64_key__/'$(cat $key_file | base64 | tr -d '\n')'/g' $to
+}
+
+function generate_ftp_certificate()
+{
+	cert_file=$1
+	key_file=$2
+	to=$3
+
+	rm -rf "${cert_file}" "${key_file}"
+
+	openssl req -new -x509 -days 3650 -nodes -out "${cert_file}" -keyout "${key_file}" -subj "/C=FR/ST=France/L=France/OU=42/OU=42/CN=42";
 
 	sed -i $SED_EXTRA 's/__b64_cert__/'$(cat $cert_file | base64 | tr -d '\n')'/g' $to
 	sed -i $SED_EXTRA 's/__b64_key__/'$(cat $key_file | base64 | tr -d '\n')'/g' $to
@@ -131,10 +145,11 @@ function generate_ready_kustomization()
 	cp $from/*.yaml $to/
 	
 	ip=$(minikube ip)
+	dashboard_url=$(cat srcs/logs/minikube_dashboard.log | grep Opening | awk '{ print $3 }')
 
 	printf "$FT_SERVICES_PREFIX Generating kustomization with IP = $ip...\n"
 	
-	find $to/ -name "*.yaml" -type f -print -exec sed -i $SED_EXTRA 's/__ip__/'$ip'/g' {} \;
+	find $to/ -name "*.yaml" -type f -print -exec sed -i $SED_EXTRA 's/__ip__/'$ip'/g' {} \; -exec sed -i $SED_EXTRA 's+__dashboard_url__+'$dashboard_url'+g' {} \;
 	
 	if [[ $MAC_42 -eq 1 ]]
 	then
@@ -156,8 +171,10 @@ then
 	start_minikube
 
 	printf "$FT_SERVICES_PREFIX Generating TLS from templates...\n"
-	cp $KUSTOMIZATION_TEMPLATES/tls.yaml $KUSTOMIZATION/tls.yaml
-	generate_tls_certificate $CERTIFICATES/common.crt $CERTIFICATES/common.key $KUSTOMIZATION/tls.yaml
+	cp $KUSTOMIZATION_TEMPLATES/*.yaml $KUSTOMIZATION/
+	
+	generate_tls_certificate $CERTIFICATES/common.crt $CERTIFICATES/common.key $KUSTOMIZATION/tls-https.yaml
+	generate_ftp_certificate $CERTIFICATES/vsftpd.cert.pem $CERTIFICATES/vsftpd.key.pem $KUSTOMIZATION/tls-vsftpd.yaml
 fi
 
 generate_ready_kustomization $KUSTOMIZATION $KUSTOMIZATION_READY

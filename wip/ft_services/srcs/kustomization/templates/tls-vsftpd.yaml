@@ -1,7 +1,7 @@
 kind: Secret
 apiVersion: v1
 metadata:
-  name: https-tls
+  name: vsftpd-tls-secrets
 data:
   tls.crt: >-
     __b64_cert__

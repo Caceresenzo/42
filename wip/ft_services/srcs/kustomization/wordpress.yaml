@@ -56,7 +56,7 @@ spec:
                 fi;
             done;
             
-            wp core install --url=http://__ip__ --title=ft-services --admin_user=admin --admin_password=admin --admin_email=admin@ft.services || true;
+            wp core install --url=https://__ip__ --title=ft-services --admin_user=admin --admin_password=admin --admin_email=admin@ft.services || true;
             
             wp config set WP_DEBUG true || true
             
