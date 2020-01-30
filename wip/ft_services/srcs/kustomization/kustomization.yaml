@@ -25,3 +25,4 @@ resources:
   - telegraf.yaml
   - tls-https.yaml
   - tls-vsftpd.yaml
+  - key-ssh.yaml

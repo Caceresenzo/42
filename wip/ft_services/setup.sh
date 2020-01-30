@@ -32,9 +32,9 @@ function redirect_minikube()
 
 	if [[ -d "$to" ]]
 	then
-		printf "Using redirected MINIKUBE home\n"
+		printf "$FT_SERVICES_PREFIX Using redirected minikube home\n"
 	else
-		printf "Redirecting MINIKUBE home directory... ($to)\n"
+		printf "$FT_SERVICES_PREFIX Redirecting minikube home directory... ($to)\n"
 		mkdir "$to"
 	fi
 }
@@ -113,6 +113,8 @@ function generate_tls_certificate()
 	cert_file=$1
 	key_file=$2
 	to=$3
+	
+	printf "$FT_SERVICES_PREFIX Generating TLS certificates...\n"
 
 	rm -rf "${cert_file}" "${key_file}"
 
@@ -127,6 +129,8 @@ function generate_ftp_certificate()
 	cert_file=$1
 	key_file=$2
 	to=$3
+	
+	printf "$FT_SERVICES_PREFIX Generating FTP certificates...\n"
 
 	rm -rf "${cert_file}" "${key_file}"
 
@@ -134,6 +138,22 @@ function generate_ftp_certificate()
 
 	sed -i $SED_EXTRA 's/__b64_cert__/'$(cat $cert_file | base64 | tr -d '\n')'/g' $to
 	sed -i $SED_EXTRA 's/__b64_key__/'$(cat $key_file | base64 | tr -d '\n')'/g' $to
+}
+
+function generate_ssh_certificate()
+{
+	base_file=$1
+	pub_file=$1".pub"
+	to=$2
+	
+	printf "$FT_SERVICES_PREFIX Generating SSH keys...\n"
+
+	rm -rf "${base_file}" "${pub_file}"
+
+	ssh-keygen -b 521 -t ecdsa -f "${base_file}" -q -N ""
+
+	sed -i $SED_EXTRA 's/__b64_private__/'$(cat $base_file | base64 | tr -d '\n')'/g' $to
+	sed -i $SED_EXTRA 's/__b64_public__/'$(cat $pub_file | base64 | tr -d '\n')'/g' $to
 }
 
 function generate_ready_kustomization()
@@ -149,7 +169,7 @@ function generate_ready_kustomization()
 
 	printf "$FT_SERVICES_PREFIX Generating kustomization with IP = $ip...\n"
 	
-	find $to/ -name "*.yaml" -type f -print -exec sed -i $SED_EXTRA 's/__ip__/'$ip'/g' {} \; -exec sed -i $SED_EXTRA 's+__dashboard_url__+'$dashboard_url'+g' {} \;
+	find $to -name "*.yaml" -type f -exec printf "Preparing file {}...\n" \;  -exec sed -i $SED_EXTRA 's/__ip__/'$ip'/g' {} \; -exec sed -i $SED_EXTRA 's+__dashboard_url__+'$dashboard_url'+g' {} \;
 	
 	if [[ $MAC_42 -eq 1 ]]
 	then
@@ -164,6 +184,34 @@ function clear_dir()
 	rm -rf $directory/*.yaml
 }
 
+function print_info()
+{
+	ip=$(minikube ip)
+	services=$(kubectl get services)
+	
+	ssh_ext_port=$(kubectl get services | grep nginx | grep "22:(\d+)" -oE | cut -c4-30)
+	influxdb_ext_port=$(kubectl get services | grep influxdb | grep "8086:(\d+)" -oE | sed 's/:/ <--> /g')
+	mysql_ext_port=$(kubectl get services | grep mysql | grep "3306:(\d+)" -oE | sed 's/:/ <--> /g')
+	
+	url_start="\e[50G\e[96m"
+	
+	printf "$FT_SERVICES_PREFIX\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	NGINX				\e[0m ${url_start}https://$ip/\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	WORDPRESS			\e[0m ${url_start}https://$ip/\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	PHPMYADMIN			\e[0m ${url_start}https://$ip/phpmyadmin/\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	GRAFANA				\e[0m ${url_start}https://$ip/grafana/\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	DASHBOARD			\e[0m ${url_start}https://$ip/dashboard\e[0m\n"
+	printf "$FT_SERVICES_PREFIX\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	SSH					\e[0m ${url_start}ssh://root@$ip:$ssh_ext_port\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	FTPS				\e[0m ${url_start}ftp://root@$ip:21\e[0m\n"
+	printf "$FT_SERVICES_PREFIX\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	InfluxDB			\e[0m ${url_start}internal: ${influxdb_ext_port}\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	MySQL				\e[0m ${url_start}internal: ${mysql_ext_port}\e[0m\n"
+	printf "$FT_SERVICES_PREFIX\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	Telegraf			\e[0m ${url_start}no access\e[0m\n"
+	printf "$FT_SERVICES_PREFIX\n"
+}
+
 printf "$FT_SERVICES_PREFIX Hello\n"
 
 if [[ "$OPERATION" != "update" ]] && [[ "$OPERATION" != "delete" ]]
@@ -175,6 +223,7 @@ then
 	
 	generate_tls_certificate $CERTIFICATES/common.crt $CERTIFICATES/common.key $KUSTOMIZATION/tls-https.yaml
 	generate_ftp_certificate $CERTIFICATES/vsftpd.cert.pem $CERTIFICATES/vsftpd.key.pem $KUSTOMIZATION/tls-vsftpd.yaml
+	generate_ssh_certificate $CERTIFICATES/ssh_host_ecdsa_key $KUSTOMIZATION/key-ssh.yaml
 fi
 
 generate_ready_kustomization $KUSTOMIZATION $KUSTOMIZATION_READY
@@ -191,5 +240,7 @@ else
 	kubectl create configmap grafana-database --from-file=./srcs/databases/grafana.db
 	kubectl apply -k $KUSTOMIZATION_READY
 fi
+
+print_info
 
 printf "$FT_SERVICES_PREFIX Done!\n"

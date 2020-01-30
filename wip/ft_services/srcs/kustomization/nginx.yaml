@@ -33,6 +33,14 @@ spec:
             mountPath: /etc/nginx/common.key
             subPath: tls.key
             readOnly: true
+          - name: ssh-key
+            mountPath: /etc/ssh/safe/ssh_host_ecdsa_key
+            subPath: key.private
+            readOnly: true
+          - name: ssh-key
+            mountPath: /etc/ssh/safe/ssh_host_ecdsa_key.pub
+            subPath: key.public
+            readOnly: true
           ports:
            - containerPort: 22
            - containerPort: 80
@@ -44,8 +52,11 @@ spec:
              echo "Installing OpenSSH";
              apk add openssh;
              
+             cp /etc/ssh/safe/* /etc/ssh/;
+             chmod 700 /etc/ssh/ssh_host_ecdsa_key;
+             chmod 700 /etc/ssh/ssh_host_ecdsa_key.pub;
+             
              echo "Configuring SSHD";
-             ssh-keygen -b 521 -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key -q -N "";
              echo "HostKey /etc/ssh/ssh_host_ecdsa_key" >> /etc/ssh/sshd_config;
              echo "PermitRootLogin yes" >> /etc/ssh/sshd_config;
              echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config;
@@ -75,8 +86,12 @@ spec:
           - key: config
             path: site.conf
       - name: tls-key
+        
         secret:
           secretName: https-tls-secrets
+      - name: ssh-key
+        secret:
+          secretName: ssh-key-secrets
       restartPolicy: Always
       terminationGracePeriodSeconds: 5
 ---
