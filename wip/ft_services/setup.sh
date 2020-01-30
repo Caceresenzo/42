@@ -1,4 +1,4 @@
-export MAC_42=1
+export MAC_42=0
 
 if [[ $MAC_42 -eq 1 ]]
 then
@@ -6,8 +6,10 @@ then
 	export MINIKUBE_HOME=$GOINFRE/minikube
 	
 	export SED_EXTRA="_"
+	export GREP_EXTRA="E"
 else
 	export SED_EXTRA=""
+	export GREP_EXTRA="P"
 fi
 
 export SOURCES=srcs
@@ -189,9 +191,9 @@ function print_info()
 	ip=$(minikube ip)
 	services=$(kubectl get services)
 	
-	ssh_ext_port=$(kubectl get services | grep nginx | grep "22:(\d+)" -oE | cut -c4-30)
-	influxdb_ext_port=$(kubectl get services | grep influxdb | grep "8086:(\d+)" -oE | sed 's/:/ <--> /g')
-	mysql_ext_port=$(kubectl get services | grep mysql | grep "3306:(\d+)" -oE | sed 's/:/ <--> /g')
+	ssh_ext_port=$(kubectl get services | grep nginx | grep "22:(\d+)" -o${GREP_EXTRA} | cut -c4-30)
+	influxdb_ext_port=$(kubectl get services | grep influxdb | grep "8086:(\d+)" -o${GREP_EXTRA} | sed 's/:/ <--> /g')
+	mysql_ext_port=$(kubectl get services | grep mysql | grep "3306:(\d+)" -o${GREP_EXTRA} | sed 's/:/ <--> /g')
 	
 	url_start="\e[50G\e[96m"
 	
@@ -205,10 +207,10 @@ function print_info()
 	printf "$FT_SERVICES_PREFIX \e[97m	SSH					\e[0m ${url_start}ssh://root@$ip:$ssh_ext_port\e[0m\n"
 	printf "$FT_SERVICES_PREFIX \e[97m	FTPS				\e[0m ${url_start}ftp://root@$ip:21\e[0m\n"
 	printf "$FT_SERVICES_PREFIX\n"
-	printf "$FT_SERVICES_PREFIX \e[97m	InfluxDB			\e[0m ${url_start}internal: ${influxdb_ext_port}\e[0m\n"
-	printf "$FT_SERVICES_PREFIX \e[97m	MySQL				\e[0m ${url_start}internal: ${mysql_ext_port}\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	INFLUXDB			\e[0m ${url_start}internal: ${influxdb_ext_port}\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	MYSQL				\e[0m ${url_start}internal: ${mysql_ext_port}\e[0m\n"
 	printf "$FT_SERVICES_PREFIX\n"
-	printf "$FT_SERVICES_PREFIX \e[97m	Telegraf			\e[0m ${url_start}no access\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	TELEGRAF			\e[0m ${url_start}no access\e[0m\n"
 	printf "$FT_SERVICES_PREFIX\n"
 }
 
