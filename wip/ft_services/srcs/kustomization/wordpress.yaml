@@ -43,8 +43,18 @@ spec:
             wp --version;
             
             wp core download;
-            wp core config --dbname=wordpress --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST || true;
-            wp db create || true;
+            
+            rm -rf wp-config.php;
+            
+            while true; do
+                echo "Trying to connect to the database...";
+                
+                wp core config --dbname=wordpress --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST;
+                
+                if [[ $? -eq 0 ]]; then
+                    break;
+                fi;
+            done;
             
             wp core install --url=http://__ip__ --title=ft-services --admin_user=admin --admin_password=admin --admin_email=admin@ft.services || true;
             

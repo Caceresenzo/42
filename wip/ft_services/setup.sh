@@ -1,4 +1,4 @@
-export MAC_42=1
+export MAC_42=0
 
 if [[ $MAC_42 -eq 1 ]]
 then
@@ -114,7 +114,7 @@ function generate_tls_certificate()
 	key_file=$2
 	to=$3
 
-﻿	rm -rf "${cert_file}" "${key_file}"
+ï»¿	rm -rf "${cert_file}" "${key_file}"
 
 	openssl req -newkey rsa:4096 -x509 -sha256 -days 3650 -nodes -out "${cert_file}" -keyout "${key_file}" -subj "/C=FR/ST=France/L=France/OU=42/OU=42/CN=42"
 
