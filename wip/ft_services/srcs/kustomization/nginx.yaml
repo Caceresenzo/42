@@ -11,6 +11,8 @@ spec:
       app: nginx
   template:
     metadata:
+      annotations:
+        checksum/config: "__dashboard_url__"
       labels:
         app: nginx
         tier: frontend
