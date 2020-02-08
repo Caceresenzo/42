@@ -1,6 +1,8 @@
+#!/usr/bin/zsh
+
 export MAC_42=0
 
-if [[ $MAC_42 -eq 1 ]]
+if [ $MAC_42 -eq 1 ]
 then
 	export GOINFRE=~/goinfre
 	export MINIKUBE_HOME=$GOINFRE/minikube
@@ -73,9 +75,11 @@ function start_minikube()
 	pids=$(ps aux | grep "[m]inikube dashboard" | cut -c10-15 | tr -d ' ')
 	if [[ "$pids" != "" ]]
 	then
-		printf "$FT_SERVICES_PREFIX Killing old minikube dashboard instances...\n"
+		printf "$FT_SERVICES_PREFIX Killing old minikube dashboard instances... (PID: "$(echo $pids)")\n"
 		
 		kill -9 $(echo $pids) || true
+	else
+		printf "$FT_SERVICES_PREFIX There are no old minikube dashboard instances currently running...\n"
 	fi
 	
 	minikube dashboard > $LOGS/minikube_dashboard.log 2>&1 &
@@ -241,8 +245,8 @@ else
 	
 	kubectl create configmap grafana-database --from-file=./srcs/databases/grafana.db
 	kubectl apply -k $KUSTOMIZATION_READY
-fi
 
-print_info
+	print_info
+fi
 
 printf "$FT_SERVICES_PREFIX Done!\n"

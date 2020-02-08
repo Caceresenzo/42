@@ -34,6 +34,27 @@ spec:
                   key: root
           ports:
            - containerPort: 9000
+          command: [ "/bin/sh" ]
+          args:
+           - '-c'
+           - >
+             echo "Waking up.";
+             
+             sed -i "s/apache2/echo/g" /docker-entrypoint.sh;
+             /docker-entrypoint.sh echo;
+             
+             if ! grep -q "__force_https" ./templates/header.twig;
+             then
+                 echo "Applying little force https hack";
+                 sed -i 's/<head>/<head><script __force_https>if (location.protocol !== "https:") \{ location.protocol = "https:"; \}<\/script>/g' ./templates/header.twig;
+             else
+                 echo "Little force https hack already applied";
+             fi;
+             
+             /docker-entrypoint.sh php-fpm;
+             
+             echo "warning: SSHD hasn't been locking, locking with an infinite sleep loop";
+             while true; do sleep 100; done;
           volumeMounts:
           - name: phpmyadmin-persistent-storage
             mountPath: /var/www/html
