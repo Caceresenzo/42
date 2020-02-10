@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export MAC_42=0
+export MAC_42=1
 
 if [ $MAC_42 -eq 1 ]
 then
@@ -212,7 +212,7 @@ function print_info()
 	printf "$FT_SERVICES_PREFIX \e[97m	DASHBOARD			\e[0m ${url_start}https://$ip/dashboard\e[0m\n"
 	printf "$FT_SERVICES_PREFIX\n"
 	printf "$FT_SERVICES_PREFIX \e[97m	SSH					\e[0m ${url_start}ssh://root@$ip:$ssh_ext_port\e[0m\n"
-	printf "$FT_SERVICES_PREFIX \e[97m	FTPS				\e[0m ${url_start}ftp://root@$ip:21\e[0m\n"
+	printf "$FT_SERVICES_PREFIX \e[97m	FTPS				\e[0m ${url_start}ftps://root@$ip:21\e[0m\n"
 	printf "$FT_SERVICES_PREFIX\n"
 	printf "$FT_SERVICES_PREFIX \e[97m	INFLUXDB			\e[0m ${url_start}internal: ${influxdb_ext_port}\e[0m\n"
 	printf "$FT_SERVICES_PREFIX \e[97m	MYSQL				\e[0m ${url_start}internal: ${mysql_ext_port}\e[0m\n"
