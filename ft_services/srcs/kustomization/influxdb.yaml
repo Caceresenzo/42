@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:1.7.4-alpine
+        ports:
+        - containerPort: 8086
+        env:
+         - name: INFLUXDB_DB
+           value: "kube_metrics"
+         - name: INFLUXDB_ADMIN_ENABLED
+           value: "true"
+         - name: INFLUXDB_ADMIN_USER
+           value: "root"
+         - name: INFLUXDB_ADMIN_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: influxdb-passwords
+               key: root
+         - name: INFLUXDB_USER
+           value: "telegraf"
+         - name: INFLUXDB_USER_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: influxdb-passwords
+               key: telegraf
+        volumeMounts:
+        - name: influxdb-persistent-storage
+          mountPath: /var/lib/influxdb
+      volumes:
+        - name: influxdb-persistent-storage
+          persistentVolumeClaim:
+            claimName: influxdb-pv-claim
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+  labels:
+    app: influxdb
+spec:
+  ports:
+    - port: 8086
+  selector:
+    app: influxdb
+  type: NodePort
+        

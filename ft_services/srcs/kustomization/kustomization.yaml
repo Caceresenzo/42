@@ -1,0 +1,28 @@
+secretGenerator:
+- name: mysql-passwords
+  literals:
+  - root=password
+- name: ftps-passwords
+  literals:
+  - root=password
+- name: grafana-passwords
+  literals:
+  - admin=password
+- name: influxdb-passwords
+  literals:
+  - root=password
+  - telegraf=password
+resources:
+  - storage.yaml
+  - ingress.yaml
+  - nginx.yaml
+  - ftps.yaml
+  - wordpress.yaml
+  - mysql.yaml
+  - phpmyadmin.yaml
+  - grafana.yaml
+  - influxdb.yaml
+  - telegraf.yaml
+  - tls-https.yaml
+  - tls-vsftpd.yaml
+  - key-ssh.yaml

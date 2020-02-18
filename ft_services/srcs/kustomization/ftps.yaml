@@ -1,0 +1,117 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ftps
+  labels:
+    app: ftps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftps
+  template:
+    metadata:
+      labels:
+        app: ftps
+    spec:
+      containers:
+      - name: ftps
+        image: avenus/vsftpd-alpine
+        ports:
+        - containerPort: 20
+          hostPort: 20
+          name: ftp-data
+        - containerPort: 21
+          hostPort: 21
+          name: ftp
+        - containerPort: 21100
+          hostPort: 21100
+          name: ftp-pasv-21100
+        - containerPort: 21101
+          hostPort: 21101
+          name: ftp-pasv-21101
+        - containerPort: 21102
+          hostPort: 21102
+          name: ftp-pasv-21102
+        - containerPort: 21103
+          hostPort: 21103
+          name: ftp-pasv-21103
+        - containerPort: 21104
+          hostPort: 21104
+          name: ftp-pasv-21104
+        - containerPort: 21105
+          hostPort: 21105
+          name: ftp-pasv-21105
+        - containerPort: 21106
+          hostPort: 21106
+          name: ftp-pasv-21106
+        - containerPort: 21107
+          hostPort: 21107
+          name: ftp-pasv-21107
+        - containerPort: 21108
+          hostPort: 21108
+          name: ftp-pasv-21108
+        - containerPort: 21109
+          hostPort: 21109
+          name: ftp-pasv-21109
+        - containerPort: 21110
+          hostPort: 21110
+          name: ftp-pasv-21110
+        env:
+        - name: FTP_USER
+          value: "root"
+        - name: FTP_PASS
+          valueFrom:
+            secretKeyRef:
+              name: ftps-passwords
+              key: root
+        - name: PASV_ADDRESS
+          value: "__ip__"
+        - name: PASV_MIN_PORT
+          value: "21100"
+        - name: PASV_MAX_PORT
+          value: "21110"
+        volumeMounts:
+        - name: ftps-persistent-storage
+          mountPath: "/root/"
+        - name: ftps-persistent-storage
+          mountPath: "/home/root/"
+        - name: tls-key
+          mountPath: /etc/ssl/private/vsftpd.cert.pem
+          subPath: tls.crt
+          readOnly: true
+        - name: tls-key
+          mountPath: /etc/ssl/private/vsftpd.key.pem
+          subPath: tls.key
+          readOnly: true
+        command: [ "/bin/sh" ]
+        args:
+         - '-c'
+         - >
+           echo "Configuring vsFTPd";
+           
+           echo "ssl_enable=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "allow_anon_ssl=NO" >> /etc/vsftpd/vsftpd.conf;
+           echo "force_local_data_ssl=NO" >> /etc/vsftpd/vsftpd.conf;
+           echo "force_local_logins_ssl=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "ssl_tlsv1=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "ssl_sslv2=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "ssl_sslv3=YES" >> /etc/vsftpd/vsftpd.conf;
+           echo "rsa_cert_file=/etc/ssl/private/vsftpd.cert.pem" >> /etc/vsftpd/vsftpd.conf;
+           echo "rsa_private_key_file=/etc/ssl/private/vsftpd.key.pem" >> /etc/vsftpd/vsftpd.conf;
+           
+           echo "Running vsFTPd";
+           /usr/sbin/vsftpd.sh;
+           
+           echo "warning: vsFTPd hasn't been locking, locking with an infinite sleep loop";
+           while true; do sleep 100; done;
+           # echo "require_ssl_reuse=NO" >> /etc/vsftpd/vsftpd.conf; # Some FTP Client need this line
+      volumes:
+      - name: ftps-persistent-storage
+        persistentVolumeClaim:
+          claimName: ftps-pv-claim
+      - name: tls-key
+        secret:
+          secretName: vsftpd-tls-secrets
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 10

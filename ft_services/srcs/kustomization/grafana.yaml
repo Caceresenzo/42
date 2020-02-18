@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana
+        ports:
+        - containerPort: 3000
+        env:
+        - name: GF_INSTALL_PLUGINS
+          value: "grafana-piechart-panel, blackmirror1-singlestat-math-panel"
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: grafana-passwords
+              key: admin
+        volumeMounts:
+        - name: config
+          mountPath: /etc/grafana/grafana.ini
+          subPath: grafana.ini
+        - name: database
+          mountPath: /grafana.db
+          subPath: grafana.db
+        command: [ "/bin/sh" ]
+        args:
+         - '-c'
+         - >
+           cp /grafana.db /var/lib/grafana/grafana.db;
+           /run.sh;
+      volumes:
+      - name: config
+        configMap:
+          name: grafana-config
+          items:
+          - key: config
+            path: grafana.ini
+      - name: database
+        configMap:
+          name: grafana-database
+          items:
+          - key: grafana.db
+            path: grafana.db
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  type: NodePort
+  ports:
+  - port: 3000
+  selector:
+    app: grafana
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-config
+  labels:
+    tier: backend
+data:
+  config : |
+    [server]
+    root_url = %(protocol)s://%(domain)s/grafana/
+    [auth.basic]
+    enabled = false
+    [auth.anonymous]
+    enabled = true
+    org_role = Admin
+    [database]
+    path = grafana.db
+    [paths]
+    data = /var/lib/grafana

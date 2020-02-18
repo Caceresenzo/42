@@ -1,0 +1,179 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      annotations:
+        checksum/config: "__dashboard_url__"
+      labels:
+        app: nginx
+        tier: frontend
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          volumeMounts:
+          - name: wordpress-persistent-storage
+            mountPath: /var/www/html
+          - name: phpmyadmin-persistent-storage
+            mountPath: /var/www/html/phpmyadmin
+          - name: config
+            mountPath: /etc/nginx/conf.d
+          - name: tls-key
+            mountPath: /etc/nginx/common.crt
+            subPath: tls.crt
+            readOnly: true
+          - name: tls-key
+            mountPath: /etc/nginx/common.key
+            subPath: tls.key
+            readOnly: true
+          - name: ssh-key
+            mountPath: /etc/ssh/safe/ssh_host_ecdsa_key
+            subPath: key.private
+            readOnly: true
+          - name: ssh-key
+            mountPath: /etc/ssh/safe/ssh_host_ecdsa_key.pub
+            subPath: key.public
+            readOnly: true
+          ports:
+           - containerPort: 22
+           - containerPort: 80
+           - containerPort: 443
+          command: [ "/bin/sh" ]
+          args:
+           - '-c'
+           - >
+             echo "Installing OpenSSH";
+             apk add openssh;
+             
+             cp /etc/ssh/safe/* /etc/ssh/;
+             chmod 700 /etc/ssh/ssh_host_ecdsa_key;
+             chmod 700 /etc/ssh/ssh_host_ecdsa_key.pub;
+             
+             echo "Configuring SSHD";
+             echo "HostKey /etc/ssh/ssh_host_ecdsa_key" >> /etc/ssh/sshd_config;
+             echo "PermitRootLogin yes" >> /etc/ssh/sshd_config;
+             echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config;
+             echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config;
+             echo "Welcome to ft-services NGINX container" > /etc/motd
+             
+             echo "Changing root password";
+             echo -e "password\npassword" | passwd;
+             
+             echo "Running NGINX and SSHD";
+             nginx;
+             /usr/sbin/sshd -D;
+             
+             echo "warning: SSHD hasn't been locking, locking with an infinite sleep loop";
+             while true; do sleep 100; done;
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pv-claim
+      - name: phpmyadmin-persistent-storage
+        persistentVolumeClaim:
+          claimName: phpmyadmin-pv-claim
+      - name: config
+        configMap:
+          name: nginx-config
+          items:
+          - key: config
+            path: site.conf
+      - name: tls-key
+        
+        secret:
+          secretName: https-tls-secrets
+      - name: ssh-key
+        secret:
+          secretName: ssh-key-secrets
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+    - name: nginx-ssh
+      protocol: TCP
+      port: 22
+      targetPort: 22
+    - name: nginx-http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: nginx-https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+  selector:
+    app: nginx
+    tier: frontend
+  type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  labels:
+    tier: backend
+data:
+  config : |
+    ssl_certificate     /etc/nginx/common.crt;
+    ssl_certificate_key /etc/nginx/common.key;
+  
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
+    
+        index index.php index.html;
+        error_log /var/log/nginx/error.log;
+        access_log /var/log/nginx/access.log;
+        
+        root /var/www/html;
+        index index.php;
+        autoindex on;
+
+        location /dashboard {
+            return 301 "__dashboard_url__";
+        }
+
+        location /grafana/ {
+            proxy_pass "http://grafana:3000/";
+        }
+        
+        try_files $uri $uri/ =404;
+
+        location /phpmyadmin {
+            location ~ \.php$ {
+                fastcgi_param HTTPS 'on';
+                fastcgi_pass phpmyadmin:5000;
+                fastcgi_split_path_info ^(?:\/phpmyadmin\/)(.+\.php)(.*)$;
+                fastcgi_param SCRIPT_FILENAME "/var/www/html/$fastcgi_script_name";
+                include fastcgi_params;
+            }
+        }
+
+        location / {
+            location ~ \.php$ {
+                fastcgi_param HTTPS 'on';
+                fastcgi_pass wordpress:5050;
+                fastcgi_param SCRIPT_FILENAME "$document_root$fastcgi_script_name";
+                include fastcgi_params;
+            }
+        }
+    }

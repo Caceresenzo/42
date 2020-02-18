@@ -1,0 +1,10 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: https-tls-secrets
+data:
+  tls.crt: >-
+    __b64_cert__
+  tls.key: >-
+    __b64_key__
+type: kubernetes.io/tls

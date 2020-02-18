@@ -1,0 +1,109 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+       - name: wordpress-installer
+         image: wordpress:cli-php7.4
+         env:
+           - name: WORDPRESS_DB_HOST
+             value: mysql
+           - name: WORDPRESS_DB_USER
+             value: "root"
+           - name: WORDPRESS_DB_PASSWORD
+             valueFrom:
+               secretKeyRef:
+                 name: mysql-passwords
+                 key: root
+         volumeMounts:
+         - name: wordpress-persistent-storage
+           mountPath: /var/www/html
+         command: [ "/bin/sh" ]
+         args:
+          - '-c'
+          - >
+            #echo $(getent hosts api.wordpress.org) >> /etc/hosts2;
+            
+            cd /var/www/html;
+            wp --version;
+            
+            wp core download;
+            
+            rm -rf wp-config.php;
+            
+            while true; do
+                echo "Trying to connect to the database...";
+                
+                wp core config --dbname=wordpress --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbhost=$WORDPRESS_DB_HOST;
+                
+                if [[ $? -eq 0 ]]; then
+                    break;
+                fi;
+            done;
+            
+            wp core install --url=https://__ip__ --title=ft-services --admin_user=admin --admin_password=admin --admin_email=admin@ft.services || true;
+            
+            wp config set WP_DEBUG true || true
+            
+            wp user create subscriber subscriber@ft.services --role=subscriber --user_pass=subscriber || true;
+            wp user create contributor contributor@ft.services --role=contributor --user_pass=contributor || true;
+            wp user create author author@ft.services --role=author --user_pass=author || true;
+            wp user create editor editor@ft.services --role=editor --user_pass=editor || true;
+      containers:
+        - name: wordpress
+          image: wordpress:fpm-alpine
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: mysql
+            - name: WORDPRESS_DB_USER
+              value: "root"
+            - name: WORDPRESS_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-passwords
+                  key: root
+            - name: WORDPRESS_DEBUG
+              value: "1"
+          ports:
+           - containerPort: 9000
+          volumeMounts:
+          - name: wordpress-persistent-storage
+            mountPath: /var/www/html
+      volumes:
+      - name: wordpress-persistent-storage
+        persistentVolumeClaim:
+          claimName: wordpress-pv-claim
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - name: wordpress-http
+      protocol: TCP
+      port: 5050
+      targetPort: 9000
+  selector:
+    app: wordpress
+    tier: frontend
+  type: NodePort

@@ -1,0 +1,10 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: ssh-key-secrets
+data:
+  key.public: >-
+    __b64_public__
+  key.private: >-
+    __b64_private__
+type: Opaque

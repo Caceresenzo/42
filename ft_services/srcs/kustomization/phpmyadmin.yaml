@@ -1,0 +1,82 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: phpmyadmin
+  labels:
+    app: phpmyadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: phpmyadmin
+  template:
+    metadata:
+      name: phpmyadmin
+      labels:
+        app: phpmyadmin
+    spec:
+      containers:
+        - name: phpmyadmin
+          image: phpmyadmin/phpmyadmin:fpm-alpine
+          env:
+            - name: PMA_ABSOLUTE_URI
+              value: "https://__ip__/phpmyadmin/"
+            - name: PMA_HOST
+              value: mysql
+            - name: PMA_PORT
+              value: "3306"
+            - name: PMA_USER
+              value: "root"
+            - name: PMA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-passwords
+                  key: root
+          ports:
+           - containerPort: 9000
+          command: [ "/bin/sh" ]
+          args:
+           - '-c'
+           - >
+             echo "Waking up.";
+             
+             sed -i "s/apache2/echo/g" /docker-entrypoint.sh;
+             /docker-entrypoint.sh echo;
+             
+             if ! grep -q "__force_https" ./templates/header.twig;
+             then
+                 echo "Applying little force https hack";
+                 sed -i 's/<head>/<head><script __force_https>if (location.protocol !== "https:") \{ location.protocol = "https:"; \}<\/script>/g' ./templates/header.twig;
+             else
+                 echo "Little force https hack already applied";
+             fi;
+             
+             /docker-entrypoint.sh php-fpm;
+             
+             echo "warning: SSHD hasn't been locking, locking with an infinite sleep loop";
+             while true; do sleep 100; done;
+          volumeMounts:
+          - name: phpmyadmin-persistent-storage
+            mountPath: /var/www/html
+      volumes:
+      - name: phpmyadmin-persistent-storage
+        persistentVolumeClaim:
+          claimName: phpmyadmin-pv-claim
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 5
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: phpmyadmin
+  labels:
+    app: phpmyadmin
+spec:
+  ports:
+    - name: phpmyadmin-http
+      protocol: TCP
+      port: 5000
+      targetPort: 9000
+  selector:
+    app: phpmyadmin
+  type: NodePort
