@@ -21,7 +21,7 @@ int
 	next = root;
 	while (1)
 	{
-		err = pthread_create(&(root->thr_id), NULL,
+		err = pthread_create(&(next->thr_id), NULL,
 								(t_routine)philosophers_routine, next);
 		if (err != 0)
 			return (err);

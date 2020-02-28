@@ -34,7 +34,7 @@ typedef enum	e_man_state
 	none = 0,
 	sleeping = 1,
 	thinking = 2,
-	took_fork = 3,
+	took_a_fork = 3,
 	eating = 4,
 	dead = 5
 }				t_man_state;
@@ -63,13 +63,17 @@ typedef struct	s_man
 	struct s_man	*next;
 	pthread_t		thr_id;
 	long			last_meal;
+	long			eat_count;
 	int				running;
+	t_param			*param;
 }				t_man;
 
 typedef	void	*(*t_routine)(void *);
 
 char			**g_parameters;
 char			**g_man_states;
+
+pthread_mutex_t	g_status_update_mutex;
 
 int				err_print_usage(void);
 int				err_param_not_int(int param);
@@ -90,9 +94,16 @@ int				philosophers_run(t_param param);
 t_man			*philosophers_create(int *index);
 t_man			*philosophers_destroy(t_man *man);
 
+void			philosophers_monitor(t_man *root);
+
 t_man			*philosophers_ring_create(t_param param);
+void			philosophers_ring_attach_param(t_man *root, t_param *param);
+int				philosophers_ring_destroy(t_man *root);
 int				philosophers_ring_threader(t_man *root);
 int				philosophers_ring_wait(t_man *root);
+
+int				philosophers_ring_start(t_man *root);
+int				philosophers_ring_end(t_man *root, t_man *to_kill);
 
 void			philosophers_status_update(t_man *man, t_man_state new_state);
 
@@ -103,6 +114,12 @@ int				philosophers_ring_forks(t_param param, t_man *root);
 t_fork			*fork_create(int *err);
 t_fork			*fork_destroy(t_fork *fork);
 
+int				fork_grab(t_fork *fork);
+int				fork_release(t_fork *fork);
+
 void			philosophers_debug_print_ring(t_man *root);
+
+void			philosophers_status_mutex_destroy(void);
+void			philosophers_status_mutex_init(void);
 
 #endif

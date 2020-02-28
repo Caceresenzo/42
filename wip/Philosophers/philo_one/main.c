@@ -12,12 +12,14 @@
 
 #include "philosophers.h"
 
-__attribute__((destructor))
-void
-	destructor(void)
-{
-	while (1);
-}
+/*
+** __attribute__((destructor))
+** void
+** 	destructor(void)
+** {
+** 	while (1);
+** }
+*/
 
 int
 	main(int argc, char **argv)
@@ -41,7 +43,7 @@ int
 	param.time_to_sleep = x_atoi(argv[4], &err);
 	if (err)
 		return (err_param_not_int(3));
-	param.nbr_must_eat = 1;
+	param.nbr_must_eat = -1;
 	if (argc == 6)
 		param.nbr_must_eat = x_atoi(argv[5], &err);
 	if (argc == 6 && err)

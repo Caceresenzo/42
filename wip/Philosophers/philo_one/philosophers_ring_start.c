@@ -1,19 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork_grab.c                                        :+:      :+:    :+:   */
+/*   philosophers_ring_start.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 19:41:04 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/27 19:41:04 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/27 18:31:29 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/27 18:31:29 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 int
-	fork_grab(t_fork *fork)
+	philosophers_ring_start(t_man *root)
 {
-	return (pthread_mutex_lock(&(fork->mutex)));
+	t_man	*next;
+
+	next = root;
+	while (1)
+	{
+		next->last_meal = x_millis();
+		next->running = 1;
+		if ((next = next->next) == root)
+			break ;
+	}
+	return (0);
 }

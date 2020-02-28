@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork_grab.c                                        :+:      :+:    :+:   */
+/*   fork_release.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 19:41:04 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/27 19:41:04 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/28 11:12:09 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/28 11:12:09 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
 int
-	fork_grab(t_fork *fork)
+	fork_release(t_fork *fork)
 {
-	return (pthread_mutex_lock(&(fork->mutex)));
+	return (pthread_mutex_unlock(&(fork->mutex)));
 }

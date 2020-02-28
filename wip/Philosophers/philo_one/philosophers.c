@@ -24,8 +24,8 @@ char	**g_man_states = (char *[]){
 	(char *)"NONE",
 	(char *)"is sleeping",
 	(char *)"is thinking",
+	(char *)"has taken a fork",
 	(char *)"is eating",
-	(char *)"time_to_sleep",
 	(char *)"died"
 };
 
@@ -38,10 +38,14 @@ int
 	root = philosophers_ring_create(param);
 	if ((err = philosophers_ring_forks(param, root)) != 0)
 		return (err_pthread(err, 1));
-	philosophers_debug_print_ring(root);
+	philosophers_ring_attach_param(root, &param);
+	philosophers_status_mutex_init();
 	if ((err = philosophers_ring_threader(root)) != 0)
 		return (err_pthread(err, 0));
+	philosophers_ring_start(root);
+	philosophers_monitor(root);
 	philosophers_ring_wait(root);
 	philosophers_ring_destroy(root);
+	philosophers_status_mutex_destroy();
 	return (0);
 }

@@ -21,7 +21,7 @@ t_man
 	{
 		x_memset(man, 0, sizeof(t_man));
 		man->id = *index + 1;
-		man->running = 1;
+		man->running = 0;
 		*index += 1;
 	}
 	return (man);
