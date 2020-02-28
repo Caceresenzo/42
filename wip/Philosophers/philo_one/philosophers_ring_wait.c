@@ -1,21 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers_routine.c                             :+:      :+:    :+:   */
+/*   philosophers_ring_wait.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 18:12:58 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/27 18:12:58 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/27 19:41:32 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/27 19:41:32 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void
-	philosophers_routine(t_man *man)
+int
+	philosophers_ring_wait(t_man *root)
 {
-	printf("thread of man #%d started\n", man->id);
-	fflush(stdout);
-	usleep(1000000);
+	t_man	*next;
+	int		err;
+
+	next = root;
+	while (1)
+	{
+		err = pthread_join(next->thr_id, NULL);
+		if (err != 0)
+			return (err);
+		if ((next = next->next) == root)
+			break ;
+	}
+	return (0);
 }

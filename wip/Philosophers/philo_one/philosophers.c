@@ -41,7 +41,7 @@ int
 	philosophers_debug_print_ring(root);
 	if ((err = philosophers_ring_threader(root)) != 0)
 		return (err_pthread(err, 0));
-	while (1)
-		;
+	philosophers_ring_wait(root);
+	philosophers_ring_destroy(root);
 	return (0);
 }

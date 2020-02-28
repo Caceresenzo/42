@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers_routine.c                             :+:      :+:    :+:   */
+/*   philosophers_ring_destroy.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 18:12:58 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/27 18:12:58 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/27 19:48:13 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/27 19:48:13 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void
-	philosophers_routine(t_man *man)
+int
+	philosophers_ring_destroy(t_man *root)
 {
-	printf("thread of man #%d started\n", man->id);
-	fflush(stdout);
-	usleep(1000000);
+	t_man	*next;
+	t_man	*current;
+
+	next = root;
+	current = NULL;
+	while (1)
+	{
+		next->fork_l = fork_destroy(next->fork_l);
+		current = next;
+		if ((next = next->next) == root)
+			break ;
+		current->next = NULL;
+		philosophers_destroy(current);
+	}
+	philosophers_destroy(current);
+	return (0);
 }

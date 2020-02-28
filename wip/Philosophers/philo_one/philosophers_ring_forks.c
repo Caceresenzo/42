@@ -12,6 +12,13 @@
 
 #include "philosophers.h"
 
+static void
+	attach_forks(t_man *next, t_fork *fork_l, t_fork *fork_r)
+{
+	next->fork_l = fork_l;
+	next->fork_r = fork_r;
+}
+
 int
 	philosophers_ring_forks(t_param param, t_man *root)
 {
@@ -29,15 +36,14 @@ int
 		return (err);
 	while (1)
 	{
-		next->fork_l = fork_l;
-		next->fork_r = fork_r;
+		attach_forks(next, fork_l, fork_r);
 		fork_r = fork_l;
-		fork_l = fork_create(&err);
-		if (err)
-			return (err);
 		current = next;
 		if ((next = next->next) == root)
 			break ;
+		fork_l = fork_create(&err);
+		if (err)
+			return (err);
 	}
 	root->fork_r = fork_r;
 	return (0);

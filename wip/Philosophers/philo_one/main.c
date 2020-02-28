@@ -12,6 +12,13 @@
 
 #include "philosophers.h"
 
+__attribute__((destructor))
+void
+	destructor(void)
+{
+	while (1);
+}
+
 int
 	main(int argc, char **argv)
 {

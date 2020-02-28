@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers_routine.c                             :+:      :+:    :+:   */
+/*   fork_destroy.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/27 18:12:58 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/27 18:12:58 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/27 19:04:18 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/27 19:04:18 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void
-	philosophers_routine(t_man *man)
+t_fork
+	*fork_destroy(t_fork *fork)
 {
-	printf("thread of man #%d started\n", man->id);
-	fflush(stdout);
-	usleep(1000000);
+	if (fork != NULL)
+	{
+		pthread_mutex_destroy(&(fork->mutex));
+		free(fork);
+	}
+	return (fork = NULL);
 }
