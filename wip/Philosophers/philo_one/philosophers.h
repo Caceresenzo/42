@@ -109,7 +109,7 @@ void			philosophers_status_update(t_man *man, t_man_state new_state);
 
 void			philosophers_routine(t_man *man);
 
-int				philosophers_ring_forks(t_param param, t_man *root);
+int				philosophers_ring_forks(t_man *root);
 
 t_fork			*fork_create(int *err);
 t_fork			*fork_destroy(t_fork *fork);

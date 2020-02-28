@@ -36,7 +36,7 @@ int
 	int		err;
 
 	root = philosophers_ring_create(param);
-	if ((err = philosophers_ring_forks(param, root)) != 0)
+	if ((err = philosophers_ring_forks(root)) != 0)
 		return (err_pthread(err, 1));
 	philosophers_ring_attach_param(root, &param);
 	philosophers_status_mutex_init();

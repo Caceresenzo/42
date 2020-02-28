@@ -20,10 +20,9 @@ static void
 }
 
 int
-	philosophers_ring_forks(t_param param, t_man *root)
+	philosophers_ring_forks(t_man *root)
 {
 	t_man	*next;
-	t_man	*current;
 	t_fork	*fork_l;
 	t_fork	*fork_r;
 	int		err;
@@ -38,7 +37,6 @@ int
 	{
 		attach_forks(next, fork_l, fork_r);
 		fork_r = fork_l;
-		current = next;
 		if ((next = next->next) == root)
 			break ;
 		fork_l = fork_create(&err);
