@@ -74,6 +74,7 @@ char			**g_parameters;
 char			**g_man_states;
 
 pthread_mutex_t	g_status_update_mutex;
+int				g_someone_is_dead;
 
 int				err_print_usage(void);
 int				err_param_not_int(int param);

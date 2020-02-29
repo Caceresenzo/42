@@ -21,7 +21,7 @@ void
 void
 	x_putnbr_fd(long n, int fd)
 {
-	if (n > 10)
+	if (n > 9)
 		x_putnbr(n / 10);
 	write(fd, &"0123456789"[n % 10], 1);
 }

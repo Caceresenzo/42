@@ -13,6 +13,7 @@
 #include "philosophers.h"
 
 pthread_mutex_t	g_status_update_mutex = (pthread_mutex_t){0};
+int				g_someone_is_dead = 0;
 
 void
 	philosophers_status_mutex_init(void)
@@ -33,11 +34,15 @@ void
 		return ;
 	pthread_mutex_lock(&g_status_update_mutex);
 	man->state = new_state;
-	x_putnbr(x_millis());
-	x_putstr(" ");
-	x_putnbr((long)0 + man->id);
-	x_putstr(" ");
-	x_putstr(g_man_states[new_state]);
-	x_putstr("\n");
+	if (!(g_someone_is_dead))
+	{
+		x_putnbr(x_millis());
+		x_putstr(" ");
+		x_putnbr((long)0 + man->id);
+		x_putstr(" ");
+		x_putstr(g_man_states[new_state]);
+		x_putstr("\n");
+		g_someone_is_dead = new_state == dead;
+	}
 	pthread_mutex_unlock(&g_status_update_mutex);
 }
