@@ -17,13 +17,16 @@ void
 {
 	t_man	*next;
 	long	now;
+	int		stop;
 
-	while (1)
+	while (!g_someone_is_dead)
 	{
 		now = x_millis();
 		next = root;
+		stop = 0;
 		while (1)
 		{
+			stop |= !next->running;
 			if (next->running
 				&& now - next->param->time_to_die > next->last_meal)
 			{
@@ -33,6 +36,8 @@ void
 			if ((next = next->next) == root)
 				break ;
 		}
-		usleep(8 * 1000);
+		if (stop)
+			break ;
+		usleep(1000);
 	}
 }

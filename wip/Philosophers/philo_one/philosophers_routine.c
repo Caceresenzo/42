@@ -24,7 +24,7 @@ void
 {
 	while (!man->running)
 		;
-	while (man->running)
+	while (man->running && !g_someone_is_dead)
 	{
 		fork_grab(man->id % 2 == 0 ? man->fork_l : man->fork_r);
 		philosophers_status_update(man, took_a_fork);
