@@ -12,11 +12,17 @@
 
 #include "philosophers.h"
 
+static long	g_start = -1;
+
 long
 	x_millis(void)
 {
 	struct timeval	tv;
+	long			millis;
 
 	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec) * 1000 + (tv.tv_usec) / 1000);
+	millis = (tv.tv_sec) * 1000 + (tv.tv_usec) / 1000;
+	if (g_start == -1)
+		g_start = millis;
+	return (millis - g_start);
 }
