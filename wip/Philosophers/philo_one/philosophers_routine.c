@@ -13,10 +13,15 @@
 #include "philosophers.h"
 
 static void
-	man_sleep(t_man *man, useconds_t micro)
+	man_sleep(t_man *man, int millis)
 {
-	if (man->running)
-		usleep(micro);
+	long end;
+
+	if (!man->running)
+		return ;
+	end = x_millis() + millis;
+	while (man->running && end > x_millis())
+		;
 }
 
 void
@@ -31,7 +36,7 @@ void
 		fork_grab(man->id % 2 == 0 ? man->fork_r : man->fork_l);
 		philosophers_status_update(man, eating);
 		man->last_meal = x_millis();
-		man_sleep(man, man->param->time_to_eat * 1000);
+		man_sleep(man, man->param->time_to_eat);
 		fork_release(man->fork_l);
 		fork_release(man->fork_r);
 		man->eat_count += 1;
@@ -39,7 +44,7 @@ void
 				&& man->eat_count >= man->param->nbr_must_eat)
 			break ;
 		philosophers_status_update(man, sleeping);
-		man_sleep(man, man->param->time_to_sleep * 1000);
+		man_sleep(man, man->param->time_to_sleep);
 		philosophers_status_update(man, thinking);
 	}
 	man->running = 0;
