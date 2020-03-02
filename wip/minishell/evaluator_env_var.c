@@ -44,7 +44,7 @@ static int
 			if (found == NULL || found->name_len < var->name_len)
 				found = var;
 	}
-	if (found)
+	if (found && found->value != NULL)
 		arg_builder_add_string(chrlst, found->value, 0);
 	return (eval_consume(found ? found->name_len : len, &line, consumed, 1));
 }
@@ -56,8 +56,8 @@ int
 
 	if (*line != '$')
 		return (0);
-	len = 0 + env_var_is_name_valid_len(line + 1, 0);
 	eval_consume(1, &line, consumed, 0);
+	len = 0 + env_var_is_name_valid_len(line);
 	if (len == 0)
 	{
 		if (*line == '?')

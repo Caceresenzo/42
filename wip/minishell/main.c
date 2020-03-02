@@ -24,5 +24,6 @@ int
 	minishell_initialize(&shell, argv[0]);
 	minishell_pre_loop();
 	minishell_input_loop(&shell);
+	minishell_exit(0);
 	return (EXIT_SUCCESS);
 }

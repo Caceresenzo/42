@@ -1,3 +1,81 @@
+commit ff4109a3286cff9df275e2b8ef1915d27bfd1677
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Mar 2 19:59:02 2020 +0100
+
+    Fixed bug....
+
+commit 7b26195cb14a6c12f89b840471eb956a333eb1f0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Mar 2 16:22:17 2020 +0100
+
+    Fixed Makefile bug
+
+commit 0cbdbeef42b0ef750505d49a049511de1fe19ace
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Mar 2 16:05:08 2020 +0100
+
+    Fixed various bug
+
+commit 6b6217b888a36554a050a637f83737107a337114
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Mar 2 15:04:34 2020 +0100
+
+    Fixed various bug
+
+commit bc719bbe321422e1a19ec0988d931e7d5b2271ed
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Mar 2 14:29:23 2020 +0100
+
+    Added export output sorting
+
+commit b69ddbd88aefd4194a7e318872a963e037d1b0fe
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 20:17:45 2020 +0100
+
+    Added new input system, stable but... not that usable with 'x < stdin'
+
+commit 3312ef3a05ed02b835877509157c084ac7b2c871
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 19:25:23 2020 +0100
+
+    Added env var append mechanism
+
+commit f15e0d2073e50fe43c3034967655a7cfa8a3c3b9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 19:18:44 2020 +0100
+
+    Fixed bug where g_shell->last_pid was not set back to 0
+
+commit 70b31f847b38222b5fee38608e8b2a9f6802d0b0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 19:14:48 2020 +0100
+
+    Added control char clearing
+
+commit 27e9aa2ecff21f50404ff3976e98f067379b9fc4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 19:06:24 2020 +0100
+
+    Redirected prompt to stderr
+
+commit ce35629fb6d3685adab756b64ef7f299e605079f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 18:24:15 2020 +0100
+
+    Changed export behavior
+
+commit a3f95566332269d8245b665eb70ef20659b95996
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 14:25:38 2020 +0100
+
+    Updated makefiles and norm
+
+commit 9112ea6fad8f0f79a7e91dba7bc6189e1e2c6210
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Mar 1 13:27:05 2020 +0100
+
+    Added test and removed escaping system
+
 commit 0f8f641ad32b0e55ecb514a6d3a3fe68fd195990
 Author: Enzo CACERES <ecaceres@e2r2p6.42.fr>
 Date:   Thu Feb 27 15:44:54 2020 +0100

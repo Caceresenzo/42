@@ -15,23 +15,15 @@
 static void
 	commit_escape(char **line, size_t *consumed, t_arrlst *chrlst)
 {
-	int		ret;
-	size_t	sub;
+	char	n;
 
-	if (*(*line + 1) == '\"')
+	if ((n = *(*line + 1)) == Q_DOUBLE || n == '\\' || n == '$')
 	{
-		arg_builder_add_char(chrlst, '\"', '\"');
+		arg_builder_add_char(chrlst, *(*line + 1), Q_DOUBLE);
 		eval_consume(1, line, consumed, 0);
 	}
 	else
-	{
-		ret = eval_escape_backslash(*line, &sub);
-		if (ret != -1)
-		{
-			arg_builder_add_char(chrlst, ret, '\"');
-			eval_consume(sub, line, consumed, 0);
-		}
-	}
+		arg_builder_add_char(chrlst, '\\', Q_DOUBLE);
 }
 
 int
@@ -39,25 +31,24 @@ int
 {
 	size_t	sub;
 
+	if (*line == Q_DOUBLE)
+		eval_consume(1, &line, consumed, 0);
 	while (*line)
 	{
 		if (*line == '\\')
 			commit_escape(&line, consumed, chrlst);
-		else if (*line == '\"')
-		{
-			*consumed += 1;
-			return (0);
-		}
+		else if (*line == Q_DOUBLE)
+			return (eval_consume(1, &line, consumed, 0));
 		else if (*line == '$')
 		{
 			sub = 0;
 			eval_env_var(line, &sub, chrlst);
-			return (eval_consume(sub, &line, consumed, 1));
+			eval_consume(sub, &line, consumed, 1);
+			continue ;
 		}
 		else
-			arg_builder_add_char(chrlst, *line, '\"');
-		*consumed += 1;
-		line++;
+			arg_builder_add_char(chrlst, *line, Q_DOUBLE);
+		eval_consume(1, &line, consumed, 0);
 	}
 	return (0);
 }

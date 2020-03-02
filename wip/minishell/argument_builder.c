@@ -37,7 +37,7 @@ void
 	while (index < len)
 	{
 		arraylist_add_char(chrlst, str[index]);
-		argument_builder_debug_print_char(str[index], quote);
+		arg_builder_debug_print_char(str[index], quote);
 		index++;
 	}
 }
@@ -46,7 +46,7 @@ void
 	arg_builder_add_char(t_arrlst *chrlst, char chr, char quote)
 {
 	arraylist_add_char(chrlst, chr);
-	argument_builder_debug_print_char(chr, quote);
+	arg_builder_debug_print_char(chr, quote);
 }
 
 char

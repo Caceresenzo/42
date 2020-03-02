@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utility_find_home.c                                :+:      :+:    :+:   */
+/*   arraylist_duplicate.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/20 18:58:35 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/20 18:58:35 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/19 13:33:19 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/19 13:33:19 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "arraylist.h"
 
-char
-	*utility_find_home_dir(void)
+t_arrlst
+	*arraylist_duplicate(t_arrlst *alst)
 {
-	t_env_var	*var;
+	t_arrlst	*dup;
 
-	var = env_get_by_name("HOME");
-	if (var != NULL)
-		return (ft_strdup(var->value));
-	var = env_get_by_name("USER");
-	if (var == NULL)
-		var = env_get_by_name("LOGNAME");
-	if (var != NULL)
-		return (ft_strjoin(BASE_HOME_DIRECTORY, var->value));
-	return (ft_strdup("~"));
+	if (alst == NULL)
+		return (NULL);
+	if ((dup = arraylist_create(1, alst->cmp_method)))
+	{
+		arraylist_add_all(dup, alst);
+		dup->grow_factor = alst->grow_factor;
+	}
+	return (dup);
 }

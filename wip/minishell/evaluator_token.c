@@ -22,7 +22,8 @@ static void
 static t_token
 	*handle(int kind, size_t *consumed, char **line)
 {
-	eval_consume(1, line, consumed, 0);
+	if (kind != TOKEN_KIND_SEMICOLON)
+		eval_consume(1, line, consumed, 0);
 	if (kind >= TOKEN_KIND_INPUT && kind <= TOKEN_KIND_APPEND)
 	{
 		if (kind == TOKEN_KIND_APPEND)
@@ -76,7 +77,10 @@ int
 		{
 			arraylist_add(tokenlst, tok);
 			if (tok->kind == TOKEN_KIND_SEMICOLON)
+			{
+				eval_consume(*line == ';', &line, consumed, 0);
 				break ;
+			}
 		}
 	}
 	return (1);

@@ -20,8 +20,11 @@ int
 	if (*line != '~')
 		return (0);
 	*consumed += 1;
-	home = utility_find_home_dir();
-	arg_builder_add_string(chrlst, home, 0);
+	home = home_get_cache();
+	if (home == NULL)
+		arg_builder_add_char(chrlst, '~', 0);
+	else
+		arg_builder_add_string(chrlst, home, 0);
 	free(home);
 	return (1);
 }

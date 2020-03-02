@@ -21,7 +21,7 @@ int
 	index = 0;
 	while ((line = envp[index]) != NULL)
 	{
-		env_set_from_line(line);
+		env_set_from_line(line, 1);
 		index++;
 	}
 	return (1);

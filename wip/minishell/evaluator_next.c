@@ -33,23 +33,22 @@ static int
 {
 	if (**line == '\\')
 	{
-		if (ft_isquote(*(*line + 1)))
+		if (*(*line + 1) != '\0')
 		{
 			arg_builder_add_char(chrlst, *(*line + 1), 0);
-			return (eval_consume(2, line, consumed, 1));
+			eval_consume(1, line, consumed, 1);
 		}
-		else
-			return (eval_consume(1, line, consumed, 1));
+		return (eval_consume(1, line, consumed, 1));
 	}
-	else if (**line == '\'')
+	else if (**line == Q_SINGLE)
 	{
-		eval_q_single(*line + 1, &sub, chrlst);
-		return (eval_consume(sub + 1, line, consumed, 1));
+		eval_q_single(*line, &sub, chrlst);
+		return (eval_consume(sub, line, consumed, 1));
 	}
-	else if (**line == '\"')
+	else if (**line == Q_DOUBLE)
 	{
-		eval_q_double(*line + 1, &sub, chrlst);
-		return (eval_consume(sub + 1, line, consumed, 1));
+		eval_q_double(*line, &sub, chrlst);
+		return (eval_consume(sub, line, consumed, 1));
 	}
 	return (commit2(line, consumed, chrlst, sub));
 }
@@ -60,32 +59,44 @@ static inline int
 	return (used ? TOKEN_KIND_STRING : kind);
 }
 
+static int
+	loop(char **line, size_t *consumed, t_arrlst *chrlst, int *used)
+{
+	int		used_this_time;
+
+	used_this_time = commit(line, consumed, chrlst, 0);
+	*used |= used_this_time;
+	if (ft_iswspace(**line))
+		return (TOKEN_KIND_STRING);
+	else if (**line == '>' && *(*line + 1) == '>')
+		return (kind(*used, TOKEN_KIND_APPEND));
+	else if (**line == '<')
+		return (kind(*used, TOKEN_KIND_INPUT));
+	else if (**line == '>')
+		return (kind(*used, TOKEN_KIND_OUTPUT));
+	else if (**line == '|')
+		return (kind(*used, TOKEN_KIND_PIPE));
+	else if (**line == ';')
+		return (kind(*used, TOKEN_KIND_SEMICOLON));
+	else if (!used_this_time)
+	{
+		arg_builder_add_char(chrlst, **line, 0);
+		*used |= eval_consume(1, line, consumed, 1);
+	}
+	return (-1);
+}
+
 int
 	eval_next(char *line, size_t *consumed, t_arrlst *chrlst)
 {
 	int		used;
+	int		ret;
 
 	used = 0;
 	while (*line)
 	{
-		used |= commit(&line, consumed, chrlst, 0);
-		if (ft_iswspace(*line))
-			return (TOKEN_KIND_STRING);
-		else if (*line == '>' && *(line + 1) == '>')
-			return (kind(used, TOKEN_KIND_APPEND));
-		else if (*line == '<')
-			return (kind(used, TOKEN_KIND_INPUT));
-		else if (*line == '>')
-			return (kind(used, TOKEN_KIND_OUTPUT));
-		else if (*line == '|')
-			return (kind(used, TOKEN_KIND_PIPE));
-		else if (*line == ';')
-			return (kind(used, TOKEN_KIND_SEMICOLON));
-		else
-		{
-			arg_builder_add_char(chrlst, *line, 0);
-			used |= eval_consume(1, &line, consumed, 1);
-		}
+		if ((ret = loop(&line, consumed, chrlst, &used)) != -1)
+			return (ret);
 	}
 	return (kind(used, 0));
 }

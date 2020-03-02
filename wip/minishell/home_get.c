@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   utility_find_home.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/02/18 15:33:08 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/02/18 15:33:08 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/02/20 18:58:35 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/02/20 18:58:35 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_mshell	*g_shell = NULL;
-
-void
-	minishell_input_loop(t_mshell *shell)
+char
+	*home_get_from_env(void)
 {
-	char	*line;
-	int		ret;
+	t_env_var	*var;
 
-	while (1)
-	{
-		minishell_prompt_ask(shell, 0);
-		ret = get_next_line(IN, &line);
-		if (line != NULL && ft_strlen(line) != 0)
-			minishell_evaluate(shell, line);
-		free(line);
-		if (ret <= 0)
-			break ;
-	}
+	var = env_get_by_name("HOME");
+	if (var != NULL && var->name != NULL)
+		return (ft_strdup(var->value));
+	return (NULL);
 }

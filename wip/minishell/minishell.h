@@ -44,15 +44,20 @@
 # define BIN_EXIT "exit"
 
 # define ERR_CMD_NOT_FOUND "command not found"
+# define ERR_IS_DIR "is a directory"
 # define ERR_TOO_MANY_ARGS "too many arguments"
 # define ERR_NUM_ARG_REQ "numeric argument required"
 # define ERR_NOT_VALID_ID "not a valid identifier"
 # define ERR_UNEXPECTED "unexpected syntax"
+# define ERR_HOME_NOT_SET "HOME not set"
 # define ERR_FORK_FAILED "failed to fork()"
 
 # define INVALID 1
 
 # define BASE_HOME_DIRECTORY "/Users/"
+
+# define Q_SINGLE '\''
+# define Q_DOUBLE '\"'
 
 typedef struct	s_minishell
 {
@@ -93,7 +98,8 @@ void			minishell_evaluate_argument(t_arrlst *arglst, char *line);
 void			minishell_error(t_mshell *shell, char *exec, char *error);
 void			minishell_exit(int code);
 
-void			minishell_prompt_ask(t_mshell *shell, int with_new_line);
+void			minishell_prompt_clear_last(int with_new_line);
+void			minishell_prompt_ask(t_mshell *shell, int with_nl);
 
 t_builtin		*builtin_match(char *name);
 
@@ -124,10 +130,13 @@ t_env_var		*env_var_create_from_line(char *line);
 t_env_var		*env_var_create(char *name, char *value);
 
 int				env_var_is_name_valid(char *name, int allow_equal);
-int				env_var_is_name_valid_len(char *name, int allow_equal);
+int				env_var_is_name_valid_len(char *name);
 
-int				env_set_from_line(char *line);
+t_env_var		*env_set_from_line(char *line, int replace);
 void			env_set(t_env_var *var);
+
+t_env_var		*env_append_from_line(char *line);
+void			env_append(t_env_var *var, char *str);
 
 void			env_unset_from_name(char *name);
 
@@ -141,6 +150,7 @@ void			env_finalize(void);
 void			env_dump_content(void);
 
 int				env_compare_by_name(t_env_var *item, char *to);
+int				env_compare_name(t_env_var *a, t_env_var *b);
 
 char			**env_array_get(void);
 void			env_array_build(void);
@@ -163,7 +173,6 @@ int				eval_q_single(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_q_double(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_tilde(char *line, size_t *consumed, t_arrlst *chrlst);
 int				eval_env_var(char *line, size_t *consumed, t_arrlst *chrlst);
-int				eval_escape_backslash(char *seq, size_t *consumed);
 
 int				eval_consume(size_t sub, char **line, size_t *consumed, int r);
 
@@ -173,11 +182,11 @@ void			arg_builder_add_char(t_arrlst *chrlst, char chr, char quote);
 void			arg_builder_add_string(t_arrlst *chrlst, char *str, char quote);
 char			*arg_builder_build(t_arrlst *chrlst);
 
-int				g_argument_builder_debug;
+int				g_arg_builder_debug;
 
-void			argument_builder_debug(int state);
-void			argument_builder_debug_print_char(char chr, char quote);
-void			argument_builder_debug_new(void);
+void			arg_builder_debug(int state);
+void			arg_builder_debug_print_char(char chr, char quote);
+void			arg_builder_debug_new(void);
 
 int				minishell_signals_attach(void);
 
@@ -211,7 +220,7 @@ t_token			*token_create_string(char *string);
 
 t_token			*token_create_io(int kind);
 
-char			*utility_find_home_dir(void);
+char			*home_get_from_env(void);
 
 # define EB_ERR_NO_NEXT 1
 # define EB_ERR_SYNTAX 2
@@ -255,5 +264,14 @@ int				executor_builder(size_t *index, t_arrlst *toklst,
 void			shell_error_file(t_mshell *shell, char *file, int err_no);
 
 int				buildin_test_sensitive(t_process *process);
+
+char			*g_home;
+void			home_set_cache(char *value);
+char			*home_get_cache(void);
+
+char			*g_saved;
+
+void			process_print_struct(t_process *process);
+void			process_print_struct_arrlst(t_arrlst *processlst);
 
 #endif

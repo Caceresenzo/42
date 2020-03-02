@@ -12,24 +12,24 @@
 
 #include "minishell.h"
 
-int		g_argument_builder_debug = 0;
+int		g_arg_builder_debug = 0;
 
 void
-	argument_builder_debug(int state)
+	arg_builder_debug(int state)
 {
-	g_argument_builder_debug = state;
+	g_arg_builder_debug = state;
 }
 
 void
-	argument_builder_debug_print_char(char chr, char quote)
+	arg_builder_debug_print_char(char chr, char quote)
 {
 	int	color;
 
-	if (!g_argument_builder_debug)
+	if (!g_arg_builder_debug)
 		return ;
-	if (quote == '\'')
+	if (quote == Q_SINGLE)
 		color = 92;
-	else if (quote == '\"')
+	else if (quote == Q_DOUBLE)
 		color = 93;
 	else
 		color = 94;
@@ -37,9 +37,9 @@ void
 }
 
 void
-	argument_builder_debug_new(void)
+	arg_builder_debug_new(void)
 {
-	if (!g_argument_builder_debug)
+	if (!g_arg_builder_debug)
 		return ;
 	ft_printf("\n");
 }

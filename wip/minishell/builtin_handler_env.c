@@ -22,7 +22,8 @@ void
 	while (index < g_env_variables.size)
 	{
 		item = (t_env_var *)g_env_variables.items[index];
-		ft_dprintf(param.fd_out, "%s=%s\n", item->name, item->value);
+		if (item->value != NULL)
+			ft_dprintf(param.fd_out, "%s=%s\n", item->name, item->value);
 		index++;
 	}
 }

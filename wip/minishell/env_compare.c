@@ -19,3 +19,11 @@ int
 		return (1);
 	return (ft_strcmp(item->name, to));
 }
+
+int
+	env_compare_name(t_env_var *a, t_env_var *b)
+{
+	if (a == NULL || b == NULL)
+		return (a != b);
+	return (ft_strcmp(a->name, b->name));
+}

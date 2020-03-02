@@ -24,6 +24,8 @@ void
 		ft_printf("Quit: %d\n", sig);
 		minishell_process_kill(g_shell, sig);
 	}
+	else
+		minishell_prompt_clear_last(0);
 	signal(SIGQUIT, &signal_handler_quit);
 }
 

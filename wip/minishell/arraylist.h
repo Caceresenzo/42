@@ -50,4 +50,8 @@ int					arraylist_remove(t_arrlst *alst, void *ptr, void (*del)());
 int					arraylist_remove_at(t_arrlst *l, size_t pos, void (*del)());
 int					arraylist_clear(t_arrlst *alst, void (*del)());
 
+t_arrlst			*arraylist_duplicate(t_arrlst *alst);
+
+int					arraylist_sort(t_arrlst *alst, int (*other_cmp)());
+
 #endif

@@ -150,4 +150,6 @@ int					ft_atoi_base_insensitive(const char *str, const char *base);
 int					ft_is_base_valid(const char *str);
 int					ft_base_resolve(const char *base, char match);
 
+void				ft_swap(void **a, void **b);
+
 #endif

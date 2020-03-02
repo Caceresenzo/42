@@ -12,16 +12,23 @@
 
 #include "minishell.h"
 
-int
-	env_set_from_line(char *line)
+t_env_var
+	*env_set_from_line(char *line, int replace)
 {
 	t_env_var	*var;
+	t_env_var	*previous;
 
 	var = env_var_create_from_line(line);
 	if (var == NULL)
-		return (0);
+		return (NULL);
+	if (!replace && ((previous = env_get_by_name(var->name)) != NULL)
+		&& previous->value != NULL)
+	{
+		env_var_free_and_release(&var);
+		return (NULL);
+	}
 	env_set(var);
-	return (1);
+	return (var);
 }
 
 void
@@ -32,4 +39,6 @@ void
 	env_unset_from_name(var->name);
 	arraylist_add(&g_env_variables, var);
 	env_array_invalidate();
+	if (ft_strcmp(var->name, "HOME") == 0)
+		home_set_cache(var->value);
 }

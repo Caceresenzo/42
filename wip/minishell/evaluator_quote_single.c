@@ -12,52 +12,20 @@
 
 #include "minishell.h"
 
-static int
-	commit(char **line, size_t *consumed, t_arrlst *chrlst)
-{
-	int		ret;
-	size_t	sub;
-
-	if (**line == '\\')
-	{
-		if (*(*line + 1) == '\'')
-		{
-			arg_builder_add_char(chrlst, '\\', '\'');
-			return (eval_consume(2, line, consumed, 0));
-		}
-		else
-		{
-			ret = eval_escape_backslash(*line, &sub);
-			if (ret != -1)
-			{
-				arg_builder_add_char(chrlst, ret, '\'');
-				*consumed += sub;
-				*line += *consumed;
-			}
-		}
-		return (1);
-	}
-	return (2);
-}
-
 int
 	eval_q_single(char *line, size_t *consumed, t_arrlst *chrlst)
 {
-	int		ret;
+	int		is;
 
+	if (*line == Q_SINGLE)
+		eval_consume(1, &line, consumed, 0);
 	while (*line)
 	{
-		ret = commit(&line, consumed, chrlst);
-		if (ret == 0)
-			return (0);
-		else if (ret == 2)
-		{
-			if (*line == '\'')
-				return (eval_consume(1, &line, consumed, 0));
-			else
-				arg_builder_add_char(chrlst, *line, '\'');
-		}
+		if (!(is = *line == Q_SINGLE))
+			arg_builder_add_char(chrlst, *line, Q_SINGLE);
 		eval_consume(1, &line, consumed, 0);
+		if (is)
+			break ;
 	}
 	return (0);
 }

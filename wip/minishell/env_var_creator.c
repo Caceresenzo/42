@@ -18,10 +18,11 @@ t_env_var
 	char	*equal;
 
 	equal = ft_strchr(line, '=');
-	if (equal == NULL)
-		return (NULL);
-	equal[0] = '\0';
-	equal++;
+	if (equal != NULL)
+	{
+		equal[0] = '\0';
+		equal++;
+	}
 	return (env_var_create(line, equal));
 }
 
@@ -34,8 +35,8 @@ t_env_var
 		return (NULL);
 	var->name = ft_strdup(name);
 	var->name_len = ft_strlen(name);
-	var->value = ft_strdup(value);
-	if (var->name == NULL || var->value == NULL)
+	var->value = value == NULL ? NULL : ft_strdup(value);
+	if (var->name == NULL)
 		env_var_free_and_release(&var);
 	return (var);
 }
