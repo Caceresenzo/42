@@ -21,7 +21,7 @@
 
 ContactManager::ContactManager(void)
 {
-	std::memset(this->contacts, 0, sizeof(this->contacts));
+	Common::memset(this->contacts, 0, sizeof(this->contacts));
 }
 
 ContactManager::~ContactManager(void)

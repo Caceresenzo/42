@@ -45,3 +45,29 @@ bool
 	}
 	return (true);
 }
+
+void
+	Common::memcpy(void *dst, void *src, unsigned long size)
+{
+	unsigned char	*dest;
+	unsigned char	*source;
+
+	dest = (unsigned char *)dst;
+	source = (unsigned char *)src;
+
+	for (unsigned long index = 0; index < size; index++)
+		dest[index] = source[index];
+}
+
+void *
+	Common::memset(void *ptr, int value, unsigned long size)
+{
+	unsigned char	*ptrr;
+
+	ptrr = (unsigned char *)ptr;
+
+	for (unsigned long index = 0; index < size; index++)
+		ptrr[index] = (unsigned char)value;
+
+	return (ptr);
+}

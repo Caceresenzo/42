@@ -20,6 +20,9 @@ public:
 	static bool is_digit(char c);
 
 	static bool strict_positive_atoi(const char *str, int *out, char line_end);
+
+	static void memcpy(void *dst, void *src, unsigned long size);
+	static void *memset(void *ptr, int value, unsigned long size);
 };
 
 #endif /* COMMON_HPP_ */

@@ -14,6 +14,7 @@
 
 #include "Phonebook.hpp"
 #include "Contact.hpp"
+#include "Common.hpp"
 
 const std::string Contact::INPUTS[] = {
 	"First Name",
@@ -52,7 +53,7 @@ void
 		&(this->underwear_color),
 		&(this->darkest_secret),
 	};
-	std::memcpy(fields, local, sizeof(local));
+	Common::memcpy(fields, local, sizeof(local));
 }
 
 Contact
