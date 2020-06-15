@@ -21,88 +21,48 @@
 
 ContactManager::ContactManager(void)
 {
-	Common::memset(this->contacts, 0, sizeof(this->contacts));
+	;
 }
 
 ContactManager::~ContactManager(void)
 {
-	for (int index = 0; index < MAX_CONTACT; index++)
-	{
-		Contact *current = this->contacts[index];
-
-		if (current == NULL)
-		{
-			break ;
-		}
-
-		delete current;
-	}
-}
-
-int
-	ContactManager::getNextAvailableSlot(void)
-{
-	for (int index = 0; index < MAX_CONTACT; index++)
-	{
-		Contact *current = this->contacts[index];
-
-		if (current == NULL)
-		{
-			return (index);
-		}
-	}
-	return (-1);
+	;
 }
 
 bool
-	ContactManager::canAddMore(void)
+ContactManager::canAddMore(void)
 {
-	return (this->getNextAvailableSlot() != -1);
+	return (this->size() < MAX_CONTACT);
 }
 
 int
-	ContactManager::size(void)
+ContactManager::size(void)
 {
-	int index = 0;
-
-	for (; index < MAX_CONTACT; index++)
-	{
-		Contact *current = this->contacts[index];
-
-		if (current == NULL)
-		{
-			break ;
-		}
-	}
-	return (index);
+	return (this->added);
 }
 
 bool
-	ContactManager::isEmpty(void)
+ContactManager::isEmpty(void)
 {
 	return (this->size() == 0);
 }
 
 bool
-	ContactManager::add(Contact *contact)
+ContactManager::add(Contact contact)
 {
-	int nextSlot = this->getNextAvailableSlot();
-
-	if (nextSlot == -1)
-	{
+	if (!this->canAddMore())
 		return (false);
-	}
 
-	this->contacts[nextSlot] = contact;
+	this->contacts[this->added++] = contact;
 
 	return (true);
 }
 
 void
-	ContactManager::display(Contact *contact)
+ContactManager::display(Contact contact)
 {
 	std::string *fields[Contact::INPUT_COUNT];
-	contact->getFields(fields);
+	contact.fields(fields);
 
 	for (int index = 0; index < Contact::INPUT_COUNT; index++)
 	{
@@ -114,13 +74,13 @@ void
 }
 
 void
-	ContactManager::listAll(void)
+ContactManager::listAll(void)
 {
 	const int size = this->size();
 
 	for (int index = 0; index < size; index++)
 	{
-		Contact *current = this->contacts[index];
+		Contact current = this->contacts[index];
 
 		std::stringstream indexStream;
 		indexStream << index;
@@ -128,19 +88,19 @@ void
 		TableRenderer::renderColumnEntry(indexStream.str());
 		TableRenderer::renderBorder(false);
 
-		TableRenderer::renderColumnEntry(current->first_name);
+		TableRenderer::renderColumnEntry(current.getFirstName());
 		TableRenderer::renderBorder(false);
 
-		TableRenderer::renderColumnEntry(current->last_name);
+		TableRenderer::renderColumnEntry(current.getLastName());
 		TableRenderer::renderBorder(false);
 
-		TableRenderer::renderColumnEntry(current->nickname);
+		TableRenderer::renderColumnEntry(current.getNickname());
 		TableRenderer::renderBorder(true);
 	}
 }
 
 void
-	ContactManager::interactiveSearch(void)
+ContactManager::interactiveSearch(void)
 {
 	std::cout << ASK_INDEX;
 
@@ -153,24 +113,17 @@ void
 	if (invalid_input || out_of_bound)
 	{
 		if (std::cin.eof())
-		{
 			std::cout << std::endl;
-		}
 		else
 		{
-			if (out_of_bound)
-			{
+			if (!invalid_input && out_of_bound && !read.empty())
 				std::cout << ERR_SEARCH_OUT_OF_BOUNDS << std::endl;
-			}
 			else
-			{
 				std::cout << ERR_SEARCH_INVALID_INDEX_INPUT << std::endl;
-			}
 		}
-		return ;
+
+		return;
 	}
 
-	Contact *selected = this->contacts[index];
-
-	this->display(selected);
+	this->display(this->contacts[index]);
 }

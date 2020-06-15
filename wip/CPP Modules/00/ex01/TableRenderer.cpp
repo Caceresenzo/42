@@ -21,7 +21,7 @@ const char TableRenderer::separator = '|';
 const char TableRenderer::truncateChar = '.';
 
 void
-	TableRenderer::renderColumnEntry(std::string text)
+TableRenderer::renderColumnEntry(std::string text)
 {
 	size_t length = text.length();
 
@@ -32,24 +32,19 @@ void
 		text = text.substr(0, TableRenderer::columnWidth - (tooLong ? 1 : 0));
 
 		if (tooLong)
-		{
 			text += truncateChar;
-		}
 	}
+
 	std::cout << std::setfill(' ') << std::setw(TableRenderer::columnWidth);
 	std::cout << text;
 	std::cout << std::setfill(' ') << std::setw(0);
 }
 
 void
-	TableRenderer::renderBorder(bool end)
+TableRenderer::renderBorder(bool end)
 {
 	if (end)
-	{
 		std::cout << std::endl;
-	}
 	else
-	{
 		std::cout << TableRenderer::separator;
-	}
 }

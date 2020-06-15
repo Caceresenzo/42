@@ -34,11 +34,11 @@ const int Contact::INPUT_COUNT = sizeof(Contact::INPUTS) / sizeof(std::string);
 
 Contact::Contact(void)
 {
-	return ;
+	;
 }
 
 void
-	Contact::getFields(std::string *fields[])
+Contact::fields(std::string *fields[])
 {
 	std::string *local[] = {
 		&(this->first_name),
@@ -53,16 +53,18 @@ void
 		&(this->underwear_color),
 		&(this->darkest_secret),
 	};
-	Common::memcpy(fields, local, sizeof(local));
+
+	for (int index = 0; index < Contact::INPUT_COUNT; ++index)
+		fields[index] = local[index];
 }
 
 Contact
-	*Contact::creator(void)
+Contact::creator(void)
 {
-	Contact* contact = new Contact();
+	Contact contact;
 
 	std::string *fields[Contact::INPUT_COUNT];
-	contact->getFields(fields);
+	contact.fields(fields);
 
 	for (int index = 0; index < Contact::INPUT_COUNT; index++)
 	{
@@ -77,11 +79,29 @@ Contact
 		if (std::cin.eof())
 		{
 			std::cout << std::endl;
-			break ;
+			break;
 		}
 
 		*field = read;
 	}
 
 	return (contact);
+}
+
+std::string
+Contact::getFirstName()
+{
+	return this->first_name;
+}
+
+std::string
+Contact::getLastName()
+{
+	return this->last_name;
+}
+
+std::string
+Contact::getNickname()
+{
+	return this->nickname;
 }
