@@ -17,6 +17,11 @@
 #include "ZombieEvent.hpp"
 #include "Zombie.hpp"
 
+/*
+** https://github.com/dominictarr/random-name/blob/master/first-names.json
+** Filtered to: (index + 1) % 50 == 0
+*/
+
 std::string
 ZombieEvent::NAMES[] = {
 	"Adriana", "Alana", "Alissa", "Amalea", "Andra",
@@ -39,7 +44,7 @@ ZombieEvent::NAMES[] = {
 
 ZombieEvent::ZombieEvent(void)
 {
-	return;
+	;
 }
 
 void
@@ -53,11 +58,6 @@ Zombie
 {
 	return (new Zombie(name, this->_type));
 }
-
-/*
-** https://raw.githubusercontent.com/dominictarr/random-name/master/first-names.json
-** Filtered to: (index + 1) % 50 == 0
-*/
 
 Zombie
 *ZombieEvent::randomChump(void)
