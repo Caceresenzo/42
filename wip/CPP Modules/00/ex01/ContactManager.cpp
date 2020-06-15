@@ -19,16 +19,6 @@
 #include "Common.hpp"
 #include "TableRenderer.hpp"
 
-ContactManager::ContactManager(void)
-{
-	;
-}
-
-ContactManager::~ContactManager(void)
-{
-	;
-}
-
 bool
 ContactManager::canAddMore(void)
 {

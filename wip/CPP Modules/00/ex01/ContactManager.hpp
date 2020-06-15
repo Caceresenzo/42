@@ -26,9 +26,6 @@ class ContactManager
 		int	added;
 
 	public:
-		ContactManager(void);
-		~ContactManager(void);
-
 		bool canAddMore(void);
 		int size(void);
 		bool isEmpty(void);
