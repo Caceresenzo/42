@@ -17,14 +17,18 @@
 
 class Zombie
 {
-	public:
+	private:
 		std::string _name;
 		std::string _type;
 
 	public:
+		Zombie(void);
 		Zombie(std::string name, std::string type);
 
-		void advert();
+		void setName(std::string name);
+		void setType(std::string type);
+
+		void announce();
 };
 
 #endif /* ZOMBIE_HPP_ */

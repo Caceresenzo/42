@@ -15,6 +15,8 @@
 #include "ZombieHorde.hpp"
 #include "Zombie.hpp"
 
+#define ARR_SIZE(arr) (sizeof(arr) / sizeof(std::string))
+
 std::string
 ZombieHorde::NAMES[] = {
 	"Adriana", "Alana", "Alissa", "Amalea", "Andra",
@@ -43,35 +45,27 @@ ZombieHorde::TYPES[] = {
 ZombieHorde::ZombieHorde(int n)
 {
 	this->_size = n;
-	this->_zombies = (Zombie *)malloc(n * sizeof(Zombie));
+	this->_zombies = new Zombie[n];
 
-	if (this->_zombies != NULL)
+	for (int index = 0; index < n; ++index)
 	{
-		for (int index = 0; index < n; ++index)
-		{
-			Zombie *zombie = (Zombie *)(this->_zombies + index);
-
-			std::string name = NAMES[rand() % (sizeof(NAMES) / sizeof(std::string))];
-			std::string type = TYPES[rand() % (sizeof(TYPES) / sizeof(std::string))];
-
-			zombie->_name = name;
-			zombie->_type = type;
-		}
+		this->_zombies[index].setName(NAMES[rand() % ARR_SIZE(NAMES)]);
+		this->_zombies[index].setType(TYPES[rand() % ARR_SIZE(TYPES)]);
 	}
 }
 
 ZombieHorde::~ZombieHorde(void)
 {
-	delete this->_zombies;
+	delete[] this->_zombies;
 }
 
 void
-ZombieHorde::advert(void)
+ZombieHorde::announce(void)
 {
 	for (int index = 0; index < this->_size; ++index)
 	{
-		Zombie *zombie = (Zombie *)(this->_zombies + index);
+		Zombie zombie = this->_zombies[index];
 
-		zombie->advert();
+		zombie.announce();
 	}
 }

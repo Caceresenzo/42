@@ -22,11 +22,9 @@ main(void)
 {
 	srand(time(NULL));
 
-	ZombieHorde *horde = new ZombieHorde(10);
+	ZombieHorde horde = ZombieHorde(10);
 
-	horde->advert();
-
-	delete horde;
+	horde.announce();
 
 	return (0);
 }

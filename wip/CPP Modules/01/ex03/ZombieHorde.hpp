@@ -28,7 +28,7 @@ class ZombieHorde
 		ZombieHorde(int n);
 		~ZombieHorde(void);
 
-		void advert();
+		void announce();
 };
 
 #endif /* ZOMBIEHORDE_HPP_ */
