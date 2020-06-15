@@ -32,7 +32,5 @@ void
 HumanB::attack(void)
 {
 	if (this->_weapon != NULL)
-	{
 		std::cout << this->_name << " attacks with his " << this->_weapon->getType() << std::endl;
-	}
 }
