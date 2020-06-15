@@ -51,9 +51,6 @@ ponyOnTheHeap(void)
 	printAddress(pony);
 
 	delete pony;
-
-	// pony->tellName();
-	// pony->tellColor();
 }
 
 int

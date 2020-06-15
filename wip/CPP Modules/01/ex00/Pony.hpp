@@ -24,16 +24,17 @@ typedef enum {
 
 class Pony
 {
-public:
-	std::string name;
-	t_color color;
+	private:
+		std::string name;
+		t_color color;
 
-	Pony(std::string name, t_color color);
-	~Pony(void);
+	public:
+		Pony(std::string name, t_color color);
+		~Pony(void);
 
-	void tellName(void);
-	void changeColor(t_color newColor);
-	void tellColor(void);
+		void tellName(void);
+		void changeColor(t_color newColor);
+		void tellColor(void);
 };
 
 #endif /* PONY_HPP_ */
