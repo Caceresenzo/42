@@ -18,12 +18,11 @@
 std::string
 Human::identify(void) const
 {
-	return (this->_brain.identify());
+	return (this->getBrain().identify());
 }
 
-Brain&
-Human::getBrain(void)
+const Brain&
+Human::getBrain(void) const
 {
-	const Brain &ref = this->_brain;
-	return ((Brain &)ref);
+	return (this->_brain);
 }

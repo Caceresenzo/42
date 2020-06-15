@@ -23,9 +23,11 @@ class Human
 		const Brain _brain;
 
 	public:
+		/* 'const' at the end: the method will never try to modify the object. */
 		std::string identify(void) const;
 
-		Brain& getBrain(void);
+		/* return a 'const': the returned variable is a const too. */
+		const Brain& getBrain(void) const;
 };
 
 #endif /* HUMAIN_HPP_ */
