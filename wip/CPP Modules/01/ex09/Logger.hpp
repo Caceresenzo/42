@@ -25,10 +25,10 @@ class Logger
 		std::string _file;
 		std::ofstream _stream;
 
-		std::string makeLogEntry(std::string const msg);
+		std::string makeLogEntry(std::string const &msg);
 
-		void logToConsole(std::string const msg);
-		void logToFile(std::string const msg);
+		void logToConsole(std::string const &msg);
+		void logToFile(std::string const &msg);
 
 	public:
 		Logger(std::string file);

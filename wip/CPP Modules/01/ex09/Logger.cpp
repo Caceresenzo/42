@@ -25,25 +25,19 @@ Logger::Logger(std::string file)
 	this->_stream.open(file, std::ofstream::out | std::ofstream::app);
 
 	if (!this->_stream.is_open())
-	{
 		this->log(DEST_CONSOLE, "WARNING: Failed to open output log file \"" + file + "\": " + strerror(errno));
-	}
 	else
-	{
 		this->_stream << std::endl;
-	}
 }
 
 Logger::~Logger(void)
 {
 	if (this->_stream.is_open())
-	{
 		this->_stream.close();
-	}
 }
 
 std::string
-Logger::makeLogEntry(std::string msg)
+Logger::makeLogEntry(std::string const &msg)
 {
 	std::stringstream stream;
 
@@ -70,28 +64,22 @@ Logger::makeLogEntry(std::string msg)
 }
 
 void
-Logger::logToConsole(std::string msg)
+Logger::logToConsole(std::string const &msg)
 {
 	std::cout << msg << std::endl;
 }
 
 void
-Logger::logToFile(std::string msg)
+Logger::logToFile(std::string const &msg)
 {
 	if (this->_stream.is_open())
-	{
 		this->_stream << msg << std::endl;
-	}
-	else
-	{
-		std::cout << msg << " (FILE NOT OPEN)" << std::endl;
-	}
 }
 
 void
 Logger::log(std::string const &dest, std::string const &message)
 {
-	void (Logger::*methods[])(std::string) = {
+	void (Logger::*methods[])(std::string const &) = {
 		&Logger::logToConsole,
 		&Logger::logToFile
 	};
@@ -100,25 +88,16 @@ Logger::log(std::string const &dest, std::string const &message)
 		DEST_FILE
 	};
 
-	int count = sizeof(names) / sizeof(std::string);
-
-	int index;
-	for (index = 0; index < count; index++)
+	for (size_t index = 0; index < (sizeof(names) / sizeof(std::string)); index++)
 	{
-		void (Logger::*method)(std::string const) = methods[index];
+		void (Logger::*method)(std::string const &) = methods[index];
 		std::string name = names[index];
 
 		if (name == dest)
 		{
-			std::string formatted = makeLogEntry(message);
+			(this->*method)(makeLogEntry(message));
 
-			(this->*method)(formatted);
 			break ;
 		}
-	}
-
-	if (index >= count)
-	{
-		log(DEST_CONSOLE, "WARNING: Unknown log destination \"" + dest + "\". (message: \"" + message + "\")");
 	}
 }
