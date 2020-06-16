@@ -23,9 +23,9 @@
 class TheReplacer
 {
 	private:
-		std::string _file;
-		std::string _s1;
-		std::string _s2;
+		std::string &_file;
+		std::string &_s1;
+		std::string &_s2;
 
 		std::string _outFile;
 
@@ -37,7 +37,7 @@ class TheReplacer
 		void _closeStreams(void);
 
 	public:
-		TheReplacer(std::string file, std::string s1, std::string s2);
+		TheReplacer(std::string &file, std::string &s1, std::string &s2);
 
 		int replace();
 };

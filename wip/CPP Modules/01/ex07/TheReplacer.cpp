@@ -10,19 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "TheReplacer.hpp"
+
+#include <stddef.h>
 #include <iostream>
 #include <string>
-#include <stddef.h>
 
-#include "TheReplacer.hpp"
 #include "Common.hpp"
 
-TheReplacer::TheReplacer(std::string file, std::string s1, std::string s2)
-{
-	this->_file = file;
-	this->_s1 = s1;
-	this->_s2 = s2;
 
+TheReplacer::TheReplacer(std::string &file, std::string &s1, std::string &s2) : _file(file), _s1(s1), _s2(s2)
+{
 	this->_outFile = Common::get_file_name(file).append(".replace");
 }
 
@@ -32,9 +30,7 @@ TheReplacer::_readInputFile(std::string &dest)
 	this->_in.open(this->_file);
 
 	if (errno)
-	{
 		return (errno);
-	}
 
 	if (this->_in.is_open())
 	{
@@ -44,9 +40,7 @@ TheReplacer::_readInputFile(std::string &dest)
 			dest.append(line);
 
 			if (!this->_in.eof())
-			{
 				dest.append("\n");
-			}
 		}
 	}
 
@@ -58,31 +52,22 @@ TheReplacer::_writeOutputFile(std::string &src)
 {
 	this->_out.open(this->_outFile);
 
-	if (errno)
+	if (!errno)
 	{
-		return (errno);
+		if (this->_out.is_open())
+			this->_out << src;
 	}
-
-	if (this->_out.is_open())
-	{
-		this->_out << src;
-	}
-
-	return (0);
+	return (errno);
 }
 
 void
 TheReplacer::_closeStreams(void)
 {
 	if (this->_in.is_open())
-	{
 		this->_in.close();
-	}
 
 	if (this->_out.is_open())
-	{
 		this->_out.close();
-	}
 }
 
 int
@@ -92,9 +77,7 @@ TheReplacer::replace(void)
 
 	std::string input;
 	if ((error = _readInputFile(input)))
-	{
 		return (error);
-	}
 
 	size_t start = 0;
 	size_t charIndex;
@@ -102,16 +85,14 @@ TheReplacer::replace(void)
 	std::string replaced;
 
 	if (this->_s1 == this->_s2)
-	{
 		replaced = input;
-	}
 	else
 	{
 		while (true)
 		{
-			charIndex = Common::strict_strstr(input, this->_s1, start);
+			charIndex = input.find(this->_s1, start);
 
-			if (charIndex == (size_t)-1)
+			if (charIndex == std::string::npos)
 			{
 				replaced.append(input, start, input.length());
 				break;
@@ -125,9 +106,7 @@ TheReplacer::replace(void)
 	}
 
 	if ((error = _writeOutputFile(replaced)))
-	{
 		return (error);
-	}
 
 	if (DEBUG_REPLACER)
 	{

@@ -18,7 +18,6 @@
 class Common
 {
 	public:
-		static ssize_t strict_strstr(const std::string haystack, const std::string needle, size_t start);
 		static std::string get_file_name(std::string const &file);
 };
 
