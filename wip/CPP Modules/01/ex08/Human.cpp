@@ -15,7 +15,7 @@
 
 #include "Human.hpp"
 
-#define NOTIFY_CALL std::cout << "Called: \e[32m" << __func__ << "\e[39m(\e[33m\"" << target << "\e[39m\");\e[0m" << std::endl;
+#define NOTIFY_CALL std::cout << "Called: \e[32m" << __func__ << "\e[39m(\e[33m\"" << target << "\"\e[39m);\e[0m" << std::endl;
 
 void
 Human::meleeAttack(std::string const &target)
