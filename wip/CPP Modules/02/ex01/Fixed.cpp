@@ -15,8 +15,7 @@
 
 #include "Fixed.hpp"
 
-const int
-Fixed::_BIT_COUNT = 8;
+const int Fixed::_BIT_COUNT = 8;
 
 Fixed::Fixed(void)
 {
@@ -43,7 +42,7 @@ Fixed::~Fixed(void)
 	this->_value = 0;
 }
 
-Fixed &
+Fixed&
 Fixed::operator =(const Fixed &other)
 {
 	if (this != &other)
@@ -52,12 +51,6 @@ Fixed::operator =(const Fixed &other)
 	}
 
 	return (*this);
-}
-
-std::ostream &
-operator <<(std::ostream &stream, const Fixed &fixed)
-{
-	return (stream << fixed.toFloat());
 }
 
 int
@@ -82,4 +75,10 @@ float
 Fixed::toFloat(void) const
 {
 	return (((float)this->_value) / (1 << _BIT_COUNT));
+}
+
+std::ostream&
+operator <<(std::ostream &stream, const Fixed &fixed)
+{
+	return (stream << fixed.toFloat());
 }
