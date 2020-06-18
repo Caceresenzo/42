@@ -14,7 +14,7 @@ NAME		= cato9tails
 SRCS		=	./main.cpp
 OBJS		= $(SRCS:.cpp=.o)
 RM			= rm -f
-FLAGS		= -Wall -Wextra -Werror
+FLAGS		= -Wall -Wextra -Werror -std=c++98
 COMPILER	= clang++
 P_NAME		= ${NAME}
 
@@ -39,6 +39,8 @@ test:
 	
 	@sh tests/do_test.sh "Common"		"A simple file"						"0"		Makefile
 	@sh tests/do_test.sh "Common"		"2 simple file"						"0"		Makefile main.cpp
+	@sh tests/do_test.sh "Common"		"A binary file"       				"0"		main.o
+	@sh tests/do_test.sh "Common"		"2 binary file"       				"0"		main.o cato9tails
 	@sh tests/do_test.sh "Common"		"Invalid file"						"0"		/i/do/not/exists
 	@sh tests/do_test.sh "Common"		"Multiple invalid file"				"0"		/i/do/not/exists /i/do/not/exists /i/do/not/exists
 	@sh tests/do_test.sh "Common"		"Invalid file in middle"			"0"		Makefile /i/do/not/exists main.cpp
