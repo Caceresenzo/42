@@ -15,8 +15,7 @@
 
 #include "Fixed.hpp"
 
-const int
-Fixed::_BIT_COUNT = 8;
+const int Fixed::_BIT_COUNT = 8;
 
 Fixed::Fixed(void)
 {
@@ -43,7 +42,7 @@ Fixed::~Fixed(void)
 	this->_value = 0;
 }
 
-Fixed &
+Fixed&
 Fixed::operator =(const Fixed &other)
 {
 	if (this != &other)
@@ -122,14 +121,14 @@ Fixed::operator /(const Fixed &right) const
 	return (Fixed(toFloat() / right.toFloat()));
 }
 
-Fixed &
+Fixed&
 Fixed::operator ++(void)
 {
 	this->_value += 1;
 	return (*this);
 }
 
-Fixed &
+Fixed&
 Fixed::operator --(void)
 {
 	this->_value -= 1;
@@ -156,7 +155,7 @@ Fixed::operator --(int)
 	return (cpy);
 }
 
-std::ostream &
+std::ostream&
 operator <<(std::ostream &stream, const Fixed &fixed)
 {
 	return (stream << fixed.toFloat());
@@ -186,25 +185,25 @@ Fixed::toFloat(void) const
 	return (((float)this->_value) / (1 << _BIT_COUNT));
 }
 
-Fixed &
+Fixed&
 Fixed::min(Fixed &a, Fixed &b)
 {
 	return (a < b ? a : b);
 }
 
-const Fixed &
+const Fixed&
 Fixed::min(const Fixed &a, const Fixed &b)
 {
 	return (a < b ? a : b);
 }
 
-Fixed &
+Fixed&
 Fixed::max(Fixed &a, Fixed &b)
 {
 	return (a > b ? a : b);
 }
 
-const Fixed &
+const Fixed&
 Fixed::max(const Fixed &a, const Fixed &b)
 {
 	return (a > b ? a : b);
