@@ -3,185 +3,134 @@
 /*                                                        :::      ::::::::   */
 /*   Evaluator.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 16:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/04 16:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/06/18 15:55:46 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/06/18 15:55:46 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Evaluator.hpp"
-#include "Token.hpp"
 
-Evaluator::Evaluator(void)
+#include "NumberToken.hpp"
+#include "ArrayList.hpp"
+#include "Fixed.hpp"
+
+Evaluator::Evaluator(void) : TokenReader()
 {
-	this->problemPosition = (size_t)-1;
-	this->errorReason = "None";
 }
 
-Evaluator::Evaluator(const Evaluator &other)
+Evaluator::Evaluator(ArrayList &list) : TokenReader(list)
 {
-	*this = other;
 }
 
-Evaluator::~Evaluator(void)
+Evaluator::Evaluator(const Evaluator &other) : TokenReader(other)
 {
-	return ;
 }
 
-Evaluator &
+Evaluator::~Evaluator()
+{
+}
+
+Evaluator&
 Evaluator::operator =(const Evaluator &other)
 {
-	if (this != &other)
-	{
-		this->problemPosition = other.problemPosition;
-		this->errorReason = other.errorReason;
-	}
+	TokenReader::operator =(other);
 
 	return (*this);
 }
 
-Fixed
-Evaluator::evaluate(Token *tokens[], size_t position)
+bool
+Evaluator::hasPrecedence(const Token *o1,
+                         const Token *o2)
+{
+	if (o2->type() == TT_ROUND_BRACKET_OPEN || o2->type() == TT_ROUND_BRACKET_CLOSE)
+		return false;
+
+	return (!((o1->type() == TT_ASTERISK || o1->type() == TT_SLASH) && (o2->type() == TT_PLUS || o2->type() == TT_MINUS)));
+}
+
+NumberToken*
+Evaluator::useOperator(const Token *rightToken,
+                       const Token *leftToken,
+                       const Token *operatorToken)
 {
 	Fixed result;
 
-	size_t size = Token::size(tokens);
+	Fixed left = dynamic_cast<const NumberToken*>(leftToken)->getValue();
+	Fixed right = dynamic_cast<const NumberToken*>(rightToken)->getValue();
+	TokenType type = operatorToken->type();
 
-	if (tokens != NULL && size != 0)
+	delete leftToken;
+	delete rightToken;
+	delete operatorToken;
+
+	switch (type)
 	{
-		char nextOperator = 0;
+		case TT_PLUS:
+			result = left + right;
+			break;
 
-		int priority = 1;
-		while (priority != -1)
+		case TT_MINUS:
+			result = left - right;
+			break;
+
+		case TT_ASTERISK:
+			result = left * right;
+			break;
+
+		case TT_SLASH:
+			result = left / right;
+
+			if (right.getRawBits() == 0)
+				this->abortNowhere("division by zero");
+
+			break;
+
+		default:
+			break;
+	}
+	return (new NumberToken(result));
+}
+
+Fixed
+Evaluator::evaluate(void)
+{
+	ArrayList values = ArrayList();
+	ArrayList operations = ArrayList();
+
+	while (!this->checkToken(TT_END_OF_FILE) && !this->aborted())
+	{
+		if (this->checkToken(TT_NUMBER))
+			values.push(new NumberToken(*(dynamic_cast<const NumberToken*>(this->currentToken()))));
+		else if (this->checkToken(TT_ROUND_BRACKET_OPEN))
+			operations.push(new Token(*(this->currentToken())));
+		else if (this->checkToken(TT_ROUND_BRACKET_CLOSE))
 		{
-			size_t index = 0;
+			while (operations.peek() != NULL && operations.peek()->type() != TT_ROUND_BRACKET_OPEN)
+				values.push(this->useOperator(values.pop(), values.pop(), operations.pop()));
 
-			Token *token;
-			while ((token = tokens[index]))
-			{
-				if (token->getKind() == kind_operator)
-				{
-					nextOperator = token->asOperatorChar();
+			delete operations.pop();
+		}
+		else if (Token::isOperator(this->currentToken()->type()))
+		{
+			while (!this->aborted() && !operations.empty() && Evaluator::hasPrecedence(this->currentToken(), operations.peek()))
+				values.push(this->useOperator(values.pop(), values.pop(),operations.pop()));
 
-					bool can = false;
-					can |= (priority == 1) && (nextOperator == '*' || nextOperator == '/');
-					can |= (priority == 0) && (nextOperator == '+' || nextOperator == '-');
-
-					if (can)
-					{
-						Fixed left = evaluate(tokens[index - 1]);
-						Fixed right = evaluate(tokens[index + 1]);
-
-						delete tokens[index - 1];
-						delete tokens[index + 0];
-						delete tokens[index + 1];
-
-						Fixed part = useOperator(left, right, nextOperator, tokens[index + 1]);
-
-						tokens[index - 1] = new Token(new Fixed(part), position);
-
-						for (size_t jndex = 0; true; jndex++)
-						{
-							if (tokens[index + 2 + jndex] == NULL)
-							{
-								tokens[index + jndex] = NULL;
-								break ;
-							}
-
-							tokens[index + jndex] = tokens[index + 2 + jndex];
-						}
-
-						index -= 1;
-					}
-				}
-
-				index++;
-			}
-
-			priority--;
+			operations.push(new Token(*(this->currentToken())));
 		}
 
-		result = evaluate(tokens[0]);
+		if (!this->aborted())
+			this->nextToken();
 	}
+
+	while (!this->aborted() && !operations.empty())
+		values.push(this->useOperator(values.pop(), values.pop(), operations.pop()));
+
+	const NumberToken *token = dynamic_cast<const NumberToken*>(values.pop());
+	Fixed result = token->getValue();
+
+	delete token;
 
 	return (result);
-}
-
-Fixed
-Evaluator::evaluate(Token *token)
-{
-	if (token != NULL)
-	{
-		if (token->getKind() == kind_number)
-		{
-			return (*(token->asFixed()));
-		}
-		else if (token->getKind() == kind_list)
-		{
-			return (evaluate(token->asArrayList(), token->getPositionInString()));
-		}
-	}
-
-	return (Fixed(0));
-}
-
-Fixed
-Evaluator::useOperator(Fixed &left, Fixed &right, char operatorChar, Token *token)
-{
-	switch (operatorChar) {
-		case '+':
-		{
-			return (left + right);
-		}
-
-		case '-':
-		{
-			return (left - right);
-		}
-
-		case '*':
-		{
-			return (left * right);
-		}
-
-		case '/':
-		{
-			if (right.isZero())
-			{
-				setError(token->getPositionInString(), "Division by 0");
-
-				break ;
-			}
-
-			return (left / right);
-		}
-	}
-
-	return (Fixed(0));
-}
-
-void
-Evaluator::setError(size_t problemPosition, std::string errorReason)
-{
-	this->problemPosition = problemPosition;
-	this->errorReason = errorReason;
-}
-
-bool
-Evaluator::hasFoundError(void)
-{
-	return (this->problemPosition != (size_t)-1);
-}
-
-size_t
-Evaluator::getProblemPosition(void)
-{
-	return (this->problemPosition);
-}
-
-std::string
-Evaluator::getErrorReason(void)
-{
-	return (this->errorReason);
 }

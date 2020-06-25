@@ -3,56 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   Token.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 16:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/04 16:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/06/18 14:05:34 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/06/18 14:05:34 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKEN_HPP
-# define TOKEN_HPP
+#ifndef TOKEN_HPP_
+# define TOKEN_HPP_
 
-# include "libft.hpp"
+# include <string>
 
-# include "Fixed.hpp"
-
-typedef enum {
-	kind_operator, kind_number, kind_list
-} TokenKind;
+enum TokenType
+{
+	TT_END_OF_FILE = -1,
+	TT_NUMBER = 0,
+	TT_PLUS,
+	TT_MINUS,
+	TT_ASTERISK,
+	TT_SLASH,
+	TT_ROUND_BRACKET_OPEN,
+	TT_ROUND_BRACKET_CLOSE,
+	TT__SIZE
+};
 
 class Token
 {
 	private:
-		TokenKind kind;
-		void *value;
-		size_t position;
-		bool converted;
+		TokenType _type;
+		std::size_t _position;
 
 	public:
-		Token(void);
-		Token(char operatorChar, size_t positionInString);
-		Token(Fixed *number, size_t positionInString);
-		Token(t_list *lst, size_t positionInString);
-		Token(Token **tokens, size_t positionInString);
+		Token();
 		Token(const Token &other);
+		Token(TokenType type);
 
-		~Token(void);
+		virtual ~Token();
 
-		Token &operator =(const Token &other);
+		Token& operator=(const Token &other);
 
-		Token **convertListToArray(void);
+		TokenType type() const;
+		std::string name() const;
 
-		TokenKind getKind(void);
-		void *getRawValue(void);
-		size_t getPositionInString(void);
+		std::size_t position() const;
+		std::size_t position(std::size_t position);
 
-		char asOperatorChar(void);
-		Fixed *asFixed(void);
-		t_list *asList(void);
-		Token **asArrayList(void);
+		virtual const std::string toString(void) const;
 
-		static size_t size(Token **array);
+		static bool isOperator(TokenType type);
+		static std::string typeName(TokenType type);
 };
 
 #endif /* TOKEN_HPP_ */

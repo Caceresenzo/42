@@ -14,7 +14,7 @@
 
 Utils::Utils(void)
 {
-	return ;
+	return;
 }
 
 Utils::Utils(const Utils &other)
@@ -24,10 +24,10 @@ Utils::Utils(const Utils &other)
 
 Utils::~Utils(void)
 {
-	return ;
+	;
 }
 
-Utils &
+Utils&
 Utils::operator =(const Utils &other)
 {
 	(void)other;
@@ -55,5 +55,6 @@ Utils::isParenthesis(char c)
 bool
 Utils::isWhitespace(char c)
 {
-	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f' || c == '\v');
+	return (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f'
+	        || c == '\v');
 }

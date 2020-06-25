@@ -1,50 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Parser.hpp                                         :+:      :+:    :+:   */
+/*   Parser.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 16:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/04 16:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/06/18 15:55:46 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/06/18 15:55:46 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_HPP
-# define PARSER_HPP
+#ifndef PARSER_HPP_
+# define PARSER_HPP_
 
-# include <string>
-
-# include "libft.hpp"
-
+# include "ArrayList.hpp"
 # include "Token.hpp"
+# include "TokenReader.hpp"
 
-class Parser
+class Parser : public TokenReader
 {
-	private:
-		Token **tokens;
-
-		Token *problematicToken;
-		std::string errorReason;
-
 	public:
 		Parser(void);
-		Parser(Token **tokens);
+		Parser(ArrayList &list);
 		Parser(const Parser &other);
 
-		~Parser(void);
+		virtual ~Parser(void);
 
-		Parser &operator =(const Parser &other);
+		Parser& operator =(const Parser &other);
 
-		bool parse(void);
-
-		void validate(Token **tokens);
-
-		void setError(Token *problematicToken, std::string errorReason);
-
-		bool hasFoundError(void);
-		Token *getProblematicToken(void);
-		std::string getErrorReason(void);
+		bool parseLine();
+		bool parseExpression();
+		bool parseExpressionBody();
 };
 
 #endif /* PARSER_HPP_ */

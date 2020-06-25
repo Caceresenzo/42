@@ -1,156 +1,141 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Parser.cpp                                         :+:      :+:    :+:   */
+/*   Parser.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 16:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/04 16:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/06/18 15:55:46 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/06/18 15:55:46 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Parser.hpp"
+#include <iostream>
 
-Parser::Parser(void)
+Parser::Parser(void) : TokenReader()
 {
-	this->tokens = NULL;
-
-	this->problematicToken = NULL;
-	this->errorReason = "None";
 }
 
-Parser::Parser(Token **tokens)
+Parser::Parser(ArrayList &list) : TokenReader(list)
 {
-	this->tokens = tokens;
-
-	this->problematicToken = NULL;
-	this->errorReason = "None";
 }
 
-Parser::Parser(const Parser &other)
+Parser::Parser(const Parser &other) : TokenReader(other)
 {
-	*this = other;
 }
 
-Parser::~Parser(void)
+Parser::~Parser()
 {
-	return ;
 }
 
-Parser &
+Parser&
 Parser::operator =(const Parser &other)
 {
-	if (this != &other)
-	{
-		this->tokens = other.tokens;
-		this->problematicToken = other.problematicToken;
-		this->errorReason = other.errorReason;
-	}
+	TokenReader::operator =(other);
 
 	return (*this);
 }
 
 bool
-Parser::parse(void)
+Parser::parseLine()
 {
-	validate(tokens);
+	if (this->currentToken() == NULL)
+		return (true);
 
-	return (!hasFoundError());
-}
+	if (this->parseExpression() && this->depth() != 0)
+		return (this->abort("bracket open but never closed"));
 
-void
-Parser::validate(Token **tokens)
-{
-	Token *token;
-
-	if (tokens == NULL)
-	{
-		return ;
-	}
-
-	size_t size = Token::size(tokens);
-	if (size == 0)
-	{
-		return ;
-	}
-
-	if ((token = tokens[0])->getKind() == kind_operator)
-	{
-		setError(token, "Operator at the beginning");
-		return ;
-	}
-
-	size_t index = 0;
-	TokenKind previous = (TokenKind)-1;
-	while ((token = tokens[index]))
-	{
-		TokenKind current = token->getKind();
-
-		if (previous == (TokenKind)-1)
-		{
-			previous = current;
-		}
-		else
-		{
-			if (previous == current)
-			{
-				setError(token, ((std::string []) {
-					"Multiple operator",
-					"Multiple litteral",
-					"Multiple group",
-				})[current]);
-				return ;
-			}
-			else if (previous == kind_number && current == kind_list)
-			{
-				setError(token, "Number followed by group");
-				return ;
-			}
-			else if (previous == kind_list && current == kind_number)
-			{
-				setError(token, "Group followed by number");
-				return ;
-			}
-
-			previous = current;
-		}
-		if (current == kind_list)
-		{
-			validate(token->asArrayList());
-		}
-
-		index++;
-	}
-
-	if ((token = tokens[size - 1])->getKind() == kind_operator)
-	{
-		setError(token, "Operator at the end");
-		return ;
-	}
-}
-
-void
-Parser::setError(Token *problematicToken, std::string errorReason)
-{
-	this->problematicToken = problematicToken;
-	this->errorReason = errorReason;
+	return (true);
 }
 
 bool
-Parser::hasFoundError(void)
+Parser::parseExpression()
 {
-	return (this->problematicToken != NULL);
+	if (Token::isOperator(this->currentToken()->type()))
+		return (this->abort("operator at start of expression"));
+
+	while (true)
+	{
+		if (!this->parseExpressionBody())
+			return (false);
+
+		if (this->checkToken(TT_END_OF_FILE))
+			break;
+	}
+
+	return (this->parseExpressionBody());
 }
 
-Token *
-Parser::getProblematicToken(void)
+bool
+Parser::parseExpressionBody()
 {
-	return (this->problematicToken);
-}
+	if (this->checkToken(TT_END_OF_FILE))
+	{
+		if (this->depth() != 0)
+			return (this->abort("bracket open but never closed"));
 
-std::string
-Parser::getErrorReason(void)
-{
-	return (this->errorReason);
+		return (true);
+	}
+	else if (this->checkToken(TT_ROUND_BRACKET_OPEN))
+	{
+		this->nextToken();
+
+		if (this->checkToken(TT_ROUND_BRACKET_CLOSE))
+			return (this->abort("empty brackets"));
+
+		this->dive();
+
+		return (this->parseExpression());
+	}
+	else if (this->checkToken(TT_ROUND_BRACKET_CLOSE))
+	{
+		this->nextToken();
+
+		bool r;
+		if (!(r = this->surface()))
+		{
+			this->abort("close bracket but never open");
+		}
+		else
+		{
+			if (this->checkToken(TT_ROUND_BRACKET_OPEN))
+				return (this->abort("multiple group"));
+			else if (!this->checkToken(TT_END_OF_FILE)
+						&& (!Token::isOperator(this->currentToken()->type())
+							&& !this->checkToken(TT_ROUND_BRACKET_CLOSE)))
+				return (this->abort("need operator after brackets"));
+		}
+
+		return (r);
+	}
+	else if (this->checkToken(TT_NUMBER))
+	{
+		this->nextToken();
+
+		if (this->checkToken(TT_NUMBER))
+			return (this->abort("multiple number"));
+
+		return (true);
+	}
+	else if (Token::isOperator(this->currentToken()->type()))
+	{
+		TokenType type = this->currentToken()->type();
+
+		this->nextToken();
+
+		TokenType now = this->currentToken()->type();
+
+		if (Token::isOperator(type) && Token::isOperator(now))
+			return (this->abort("multiple operator: " + Token::typeName(now)));
+
+		if (this->checkToken(TT_END_OF_FILE))
+			return (this->abort("missing number or group after operator"));
+
+		return (true);
+	}
+
+	this->nextToken();
+
+	return (this->abort("unexpected token"));
 }

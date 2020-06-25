@@ -3,261 +3,103 @@
 /*                                                        :::      ::::::::   */
 /*   Token.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 16:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/04 16:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/06/18 14:05:34 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/06/18 14:05:34 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Token.hpp"
 
-static void
-free_token_by_delete(void *content)
-{
-	Token *token = (Token *)content;
+#include <string>
 
-	delete token;
+Token::Token()
+{
+	this->_type = TT_END_OF_FILE;
+	this->_position = std::string::npos;
 }
 
-static void
-free_nothing(void *content)
+Token::Token(TokenType type)
 {
-	(void)content;
+	this->_type = type;
+	this->_position = std::string::npos;
 }
 
-Token::Token(void)
+Token::~Token()
 {
-	this->kind = kind_operator;
-	this->value = (void *)(long)'+';
-	this->position = 0;
-
-	this->converted = false;
+	;
 }
 
-Token::Token(char operatorChar, size_t positionInString)
+Token::Token(const Token &other)
 {
-	this->kind = kind_operator;
-	this->value = (void *)(long)operatorChar;
-	this->position = positionInString;
-
-	this->converted = false;
+	this->operator =(other);
 }
 
-Token::Token(Fixed *fixed, size_t positionInString)
-{
-	this->kind = kind_number;
-	this->value = fixed;
-	this->position = positionInString;
-
-	this->converted = false;
-}
-
-Token::Token(t_list *lst, size_t positionInString)
-{
-	this->kind = kind_list;
-	this->value = (void *)lst;
-	this->position = positionInString;
-
-	this->converted = false;
-}
-
-Token::Token(Token **tokens, size_t positionInString)
-{
-	this->kind = kind_list;
-	this->value = (void *)tokens;
-	this->position = positionInString;
-
-	this->converted = true;
-}
-
-Token::~Token(void)
-{
-	switch (this->kind)
-	{
-		case kind_operator:
-		{
-			break ;
-		}
-
-		case kind_number:
-		{
-			delete asFixed();
-			break ;
-		}
-
-		case kind_list:
-		{
-			if (converted)
-			{
-				Token **tokens = asArrayList();
-
-				Token *token;
-				for (size_t index = 0; (token = tokens[index]); index++)
-				{
-					delete token;
-				}
-
-				free(tokens);
-			}
-			else
-			{
-				t_list *lst = asList();
-
-				ft_lstclear(&lst, &free_token_by_delete);
-			}
-			break ;
-		}
-	}
-}
-
-Token &
-Token::operator =(const Token &other)
+Token&
+Token::operator=(const Token &other)
 {
 	if (this != &other)
 	{
-		this->kind = other.kind;
-		this->value = other.value;
-		this->position = other.position;
-
-		this->converted = other.converted;
+		this->_type = other._type;
+		this->_position = other._position;
 	}
 
 	return (*this);
 }
 
-Token **
-Token::convertListToArray(void)
+TokenType
+Token::type() const
 {
-	if (this->kind != kind_list || this->converted)
-	{
-		return (NULL);
-	}
-
-	t_list *next = asList();
-
-	if (next == NULL)
-	{
-		return (NULL);
-	}
-
-	int size = ft_lstsize(next);
-	int byteSize = (size * sizeof(Token *)) + 1;
-	Token **array = (Token **)malloc(byteSize);
-
-	if (array != NULL)
-	{
-		array[size] = NULL;
-
-		size_t index = 0;
-
-		while (1)
-		{
-			Token *token = (Token *)next->content;
-
-			if (token != NULL)
-			{
-				array[index] = token;
-
-				if (token->getKind() == kind_list)
-				{
-					token->convertListToArray();
-				}
-
-				index++;
-			}
-
-			next = next->next;
-			if (next == NULL)
-			{
-				break ;
-			}
-		}
-	}
-
-	t_list *lst = asList();
-	ft_lstclear(&lst, &free_nothing);
-
-	this->value = (void *)array;
-	this->converted = true;
-
-	return (array);
+	return (this->_type);
 }
 
-TokenKind
-Token::getKind(void)
+std::string
+Token::name() const
 {
-	return (this->kind);
+	return (Token::typeName(this->_type));
 }
 
-void *
-Token::getRawValue(void)
+std::size_t
+Token::position() const
 {
-	return (this->value);
+	return (this->_position);
 }
 
-size_t
-Token::getPositionInString(void)
+std::size_t
+Token::position(std::size_t position)
 {
-	return (this->position);
+	if (this->_position == std::string::npos)
+		this->_position = position;
+
+	return (this->_position);
 }
 
-char
-Token::asOperatorChar(void)
+std::string const
+Token::toString(void) const
 {
-	if (this->kind == kind_operator)
-	{
-		return ((char)((long)this->value & 0xFF));
-	}
-
-	return (0);
+	return ("Token[type=" + Token::typeName(this->_type) + "]");
 }
 
-Fixed *
-Token::asFixed(void)
+bool
+Token::isOperator(TokenType type)
 {
-	if (this->kind == kind_number)
-	{
-		return ((Fixed *)this->value);
-	}
-
-	return (NULL);
+	return (type == TT_PLUS || type == TT_MINUS || type == TT_ASTERISK
+	        || type == TT_SLASH);
 }
 
-t_list *
-Token::asList(void)
+std::string
+Token::typeName(TokenType type)
 {
-	if (this->kind == kind_list)
-	{
-		return ((t_list *)this->value);
-	}
-
-	return (NULL);
-}
-
-Token **
-Token::asArrayList(void)
-{
-	if (this->kind == kind_list)
-	{
-		return ((Token **)this->value);
-	}
-
-	return (NULL);
-}
-
-size_t
-Token::size(Token **array)
-{
-	size_t size = 0;
-
-	if (array != NULL)
-	{
-		while (array[size])
-		{
-			size++;
-		}
-	}
-
-	return (size);
+	return (((std::string[]) {
+		"END OF FILE",
+		"NUMBER",
+		"PLUS",
+		"MINUS",
+		"ASTERISK",
+		"SLASH",
+		"ROUND BRACKET OPEN",
+		"ROUND BRACKET CLOSE",
+		"__SIZE"
+	})[(int) type + 1]);
 }

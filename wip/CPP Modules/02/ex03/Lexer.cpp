@@ -10,206 +10,193 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Lexer.hpp"
+
+#include <string>
 #include <sstream>
 
-#include "Lexer.hpp"
-#include "Token.hpp"
+#include "Fixed.hpp"
+#include "NumberToken.hpp"
 #include "Utils.hpp"
-
-#define ERR_CHECK if (error) { return ; }
 
 Lexer::Lexer(void)
 {
-	this->expression = "";
-	this->index = 0;
-	this->depth = 0;
-	this->error = false;
-};
+	this->_expression = "";
+	this->_currentChar = 0;
+	this->_currentPosition = -1;
+
+	this->nextChar();
+}
 
 Lexer::Lexer(std::string expression)
 {
-	this->expression = expression;
-	this->index = 0;
-	this->depth = 0;
-	this->error = false;
-};
+	this->_expression = expression;
+	this->_currentChar = 0;
+	this->_currentPosition = -1;
+
+	this->nextChar();
+}
 
 Lexer::Lexer(const Lexer &other)
 {
-	*this = other;
+	this->operator =(other);
 }
 
 Lexer::~Lexer(void)
 {
-	return ;
 }
 
-Lexer &
+Lexer&
 Lexer::operator =(const Lexer &other)
 {
 	if (this != &other)
 	{
-		this->expression = other.expression;
-		this->index = other.index;
-		this->depth = other.depth;
-		this->error = other.error;
+		this->_expression = other._expression;
+		this->_currentChar = other._currentChar;
+		this->_currentPosition = other._currentPosition;
+		this->_error = other._error;
 	}
 
 	return (*this);
 }
 
-char
-Lexer::eat(void)
-{
-	char current;
-
-	while (index < expression.length())
-	{
-		current = expression.at(index);
-		index++;
-
-		if (Utils::isWhitespace(current))
-		{
-			continue ;
-		}
-
-		if (Utils::isDigit(current) || Utils::isOperator(current) || Utils::isParenthesis(current))
-		{
-			return (current);
-		}
-
-		error = true;
-		return (LEXER_ERR);
-	}
-
-	return (LEXER_EOF);
-
-};
-
 void
-Lexer::process(t_list *&lst)
+Lexer::nextChar(void)
 {
-	Token *token;
-	char c;
+	std::size_t at = ++this->_currentPosition;
 
-	while (true)
-	{
-		token = NULL;
-		c = eat();
-
-		if (c == LEXER_EOF || c == LEXER_ERR)
-		{
-			return ;
-		}
-		else
-		{
-			if (c == '(')
-			{
-				depth++;
-
-				size_t start = index;
-
-				t_list *new_lst = NULL;
-				process(new_lst);
-
-				ERR_CHECK;
-
-				token = new Token(new_lst, start);
-			}
-			else if (c == ')')
-			{
-				depth--;
-
-				if (depth < 0)
-				{
-					error = true;
-				}
-
-				return ;
-			}
-			else if (Utils::isOperator(c))
-			{
-				token = new Token(c, index);
-			}
-			else if (Utils::isDigit(c))
-			{
-				size_t start = index;
-				float read = readFloat();
-
-				ERR_CHECK;
-
-				token = new Token(new Fixed(read), start);
-			}
-		}
-
-		ft_lstadd_back(&lst, ft_lstnew(token));
-	}
+	if (at >= this->_expression.length())
+		this->_currentChar = '\0';
+	else
+		this->_currentChar = this->_expression[at];
 }
 
-float
-Lexer::readFloat(void)
+char
+Lexer::peek(void)
 {
-	size_t start = --index;
-	bool dot = false;
+	std::size_t at = this->_currentPosition + 1;
 
-	while (index < expression.length() && Utils::isDigit(expression.at(index)))
+	if (at >= this->_expression.length())
+		return '\0';
+	return this->_expression[at];
+}
+
+void
+Lexer::skipWhitespace(void)
+{
+	while (Utils::isWhitespace(this->_currentChar))
+		this->nextChar();
+}
+
+Token*
+Lexer::getToken(void)
+{
+	std::size_t start;
+	Token *token = NULL;
+	std::stringstream ss;
+	float x = 0;
+
+	this->skipWhitespace();
+
+	switch (this->_currentChar)
 	{
-		if (expression.at(index) == '.')
-		{
-			if (!dot)
-			{
-				dot = true;
-			}
-			else
-			{
-				error = true;
-			}
-		}
-		index++;
+		case '+':
+			token = new Token(TT_PLUS);
+			break;
 
-		if (error)
-		{
-			return (0.0);
-		}
+		case '-':
+			token = new Token(TT_MINUS);
+			break;
+
+		case '*':
+			token = new Token(TT_ASTERISK);
+			break;
+
+		case '/':
+			token = new Token(TT_SLASH);
+			break;
+
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			start = this->_currentPosition;
+
+			while (Utils::isDigit(this->peek()))
+				this->nextChar();
+
+			if (this->peek() == '.')
+			{
+				this->nextChar();
+
+				if (!Utils::isDigit(this->peek()))
+				{
+					this->abort("illegal character in number");
+					break;
+				}
+
+				while (Utils::isDigit(this->peek()))
+					this->nextChar();
+			}
+
+			ss << this->_expression.substr(start, this->_currentPosition - start + 1);
+			ss >> x;
+
+			token = new NumberToken(Fixed(x));
+
+			break;
+
+		case '\0':
+			token = new Token(TT_END_OF_FILE);
+			break;
+
+		case '(':
+			token = new Token(TT_ROUND_BRACKET_OPEN);
+			break;
+
+		case ')':
+			token = new Token(TT_ROUND_BRACKET_CLOSE);
+			break;
+
+		default:
+			this->abort("unknown token");
+			break;
 	}
 
-	std::string part = expression.substr(start, index - start);
-	std::istringstream stream(part);
+	if (token != NULL)
+		token->position(this->position());
+	if (!this->aborted())
+		this->nextChar();
 
-	float floatValue = 0;
-	stream >> floatValue;
+	return token;
+}
 
-	return (floatValue);
+void
+Lexer::abort(std::string error)
+{
+	this->_error = error;
 }
 
 bool
-Lexer::analyze(t_list *&lst)
+Lexer::aborted(void)
 {
-	process(lst);
+	return (!this->_error.empty());
+}
 
-	return (!error);
+ssize_t
+Lexer::position(void)
+{
+	return (this->_currentPosition);
 }
 
 std::string
-Lexer::getExpression(void)
+Lexer::getError(void)
 {
-	return (this->expression);
-}
-
-size_t
-Lexer::getCurrentIndex(void)
-{
-	return (this->index);
-}
-
-int
-Lexer::getCurrentDepth(void)
-{
-	return (this->depth);
-}
-
-bool
-Lexer::hasFoundError(void)
-{
-	return (this->error);
+	return (this->_error);
 }

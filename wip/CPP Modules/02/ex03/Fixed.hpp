@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #ifndef FIXED_HPP
-# define FIXED_HPP
+#define FIXED_HPP
 
-# include <iostream>
+#include <iostream>
 
 class Fixed
 {
@@ -55,8 +55,6 @@ class Fixed
 
 		int toInt(void) const;
 		float toFloat(void) const;
-
-		bool isZero(void) const;
 
 		static Fixed &min(Fixed &a, Fixed &b);
 		const static Fixed &min(const Fixed &a, const Fixed &b);

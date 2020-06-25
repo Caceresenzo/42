@@ -10,30 +10,91 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdlib>
 #include <iostream>
-#include <iomanip>
+#include <string>
 
-#include "Token.hpp"
-#include "Lexer.hpp"
-#include "Parser.hpp"
+#include "ArrayList.hpp"
 #include "Evaluator.hpp"
 #include "Fixed.hpp"
+#include "Lexer.hpp"
+#include "Parser.hpp"
+#include "Token.hpp"
 
 #define PROGRAM_NAME "eval_expr"
 
 void
-error_invalid_expression(std::string reason, std::string expression,
-                         size_t index)
+error_invalid_expression(std::string reason, std::string expr, std::size_t at)
 {
 	std::cerr << "\e[97mError: \e[91m" << reason << ".\e[0m" << std::endl;
-	std::cerr << expression << std::endl;
-	std::cerr << "\e[1m\e[92m" << std::setw(index) << "^" << "\e[0m"
-	        << std::endl;
+	std::cerr << expr << std::endl;
 
-	exit(1);
+	if (at != std::string::npos)
+	{
+		std::cerr << "\e[1m\e[92m";
+
+		for (size_t index = 0; index < at; index++)
+			std::cerr << " ";
+
+		std::cerr << "^" << "\e[0m" << std::endl;
+	}
 }
 
-#include "libft.hpp"
+bool
+error_invalid_expression(std::string expression, TokenReader &reader)
+{
+	std::string reason = reader.getError();
+
+	if (!reader.aborted())
+		reason = "no reason";
+
+	error_invalid_expression(reason, expression, reader.getErrorPosition());
+
+	return (false);
+}
+
+bool
+eval_expr(std::string &expr, Fixed *fixed)
+{
+	Lexer lexer = Lexer(expr);
+	ArrayList list = ArrayList();
+
+	Token *token;
+	while (true)
+	{
+		token = lexer.getToken();
+
+		if (lexer.aborted() || !token)
+			break;
+
+		list.add(token);
+
+		if (token->type() == TT_END_OF_FILE)
+			break;
+	}
+
+	if (lexer.aborted())
+	{
+		error_invalid_expression(lexer.getError(), expr, lexer.position());
+		return (false);
+	}
+
+	if (!(list.empty() || list.first()->type() == TT_END_OF_FILE))
+	{
+		Parser parser = Parser(list);
+		if (!parser.parseLine() || parser.aborted())
+			return (error_invalid_expression(expr, parser));
+
+		Evaluator evaluator = Evaluator(list);
+
+		*fixed = evaluator.evaluate();
+
+		if (evaluator.aborted())
+			return (error_invalid_expression(expr, evaluator));
+	}
+
+	return (true);
+}
 
 int
 main(int argc, char **argv)
@@ -44,41 +105,13 @@ main(int argc, char **argv)
 		return (1);
 	}
 
-	std::string expression = std::string(argv[1]);
-	t_list *head = NULL;
+	std::string expr = std::string(argv[1]);
+	Fixed result = Fixed();
 
-	Lexer lexer(expression);
-	if (!lexer.analyze(head))
-	{
-		error_invalid_expression("Invalid token", lexer.getExpression(), lexer.getCurrentIndex());
-	}
+	bool success = eval_expr(expr, &result);
 
-	Fixed result;
+	if (success)
+		std::cout << result << std::endl;
 
-	if (ft_lstsize(head) != 0)
-	{
-
-		Token *root = new Token(head, (size_t)-1);
-		Token **tokens = root->convertListToArray();
-
-		Parser parser(tokens);
-		if (!parser.parse())
-		{
-			error_invalid_expression( parser.getErrorReason(), expression, parser.getProblematicToken()->getPositionInString());
-		}
-
-		Evaluator evaluator;
-		result = evaluator.evaluate(tokens);
-
-		if (evaluator.hasFoundError())
-		{
-			error_invalid_expression(evaluator.getErrorReason(), expression, evaluator.getProblemPosition());
-		}
-
-		delete root;
-	}
-
-	std::cout << result << std::endl;
-
-	return (0);
+	return (success ? EXIT_SUCCESS : EXIT_FAILURE);
 }

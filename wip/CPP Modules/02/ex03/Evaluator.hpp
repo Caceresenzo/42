@@ -3,44 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   Evaluator.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/04 16:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/04 16:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/06/18 15:55:46 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/06/18 15:55:46 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EVALUATOR_HPP
-# define EVALUATOR_HPP
+#ifndef EVALUATOR_HPP_
+# define EVALUATOR_HPP_
 
-# include "libft.hpp"
-
+# include "ArrayList.hpp"
 # include "Token.hpp"
 # include "Fixed.hpp"
+# include "TokenReader.hpp"
+# include "NumberToken.hpp"
 
-class Evaluator
+class Evaluator : public TokenReader
 {
 	private:
-		size_t problemPosition;
-		std::string errorReason;
+		NumberToken *useOperator(const Token *right, const Token *left, const Token *operatorToken);
+
+		static bool hasPrecedence(const Token *operator1, const Token *operator2);
 
 	public:
 		Evaluator(void);
+		Evaluator(ArrayList &list);
 		Evaluator(const Evaluator &other);
 
-		~Evaluator(void);
+		virtual ~Evaluator(void);
 
-		Evaluator &operator =(const Evaluator &other);
+		Evaluator& operator =(const Evaluator &other);
 
-		Fixed evaluate(Token *tokens[], size_t position = 1);
-		Fixed evaluate(Token *token);
-		Fixed useOperator(Fixed &left, Fixed &right, char operatorChar, Token *token);
-
-		void setError(size_t problemPosition, std::string errorReason);
-
-		bool hasFoundError(void);
-		size_t getProblemPosition(void);
-		std::string getErrorReason(void);
+		Fixed evaluate(void);
 };
 
 #endif /* EVALUATOR_HPP_ */

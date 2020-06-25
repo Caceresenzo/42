@@ -14,40 +14,38 @@
 # define LEXER_HPP
 
 # include <string>
-# include <stddef.h>
 
-# include "libft.hpp"
-
-# define LEXER_EOF 0
-# define LEXER_ERR 1
+# include "Token.hpp"
 
 class Lexer
 {
 	private:
-		std::string expression;
-		size_t index;
-		int depth;
-		bool error;
-
-		char eat(void);
-		void process(t_list *&lst);
-		float readFloat(void);
+		std::string _expression;
+		char _currentChar;
+		ssize_t _currentPosition;
+		std::string _error;
 
 	public:
 		Lexer(void);
-		Lexer(std::string expression);
 		Lexer(const Lexer &other);
+		Lexer(std::string expression);
 
 		~Lexer(void);
 
-		Lexer &operator =(const Lexer &other);
+		Lexer& operator =(const Lexer &other);
 
-		bool analyze(t_list *&lst);
+		void nextChar(void);
+		char peek(void);
 
-		std::string getExpression();
-		size_t getCurrentIndex(void);
-		int getCurrentDepth(void);
-		bool hasFoundError(void);
+		void skipWhitespace(void);
+
+		Token *getToken(void);
+
+		void abort(std::string error);
+		bool aborted(void);
+
+		ssize_t position();
+		std::string getError(void);
 };
 
 #endif /* LEXER_HPP_ */
