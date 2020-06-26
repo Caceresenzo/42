@@ -1,7 +1,7 @@
 file=./tests/tests_$1.cpp
 
 if test -f "$file"; then
-	clang++ -I./tests/ *.cpp $file -o test
+	clang++ -Werror -Wall -Wextra -std=c++98 -I./tests/ *.cpp $file -o test
 	
 	cat ./tests/1992*.log | cut -f2- -d] > should_output.txt
 	./test | cut -f2- -d] > user_output.txt
