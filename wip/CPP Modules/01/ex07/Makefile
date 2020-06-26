@@ -11,12 +11,11 @@
 # **************************************************************************** #
 
 NAME		= replace
-SRCS		=	./Common.cpp \
-				./TheReplacer.cpp \
+SRCS		=	./TheReplacer.cpp \
 				./main.cpp
 OBJS		= $(SRCS:.cpp=.o)
 RM			= rm -f
-FLAGS		= -Wall -Wextra -Werror -g3
+FLAGS		= -Wall -Wextra -Werror -std=c++98 -g3
 COMPILER	= clang++
 DEBUG		= 0
 

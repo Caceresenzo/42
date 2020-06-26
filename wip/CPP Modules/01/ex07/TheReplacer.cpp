@@ -19,12 +19,9 @@
 #include <cerrno>
 #include <cstring>
 
-#include "Common.hpp"
-
-
 TheReplacer::TheReplacer(std::string &file, std::string &s1, std::string &s2) : _file(file), _s1(s1), _s2(s2)
 {
-	this->_outFile = Common::get_file_name(file).append(".replace");
+	this->_outFile = file + ".replace";
 }
 
 int
