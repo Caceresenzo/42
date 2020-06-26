@@ -17,12 +17,16 @@
 void
 printAddress(Pony *ptr)
 {
-	int aVariableOnTheStack = 0;
+	int aVariableOnTheStack = 42;
+	int *aVariableOnTheHeap = new int(42);
 
 	std::cout << "\e[1m";
-	std::cout << "PTR LOCAL VARIABLE : " << (void *) &aVariableOnTheStack << std::endl;
-	std::cout << "PTR IN PARAMETER   : " << (void *) ptr << std::endl;
+	std::cout << "LOCAL VARIABLE : " << (void *) &aVariableOnTheStack << std::endl;
+	std::cout << "ALLOC VARIABLE : " << (void *) aVariableOnTheHeap << std::endl;
+	std::cout << "GIVEN PTR      : " << (void *) ptr << std::endl;
 	std::cout << "\e[0m";
+
+	delete aVariableOnTheHeap;
 }
 
 void
