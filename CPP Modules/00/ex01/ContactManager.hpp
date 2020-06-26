@@ -21,20 +21,20 @@
 
 class ContactManager
 {
-private:
-	Contact *contacts[MAX_CONTACT];
-public:
-	ContactManager(void);
-	~ContactManager(void);
+	private:
+		Contact contacts[MAX_CONTACT];
+		int	added;
 
-	int	getNextAvailableSlot(void);
-	bool canAddMore(void);
-	int size(void);
-	bool isEmpty(void);
-	bool add(Contact *contact);
-	void display(Contact *contact);
-	void listAll(void);
-	void interactiveSearch(void);
+	public:
+		ContactManager();
+
+		bool canAddMore(void);
+		int size(void);
+		bool isEmpty(void);
+		bool add(Contact contact);
+		void display(Contact contact);
+		void listAll(void);
+		void interactiveSearch(void);
 };
 
 #endif /* CONTACTMANAGER_HPP */

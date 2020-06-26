@@ -11,7 +11,7 @@
 |     libasm     | 125% |   1   |        5d        | very cool |
 |   ft_services  | 100% |   1   |        3w        |   boring  |
 |    minishell   | 100% |   1   |        5d        |    cool   |
-| CPP Modules/00 |  99% |   1   |        4h        |           |
+| CPP Modules/00 | 100% |   2   |        6h        |           |
 | CPP Modules/01 | done |       |        1d        |           |
 | CPP Modules/02 | done |       |        8h        |           |
 | CPP Modules/03 | done |       |        8d        |   boring  |

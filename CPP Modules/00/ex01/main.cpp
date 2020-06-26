@@ -17,9 +17,10 @@
 #include "ContactManager.hpp"
 
 int
-	main(void) {
+main(void)
+{
 	std::string read;
-	ContactManager *manager = new ContactManager();
+	ContactManager manager;
 
 	while (true)
 	{
@@ -34,31 +35,26 @@ int
 
 		if (read == CMD_ADD)
 		{
-			if (manager->canAddMore())
+			if (manager.canAddMore())
 			{
-				Contact *contact = Contact::creator();
+				Contact contact = Contact::creator();
 
-				manager->add(contact);
+				manager.add(contact);
 			}
 			else
-			{
 				std::cout << ERR_PHONEBOOK_FULL << std::endl;
-			}
 		}
 		else if (read == CMD_SEARCH)
 		{
-			if (!manager->isEmpty())
+			if (!manager.isEmpty())
 			{
-				manager->listAll();
-				manager->interactiveSearch();
+				manager.listAll();
+				manager.interactiveSearch();
 			}
 		}
 		else if (read == CMD_EXIT)
-		{
-			break ;
-		}
+			break;
 	}
 
-	delete manager;
 	return (0);
 }
