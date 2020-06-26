@@ -14,6 +14,7 @@
 # define LEXER_HPP
 
 # include <string>
+# include <unistd.h>
 
 # include "Token.hpp"
 
