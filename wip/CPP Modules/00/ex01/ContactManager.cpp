@@ -19,6 +19,11 @@
 #include "Common.hpp"
 #include "TableRenderer.hpp"
 
+ContactManager::ContactManager(void)
+{
+	this->added = 0;
+}
+
 bool
 ContactManager::canAddMore(void)
 {
