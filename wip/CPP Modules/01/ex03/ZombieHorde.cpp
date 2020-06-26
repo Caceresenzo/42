@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <string>
+#include <cstdlib>
 
 #include "ZombieHorde.hpp"
 #include "Zombie.hpp"
