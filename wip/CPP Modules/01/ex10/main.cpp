@@ -14,6 +14,7 @@
 #include <string>
 #include <fstream>
 #include <cerrno>
+#include <cstring>
 
 #ifndef PROGRAM_NAME
 # define PROGRAM_NAME "cato9tails"
@@ -70,7 +71,7 @@ main(int argc, char **argv)
 				handleStream(file, std::cin);
 			else
 			{
-				stream.open(file, std::ifstream::in);
+				stream.open(file.c_str(), std::ifstream::in);
 
 				if (stream.is_open())
 				{
