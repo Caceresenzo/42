@@ -14,7 +14,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <errno.h>
+#include <cerrno>
+#include <cstring>
 
 #include "Logger.hpp"
 
@@ -22,7 +23,7 @@
 
 Logger::Logger(std::string file)
 {
-	this->_stream.open(file, std::ofstream::out | std::ofstream::app);
+	this->_stream.open(file.c_str(), std::ofstream::out | std::ofstream::app);
 
 	if (!this->_stream.is_open())
 		this->log(DEST_CONSOLE, "WARNING: Failed to open output log file \"" + file + "\": " + strerror(errno));
@@ -41,8 +42,8 @@ Logger::makeLogEntry(std::string const &msg)
 {
 	std::stringstream stream;
 
-    std::time_t t = std::time(0);
-    std::tm* now = std::localtime(&t);
+    time_t t = time(0);
+    tm* now = localtime(&t);
 
     stream
 		<< "["
