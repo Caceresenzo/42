@@ -16,6 +16,9 @@
 #include <iostream>
 #include <string>
 
+#include <cerrno>
+#include <cstring>
+
 #include "Common.hpp"
 
 
@@ -27,7 +30,7 @@ TheReplacer::TheReplacer(std::string &file, std::string &s1, std::string &s2) : 
 int
 TheReplacer::_readInputFile(std::string &dest)
 {
-	this->_in.open(this->_file);
+	this->_in.open(this->_file.c_str());
 
 	if (errno)
 		return (errno);
@@ -50,7 +53,7 @@ TheReplacer::_readInputFile(std::string &dest)
 int
 TheReplacer::_writeOutputFile(std::string &src)
 {
-	this->_out.open(this->_outFile);
+	this->_out.open(this->_outFile.c_str());
 
 	if (!errno)
 	{

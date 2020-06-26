@@ -13,7 +13,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <errno.h>
+#include <cerrno>
+#include <cstring>
 
 #include "TheReplacer.hpp"
 
@@ -56,7 +57,7 @@ main(int argc, char **argv)
 	int error = replacer.replace();
 	if (error)
 	{
-		std::cerr << program << ": " << file << ": " << strerror(errno) << std::endl;
+		std::cerr << program << ": " << file << ": " << std::strerror(errno) << std::endl;
 		return (1);
 	}
 
