@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 #include "Zombie.hpp"
 #include "ZombieEvent.hpp"
