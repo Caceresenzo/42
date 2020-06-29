@@ -15,4 +15,5 @@
 | CPP Modules/01 | 100% |   1   |        1d        |           |
 | CPP Modules/02 | 100% |   1   |        10h       |           |
 | CPP Modules/03 | done |       |        8d        |   boring  |
+| CPP Modules/05 |  wip |       |                  |           |
 |  Philosophers  |  wip |       |        16h       |    cool   |
