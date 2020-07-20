@@ -18,4 +18,5 @@
 | CPP Modules/05 | done |       |        14h       |           |
 | CPP Modules/06 | done |       |        3h        |           |
 | CPP Modules/07 | done |       |        3h        |           |
+| CPP Modules/08 | done |       |        8h        |           |
 |  Philosophers  |  wip |       |        16h       |    cool   |
