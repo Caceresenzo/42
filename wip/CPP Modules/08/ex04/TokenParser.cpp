@@ -73,9 +73,11 @@ TokenParser::parse(std::vector<Token*> &out) const
 		if (token == NULL)
 			return (TokenParser::errorAt(this->_expr, "unexpected token", index));
 
+		out.push_back(token);
+
 		if (EXPECT_COND(E_NUMERIC, NumericToken))
 		{
-			expect = E_OPERATOR | E_POPEN | E_NONE;
+			expect = E_OPERATOR | E_NONE;
 
 			if (depth != 0)
 				expect |= E_PCLOSE;
@@ -91,11 +93,13 @@ TokenParser::parse(std::vector<Token*> &out) const
 		}
 		else if (EXPECT_COND(E_PCLOSE, ParenthesisCloseToken))
 		{
-			expect = E_OPERATOR | E_PCLOSE;
+			expect = E_OPERATOR;
 			if (--depth == -1)
 				return (TokenParser::errorAt(this->_expr, "parenthesis closed but never open", index));
 
-			if (depth == 0)
+			if (depth != 0)
+				expect |= E_PCLOSE;
+			else if (depth == 0)
 				expect |= E_NONE;
 		}
 		else
@@ -111,14 +115,12 @@ TokenParser::parse(std::vector<Token*> &out) const
 			if ((expect & E_PCLOSE))
 				message += "parenthesis close, ";
 			if ((expect & E_NONE))
-				message += "end of line ";
+				message += "end of line, ";
 
 			message += "but got: " + token->toString();
 
 			return (TokenParser::errorAt(this->_expr, message, index));
 		}
-
-		out.push_back(token);
 	}
 
 	if (!(expect & E_NONE))

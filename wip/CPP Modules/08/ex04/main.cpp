@@ -67,7 +67,8 @@ compute(std::vector<Token*> &tokens, std::vector<Token*> &postfixTokens)
 			std::cout << " | ST ";
 
 			bool first = true;
-			for (MutantStack<int>::iterator it = --stack.end(); it >= stack.begin(); --it)
+			for (MutantStack<int>::reverse_iterator it = stack.rbegin();
+			        it < stack.rend(); ++it)
 			{
 				if (!first)
 					std::cout << ", ";
@@ -123,18 +124,20 @@ main(int argc, char **argv)
 	std::vector<Token*> tokens;
 	std::vector<Token*> postfixTokens;
 
-	if (!TokenParser(argv[1]).parse(tokens))
-		return (EXIT_FAILURE);
+	bool success = false;
 
-	if (!(PostfixConvertor(&tokens).convert(postfixTokens)))
-		return (EXIT_FAILURE);
+	if (TokenParser(argv[1]).parse(tokens))
+	{
+		if (PostfixConvertor(&tokens).convert(postfixTokens))
+		{
+			std::cout << "Tokens: " << Token::join(tokens) << std::endl;
+			std::cout << "Postfix: " << Token::join(postfixTokens) << std::endl;
 
-	std::cout << "Tokens: " << Token::join(tokens) << std::endl;
-	std::cout << "Postfix: " << Token::join(postfixTokens) << std::endl;
+			std::cout << std::endl;
 
-	std::cout << std::endl;
-
-	bool success = compute(tokens, postfixTokens);
+			success = compute(tokens, postfixTokens);
+		}
+	}
 
 	Token::free(tokens);
 	Token::free(postfixTokens);

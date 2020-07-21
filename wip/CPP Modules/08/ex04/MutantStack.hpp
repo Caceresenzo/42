@@ -21,6 +21,7 @@ template<class T>
 	{
 		public:
 			typedef typename std::stack<T>::container_type::iterator iterator;
+			typedef typename std::stack<T>::container_type::reverse_iterator reverse_iterator;
 
 			MutantStack() : std::stack<T>()
 			{
@@ -47,6 +48,16 @@ template<class T>
 			iterator end()
 			{
 				return std::stack<T>::c.end();
+			}
+
+			reverse_iterator rbegin()
+			{
+				return std::stack<T>::c.rbegin();
+			}
+
+			reverse_iterator rend()
+			{
+				return std::stack<T>::c.rend();
 			}
 	};
 

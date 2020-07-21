@@ -38,6 +38,9 @@ Token::operator=(const Token &other)
 std::string
 Token::join(std::vector<Token*> const &tokens)
 {
+	if (tokens.empty())
+		return ("<empty>");
+
 	std::stringstream stream;
 
 	for (size_t index = 0; index < tokens.size(); ++index)
