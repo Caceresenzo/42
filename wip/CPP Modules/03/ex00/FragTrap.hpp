@@ -26,8 +26,9 @@ class FragTrap
 		long _rangedAttackDamage;
 		long _armorDamageReduction;
 
-		std::string _vaulthunterAttacks[5];
-		long _vaulthunterDamages[5];
+	protected:
+		std::ostream& says();
+		std::ostream& says(std::string msg);
 
 	public:
 		FragTrap(void);

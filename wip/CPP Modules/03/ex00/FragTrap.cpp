@@ -15,88 +15,89 @@
 
 #include "FragTrap.hpp"
 
-FragTrap::FragTrap(void)
+FragTrap::FragTrap(void) :
+        _hitPoints(100),
+        _maxHitPoints(100),
+        _energyPoints(100),
+        _maxEnergyPoints(100),
+        _level(1),
+        _name("unnamed"),
+        _meleeAttackDamage(30),
+        _rangedAttackDamage(20),
+        _armorDamageReduction(5)
 {
-	return ;
+	says("ready! (default)");
 }
 
-FragTrap::FragTrap(std::string name)
+FragTrap::FragTrap(std::string name) :
+        _hitPoints(100),
+        _maxHitPoints(100),
+        _energyPoints(100),
+        _maxEnergyPoints(100),
+        _level(1),
+        _name(name),
+        _meleeAttackDamage(30),
+        _rangedAttackDamage(20),
+        _armorDamageReduction(5)
 {
-	this->_hitPoints = 100;
-	this->_maxHitPoints = 100;
-	this->_energyPoints = 100;
-	this->_maxEnergyPoints = 100;
-	this->_level = 1;
-	this->_name = name;
-	this->_meleeAttackDamage = 30;
-	this->_rangedAttackDamage = 20;
-	this->_armorDamageReduction = 5;
-
-	std::string vaulthunterAttacks[] = {
-		"Fireball",
-		"Waterball",
-		"Airball",
-		"Earthball",
-		"Lightball"
-	};
-
-	long vaulthunterDamages[] = {
-		10,
-		12,
-		2,
-		23,
-		1
-	};
-
-	std::memcpy(&(this->_vaulthunterAttacks), &vaulthunterAttacks, sizeof(vaulthunterAttacks));
-	std::memcpy(&(this->_vaulthunterDamages), &vaulthunterDamages, sizeof(vaulthunterDamages));
-
-	std::cout << this->_name << ": ready!" << std::endl;
+	says("ready!");
 }
 
 FragTrap::FragTrap(const FragTrap &other)
 {
 	*this = other;
 
-	std::cout << this->_name << ": copied!" << std::endl;
+	says("copied!");
 }
 
 FragTrap::~FragTrap(void)
 {
-	std::cout << this->_name << ": destroyed!" << std::endl;
+	says("destroyed!");
 }
 
-FragTrap &
-FragTrap::operator =(const FragTrap &right)
+FragTrap&
+FragTrap::operator =(const FragTrap &other)
 {
-	if (this != &right)
+	if (this != &other)
 	{
-		this->_hitPoints = right._hitPoints;
-		this->_maxEnergyPoints = right._hitPoints;
-		this->_energyPoints = right._energyPoints;
-		this->_maxEnergyPoints = right._maxEnergyPoints;
-		this->_level = right._level;
-		this->_name = right._name;
-		this->_meleeAttackDamage = right._meleeAttackDamage;
-		this->_rangedAttackDamage = right._rangedAttackDamage;
-		this->_armorDamageReduction = right._armorDamageReduction;
+		this->_hitPoints = other._hitPoints;
+		this->_maxEnergyPoints = other._hitPoints;
+		this->_energyPoints = other._energyPoints;
+		this->_maxEnergyPoints = other._maxEnergyPoints;
+		this->_level = other._level;
+		this->_name = other._name;
+		this->_meleeAttackDamage = other._meleeAttackDamage;
+		this->_rangedAttackDamage = other._rangedAttackDamage;
+		this->_armorDamageReduction = other._armorDamageReduction;
 	}
 
-	std::cout << this->_name << ": assigned!" << std::endl;
+	says("assigned!");
 
 	return (*this);
+}
+
+std::ostream&
+FragTrap::says()
+{
+	return (std::cout << "<FR4G-TP " << this->_name << "> ");
+}
+
+std::ostream&
+FragTrap::says(std::string msg)
+{
+	return (says() << msg << std::endl);
 }
 
 void
 FragTrap::rangedAttack(std::string const &target)
 {
-	std::cout << this->_name << ": ranged attacked " << target << ", damage = " << this->_rangedAttackDamage << "." << std::endl;
+	says() << "I expect you to die " << target << "! (damage: " << this->_rangedAttackDamage << ")" << std::endl;
 }
 
 void
 FragTrap::meleeAttack(std::string const &target)
 {
-	std::cout << this->_name << ": melee attacked " << target << ", damage = " << this->_meleeAttackDamage << "." << std::endl;
+	says() << "Take that " << target << "! (damage: " << this->_meleeAttackDamage << ")" << std::endl;
 }
 
 void
@@ -106,21 +107,21 @@ FragTrap::takeDamage(unsigned int amount)
 
 	if (damage <= 0)
 	{
-		std::cout << this->_name << ": no damage taken." << std::endl;
-		return ;
+		says("Nice shield, maiden!");
+		return;
 	}
 
 	if (damage >= this->_hitPoints)
 	{
 		this->_hitPoints = 0;
 
-		std::cout << this->_name << ": dead." << std::endl;
+		says("The robot is dead, long live the robot!");
 	}
 	else
 	{
 		this->_hitPoints -= damage;
 
-		std::cout << this->_name << ": took " << damage << " of damage." << std::endl;
+		says() << "Hey, watch out! (damage took: " << damage << ")" << std::endl;
 	}
 }
 
@@ -129,38 +130,47 @@ FragTrap::beRepaired(unsigned int amount)
 {
 	long real = amount;
 	if (this->_hitPoints + real > this->_maxHitPoints)
-	{
 		real = this->_maxHitPoints - this->_hitPoints;
-	}
 
 	if (this->_energyPoints < real)
-	{
-		std::cout << this->_name << ": not enought energy." << std::endl;
-	}
+		says("Crap! (not enought energy)");
 	else
 	{
 		this->_energyPoints -= real;
 		this->_hitPoints += real;
 
-		std::cout << this->_name << ": repaired (" << real << ")." << std::endl;
+		says() << "Sweet energy juice! (repaired: " << real << ")." << std::endl;
 	}
 }
-
 void
 FragTrap::vaulthunter_dot_exe(std::string const &target)
 {
+	static const std::string attacks[] = {
+	        "Fireball",
+	        "Waterball",
+	        "Airball",
+	        "Earthball",
+	        "Lightball"
+	};
+
+	static const long damages[] = {
+	        10,
+	        12,
+	        2,
+	        23,
+	        1
+	};
+
 	int random = rand() % 5;
 
-	std::string attack = this->_vaulthunterAttacks[random];
-	long damage = this->_vaulthunterDamages[random];
+	std::string attack = attacks[random];
+	long damage = damages[random];
 
 	if (this->_energyPoints >= 25)
 	{
 		this->_energyPoints -= 25;
-		std::cout << this->_name << ": attacked " << target << " with " << attack << " and do " << damage << " damage(s)." << std::endl;
+		says() << "attacked " << target << " with " << attack << " and do " << damage << " damage(s)." << std::endl;
 	}
 	else
-	{
-		std::cout << this->_name << ": not enought energy point to use vaulthunter_dot_exe on " << target << "." << std::endl;
-	}
+		says() << "Crap! (not enought energy point to use vaulthunter_dot_exe on " << target << ")" << std::endl;
 }
