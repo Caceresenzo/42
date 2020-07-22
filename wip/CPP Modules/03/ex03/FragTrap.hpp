@@ -17,18 +17,17 @@
 
 # include "ClapTrap.hpp"
 
-class FragTrap: public ClapTrap
+class FragTrap : public ClapTrap
 {
-	private:
-		std::string _vaulthunterAttacks[5];
-		long _vaulthunterDamages[5];
+	protected:
+		virtual std::ostream& says();
 
 	public:
 		FragTrap(void);
 		FragTrap(std::string name);
 		FragTrap(const FragTrap &other);
 
-		~FragTrap(void);
+		virtual ~FragTrap(void);
 
 		FragTrap &operator =(const FragTrap &right);
 

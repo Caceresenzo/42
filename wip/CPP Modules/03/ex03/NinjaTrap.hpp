@@ -22,14 +22,17 @@
 class NinjaTrap : public ClapTrap
 {
 	private:
-		std::string _specials[4][5];
+		void doNinjaShoebox(std::string type, int index, ClapTrap *clapTrapPtr);
+
+	protected:
+		virtual std::ostream& says();
 
 	public:
 		NinjaTrap(void);
 		NinjaTrap(std::string name);
-		NinjaTrap(NinjaTrap const &other);
+		NinjaTrap(const NinjaTrap &other);
 
-		~NinjaTrap(void);
+		virtual ~NinjaTrap(void);
 
 		NinjaTrap &operator =(const NinjaTrap &right);
 
