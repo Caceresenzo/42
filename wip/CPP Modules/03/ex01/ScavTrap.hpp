@@ -26,7 +26,9 @@ class ScavTrap
 		long _rangedAttackDamage;
 		long _armorDamageReduction;
 
-		std::string _challenges[5];
+	protected:
+		std::ostream& says();
+		std::ostream& says(std::string msg);
 
 	public:
 		ScavTrap(void);
@@ -46,4 +48,4 @@ class ScavTrap
 		void challengeNewcomer(std::string const &target);
 };
 
-#endif /* SCAVTRAP_HPP_ */
+#endif /* SCAVTRAP_HPP */

@@ -15,79 +15,89 @@
 
 #include "ScavTrap.hpp"
 
-ScavTrap::ScavTrap(void)
+ScavTrap::ScavTrap(void) :
+        _hitPoints(100),
+        _maxHitPoints(100),
+        _energyPoints(50),
+        _maxEnergyPoints(50),
+        _level(1),
+        _name("unnamed"),
+        _meleeAttackDamage(20),
+        _rangedAttackDamage(15),
+        _armorDamageReduction(3)
 {
-	return ;
+	says("ready! (default)");
 }
 
-ScavTrap::ScavTrap(std::string name)
+ScavTrap::ScavTrap(std::string name) :
+        _hitPoints(100),
+        _maxHitPoints(100),
+        _energyPoints(50),
+        _maxEnergyPoints(50),
+        _level(1),
+        _name(name),
+        _meleeAttackDamage(20),
+        _rangedAttackDamage(15),
+        _armorDamageReduction(3)
 {
-	this->_hitPoints = 100;
-	this->_maxHitPoints = 100;
-	this->_energyPoints = 50;
-	this->_maxEnergyPoints = 50;
-	this->_level = 1;
-	this->_name = name;
-	this->_meleeAttackDamage = 50;
-	this->_rangedAttackDamage = 15;
-	this->_armorDamageReduction = 3;
-
-	std::string challenges[] = {
-		"Game of Card",
-		"Game of Rolling Dice",
-		"Russian Roulette",
-		"Fly Higher that me",
-		"Sing a Song"
-	};
-
-	std::memcpy(&(this->_challenges), &challenges, sizeof(challenges));
-
-	std::cout << this->_name << ": ready am i!" << std::endl;
+	says("ready!");
 }
 
 ScavTrap::ScavTrap(const ScavTrap &other)
 {
 	*this = other;
 
-	std::cout << this->_name << ": copied am i!" << std::endl;
+	says("copied!");
 }
 
 ScavTrap::~ScavTrap(void)
 {
-	std::cout << this->_name << ": destroyed am i!" << std::endl;
+	says("destroyed!");
 }
 
-ScavTrap &
-ScavTrap::operator =(const ScavTrap &right)
+ScavTrap&
+ScavTrap::operator =(const ScavTrap &other)
 {
-	if (this != &right)
+	if (this != &other)
 	{
-		this->_hitPoints = right._hitPoints;
-		this->_maxEnergyPoints = right._hitPoints;
-		this->_energyPoints = right._energyPoints;
-		this->_maxEnergyPoints = right._maxEnergyPoints;
-		this->_level = right._level;
-		this->_name = right._name;
-		this->_meleeAttackDamage = right._meleeAttackDamage;
-		this->_rangedAttackDamage = right._rangedAttackDamage;
-		this->_armorDamageReduction = right._armorDamageReduction;
+		this->_hitPoints = other._hitPoints;
+		this->_maxEnergyPoints = other._hitPoints;
+		this->_energyPoints = other._energyPoints;
+		this->_maxEnergyPoints = other._maxEnergyPoints;
+		this->_level = other._level;
+		this->_name = other._name;
+		this->_meleeAttackDamage = other._meleeAttackDamage;
+		this->_rangedAttackDamage = other._rangedAttackDamage;
+		this->_armorDamageReduction = other._armorDamageReduction;
 	}
 
-	std::cout << this->_name << ": assigned am i!" << std::endl;
+	says("assigned!");
 
 	return (*this);
+}
+
+std::ostream&
+ScavTrap::says()
+{
+	return (std::cout << "<SC4V-TP " << this->_name << "> ");
+}
+
+std::ostream&
+ScavTrap::says(std::string msg)
+{
+	return (says() << msg << std::endl);
 }
 
 void
 ScavTrap::rangedAttack(std::string const &target)
 {
-	std::cout << this->_name << ": attacked ranged " << target << ", damage = " << this->_rangedAttackDamage << "." << std::endl;
+	says() << "I expect you to die " << target << "! (damage: " << this->_rangedAttackDamage << ")" << std::endl;
 }
 
 void
 ScavTrap::meleeAttack(std::string const &target)
 {
-	std::cout << this->_name << ": attacked melee " << target << ", damage = " << this->_meleeAttackDamage << "." << std::endl;
+	says() << "Take that " << target << "! (damage: " << this->_meleeAttackDamage << ")" << std::endl;
 }
 
 void
@@ -97,21 +107,21 @@ ScavTrap::takeDamage(unsigned int amount)
 
 	if (damage <= 0)
 	{
-		std::cout << this->_name << ": taken no damage i have." << std::endl;
-		return ;
+		says("Nice shield, maiden!");
+		return;
 	}
 
 	if (damage >= this->_hitPoints)
 	{
 		this->_hitPoints = 0;
 
-		std::cout << this->_name << ": dead am i." << std::endl;
+		says("The robot is dead, long live the robot!");
 	}
 	else
 	{
 		this->_hitPoints -= damage;
 
-		std::cout << this->_name << ": damage i took is " << damage << "." << std::endl;
+		says() << "Hey, watch out! (damage took: " << damage << ")" << std::endl;
 	}
 }
 
@@ -120,27 +130,31 @@ ScavTrap::beRepaired(unsigned int amount)
 {
 	long real = amount;
 	if (this->_hitPoints + real > this->_maxHitPoints)
-	{
 		real = this->_maxHitPoints - this->_hitPoints;
-	}
 
 	if (this->_energyPoints < real)
-	{
-		std::cout << this->_name << ": enought energy not." << std::endl;
-	}
+		says("Crap! (not enought energy)");
 	else
 	{
 		this->_energyPoints -= real;
 		this->_hitPoints += real;
 
-		std::cout << this->_name << ": repaired am i (" << real << ")." << std::endl;
+		says() << "Sweet energy juice! (repaired: " << real << ")." << std::endl;
 	}
 }
-
 void
 ScavTrap::challengeNewcomer(std::string const &target)
 {
-	std::string challenge = this->_challenges[rand() % 5];
 
-	std::cout << this->_name << ": challenged " << target << " with " << challenge << "." << std::endl;
+	std::string challenges[] = {
+	        "Game of Card",
+	        "Game of Rolling Dice",
+	        "Russian Roulette",
+	        "Fly Higher that me",
+	        "Sing a Song"
+	};
+
+	std::string challenge = challenges[rand() % 5];
+
+	says() << "challenged " << target << " with " << challenge << "." << std::endl;
 }
