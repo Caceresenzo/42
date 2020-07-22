@@ -20,15 +20,15 @@
 
 class SuperTrap : public FragTrap, public NinjaTrap
 {
+	protected:
+		virtual std::ostream& says();
+
 	public:
 		SuperTrap(void);
 		SuperTrap(std::string name);
 		SuperTrap(SuperTrap const &other);
 
-		~SuperTrap(void);
-
-		void rangedAttack(std::string const &target);
-		void meleeAttack(std::string const &target);
+		virtual ~SuperTrap(void);
 
 		SuperTrap &operator =(const SuperTrap &right);
 };

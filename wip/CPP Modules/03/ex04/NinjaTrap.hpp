@@ -19,27 +19,27 @@
 # include "FragTrap.hpp"
 # include "ScavTrap.hpp"
 
-class NinjaTrap : virtual public ClapTrap
+class NinjaTrap : public virtual ClapTrap
 {
 	private:
-		std::string _specials[4][5];
+		void doNinjaShoebox(std::string type, int index, ClapTrap *clapTrapPtr);
+
+	protected:
+		virtual std::ostream& says();
 
 	public:
 		NinjaTrap(void);
 		NinjaTrap(std::string name);
-		NinjaTrap(NinjaTrap const &other);
+		NinjaTrap(const NinjaTrap &other);
 
-		~NinjaTrap(void);
+		virtual ~NinjaTrap(void);
 
 		NinjaTrap &operator =(const NinjaTrap &right);
 
-		void rangedAttack(std::string const &target);
-		void meleeAttack(std::string const &target);
-
-		void ninjaShoebox(ClapTrap &target);
 		void ninjaShoebox(FragTrap &target);
 		void ninjaShoebox(ScavTrap &target);
 		void ninjaShoebox(NinjaTrap &target);
+		void ninjaShoebox(ClapTrap &target);
 };
 
 #endif /* NINJATRAP_HPP_ */

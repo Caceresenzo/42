@@ -13,56 +13,48 @@
 
 #include "SuperTrap.hpp"
 
-SuperTrap::SuperTrap(void) : ClapTrap(), FragTrap(), NinjaTrap()
+SuperTrap::SuperTrap(void) :
+        ClapTrap(100, 100, 120, 120, 1, "unnamed", 60, 20, 5),
+        FragTrap(),
+        NinjaTrap()
 {
-	return ;
+	saysm("ready! (default)");
 }
 
-SuperTrap::SuperTrap(std::string name) : ClapTrap(name), FragTrap(name), NinjaTrap(name)
+SuperTrap::SuperTrap(std::string name) :
+        ClapTrap(100, 100, 120, 120, 1, name, 60, 20, 5),
+        FragTrap(),
+        NinjaTrap()
 {
-	this->_hitPoints = 100;
-	this->_maxHitPoints = 100;
-	this->_energyPoints = 120;
-	this->_maxEnergyPoints = 120;
-	this->_level = 1;
-	this->_name = name;
-	this->_meleeAttackDamage = 60;
-	this->_rangedAttackDamage = 20;
-	this->_armorDamageReduction = 5;
-
-	std::cout << this->_name << ": SUPER READY!" << std::endl;
+	saysm("ready!");
 }
 
-SuperTrap::SuperTrap(SuperTrap const &other) : ClapTrap(other), FragTrap(other), NinjaTrap(other)
+SuperTrap::SuperTrap(SuperTrap const &other) :
+        ClapTrap(other),
+        FragTrap(other),
+        NinjaTrap(other)
 {
 	*this = other;
 
-	std::cout << this->_name << ": copied!" << std::endl;
+	saysm("copied!");
 }
 
 SuperTrap::~SuperTrap(void)
 {
-	std::cout << this->_name << ": destroyed!" << std::endl;
+	saysm("destroyed!");
 }
 
-SuperTrap &
+std::ostream&
+SuperTrap::says()
+{
+	return (std::cout << "<SUP3R-TP " << this->FragTrap::getName() << "> ");
+}
+
+SuperTrap&
 SuperTrap::operator =(const SuperTrap &right)
 {
-	ClapTrap::operator =(right);
 	FragTrap::operator =(right);
 	NinjaTrap::operator =(right);
 
 	return (*this);
-}
-
-void
-SuperTrap::rangedAttack(std::string const &target)
-{
-	FragTrap::rangedAttack(target);
-}
-
-void
-SuperTrap::meleeAttack(std::string const &target)
-{
-	NinjaTrap::meleeAttack(target);
 }

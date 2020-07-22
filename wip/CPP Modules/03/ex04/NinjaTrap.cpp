@@ -10,115 +10,111 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-
 #include "NinjaTrap.hpp"
 
-NinjaTrap::NinjaTrap(void) : ClapTrap()
+#include <cstdlib>
+#include <iostream>
+
+NinjaTrap::NinjaTrap(void) :
+        ClapTrap(60, 60, 120, 120, 1, "unnamed", 60, 5, 0)
 {
-	return ;
+	saysm("ready! (default)");
 }
 
-NinjaTrap::NinjaTrap(std::string name) : ClapTrap(name)
+NinjaTrap::NinjaTrap(std::string name) :
+        ClapTrap(60, 60, 120, 120, 1, name, 60, 5, 0)
 {
-	this->_hitPoints = 60;
-	this->_maxHitPoints = 60;
-	this->_energyPoints = 120;
-	this->_maxEnergyPoints = 120;
-	this->_level = 1;
-	this->_name = name;
-	this->_meleeAttackDamage = 60;
-	this->_rangedAttackDamage = 5;
-	this->_armorDamageReduction = 0;
-
-	std::string specials[4][5] = {
-		{
-			"1_A",
-			"1_B",
-			"1_C",
-			"1_D",
-			"1_E",
-		},
-		{
-			"2_A",
-			"2_B",
-			"2_C",
-			"2_D",
-			"2_E",
-		},
-		{
-			"3_A",
-			"3_B",
-			"3_C",
-			"3_D",
-			"3_E",
-		},
-		{
-			"4_A",
-			"4_B",
-			"4_C",
-			"4_D",
-			"4_E",
-		}
-	};
-
-	std::memcpy(&(this->_specials), &specials, sizeof(specials));
-
-	std::cout << this->_name << ": [NinjaTrap] ready i will!" << std::endl;
+	saysm("ready!");
 }
 
-NinjaTrap::NinjaTrap(NinjaTrap const &other) : ClapTrap(other)
+NinjaTrap::NinjaTrap(NinjaTrap const &other) :
+        ClapTrap(other)
 {
 	*this = other;
 
-	std::cout << this->_name << ": copied!" << std::endl;
+	saysm("copied!");
 }
 
 NinjaTrap::~NinjaTrap(void)
 {
-	std::cout << this->_name << ": destroyed!" << std::endl;
+	saysm("destroyed!");
 }
 
-NinjaTrap &
+NinjaTrap&
 NinjaTrap::operator =(const NinjaTrap &right)
 {
-	std::memcpy(&(this->_specials), &right._specials, sizeof(right._specials));
+	ClapTrap::operator =(right);
+
+	saysm("assigned!");
 
 	return (*this);
 }
 
 void
-NinjaTrap::rangedAttack(std::string const &target)
+NinjaTrap::doNinjaShoebox(std::string type, int index, ClapTrap *clapTrapPtr)
 {
-	std::cout << this->_name << ": [NinjaTrap] ranged attacked " << target << ", damage = " << this->_rangedAttackDamage << "." << std::endl;
+	const static std::string specials[4][5] = {
+	        {
+	                "1_A",
+	                "1_B",
+	                "1_C",
+	                "1_D",
+	                "1_E",
+	        },
+	        {
+	                "2_A",
+	                "2_B",
+	                "2_C",
+	                "2_D",
+	                "2_E",
+	        },
+	        {
+	                "3_A",
+	                "3_B",
+	                "3_C",
+	                "3_D",
+	                "3_E",
+	        },
+	        {
+	                "4_A",
+	                "4_B",
+	                "4_C",
+	                "4_D",
+	                "4_E",
+	        }
+	};
+
+	std::string attack = specials[index][rand() % 5];
+
+	says() << "attacked a " << type << " named " << clapTrapPtr->getName() << " with " << attack << "." << std::endl;
 }
 
-void
-NinjaTrap::meleeAttack(std::string const &target)
+std::ostream&
+NinjaTrap::says()
 {
-	std::cout << this->_name << ": [NinjaTrap] melee attacked " << target << ", damage = " << this->_meleeAttackDamage << "." << std::endl;
+	return (std::cout << "<NINJ4-TP " << this->getName() << "> ");
 }
 
 void
 NinjaTrap::ninjaShoebox(FragTrap &target)
 {
-	std::cout << this->_name << ": attacked a FragTrap named " << target.getName() << " with " << this->_specials[0][rand() % 5] << "." << std::endl;
+	doNinjaShoebox("FragTrap", 0, &target);
 }
 
 void
 NinjaTrap::ninjaShoebox(ScavTrap &target)
 {
-	std::cout << this->_name << ": attacked a ScavTrap named " << target.getName() << " with " << this->_specials[1][rand() % 5] << "." << std::endl;
+	doNinjaShoebox("ScavTrap", 1, &target);
 }
 
 void
 NinjaTrap::ninjaShoebox(NinjaTrap &target)
 {
-	std::cout << this->_name << ": attacked a NinjaTrap named " << target.getName() << " with " << this->_specials[2][rand() % 5] << "." << std::endl;
+	doNinjaShoebox("NinjaTrap", 2, &target);
 }
 
 void
 NinjaTrap::ninjaShoebox(ClapTrap &target)
 {
-	std::cout << this->_name << ": attacked a ClapTrap named " << target.getName() << " with " << this->_specials[3][rand() % 5] << "." << std::endl;
+	doNinjaShoebox("ClapTrap", 3, &target);
 }

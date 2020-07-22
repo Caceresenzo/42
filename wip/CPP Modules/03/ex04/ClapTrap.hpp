@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/01/08 11:03:20 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/01/08 11:03:20 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/01/07 12:55:33 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/01/07 12:55:33 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CLAPTRAP_HPP_
-# define CLAPTRAP_HPP_
+#ifndef CLAPTRAP_HPP
+# define CLAPTRAP_HPP
 
 # include <string>
 
 class ClapTrap
 {
-	public:
+	private:
 		long _hitPoints, _maxHitPoints;
 		long _energyPoints, _maxEnergyPoints;
 		long _level;
@@ -26,12 +26,16 @@ class ClapTrap
 		long _rangedAttackDamage;
 		long _armorDamageReduction;
 
+	protected:
+		virtual std::ostream& says();
+		std::ostream& saysm(std::string msg);
+
 	public:
 		ClapTrap(void);
-		ClapTrap(std::string name);
+		ClapTrap(long hitPoints, long maxHitPoints, long energyPoints, long maxEnergyPoints, long level, std::string name, long meleeAttackDamage, long rangedAttackDamage, long armorDamageReduction);
 		ClapTrap(const ClapTrap &other);
 
-		~ClapTrap(void);
+		virtual ~ClapTrap(void);
 
 		ClapTrap &operator =(const ClapTrap &right);
 
@@ -40,8 +44,17 @@ class ClapTrap
 
 		void takeDamage(unsigned int amount);
 		void beRepaired(unsigned int amount);
+		
+		long& getEnergyPoints();
+		long& getHitPoints();
+		const std::string& getName();
 
-		std::string getName(void);
+		long getArmorDamageReduction() const;
+		long getLevel() const;
+		long getMaxEnergyPoints() const;
+		long getMaxHitPoints() const;
+		long getMeleeAttackDamage() const;
+		long getRangedAttackDamage() const;
 };
 
-#endif /* CLAPTRAP_HPP_ */
+#endif /* CLAPTRAP_HPP */
