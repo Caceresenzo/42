@@ -15,63 +15,58 @@
 
 #include "ScavTrap.hpp"
 
-ScavTrap::ScavTrap(void) : ClapTrap()
+ScavTrap::ScavTrap(void) :
+        ClapTrap(100, 100, 50, 50, 1, "unnamed", 20, 15, 3)
 {
-	return ;
+	saysm("ready! (default)");
 }
 
-ScavTrap::ScavTrap(std::string name) : ClapTrap(name)
+ScavTrap::ScavTrap(std::string name) :
+        ClapTrap(100, 100, 50, 50, 1, name, 20, 15, 3)
 {
-	this->_energyPoints = 50;
-	this->_maxEnergyPoints = 50;
-	this->_meleeAttackDamage = 50;
-	this->_rangedAttackDamage = 15;
-	this->_armorDamageReduction = 3;
-
-	std::string challenges[] = {
-		"Game of Card",
-		"Game of Rolling Dice",
-		"Russian Roulette",
-		"Fly Higher that me",
-		"Sing a Song"
-	};
-
-	std::memcpy(&(this->_challenges), &challenges, sizeof(challenges));
-
-	std::cout << this->_name << ": ready am i!" << std::endl;
+	saysm("ready!");
 }
 
-ScavTrap::ScavTrap(const ScavTrap &other) : ClapTrap(other)
+ScavTrap::ScavTrap(const ScavTrap &other)
 {
 	*this = other;
 
-	std::cout << this->_name << ": assigned!" << std::endl;
+	saysm("copied!");
 }
 
 ScavTrap::~ScavTrap(void)
 {
-	std::cout << this->_name << ": destroyed!" << std::endl;
+	saysm("destroyed!");
 }
 
-ScavTrap &
-ScavTrap::operator =(const ScavTrap &right)
+ScavTrap&
+ScavTrap::operator =(const ScavTrap &other)
 {
-	ClapTrap::operator =(right);
+	ClapTrap::operator =(other);
 
-	if (this != &right)
-	{
-		std::memcpy(&(this->_challenges), &(right._challenges), sizeof(this->_challenges));
-	}
-
-	std::cout << this->_name << ": assigned!" << std::endl;
+	saysm("assigned!");
 
 	return (*this);
+}
+
+std::ostream&
+ScavTrap::says()
+{
+	return (std::cout << "<SC4V-TP " << this->getName() << "> ");
 }
 
 void
 ScavTrap::challengeNewcomer(std::string const &target)
 {
-	std::string challenge = this->_challenges[rand() % 5];
+	std::string challenges[] = {
+	        "Game of Card",
+	        "Game of Rolling Dice",
+	        "Russian Roulette",
+	        "Fly Higher that me",
+	        "Sing a Song"
+	};
 
-	std::cout << this->_name << ": challenged " << target << " with " << challenge << "." << std::endl;
+	std::string challenge = challenges[rand() % 5];
+
+	says() << "challenged " << target << " with " << challenge << "." << std::endl;
 }

@@ -19,19 +19,19 @@
 
 class ScavTrap : public ClapTrap
 {
-	private:
-		std::string _challenges[5];
+	protected:
+		virtual std::ostream& says();
 
 	public:
 		ScavTrap(void);
 		ScavTrap(std::string name);
 		ScavTrap(const ScavTrap &other);
 
-		~ScavTrap(void);
+		virtual ~ScavTrap(void);
 
 		ScavTrap &operator =(const ScavTrap &right);
 
 		void challengeNewcomer(std::string const &target);
 };
 
-#endif /* SCAVTRAP_HPP_ */
+#endif /* SCAVTRAP_HPP */

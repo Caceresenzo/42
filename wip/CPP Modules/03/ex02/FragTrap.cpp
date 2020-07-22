@@ -15,85 +15,75 @@
 
 #include "FragTrap.hpp"
 
-FragTrap::FragTrap(void) : ClapTrap()
+FragTrap::FragTrap(void) :
+        ClapTrap(100, 100, 100, 100, 1, "unnamed", 30, 20, 5)
 {
-	return ;
+	saysm("ready! (default)");
 }
 
-FragTrap::FragTrap(std::string name) : ClapTrap(name)
+FragTrap::FragTrap(std::string name) :
+        ClapTrap(100, 100, 100, 100, 1, name, 30, 20, 5)
 {
-	this->_energyPoints = 100;
-	this->_maxEnergyPoints = 100;
-	this->_name = name;
-	this->_meleeAttackDamage = 30;
-	this->_rangedAttackDamage = 20;
-	this->_armorDamageReduction = 5;
-
-	std::string vaulthunterAttacks[] = {
-		"Fireball",
-		"Waterball",
-		"Airball",
-		"Earthball",
-		"Lightball"
-	};
-
-	long vaulthunterDamages[] = {
-		10,
-		12,
-		2,
-		23,
-		1
-	};
-
-	std::memcpy(&(this->_vaulthunterAttacks), &vaulthunterAttacks, sizeof(vaulthunterAttacks));
-	std::memcpy(&(this->_vaulthunterDamages), &vaulthunterDamages, sizeof(vaulthunterDamages));
-
-	std::cout << this->_name << ": ready!" << std::endl;
+	saysm("ready!");
 }
 
-FragTrap::FragTrap(const FragTrap &other) : ClapTrap(other)
+FragTrap::FragTrap(const FragTrap &other)
 {
 	*this = other;
 
-	std::cout << this->_name << ": assigned!" << std::endl;
+	saysm("copied!");
 }
 
 FragTrap::~FragTrap(void)
 {
-	std::cout << this->_name << ": destroyed!" << std::endl;
+	saysm("destroyed!");
 }
 
-FragTrap &
-FragTrap::operator =(const FragTrap &right)
+FragTrap&
+FragTrap::operator =(const FragTrap &other)
 {
-	ClapTrap::operator =(right);
+	ClapTrap::operator =(other);
 
-	if (this != &right)
-	{
-		std::memcpy(&(this->_vaulthunterAttacks), &(right._vaulthunterAttacks), sizeof(this->_vaulthunterAttacks));
-		std::memcpy(&(this->_vaulthunterDamages), &(right._vaulthunterDamages), sizeof(this->_vaulthunterDamages));
-	}
-
-	std::cout << this->_name << ": assigned!" << std::endl;
+	saysm("assigned!");
 
 	return (*this);
+}
+
+std::ostream&
+FragTrap::says()
+{
+	return (std::cout << "<FR4G-TP " << this->getName() << "> ");
 }
 
 void
 FragTrap::vaulthunter_dot_exe(std::string const &target)
 {
+	static const std::string attacks[] = {
+	        "Fireball",
+	        "Waterball",
+	        "Airball",
+	        "Earthball",
+	        "Lightball"
+	};
+
+	static const long damages[] = {
+	        10,
+	        12,
+	        2,
+	        23,
+	        1
+	};
+
 	int random = rand() % 5;
 
-	std::string attack = this->_vaulthunterAttacks[random];
-	long damage = this->_vaulthunterDamages[random];
+	std::string attack = attacks[random];
+	long damage = damages[random];
 
-	if (this->_energyPoints >= 25)
+	if (this->getEnergyPoints() >= 25)
 	{
-		this->_energyPoints -= 25;
-		std::cout << this->_name << ": attacked " << target << " with " << attack << " and do " << damage << " damage(s)." << std::endl;
+		this->getEnergyPoints() -= 25;
+		says() << "attacked " << target << " with " << attack << " and do " << damage << " damage(s)." << std::endl;
 	}
 	else
-	{
-		std::cout << this->_name << ": not enought energy point to use vaulthunter_dot_exe on " << target << "." << std::endl;
-	}
+		says() << "Crap! (not enought energy point to use vaulthunter_dot_exe on " << target << ")" << std::endl;
 }

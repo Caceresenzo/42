@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 #include "FragTrap.hpp"
@@ -20,66 +22,41 @@ main(void)
 {
 	srand(time(0));
 
-	{
-		FragTrap fragTrap("Unit 1");
+	std::cout << "--- Waking up\n" << std::endl;
+	ScavTrap scavTrap("Unit 1");
+	FragTrap fragTrap("Unit 1");
 
-		fragTrap.rangedAttack("The Kind");
-		fragTrap.meleeAttack("The Queen");
+	std::cout << "\n--- Attacks\n" << std::endl;
+	scavTrap.rangedAttack("The Kind");
+	scavTrap.meleeAttack("The Queen");
+	fragTrap.rangedAttack("The Kind");
+	fragTrap.meleeAttack("The Queen");
 
-		fragTrap.takeDamage(10);
-		fragTrap.beRepaired(10);
-		// Energy = 95
-
-		fragTrap.takeDamage(50);
-		fragTrap.beRepaired(100);
-		// Energy = 50
-
-		fragTrap.takeDamage(50);
-		fragTrap.beRepaired(100);
-		// Energy = 5
-
-		fragTrap.takeDamage(15);
-		fragTrap.beRepaired(15); // Needed 10
-		// Energy = -5 --> not enought
-
-		fragTrap.takeDamage(1000);
-
-		FragTrap fragTrap2("Unit 2");
-
-		fragTrap2.vaulthunter_dot_exe("Human");
-		fragTrap2.vaulthunter_dot_exe("Sorcerer");
-		fragTrap2.vaulthunter_dot_exe("Knight");
-		fragTrap2.vaulthunter_dot_exe("Giant");
-		fragTrap2.vaulthunter_dot_exe("Ant");
-	}
+	std::cout << "\n--- Take damage and be repaired\n" << std::endl;
+	scavTrap.takeDamage(10); // HP = 93, Energy = 50
+	scavTrap.beRepaired(10); // HP = 100, Energy = 43
 
 	std::cout << std::endl;
+	scavTrap.takeDamage(20); // HP = 83, Energy = 43
+	scavTrap.beRepaired(100); // HP = 100, Energy = 26
 
-	{
-		ScavTrap scavTrap("Unit 1");
+	std::cout << std::endl;
+	scavTrap.takeDamage(40); // HP = 63, Energy = 26
+	scavTrap.beRepaired(26); // HP = 89, Energy = 0
+	scavTrap.beRepaired(1); // Needed 1, so not enough
 
-		scavTrap.rangedAttack("The Kind");
-		scavTrap.meleeAttack("The Queen");
+	std::cout << "\n--- Taking a lot of damage\n" << std::endl;
+	scavTrap.takeDamage(1000);
 
-		scavTrap.takeDamage(10);
-		scavTrap.beRepaired(10);
-		// Energy = 47
+	std::cout << "\n--- Waking up 2\n" << std::endl;
+	ScavTrap scavTrap2("Unit 2");
 
-		scavTrap.takeDamage(50);
-		scavTrap.beRepaired(100);
-		// Energy = 0
+	std::cout << "\n--- Testing VaultHunter.EXE\n" << std::endl;
+	scavTrap2.challengeNewcomer("Human");
+	scavTrap2.challengeNewcomer("Sorcerer");
+	scavTrap2.challengeNewcomer("Knight");
+	scavTrap2.challengeNewcomer("Giant");
+	scavTrap2.challengeNewcomer("Ant");
 
-		scavTrap.beRepaired(15); // Needed 13
-		// Energy = -5 --> not enought
-
-		scavTrap.takeDamage(1000); // dead
-
-		ScavTrap ScavTrap2("Unit 2");
-
-		ScavTrap2.challengeNewcomer("Human");
-		ScavTrap2.challengeNewcomer("Sorcerer");
-		ScavTrap2.challengeNewcomer("Knight");
-		ScavTrap2.challengeNewcomer("Giant");
-		ScavTrap2.challengeNewcomer("Ant");
-	}
+	std::cout << "\n--- END OF FILE\n" << std::endl;
 }
