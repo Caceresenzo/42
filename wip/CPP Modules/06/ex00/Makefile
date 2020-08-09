@@ -95,6 +95,8 @@ test: all
 	./$(NAME) +0
 	@echo
 	./$(NAME) -0
+	@echo
+	./$(NAME) 42.0042
 
 test-error: all
 	! ./$(NAME) ""

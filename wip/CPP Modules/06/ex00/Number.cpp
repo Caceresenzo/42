@@ -15,6 +15,7 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <string>
 
 Number::Number() :
 		_precision(0), _value(0.0)
@@ -90,7 +91,8 @@ Number::asFloat()
 	ensureParsing(false);
 
 	if (std::isnan(_value))
-		return (std::nanf(""));
+		return (nanf(""));
+
 	return (static_cast<float>(_value));
 }
 
@@ -152,7 +154,7 @@ Number::parseDouble(std::string str, int *precision)
 			throw NumberException::invalidFormat("'signed' nanf", index);
 		}
 
-		return (std::nan(""));
+		return (nan(""));
 	}
 
 	bool isInf = false;
@@ -200,7 +202,7 @@ Number::parseDouble(std::string str, int *precision)
 		*precision = postComma.length();
 
 		try {
-			return (std::stod(preComma + "." + postComma) * negativity);
+			return (atof((preComma + "." + postComma).c_str()) * negativity);
 		} catch (std::out_of_range &e) {
 		}
 	}
