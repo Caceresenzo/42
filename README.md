@@ -17,7 +17,7 @@
 | CPP Modules/03 | 100% |   1   |  8d  |   boring   |          |
 | CPP Modules/04 | 100% |   1   | 10h  | repetitive |          |
 | CPP Modules/05 | 100% |   1   | 14h  |            |          |
-| CPP Modules/06 | done |       |  3h  |            |          |
+| CPP Modules/06 | 100% |   1   |  3h  |            |          |
 | CPP Modules/07 | done |       |  3h  |            |          |
 | CPP Modules/08 | done |       |  8h  |            |          |
 |  Philosophers  |  wip |       | 16h  |    cool    |          |
