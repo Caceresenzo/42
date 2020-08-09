@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cstdlib>
+
 #include "CentralBureaucracy.hpp"
 
 CentralBureaucracy::CentralBureaucracy()
@@ -25,7 +27,7 @@ CentralBureaucracy::~CentralBureaucracy()
 		if (block.getIntern())
 			delete block.removeIntern();
 
-		if (block.getSigner())
+		if (block.getSigner() && block.getSigner() != block.getExecutor())
 			delete block.removeSigner();
 
 		if (block.getExecutor())
