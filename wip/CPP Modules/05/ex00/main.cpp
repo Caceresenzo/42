@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
 
 #include "Bureaucrat.hpp"
 
