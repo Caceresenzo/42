@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <iostream>
+#include <cstdlib>
 
 #include "Bureaucrat.hpp"
 #include "Form.hpp"
