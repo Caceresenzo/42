@@ -70,6 +70,8 @@ OfficeBlock::doBureaucracy(const std::string formName, const std::string target)
 		{
 			_signer->signForm(*form);
 			_executor->executeForm(*form);
+			
+			delete form;
 		}
 		catch (std::exception &e)
 		{
