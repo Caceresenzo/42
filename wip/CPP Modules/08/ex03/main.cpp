@@ -43,6 +43,9 @@ g_stdin = false;
 bool
 g_dump = false;
 
+bool
+g_colored = false;
+
 void
 at(std::string source, size_t position)
 {
@@ -160,11 +163,28 @@ mindopen(std::string source)
 				{
 					long addr = y * 16 + x;
 					unsigned char c = context.memory(addr);
+					int i = c;
+
+
+					if (g_colored)
+					{
+						std::stringstream stream;
+						stream << (i + 1);
+
+						std::cout << "\e[38;5;" << stream.str() << "m";
+					}
 
 					if (c < 16)
 						std::cout << "0";
 
-					std::cout << std::hex << (int)c << " ";
+					std::ios::fmtflags savedFlags(std::cout.flags());
+
+					std::cout << std::hex << i << " ";
+
+					std::cout.flags(savedFlags);
+
+					if (g_colored)
+						std::cout << "\e[0m";
 				}
 
 				std::cout << "| ";
@@ -229,6 +249,8 @@ main(int argc, char **argv)
 			g_profiler = true;
 		else if (str == "-d" || str == "--dump")
 			g_dump = true;
+		else if (str == "-c" || str == "--color")
+			g_colored = true;
 		else if (file.empty() && !g_file && (g_file = true))
 			g_stdin = (file = str) == "-";
 		else
@@ -245,6 +267,7 @@ main(int argc, char **argv)
 		std::cout << " -h --help     : display this help message" << std::endl;
 		std::cout << " -p --profiler : enable the profiler" << std::endl;
 		std::cout << " -d --dump     : dump the memory" << std::endl;
+		std::cout << " -c --color    : add color to the dump" << std::endl;
 
 		return (EXIT_FAILURE);
 	}
