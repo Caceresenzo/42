@@ -69,6 +69,45 @@ main(void)
 
 	try
 	{
+		std::cout << "--- TESTING RANGE ---" << std::endl;
+
+		Span span = Span(3);
+		span.addNumber(5, 8);
+		display_test_results(3, span);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "FAILED: " << e.what() << std::endl << std::endl;
+	}
+
+	try
+	{
+		std::cout << "--- TESTING RANGE - from > to ---" << std::endl;
+
+		Span span = Span(3);
+		span.addNumber(8, 5);
+		display_test_results(3, span);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl << std::endl;
+	}
+
+	try
+	{
+		std::cout << "--- TESTING RANGE - from = to ---" << std::endl;
+
+		Span span = Span(3);
+		span.addNumber(5, 5);
+		display_test_results(3, span);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl << std::endl;
+	}
+
+	try
+	{
 		std::cout << "--- TESTING n=0, but adding one ---" << std::endl;
 
 		Span zero = Span(0);

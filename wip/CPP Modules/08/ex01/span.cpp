@@ -17,17 +17,17 @@
 #include <iostream>
 
 Span::Span() :
-		_n(0)
+        _n(0)
 {
 }
 
 Span::Span(unsigned int n) :
-		_n(n)
+        _n(n)
 {
 }
 
 Span::Span(const Span &other) :
-		_n(other._n)
+        _n(other._n)
 {
 	this->operator =(other);
 }
@@ -67,6 +67,21 @@ Span::addNumber(std::vector<int> const &numbers)
 		throw SpanException::capacityReached();
 
 	this->_vector.insert(this->_vector.end(), numbers.begin(), numbers.end());
+}
+
+void
+Span::addNumber(int from, int to)
+{
+	if (from > to)
+		throw SpanException::illegalArgument();
+
+	int diff = to - from;
+
+	if (this->_vector.size() + diff > this->_n)
+		throw SpanException::capacityReached();
+
+	for (int index = from; index < to; ++index)
+		this->_vector.push_back(index);
 }
 
 void
@@ -110,17 +125,20 @@ Span::longestSpan() const
 }
 
 Span::SpanException::SpanException(void) :
-		std::exception(), _message("no message")
+        std::exception(),
+        _message("no message")
 {
 }
 
 Span::SpanException::SpanException(std::string message) :
-		std::exception(), _message(message)
+        std::exception(),
+        _message(message)
 {
 }
 
 Span::SpanException::SpanException(const SpanException &other) :
-		std::exception(), _message(other._message)
+        std::exception(),
+        _message(other._message)
 {
 }
 
@@ -149,6 +167,12 @@ Span::SpanException::message() const
 }
 
 Span::SpanException
+Span::SpanException::illegalArgument()
+{
+	return (SpanException("illegal arguments: from > to"));
+}
+
+Span::SpanException
 Span::SpanException::capacityReached()
 {
 	return (SpanException("capacity reached"));
@@ -165,7 +189,8 @@ Span::dump()
 {
 	for (int index = 0; index < this->_vector.size(); ++index)
 	{
-		std::cout << _vector[index] << (index < this->_vector.size() - 1 ? ", " : "");
+		std::cout << _vector[index] << (
+		        index < this->_vector.size() - 1 ? ", " : "");
 	}
 
 	std::cout << std::endl;

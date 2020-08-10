@@ -34,6 +34,7 @@ class Span
 
 		void addNumber(int number);
 		void addNumber(std::vector<int> const &numbers);
+		void addNumber(int from, int to);
 		void addNumber(Span const &other);
 
 		int shortestSpan() const;
@@ -59,6 +60,7 @@ class Span
 
 				const std::string &message() const;
 
+				static SpanException illegalArgument();
 				static SpanException capacityReached();
 				static SpanException requireAtLeast2();
 		};
