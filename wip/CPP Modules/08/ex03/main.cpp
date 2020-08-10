@@ -23,6 +23,10 @@
 #include "Context.hpp"
 #include "ICommand.hpp"
 
+#define TABLE_SEPARATOR  "+ ---- + ----------------------------------------------- + ---------------- +"
+#define TABLE_HEAD       "| ADDR | CONTENT                                         | PRINTABLE        |"
+#define TABLE_DUPLICATE  "|      | **                                           ** |                  |"
+
 bool
 g_help = false;
 
@@ -34,6 +38,9 @@ g_file = false;
 
 bool
 g_stdin = false;
+
+bool
+g_dump = false;
 
 void
 at(std::string source, size_t position)
@@ -98,13 +105,82 @@ mindopen(std::string source)
 
 	if (g_profiler)
 	{
-		std::cerr << "----- PROFILER -----" << std::endl;
+		std::cerr << std::endl << "----- PROFILER -----" << std::endl;
 		std::cerr << "Compiled instruction: " << context.commandCount() << "  " << std::endl;
 		std::cerr << "Executed instruction: " << executed << "  " << std::endl;
 
 		float took = float(clock() - begin_time) / CLOCKS_PER_SEC;
 
 		std::cerr << "Execution time: " << std::fixed << std::setprecision(5) << took << "s" << "  " << std::endl;
+	}
+
+	if (g_dump)
+	{
+		std::cerr << std::endl << "----- DUMP -----" << std::endl;
+		std::cerr << "Memory size: " << MEMORY_SIZE << "  " << std::endl;
+
+		std::cerr << TABLE_SEPARATOR << std::endl;
+		std::cerr << TABLE_HEAD << std::endl;
+		std::cerr << TABLE_SEPARATOR << std::endl;
+
+		bool wasSame = true;
+
+		for (int y = 0; y < MEMORY_SIZE / 16; ++y)
+		{
+			bool same = true;
+
+			if (y != 0)
+			{
+				for (int x = 0; x < 16; ++x)
+				{
+					long addr = y * 16 + x;
+					long addrMinusOne = (y - 1) * 16 + x;
+
+					same &= context.memory(addr) == context.memory(addrMinusOne);
+				}
+
+				if (!same)
+					wasSame = false;
+			}
+
+			if (same)
+			{
+				if (!wasSame)
+				{
+					std::cerr << TABLE_DUPLICATE << std::endl;
+					wasSame = true;
+				}
+			}
+			else
+			{
+				std::cout << "| " << std::hex << std::setw(4) << (y * 16) << " | ";
+
+				for (int x = 0; x < 16; ++x)
+				{
+					long addr = y * 16 + x;
+					unsigned char c = context.memory(addr);
+
+					if (c < 16)
+						std::cout << "0";
+
+					std::cout << std::hex << (int)c << " ";
+				}
+
+				std::cout << "| ";
+
+				for (int x = 0; x < 16; ++x)
+				{
+					long addr = y * 16 + x;
+					char c = context.memory(addr);
+
+					std::cout << (std::isprint(c) ? c : '.');
+				}
+
+				std::cout << " | " << std::endl;
+			}
+		}
+
+		std::cerr << TABLE_SEPARATOR << std::endl;
 	}
 
 	return (EXIT_SUCCESS);
@@ -148,6 +224,8 @@ main(int argc, char **argv)
 			g_help = true;
 		else if (str == "-p" || str == "--profile")
 			g_profiler = true;
+		else if (str == "-d" || str == "--dump")
+			g_dump = true;
 		else if (file.empty() && !g_file && (g_file = true))
 			g_stdin = (file = str) == "-";
 		else
@@ -163,11 +241,12 @@ main(int argc, char **argv)
 		std::cout << "usage: mindopen [-hp] [file]" << std::endl << std::endl;
 		std::cout << " -h --help     : display this help message" << std::endl;
 		std::cout << " -p --profiler : enable the profiler" << std::endl;
+		std::cout << " -d --dump     : dump the memory" << std::endl;
 
 		return (EXIT_FAILURE);
 	}
 
-	if (g_stdin ||!g_file)
+	if (g_stdin || !g_file)
 		return (mindopen(readStream(std::cin, true)));
 	else
 	{
