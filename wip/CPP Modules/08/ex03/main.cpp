@@ -26,7 +26,7 @@
 
 #define TABLE_SEPARATOR  "+ ---- + ----------------------------------------------- + ---------------- +"
 #define TABLE_HEAD       "| ADDR | CONTENT                                         | PRINTABLE        |"
-#define TABLE_DUPLICATE  "|      | **                                           ** |                  |"
+#define TABLE_DUPLICATE  "| **** | ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** | **************** |"
 
 bool
 g_help = false;
@@ -124,13 +124,13 @@ mindopen(std::string source)
 		std::cerr << TABLE_HEAD << std::endl;
 		std::cerr << TABLE_SEPARATOR << std::endl;
 
-		bool wasSame = true;
+		bool wasSame = false;
 
 		for (int y = 0; y < MEMORY_SIZE / 16; ++y)
 		{
-			bool same = true;
+			bool same;
 
-			if (y != 0)
+			if ((same = y != 0))
 			{
 				for (int x = 0; x < 16; ++x)
 				{
@@ -205,7 +205,7 @@ readStream(std::istream &stream, bool onlyOneLine)
 
 	for (size_t index = 0; index < source.length(); ++index)
 		if (std::isspace(source.at(index)))
-			source.erase(index--);
+			source.erase(index--, 1);
 
 	return (source);
 }

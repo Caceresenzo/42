@@ -33,8 +33,4 @@
 #  define MO_WHILE_CLOSE '}'
 # endif
 
-
-
-
-
 #endif /* MINDOPEN_HPP_ */
