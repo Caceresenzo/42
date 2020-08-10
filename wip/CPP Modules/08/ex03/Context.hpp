@@ -49,6 +49,8 @@ class Context
 
 		Context& operator=(const Context &other);
 
+		void zeroMemory();
+
 		void addCommand(ICommand *command);
 
 		ICommand* next();

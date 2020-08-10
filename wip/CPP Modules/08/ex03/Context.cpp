@@ -13,29 +13,31 @@
 #include "Context.hpp"
 
 Context::Context() :
-		_source(""),
-		_instructionPointer(-1),
-		_direction(d_forward),
-		_memoryPointer(0),
-		_depth(0)
+        _source(""),
+        _instructionPointer(-1),
+        _direction(d_forward),
+        _memoryPointer(0),
+        _depth(0)
 {
+	zeroMemory();
 }
 
 Context::Context(std::string source) :
-		_source(source),
-		_instructionPointer(-1),
-		_direction(d_forward),
-		_memoryPointer(0),
-		_depth(0)
+        _source(source),
+        _instructionPointer(-1),
+        _direction(d_forward),
+        _memoryPointer(0),
+        _depth(0)
 {
+	zeroMemory();
 }
 
 Context::Context(const Context &other) :
-		_source(other._source),
-		_instructionPointer(other._instructionPointer),
-		_direction(other._direction),
-		_memoryPointer(other._memoryPointer),
-		_depth(other._depth)
+        _source(other._source),
+        _instructionPointer(other._instructionPointer),
+        _direction(other._direction),
+        _memoryPointer(other._memoryPointer),
+        _depth(other._depth)
 {
 	this->operator =(other);
 }
@@ -69,6 +71,13 @@ Context::operator=(const Context &other)
 		this->_depth = other._depth;
 	}
 	return (*this);
+}
+
+void
+Context::zeroMemory()
+{
+	for (int index = 0; index < MEMORY_SIZE; ++index)
+		_memory[index] = 0;
 }
 
 void
