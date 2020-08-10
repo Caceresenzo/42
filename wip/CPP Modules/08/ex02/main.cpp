@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <stack>
+#include <cstdlib>
 
 #include "mutantstack.hpp"
 
@@ -45,9 +46,8 @@ main()
 		xassert(mstack.top() == 48);
 		xassert(mstack.size() == 49);
 
-		int times = 0;
-		for (MutantStack<int>::iterator it = mstack.begin(); it != mstack.end();
-		        ++it)
+		unsigned long times = 0;
+		for (MutantStack<int>::iterator it = mstack.begin(); it != mstack.end(); ++it)
 			times++;
 
 		xassert(times == mstack.size());
