@@ -80,7 +80,27 @@ test-error: all
 	
 test-leaks: all
 	@printf "EXPRESSION \033[67G DEFINETLY LOST  \033[100G INDIRECTLY LOST \n"
-	@cat Makefile | grep -oE "\"(.*)\" && echo$$" | awk -F\" '{print $$2}' | while read line; do printf "%s \033[67G" "$$line"; valgrind ./$(NAME) "$$line" 2>&1 > /tmp/cpp_08_valgrind_out | tee /tmp/cpp_08_valgrind_out | grep "definitely lost" | awk -F: '{print $$2}' | tr -d '\n' || true; printf "\033[100G"; cat /tmp/cpp_08_valgrind_out | grep "indirectly lost" | tr -d '\n' | awk -F: '{print $$2}'; done
+	@cat Makefile | \
+		grep -oE "\"(.*)\" && echo$$" \
+		| awk -F\" '{print $$2}' \
+		| while read line; do  \
+			printf "%s \033[67G" "$$line"; \
+			valgrind ./$(NAME) "$$line" 2>&1 > /tmp/cpp_08_valgrind_out \
+			| tee /tmp/cpp_08_valgrind_out \
+			| grep "definitely lost" \
+			| awk -F: '{print $$2}' \
+			| tr -d '\n' || true; \
+			printf "\033[100G"; \
+			cat /tmp/cpp_08_valgrind_out \
+			| grep "indirectly lost" \
+			| tr -d '\n' \
+			| awk -F: '{print $$2}'; \
+			printf "\033[125G"; \
+			cat /tmp/cpp_08_valgrind_out \
+			| grep "All heap blocks were freed -- no leaks are possible" \
+			| tr -d '\n'; \
+			echo; \
+		done
 
 test-break-valid: all
 	valgrind --leak-check=full ./$(NAME) "$$(python3 -c 'print("(" * 2500 + "5" + ") + 1" * 2500)')"
