@@ -101,7 +101,7 @@ Span::shortestSpan() const
 
 	int shortest = -1;
 
-	for (int index = 0; index < this->_vector.size() - 1; ++index)
+	for (unsigned int index = 0; index < this->_vector.size() - 1; ++index)
 	{
 		int diff = std::abs(_vector[index] - _vector[index + 1]);
 
@@ -187,11 +187,8 @@ Span::SpanException::requireAtLeast2()
 void
 Span::dump()
 {
-	for (int index = 0; index < this->_vector.size(); ++index)
-	{
-		std::cout << _vector[index] << (
-		        index < this->_vector.size() - 1 ? ", " : "");
-	}
+	for (unsigned int index = 0; index < this->_vector.size(); ++index)
+		std::cout << _vector[index] << (index < this->_vector.size() - 1 ? ", " : "");
 
 	std::cout << std::endl;
 }
