@@ -19,5 +19,5 @@
 | CPP Modules/05 | 100% |   1   | 14h  |            |          |
 | CPP Modules/06 | 100% |   1   |  3h  |            |          |
 | CPP Modules/07 | 100% |   1   |  4h  |            |          |
-| CPP Modules/08 | done |       |  8h  |            |          |
+| CPP Modules/08 | 100% |   1   | 11h  |            |          |
 |  Philosophers  |  wip |       | 16h  |    cool    |          |
