@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <array>
+#include <set>
 #include <iostream>
 #include <list>
 #include <vector>
@@ -50,10 +50,11 @@ main(void)
 	do_test(vctor, 32);
 	do_test(vctor, 65);
 
-	std::cout << std::endl << "--- An ARRAY ---" << std::endl;
-	std::array<int, 3> arry = { 1, 2, 65 };
+	std::cout << std::endl << "--- A SET ---" << std::endl;
+	int ints[] = { 1, 2, 65 };
+	std::set<int> st(ints, ints + sizeof(ints) / sizeof(int));
 
-	do_test(arry, 16);
-	do_test(arry, 32);
-	do_test(arry, 65);
+	do_test(st, 16);
+	do_test(st, 32);
+	do_test(st, 65);
 }
