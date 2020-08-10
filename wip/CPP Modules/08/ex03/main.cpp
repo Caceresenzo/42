@@ -15,6 +15,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <cerrno>
 #include <cstring>
@@ -202,7 +203,9 @@ readStream(std::istream &stream, bool onlyOneLine)
 		source = buffer.str();
 	}
 
-	source.erase(std::remove_if(source.begin(), source.end(), ::isspace), source.end());
+	for (size_t index = 0; index < source.length(); ++index)
+		if (std::isspace(source.at(index)))
+			source.erase(index--);
 
 	return (source);
 }
@@ -250,7 +253,7 @@ main(int argc, char **argv)
 		return (mindopen(readStream(std::cin, true)));
 	else
 	{
-		fileStream.open(file, std::ios::binary | std::ios::in);
+		fileStream.open(file.c_str(), std::ios::binary | std::ios::in);
 		fileStream.peek();
 
 		if (!fileStream.good())

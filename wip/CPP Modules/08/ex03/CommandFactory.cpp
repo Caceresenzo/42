@@ -72,7 +72,7 @@ CommandFactory::registerCreator(char c, Creator creator)
 ICommand*
 CommandFactory::create(char c, size_t position) const
 {
-	std::unordered_map<char, Creator>::const_iterator it = this->_factories.find(c);
+	std::map<char, Creator>::const_iterator it = this->_factories.find(c);
 
 	if (it != this->_factories.end())
 	{

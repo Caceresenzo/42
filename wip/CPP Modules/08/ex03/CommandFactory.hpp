@@ -13,7 +13,7 @@
 #ifndef COMMANDFACTORY_HPP_
 # define COMMANDFACTORY_HPP_
 
-# include <unordered_map>
+# include <map>
 
 # include "ICommand.hpp"
 
@@ -23,7 +23,7 @@ class CommandFactory
 		typedef ICommand *(*Creator)(size_t);
 
 	private:
-		std::unordered_map<char, Creator> _factories;
+		std::map<char, Creator> _factories;
 
 		void initialize();
 		void registerCreator(char c, Creator creator);
