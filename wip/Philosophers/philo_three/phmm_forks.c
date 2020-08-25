@@ -25,11 +25,6 @@ int
 	{
 		table->mans[index].start = start;
 		table->mans[index].last_meal = start;
-		index++;
-	}
-	index = 0;
-	while (index < g_params.nbr_of_philo)
-	{
 		if ((pid = fork()) == -1)
 			return (errno);
 		else if (pid == 0)
