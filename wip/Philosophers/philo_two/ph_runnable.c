@@ -39,7 +39,7 @@ void
 	bool	countdown;
 
 	countdown = g_params.nbr_must_eat != -1;
-	while (!g_someone_is_dead)
+	while (!g_someone_is_dead && !mn->stopped)
 	{
 		if (eat(countdown, mn))
 			break ;
@@ -47,4 +47,5 @@ void
 		ph_sleep(g_params.time_to_sleep);
 		ph_update(mn, thinking);
 	}
+	mn->stopped = true;
 }

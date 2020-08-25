@@ -19,21 +19,21 @@ void
 	char	msg[60];
 	size_t	len;
 
-	last = ph_millis();
 	ft_memset(msg, ' ', sizeof(msg));
-	len = ft_sputnbr(msg, last - man->start) + 1;
-	len += ft_sputnbr(msg + len, man->id) + 1;
-	len += ft_sputstr(msg + len, g_man_states[new_state]);
-	msg[len++] = '\n';
-	if (new_state == eating)
-	{
-		sem_wait(man->sem);
-		man->last_meal = last;
-		sem_post(man->sem);
-	}
 	sem_wait(g_sem_stdout);
 	if (!g_someone_is_dead)
 	{
+		last = ph_millis();
+		len = ft_sputnbr(msg, last - man->start) + 1;
+		len += ft_sputnbr(msg + len, man->id) + 1;
+		len += ft_sputstr(msg + len, g_man_states[new_state]);
+		msg[len++] = '\n';
+		if (new_state == eating)
+		{
+			sem_wait(man->sem);
+			man->last_meal = last;
+			sem_post(man->sem);
+		}
 		write(FD_OUT, msg, len);
 		g_someone_is_dead = new_state == dead;
 	}

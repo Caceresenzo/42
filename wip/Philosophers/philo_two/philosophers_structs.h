@@ -43,6 +43,7 @@ typedef struct {
 	long		start;
 	long		last_meal;
 	long		eat_count;
+	bool		stopped;
 	pthread_t	thr;
 	pthread_t	thr_monitor;
 }	t_man;

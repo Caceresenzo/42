@@ -39,7 +39,6 @@ int
 	create(&err, SM_MILLIS, &g_sem_millis, 1);
 	create(&err, SM_FORKS, &g_sem_forks, g_params.nbr_of_philo);
 	create(&err, SM_GRAB, &g_sem_grab, 1);
-	create(&err, SM_DEAD, &g_sem_dead, 0);
 	return (err);
 }
 
@@ -50,5 +49,4 @@ void
 	destroy(SM_MILLIS, &g_sem_millis);
 	destroy(SM_FORKS, &g_sem_forks);
 	destroy(SM_GRAB, &g_sem_grab);
-	destroy(SM_DEAD, &g_sem_dead);
 }

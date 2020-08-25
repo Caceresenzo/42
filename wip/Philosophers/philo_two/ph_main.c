@@ -29,8 +29,6 @@ sem_t	*g_sem_millis = SEM_FAILED;
 sem_t	*g_sem_forks = SEM_FAILED;
 sem_t	*g_sem_grab = SEM_FAILED;
 
-sem_t	*g_sem_dead = SEM_FAILED;
-
 int
 	ph_main(void)
 {

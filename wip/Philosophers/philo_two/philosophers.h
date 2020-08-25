@@ -71,8 +71,6 @@ sem_t		*g_sem_millis;
 sem_t		*g_sem_forks;
 sem_t		*g_sem_grab;
 
-sem_t		*g_sem_dead;
-
 bool		g_someone_is_dead;
 
 # define AUTO_HEADER_SECTION
@@ -81,7 +79,7 @@ bool		g_someone_is_dead;
 ** Automatic header generation:
 ** - from 23 files
 ** - found 33 prototypes
-** - at 18:11:22, the August 24 (2020)
+** - at 13:42:20, the August 25 (2020)
 ** - with version 1.1
 */
 

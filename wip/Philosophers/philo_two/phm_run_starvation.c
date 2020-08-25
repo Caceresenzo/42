@@ -20,12 +20,14 @@ void
 	long	last;
 
 	time_to_die = g_params.time_to_die;
-	while (!g_someone_is_dead)
+	while (!g_someone_is_dead && !man->stopped)
 	{
 		sem_wait(man->sem);
 		last = man->last_meal;
 		sem_post(man->sem);
 		now = ph_millis();
+		if (man->stopped)
+			break ;
 		if (now - time_to_die > last)
 		{
 			ph_update(man, dead);
