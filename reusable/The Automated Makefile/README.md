@@ -6,13 +6,13 @@ An already written Makefile to allow faster usage. Able to `make update` itself.
 
 ### Target
 
-```
+```makefile
 TARGET                  = program           # output compiled binary file
 ```
 
 ### Flags & Compiler
 
-```
+```makefile
 COMPILER                = gcc               # compiled used for every files
 
 FRAMEWORKS              = OpenGL AppKit     # frameworks that will be linked with flag -framework (can be empty)
@@ -35,7 +35,7 @@ FIX_LIBRARIES_DIR       = .         # libraries file directory
 
 ## Usage
 
-```
+```bash
 $ make update
 $ make
 ```
