@@ -13,8 +13,9 @@
 #ifndef ALGORITHM_HPP_
 # define ALGORITHM_HPP_
 
-#include <stddef.h>
 #include <Utility.hpp>
+#include <Iterator.hpp>
+#include <stddef.h>
 
 namespace ft
 {

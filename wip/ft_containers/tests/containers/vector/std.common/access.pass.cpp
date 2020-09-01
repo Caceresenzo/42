@@ -66,5 +66,5 @@ main(void)
 		ASSERT(c.back() == N + 9);
 	});
 
-	return 0;
+	return (0);
 }

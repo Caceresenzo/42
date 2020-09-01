@@ -15,8 +15,8 @@
 
 struct A
 {
-		int first;
-		int second;
+	int first;
+	int second;
 };
 
 int
@@ -42,7 +42,7 @@ main(int, char**)
 		ASSERT(i == j);
 	});
 
-	{ /* Aware block is not usable here for some reason. */
+	{
 		typedef Aware<int> T;
 		typedef ft::Vector<T> C;
 		const T t[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };

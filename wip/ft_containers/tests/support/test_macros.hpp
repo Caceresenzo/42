@@ -14,6 +14,7 @@
 # define TEST_MACROS_HPP_
 
 # include <iostream>
+# include <exception>
 
 #define ASSERT(cond) \
 		if (!(cond)) { \
@@ -39,6 +40,24 @@
 #define ASSERT_FAIL(code) \
 		std::cout << "assert failed " << __FILE__ << ":" << __LINE__ << " { " << #code << " }" << std::endl; \
 		exit(1); \
+
+#define ASSERT_AWARE_ZERO() ASSERT(aware_count == 0);
+
+#define TEST_BLOCK(code) do \
+	{ \
+		code \
+	} while (0);
+
+#define TEST_AWARE_BLOCK(code) \
+	TEST_BLOCK(code); \
+	ASSERT_AWARE_ZERO();
+
+template<class _Tp>
+	inline _Tp*
+	addressof(_Tp &__x)
+	{
+		return reinterpret_cast<_Tp*>(const_cast<char*>(&reinterpret_cast<const volatile char&>(__x)));
+	}
 
 static int aware_count = 0;
 
@@ -93,16 +112,5 @@ template<class T>
 				return (_x);
 			}
 	};
-
-#define ASSERT_AWARE_ZERO() ASSERT(aware_count == 0);
-
-#define TEST_BLOCK(code) do \
-	{ \
-		code \
-	} while (0);
-
-#define TEST_AWARE_BLOCK(code) \
-	TEST_BLOCK(code); \
-	ASSERT_AWARE_ZERO();
 
 #endif /* TEST_MACROS_HPP_ */

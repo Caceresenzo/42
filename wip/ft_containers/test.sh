@@ -31,21 +31,36 @@ do
 		category=$(basename "$category_path")
 		printf $C_TREE"   |-- "$C_CATEGORY"%s"$C_RESET"\n" "$category"
 
-		for test_file in $category_path/*
+		for test_file in $category_path/*.cpp
 		do
 			test=$(basename "$test_file")
+			test_name=$(echo $test | awk -F . '{ print $1 }')
+			test_success=$(echo $test | awk -F . '{ print $2 }')
 			test_bin=/tmp/"$test".out
 			
 			printf $C_TREE"   |    |-- "$C_TEST"Compiling "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET "$test"
+			
+			clang++ -std=c++98 -g3 -fsanitize=address -I. -Itests/support $test_file -o $test_bin
+			compiled_exit_code=$?
 
-			if clang++ -std=c++98 -g3 -fsanitize=address -I. -Itests/support $test_file -o $test_bin; then
-				printf $C_SAME_LINE$C_TREE"   |    |-- "$C_TEST"Testing "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET" "$C_FAIL "$(echo $test | awk -F . '{ print $1 }')"
+			expected_exit_code=0
+			if [ $test_success = "fail" ]; then
+				expected_exit_code=1
+			fi
+
+			if [ $compiled_exit_code = $expected_exit_code ]; then
+				printf $C_SAME_LINE$C_TREE"   |    |-- "$C_TEST"Testing "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET" "$C_FAIL "$test_name"
 				
 				if $test_bin; then
 					printf $C_PASS"OK"$C_RESET"\n"
 				fi
 			else
-				printf $C_FAIL"FAIL (to compile)"$C_RESET"\n"
+				if [ $test_success = "fail" ]; then
+					printf $C_FAIL"FAIL (to not compile)"$C_RESET"\n"
+				else
+					printf $C_FAIL"FAIL (to compile)"$C_RESET"\n"
+				fi
+				
 				exit 1
 			fi
 		done
