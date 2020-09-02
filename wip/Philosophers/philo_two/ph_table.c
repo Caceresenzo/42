@@ -59,10 +59,6 @@ void
 	{
 		if ((man = &(table->mans[index]))->is & IS_SEM)
 			ph_sem_destroy_man(&(man->sem), index);
-		if (man->is & IS_THREAD)
-			pthread_detach(man->thr);
-		if (man->is & IS_MONITOR)
-			pthread_detach(man->thr_monitor);
 		index++;
 	}
 	free(table->mans);
