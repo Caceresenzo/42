@@ -70,6 +70,8 @@ sem_t		*g_sem_wait_start;
 sem_t		*g_sem_dead;
 sem_t		*g_sem_stop_await;
 
+bool		g_stopped;
+
 # define AUTO_HEADER_SECTION
 
 /*

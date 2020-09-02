@@ -48,6 +48,7 @@ int
 void
 	phm_destroy(void)
 {
+	g_stopped = true;
 	destroy(SM_STDOUT, &g_sem_stdout);
 	destroy(SM_FORKS, &g_sem_forks);
 	destroy(SM_GRAB, &g_sem_grab);

@@ -33,6 +33,8 @@ sem_t	*g_sem_wait_start = SEM_FAILED;
 sem_t	*g_sem_dead = SEM_FAILED;
 sem_t	*g_sem_stop_await = SEM_FAILED;
 
+bool	g_stopped = false;
+
 int
 	ph_main(void)
 {

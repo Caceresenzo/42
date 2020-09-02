@@ -14,8 +14,8 @@
 
 #if 0
 
-void
-	on_stop(void) __attribute__((destructor))
+void __attribute__((destructor))
+	on_stop(void)
 {
 	while (1)
 		;
@@ -52,5 +52,7 @@ int
 	if (argc == 6)
 		if (atoi_strict(&(g_params.nbr_must_eat), argv[5]))
 			return (err_param_not_int(4));
+	if (g_params.nbr_must_eat == 0)
+		return (0);
 	return (err_errno(ph_main(), false));
 }

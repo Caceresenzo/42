@@ -16,5 +16,6 @@ void
 	phmm_run_dead(t_table *table)
 {
 	sem_wait(g_sem_dead);
-	phmm_shout(table, g_sem_stop);
+	if (!g_stopped)
+		phmm_shout(table, g_sem_stop);
 }

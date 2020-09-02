@@ -16,6 +16,7 @@ void
 	phms_exit(t_seat *seat)
 {
 	sem_post(g_sem_stop_await);
+	(void)seat;
 	pthread_detach(seat->man->thr_monitor);
 	pthread_detach(seat->man->thr_stop_monitor);
 	exit(0);
