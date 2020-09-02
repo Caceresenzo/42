@@ -81,10 +81,6 @@ void
 			pthread_mutex_destroy(&(man->mutex));
 		if (man->is & IS_FORK)
 			pthread_mutex_destroy(&(table->forks[index]));
-		if (man->is & IS_THREAD)
-			pthread_detach(man->thr);
-		if (man->is & IS_MONITOR)
-			pthread_detach(man->thr_monitor);
 		index++;
 	}
 	free(table->mans);
