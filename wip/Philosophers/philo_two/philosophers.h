@@ -34,7 +34,7 @@ typedef	void	*(*t_run)(void *);
 # define FD_OUT 1
 # define FD_ERR 2
 
-# define PROGRAM "philo_three"
+# define PROGRAM "philo_two"
 
 # define NBR_OF_PARAMETER 5
 
