@@ -20,7 +20,7 @@
 |  CPP Modules/06  | 100% |   1   |  3h  |            |          |
 |  CPP Modules/07  | 100% |   1   |  4h  |            |          |
 |  CPP Modules/08  | 100% |   1   | 11h  |            |          |
-|   Philosophers   |  wip |       |  3d  |    cool    |          |
-|   ft_containers  |      |       |      |            |          |
+|   Philosophers   | 100% |   1   |  3d  |    cool    |          |
+|   ft_containers  |  wip |       |      |            |          |
 |      webserv     |      |       |      |            |          |
 | ft_transcendence |      |       |      |            |          |
