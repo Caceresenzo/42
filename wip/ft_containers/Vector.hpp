@@ -379,10 +379,16 @@ namespace ft
 				}
 
 			public:
-				size_type
+				inline size_type
 				capacity_size() const
 				{
 					return (static_cast<size_type>(_end_capacity - _end));
+				}
+
+				inline bool
+				has_room() const
+				{
+					return (capacity_size() != 0);
 				}
 
 			public:
@@ -868,25 +874,89 @@ namespace ft
 				iterator
 				insert(iterator position, const value_type &val)
 				{
-					pointer ptr = _begin + (position - begin());
+					difference_type offset = position - begin();
 
-					return (iterator(ptr));
+					insert(position, 1, val);
+
+					return (iterator(begin() + offset));
 				}
 
 				void
 				insert(iterator position, size_type n, const value_type &val)
 				{
-					pointer ptr = _begin + (position - begin());
+					/*
+					 * [A] [B] [C] [D];[ ] [ ] [ ] --- --- --- --- ---
+					 *      ^ n=5
+					 *
+					 * [A] [B] [C] [D];[ ] [ ] [ ] [ ] [ ] [ ] --- ---  : reserve
+					 * [A] [b] [c] [d];[ ] [ ] [B] [C] [D] [ ] --- ---  : construct copy to new location
+					 * [A] [E] [E] [E];[ ] [ ] [B] [C] [D] [ ] --- ---  : operator = to already created
+					 * [A] [E] [E] [E] [E] [E] [B] [C] [D];[ ] --- ---  : construct copy to remain location
+					 *
+					 *
+					 * [A] [B] [C] [D];[ ] [ ] [ ] --- --- --- --- ---
+					 *      ^ n=1
+					 *
+					 * [A] [B] [C] [D];--- --- --- --- --- --- --- ---  : reserve
+					 * [A] [B] [C] [d];[D] [ ] [ ] --- --- --- --- ---  : construct copy to new location
+					 * [A] [b] [B] [C];[D] [ ] [ ] --- --- --- --- ---  : operator = to already location
+					 * [A] [E] [B] [C];[D] [ ] [ ] --- --- --- --- ---  : operator = to already created
+					 * [A] [E] [B] [C] [D];[ ] [ ] --- --- --- --- ---  :
+					 *
+					 * legend:
+					 *   [A] = constructed instanced
+					 *   [a] = old instance that has been copied
+					 *   [ ] = non constructed memory
+					 *   --- = non allocated memory
+					 *    ;  = _end
+					 */
 
 					if (n > 0)
 					{
-						if (n <= capacity_size())
+						difference_type offset = position - begin();
+
+						size_type new_size = size() + n;
+
+						if (true || n > capacity_size()) /* reserve */
+							reserve(recommend(new_size));
+
+						value_type copy = value_type(val);
+
+						pointer pos = _begin + offset;
+
+						pointer loc = pos;
+						pointer loc_end = pos + n;
+						pointer new_end = _end + n;
+
+						if (!empty())
 						{
+							pointer to = new_end - 1;
+							pointer from = _end - 1;
 
+							while (to != loc)
+							{
+								if (to >= _end)
+									ft::construct_copy(to, *from);
+								else
+									*to = *from;
+
+								to--;
+								from--;
+							}
 						}
-					}
 
-//					return (iterator(ptr));
+						while (loc != loc_end)
+						{
+							if (loc >= _end)
+								ft::construct_copy(loc, copy);
+							else
+								*loc = copy;
+
+							loc++;
+						}
+
+						_end += n;
+					}
 				}
 
 				template<class InputIterator>
