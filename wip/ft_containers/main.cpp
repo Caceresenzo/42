@@ -19,7 +19,7 @@
 class CountAware
 {
 	private:
-		int _hello;
+		int _x;
 		std::string _last;
 
 	public:
@@ -27,7 +27,7 @@ class CountAware
 		static bool says;
 
 		CountAware() :
-				_hello(0),
+				_x(0),
 				_last("construct default")
 		{
 			total++;
@@ -37,23 +37,23 @@ class CountAware
 		}
 
 		CountAware(int hello) :
-				_hello(hello),
+				_x(hello),
 				_last("construct custom")
 		{
 			total++;
 
 			if (says)
-				std::cout << "construct custom (" << _hello << ")" << std::endl;
+				std::cout << "construct custom (" << _x << ")" << std::endl;
 		}
 
 		CountAware(const CountAware &other) :
-				_hello(other._hello),
+				_x(other._x),
 				_last("construct copy")
 		{
 			total++;
 
 			if (says)
-				std::cout << "construct copy (" << _hello << ")" << std::endl;
+				std::cout << "construct copy (" << _x << ")" << std::endl;
 		}
 
 		~CountAware()
@@ -61,7 +61,7 @@ class CountAware
 			total--;
 
 			if (says)
-				std::cout << "destructor (" << _hello << ", last: " << _last << ")" << std::endl;
+				std::cout << "destructor (" << _x << ", last: " << _last << ")" << std::endl;
 		}
 
 		CountAware&
@@ -70,22 +70,34 @@ class CountAware
 			_last = "assign";
 
 			if (says)
-				std::cout << "operator = (" << _hello << " -> " << other._hello << ")" << std::endl;
+				std::cout << "operator = (" << _x << " -> " << other._x << ")" << std::endl;
 
-			_hello = other._hello;
+			_x = other._x;
 			return (*this);
+		}
+
+		bool
+		operator ==(const CountAware &other) const
+		{
+			return (_x == other._x);
 		}
 
 		void
 		say(void) const
 		{
-			std::cout << "hey " << _hello << ", last: " << _last << ", at " << (void*)this << std::endl;
+			std::cout << "hey " << _x << ", last: " << _last << ", at " << (void*)this << std::endl;
+		}
+
+		int
+		x() const
+		{
+			return (_x);
 		}
 };
 
 int CountAware::total = 0;
-bool CountAware::says = false;
-//bool CountAware::says = true;
+//bool CountAware::says = false;
+bool CountAware::says = true;
 
 void
 test(CountAware const &to)
@@ -99,115 +111,55 @@ test(CountAware const &to)
 		x[i].~CountAware();
 }
 
+#define XASSERT(cond) std::cout << #cond << ": " << (cond) << std::endl;
+
 int
 main(int argc, char **argv)
 {
-//	std::vector<CountAware> v;
-//	std::cout << (void*) &(v.front()) << std::endl;
-//	std::cout << (void*) v.begin().base() << std::endl;
-//
-//	v.insert(v.begin(), CountAware(5));
-//	std::cout << (void*) v.begin().base() << std::endl;
-
-//	ft::Vector<int>().at(2);
-//
-//	v.assign(3, CountAware(5));
-//	v.push_back(CountAware(1));
-//	std::cout << std::endl;
-//	v.push_back(CountAware(2));
-//	std::cout << std::endl;
-//	v.push_back(CountAware(3));
-//	std::cout << std::endl;
-//	v.insert(v.begin(), CountAware(6));
-//	v.erase(v.begin());
-
-//	std::cout << (void*) &(v.front()) << std::endl;
-//	v.reserve(100);
-//
-//	std::cout << "TOTAL: " << CountAware::total << std::endl;
-//	v.clear();
-//
-//	std::cout << "TOTAL: " << CountAware::total << std::endl;
-//	std::cout << std::endl;
-
-//	CountAware *x = std::allocator<CountAware>().allocate(3);
-//	for (int i = 0; i < 3; ++i)
 //	{
-//		std::memcpy(&(x[i]), &cpy, sizeof(CountAware));
-////		x[i] = CountAware(x[i]);
+//		ft::Vector<Aware<int> > v(100);
+//
+//		v.resize(50);
+//		XASSERT(v.size() == 50);
+//		XASSERT(v.capacity() == 100);
+//
+//		v.resize(200);
+//		XASSERT(v.size() == 200);
+//		XASSERT(v.capacity() >= 200);
 //	}
-
-//	test(CountAware(5));
-////
-//	std::cout << std::endl;
-//	std::cout << "TOTAL: " << CountAware::total << std::endl;
-//	std::cout << std::endl;
-
-//	ft::Vector<CountAware> ftv;
-//	for (size_t i = 0; i < 50; ++i)
-//	{
-//		ftv.push_back(CountAware(i));
-//	}
-//	for (size_t i = 0; i < ftv.size(); ++i)
-//	{
-//		ftv[i].say();
-//	}
-//	ftv.pop_back();
-//
-
-//	const ft::Vector<CountAware> v;
-////	v.assign(10, CountAware(1));
-//
-//	for (size_t i = 0; i < 50; ++i)
-//	{
-////		v.push_back(CountAware(i));
-////		std::cout << std::endl;
-//	}
-//
-////	ft::Vector<CountAware>::iterator it = v.begin();
-//	ft::Vector<CountAware>::const_iterator cit = v.begin();
-//
-//	while (cit != v.end())
-//	{
-//		cit->say();
-//		cit++;
-//	}
-//
-//
-////	v.clear();
-
-//	std::vector<CountAware> v;
-//	typedef std::vector<CountAware> vec;
-	typedef ft::Vector<CountAware> vec;
-
-	for (int i = 0; i < 6; i++)
 	{
-		std::cout << "\e[95m" "TESTING WITH I=" << i << "\e[0m" << std::endl;
-		{
-			vec v;
-			for (int index = 0; index < 5; ++index)
-				v.push_back(CountAware(index));
+//		ft::Vector<CountAware> v(100);
 
-			v.insert(v.begin() + i, CountAware(123));
-			//	v.insert(v.begin(), 3, CountAware(1));
-			//	v.insert(v.begin(), CountAware(2));
-			//	v.insert(v.begin(), CountAware(3));
+//		v.resize(50, 1);
+//		XASSERT(v.size() == 50);
+//		XASSERT(v.capacity() == 100);
+//		XASSERT(v == ft::Vector<CountAware>(50));
 
-			std::cout << std::endl;
-			vec::iterator ite = v.end();
-			for (vec::iterator it = v.begin(); it < ite; ++it)
-				it->say();
-		}
+//		bool x = v == ft::Vector<CountAware>(50);
+//		(void)x;
 
-		std::cout << std::endl;
-		std::cout << "TOTAL: " << CountAware::total << std::endl;
-		std::cout << std::endl;
+		typedef ft::Vector<int> V;
 
-		if (CountAware::total)
-		{
-			std::cout << "WARNING: count aware total not zero, resetting it." << std::endl;
-			CountAware::total = 0;
-		}
+		V x(6, 42);
+		V::iterator it = x.begin() + 3;
+		V::iterator ite = x.end();
+
+		V::difference_type diff = it - ite;
+
+		std::cout << diff << std::endl;
+
+//		v.resize(200, 1);
+//		XASSERT(v.size() == 200);
+//		XASSERT(v.capacity() >= 200);
+
+//		for (unsigned i = 0; i < 50; ++i)
+//			XASSERT(v[i] == CountAware(0));
+//
+//		for (unsigned i = 50; i < 200; ++i)
+//			XASSERT(v[i] == CountAware(1));
 	}
-
+//
+//	std::cout << std::endl;
+//	std::cout << "TOTAL: " << CountAware::total << std::endl;
+//	std::cout << std::endl;
 }

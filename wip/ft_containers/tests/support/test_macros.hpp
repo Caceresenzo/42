@@ -70,19 +70,19 @@ template<class T>
 		public:
 
 			Aware() :
-			        _x(0)
+					_x(0)
 			{
 				aware_count++;
 			}
 
 			Aware(T x) :
-			        _x(x)
+					_x(x)
 			{
 				aware_count++;
 			}
 
 			Aware(const Aware &other) :
-			        _x(other._x)
+					_x(other._x)
 			{
 				aware_count++;
 			}
@@ -112,5 +112,132 @@ template<class T>
 				return (_x);
 			}
 	};
+
+template<typename T, class Alloc = std::allocator<T> >
+	class SimpleIterator
+	{
+		public:
+			typedef typename Alloc::difference_type difference_type;
+			typedef typename Alloc::value_type value_type;
+			typedef typename Alloc::reference reference;
+			typedef typename Alloc::pointer pointer;
+			typedef std::random_access_iterator_tag iterator_category;
+
+		private:
+			T *_ptr;
+
+		public:
+			SimpleIterator() :
+					_ptr(NULL)
+			{
+			}
+
+			SimpleIterator(T *ptr) :
+					_ptr(ptr)
+			{
+			}
+
+			virtual
+			~SimpleIterator()
+			{
+			}
+
+			SimpleIterator&
+			operator++()
+			{
+				_ptr++;
+
+				return (*this);
+			}
+
+			SimpleIterator
+			operator++(int)
+			{
+				SimpleIterator cpy(_ptr);
+
+				_ptr++;
+
+				return (cpy);
+			}
+
+			SimpleIterator&
+			operator--()
+			{
+				_ptr--;
+
+				return (*this);
+			}
+
+			SimpleIterator
+			operator--(int)
+			{
+				SimpleIterator cpy(_ptr);
+
+				_ptr--;
+
+				return (cpy);
+			}
+
+			T
+			operator*() const
+			{
+				return (*_ptr);
+			}
+
+			T
+			operator->() const
+			{
+				return (_ptr);
+			}
+
+			bool
+			operator==(const SimpleIterator &rhs) const
+			{
+				return (_ptr == rhs._ptr);
+			}
+
+			bool
+			operator!=(const SimpleIterator &rhs) const
+			{
+				return (_ptr != rhs._ptr);
+			}
+
+			bool
+			operator<(const SimpleIterator &rhs) const
+			{
+				return (_ptr < rhs._ptr);
+			}
+
+			bool
+			operator>(const SimpleIterator &rhs) const
+			{
+				return (_ptr > rhs._ptr);
+			}
+
+			bool
+			operator<=(const SimpleIterator &rhs) const
+			{
+				return (_ptr <= rhs._ptr);
+			}
+
+			bool
+			operator>=(const SimpleIterator &rhs) const
+			{
+				return (_ptr >= rhs._ptr);
+			}
+
+			const T*
+			base() const
+			{
+				return (_ptr);
+			}
+	};
+
+template<class T, class Alloc>
+	typename SimpleIterator<T, Alloc>::difference_type
+	operator-(const SimpleIterator<T, Alloc> &left, const SimpleIterator<T, Alloc> &right)
+	{
+		return (left.base() - right.base());
+	}
 
 #endif /* TEST_MACROS_HPP_ */

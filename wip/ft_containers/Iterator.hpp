@@ -13,117 +13,178 @@
 #ifndef ITERATOR_HPP_
 # define ITERATOR_HPP_
 
-# include <cstddef>
+# include <iterator>
 
 namespace ft
 {
-	struct input_iterator_tag
-	{
-	};
-
-	struct output_iterator_tag
-	{
-	};
-
-	struct forward_iterator_tag :
-			input_iterator_tag
-	{
-	};
-
-	struct bidirectional_iterator_tag :
-			forward_iterator_tag
-	{
-	};
-
-	struct random_access_iterator_tag :
-			bidirectional_iterator_tag
-	{
-	};
-
-	template<class Category, class T, class Distance = ptrdiff_t,
-			class Pointer = T*, class Reference = T&>
-		struct iterator
+	template<class It>
+		typename std::iterator_traits<It>::difference_type
+		do_distance(It first, It last, std::input_iterator_tag)
 		{
-				typedef T value_type;
-				typedef Distance difference_type;
-				typedef Pointer pointer;
-				typedef Reference reference;
-				typedef Category iterator_category;
+			typename std::iterator_traits<It>::difference_type result = 0;
+
+			while (first != last)
+			{
+				++first;
+				++result;
+			}
+
+			return (result);
+		}
+
+	template<class It>
+		typename std::iterator_traits<It>::difference_type
+		do_distance(It first, It last, std::random_access_iterator_tag)
+		{
+			return (last - first);
+		}
+
+	template<class It>
+		typename std::iterator_traits<It>::difference_type
+		distance(It first, It last)
+		{
+			return do_distance(first, last, typename std::iterator_traits<It>::iterator_category());
+		}
+
+	template<typename T>
+		class BaseIterator
+		{
+			private:
+				BaseIterator();
+
+			protected:
+				T *_ptr;
+
+			public:
+				BaseIterator(T *ptr) :
+						_ptr(ptr)
+				{
+				}
+
+				BaseIterator(const BaseIterator &other) :
+						_ptr(other._ptr)
+				{
+				}
+
+				virtual
+				~BaseIterator()
+				{
+				}
+
+				bool
+				operator==(const BaseIterator &rhs) const
+				{
+					return (_ptr == rhs._ptr);
+				}
+
+				bool
+				operator!=(const BaseIterator &rhs) const
+				{
+					return (_ptr != rhs._ptr);
+				}
+
+				bool
+				operator<(const BaseIterator &rhs) const
+				{
+					return (_ptr < rhs._ptr);
+				}
+
+				bool
+				operator>(const BaseIterator &rhs) const
+				{
+					return (_ptr > rhs._ptr);
+				}
+
+				bool
+				operator<=(const BaseIterator &rhs) const
+				{
+					return (_ptr <= rhs._ptr);
+				}
+
+				bool
+				operator>=(const BaseIterator &rhs) const
+				{
+					return (_ptr >= rhs._ptr);
+				}
+
+				T*
+				base() const
+				{
+					return (_ptr);
+				}
 		};
 
-	template<class T>
-		struct remove_pointer
+	template<typename T>
+		class BaseConstIterator
 		{
-				typedef T type;
-		};
+			private:
+				BaseConstIterator();
 
-	template<class T>
-		struct remove_pointer<T*>
-		{
-				typedef T type;
-		};
+			protected:
+				const T *_ptr;
 
-	template<class T>
-		struct remove_pointer<T* const >
-		{
-				typedef T type;
-		};
+			public:
+				BaseConstIterator(const T *ptr) :
+						_ptr(ptr)
+				{
+				}
 
-	template<class T>
-		struct remove_pointer<T* volatile >
-		{
-				typedef T type;
-		};
+				BaseConstIterator(const BaseConstIterator &other) :
+						_ptr(other._ptr)
+				{
+				}
 
-	template<class T>
-		struct remove_pointer<T* const volatile >
-		{
-				typedef T type;
-		};
+				BaseConstIterator(const BaseIterator<T> &other) :
+						_ptr(other._ptr)
+				{
+				}
 
-	template<class T>
-		struct remove_const
-		{
-				typedef T type;
-		};
-	template<class T>
-		struct remove_const<const T>
-		{
-				typedef T type;
-		};
+				virtual
+				~BaseConstIterator()
+				{
+				}
 
-	template<class T>
-		struct remove_volatile
-		{
-				typedef T type;
-		};
+				bool
+				operator==(const BaseConstIterator &rhs) const
+				{
+					return (_ptr == rhs._ptr);
+				}
 
-	template<class T>
-		struct remove_volatile<volatile T>
-		{
-				typedef T type;
-		};
+				bool
+				operator!=(const BaseConstIterator &rhs) const
+				{
+					return (_ptr != rhs._ptr);
+				}
 
-	template<class T>
-		struct remove_cv
-		{
-				typedef typename remove_volatile<
-						typename remove_const<T>::type>::type type;
-		};
+				bool
+				operator<(const BaseConstIterator &rhs) const
+				{
+					return (_ptr < rhs._ptr);
+				}
 
-	template<class _Iter, class C>
-		struct iterator_traits
-		{
-		};
+				bool
+				operator>(const BaseConstIterator &rhs) const
+				{
+					return (_ptr > rhs._ptr);
+				}
 
-	template<class T, class C>
-		struct iterator_traits<T*, C>
-		{
-				typedef ptrdiff_t difference_type;
-				typedef typename remove_cv<T>::type value_type;
-				typedef T *pointer;
-				typedef T &reference;
-				typedef C iterator_category;
+				bool
+				operator<=(const BaseConstIterator &rhs) const
+				{
+					return (_ptr <= rhs._ptr);
+				}
+
+				bool
+				operator>=(const BaseConstIterator &rhs) const
+				{
+					return (_ptr >= rhs._ptr);
+				}
+
+				const T*
+				base() const
+				{
+					return (_ptr);
+				}
 		};
 }
 

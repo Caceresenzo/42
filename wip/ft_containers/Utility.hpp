@@ -22,6 +22,14 @@ namespace ft
 			ptr->~T();
 		}
 
+	template<class T, class S>
+		inline void
+		destruct(T *ptr, S n)
+		{
+			while (n--)
+				(ptr++)->~T();
+		}
+
 	template<class T>
 		inline void
 		destruct(T &ref)
@@ -65,6 +73,26 @@ namespace ft
 				::new (ptr++) T(ref);
 
 			return (ptr);
+		}
+
+	template<class I, class O>
+		inline O
+		copy(I first, I last, O dest_first)
+		{
+			while (first != last)
+				*dest_first++ = *first++;
+
+			return (dest_first);
+		}
+
+	template<class I, class O>
+		O
+		copy_backward(I first, I last, O dest_last)
+		{
+			while (first != last)
+				*(--dest_last) = *(--last);
+
+			return (dest_last);
 		}
 }
 
