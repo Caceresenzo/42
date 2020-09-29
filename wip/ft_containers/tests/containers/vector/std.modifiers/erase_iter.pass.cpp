@@ -10,21 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > l1;
+		VECTOR<Aware<int> > l1;
 		l1.push_back(1);
 		l1.push_back(2);
 		l1.push_back(3);
 
-		ft::Vector<Aware<int> >::iterator i = l1.begin();
+		VECTOR<Aware<int> >::iterator i = l1.begin();
 		++i;
-		ft::Vector<Aware<int> >::iterator j = l1.erase(i);
+		VECTOR<Aware<int> >::iterator j = l1.erase(i);
 		ASSERT(l1.size() == 2);
 		ASSERT(*j == 3);
 		ASSERT(*l1.begin() == 1);

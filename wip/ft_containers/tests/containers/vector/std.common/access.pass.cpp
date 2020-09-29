@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <test_macros.hpp>
-#include <Vector.hpp>
+#include <unit_vector.hpp>
 
 template<class C>
 	C
@@ -28,7 +27,7 @@ int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		typedef ft::Vector<Aware<int> > C;
+		typedef VECTOR<Aware<int> > C;
 		C c = make<C>(10);
 
 		ASSERT_NOEXCEPT(c[0]);
@@ -47,7 +46,7 @@ main(void)
 	});
 
 	TEST_AWARE_BLOCK({
-		typedef ft::Vector<Aware<int> > C;
+		typedef VECTOR<Aware<int> > C;
 		const int N = 5;
 		const C c = make<C>(10, N);
 

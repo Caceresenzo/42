@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > v(100);
+		VECTOR<Aware<int> > v(100);
 
 		v.insert(v.begin() + 10, 5, 1);
 		ASSERT(v.size() == 105);
@@ -34,7 +33,7 @@ main(void)
 	});
 
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > v(100);
+		VECTOR<Aware<int> > v(100);
 
 		while (v.size() < v.capacity())
 			v.push_back(0);
@@ -55,7 +54,7 @@ main(void)
 	});
 
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > v(100);
+		VECTOR<Aware<int> > v(100);
 
 		v.reserve(128);
 

@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   construct_default.pass.cpp                         :+:      :+:    :+:   */
+/*   test_containers.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 18:20:42 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 18:20:42 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/08/26 17:08:24 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/08/26 17:08:24 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unit_vector.hpp>
+#ifndef TEST_CONTAINERS_HPP_
+# define TEST_CONTAINERS_HPP_
 
-int
-main(void)
-{
-	TEST_AWARE_BLOCK({
-		VECTOR<Aware<int> > v;
+# ifndef TEST_USE_STD
+#  define TEST_USE_STD 0
+# endif
 
-		ASSERT(v.empty());
-	});
+# ifndef NOTIFY_WHICH
+#  define NOTIFY_WHICH 0
+# endif
 
-	return 0;
-}
+# if NOTIFY_WHICH
+#  if TEST_USE_STD
+#   warning USING STD
+#  else
+#   warning USING 42
+#  endif
+# endif
+
+#endif /* TEST_CONTAINERS_HPP_ */

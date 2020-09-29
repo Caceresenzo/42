@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 bool
 is6(const Aware<int> &x)
@@ -20,12 +19,12 @@ is6(const Aware<int> &x)
 }
 
 void
-test(ft::Vector<Aware<int> > &v)
+test(VECTOR<Aware<int> > &v)
 {
 	v.assign(5, Aware<int>(6));
 	ASSERT(v.size() == 5);
 
-	for (ft::Vector<Aware<int> >::iterator it = v.begin(); it < v.end(); it++)
+	for (VECTOR<Aware<int> >::iterator it = v.begin(); it < v.end(); it++)
 	{
 		ASSERT(is6(*it));
 	}
@@ -35,7 +34,7 @@ int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		typedef ft::Vector<Aware<int> > V;
+		typedef VECTOR<Aware<int> > V;
 		V d1;
 		V d2;
 

@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 static bool gCopyConstructorShouldThrow = false;
 
@@ -41,7 +40,7 @@ class CMyClass
 		~CMyClass()
 		{
 			// Only instances for which the constructor has finished running should be destructed
-			assert(fMagicValue == kFinishedConstructionMagicValue);
+			ASSERT(fMagicValue == kFinishedConstructionMagicValue);
 		}
 		bool
 		equal(const CMyClass &rhs) const
@@ -71,14 +70,14 @@ operator==(const CMyClass &lhs, const CMyClass &rhs)
 }
 
 int
-main(int, char**)
+main(void)
 {
 	TEST_AWARE_BLOCK({
 		CMyClass instance(42);
-		ft::Vector<CMyClass> vec;
+		VECTOR<CMyClass> vec;
 
 		vec.push_back(instance);
-		ft::Vector<CMyClass> vec2(vec);
+		VECTOR<CMyClass> vec2(vec);
 
 		gCopyConstructorShouldThrow = true;
 

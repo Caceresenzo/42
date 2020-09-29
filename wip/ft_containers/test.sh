@@ -21,6 +21,18 @@ C_FAIL=$C_LIGHT_RED
 TEST_DIR=tests
 CONTAINERS_DIR=$TEST_DIR/containers
 
+TEST_STD=0
+NOTIFY_WHICH=0
+
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -s|--std) TEST_STD=1 ;;
+        -n|--std) NOTIFY_WHICH=1 ;;
+        *) echo "Unknown parameter: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 for container_path in $CONTAINERS_DIR/*
 do
 	container=$(basename "$container_path")
@@ -40,7 +52,7 @@ do
 			
 			printf $C_TREE"   |    |-- "$C_TEST"Compiling "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET "$test"
 			
-			clang++ -std=c++98 -g3 -fsanitize=address -I. -Itests/support $test_file -o $test_bin
+			clang++ -ferror-limit=1 -std=c++98 -g3 -fsanitize=address -Wall -Wextra -Werror -I. -Itests/support -DTEST_USE_STD=$TEST_STD -DNOTIFY_WHICH=$NOTIFY_WHICH $test_file -o $test_bin
 			compiled_exit_code=$?
 
 			expected_exit_code=0

@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   construct_default.pass.cpp                         :+:      :+:    :+:   */
+/*   support_std.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 18:20:42 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 18:20:42 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/09/29 17:42:29 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/09/29 17:42:29 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unit_vector.hpp>
+#ifndef SUPPORT_STD_HPP_
+# define SUPPORT_STD_HPP_
 
-int
-main(void)
-{
-	TEST_AWARE_BLOCK({
-		VECTOR<Aware<int> > v;
-
-		ASSERT(v.empty());
-	});
-
-	return 0;
-}
+#endif /* SUPPORT_STD_HPP_ */

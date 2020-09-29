@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   construct_default.pass.cpp                         :+:      :+:    :+:   */
+/*   construct_size.pass.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,22 @@
 
 #include <unit_vector.hpp>
 
+template<class C>
+	void
+	test(typename C::size_type n)
+	{
+		C c(n);
+
+		ASSERT(c.size() == n);
+	}
+
 int
-main(void)
+main(int, char**)
 {
-	TEST_AWARE_BLOCK({
-		VECTOR<Aware<int> > v;
+	test<VECTOR<int> >(50);
+	test<VECTOR<Aware<int> > >(500);
 
-		ASSERT(v.empty());
-	});
+	ASSERT_AWARE_ZERO();
 
-	return 0;
+	return (0);
 }

@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > v(100);
+		VECTOR<Aware<int> > v(100);
 
 		v.resize(50);
 		ASSERT(v.size() == 50);

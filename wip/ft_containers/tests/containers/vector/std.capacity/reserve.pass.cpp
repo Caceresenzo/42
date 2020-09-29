@@ -10,21 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		ft::Vector<int> v;
+		VECTOR<int> v;
 
 		v.reserve(10);
 		ASSERT(v.capacity() >= 10);
 	});
 
 	TEST_AWARE_BLOCK({
-		ft::Vector<int> v(100);
+		VECTOR<int> v(100);
 
 		ASSERT(v.capacity() == 100);
 

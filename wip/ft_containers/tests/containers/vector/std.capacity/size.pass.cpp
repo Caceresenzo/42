@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		typedef ft::Vector<int> C;
+		typedef VECTOR<int> C;
 		C c;
 
 		ASSERT_NOEXCEPT(c.size());

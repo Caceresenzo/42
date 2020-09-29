@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   construct_default.pass.cpp                         :+:      :+:    :+:   */
+/*   operators.pass.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 18:20:42 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 18:20:42 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,17 @@
 int
 main(void)
 {
-	TEST_AWARE_BLOCK({
-		VECTOR<Aware<int> > v;
+	{
+		VECTOR<int> foo(3, 100);
+		VECTOR<int> bar(2, 200);
 
-		ASSERT(v.empty());
-	});
+		ASSERT((foo == bar) == false);
+		ASSERT((foo != bar) == true);
+		ASSERT((foo < bar) == true);
+		ASSERT((foo > bar) == false);
+		ASSERT((foo <= bar) == true);
+		ASSERT((foo >= bar) == false);
+	};
 
-	return 0;
+	return (0);
 }

@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
@@ -19,7 +18,7 @@ main(void)
 	{
 		Aware<int> a[] = { 1, 2, 3 };
 
-		ft::Vector<Aware<int> > c(a, a + 3);
+		VECTOR<Aware<int> > c(a, a + 3);
 
 		c.clear();
 		ASSERT(c.empty());

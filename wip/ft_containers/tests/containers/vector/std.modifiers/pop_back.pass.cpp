@@ -10,30 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
-#include <vector>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
-	{
-		ft::Vector<Aware<int> > c;
+	TEST_AWARE_BLOCK({
+		VECTOR<Aware<int> > c;
 
 		c.push_back(1);
 		ASSERT(c.size() == 1);
 
 		c.pop_back();
 		ASSERT(c.size() == 0);
-
-	}
-
-	ASSERT_AWARE_ZERO();
+	});
 
 	{
 		Aware<int> arr[] = { 0, 1, 2, 3, 4 };
 		int sz = 5;
-		ft::Vector<Aware<int> > c(arr, arr + sz);
+		VECTOR<Aware<int> > c(arr, arr + sz);
 
 		while (c.size() < c.capacity())
 			c.push_back(sz++);

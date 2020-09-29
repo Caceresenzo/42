@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <test_macros.hpp>
-#include <Vector.hpp>
+#include <unit_vector.hpp>
 
 template<class C>
 	void
@@ -26,7 +25,7 @@ main(void)
 {
 	TEST_AWARE_BLOCK({
 		typedef Aware<int> T;
-		typedef ft::Vector<T> C;
+		typedef VECTOR<T> C;
 
 		test_contiguous(C());
 		test_contiguous(C(3, T(5)));

@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 static bool gCopyConstructorShouldThrow = false;
 
@@ -74,7 +73,7 @@ int
 main(int, char**)
 {
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > c;
+		VECTOR<Aware<int> > c;
 
 		c.push_back(Aware<int>(0));
 		ASSERT(c.size() == 1);

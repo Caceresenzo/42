@@ -10,14 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		typedef ft::Vector<Aware<int> > V;
+		typedef VECTOR<Aware<int> > V;
 
 		V v;
 		for (int i = 0; i < 42; ++i) {

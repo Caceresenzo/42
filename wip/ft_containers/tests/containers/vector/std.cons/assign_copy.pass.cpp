@@ -10,15 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
-#include <test_macros.hpp>
+#include <unit_vector.hpp>
 
 int
 main(void)
 {
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > l(3, Aware<int>(2));
-		ft::Vector<Aware<int> > l2(l);
+		VECTOR<Aware<int> > l(3, Aware<int>(2));
+		VECTOR<Aware<int> > l2(l);
 
 		l2 = l;
 
@@ -26,8 +25,8 @@ main(void)
 	});
 
 	TEST_AWARE_BLOCK({
-		ft::Vector<Aware<int> > l(3, Aware<int>(2));
-		ft::Vector<Aware<int> > l2(l);
+		VECTOR<Aware<int> > l(3, Aware<int>(2));
+		VECTOR<Aware<int> > l2(l);
 
 		l2 = l;
 

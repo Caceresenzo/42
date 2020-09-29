@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   construct_default.pass.cpp                         :+:      :+:    :+:   */
+/*   default.recursive.pass.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,13 @@
 
 #include <unit_vector.hpp>
 
+struct X
+{
+		VECTOR<X> q;
+};
+
 int
 main(void)
 {
-	TEST_AWARE_BLOCK({
-		VECTOR<Aware<int> > v;
-
-		ASSERT(v.empty());
-	});
-
-	return 0;
+	return (0);
 }

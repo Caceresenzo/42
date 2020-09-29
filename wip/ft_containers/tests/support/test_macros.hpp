@@ -15,6 +15,9 @@
 
 # include <iostream>
 # include <exception>
+# include <memory>
+# include <cstdlib>
+# include <Iterator.hpp>
 
 #define ASSERT(cond) \
 		if (!(cond)) { \
@@ -68,7 +71,6 @@ template<class T>
 			T _x;
 
 		public:
-
 			Aware() :
 					_x(0)
 			{
@@ -106,25 +108,35 @@ template<class T>
 				return (_x == right._x);
 			}
 
-			T&
+			const T&
 			x() const
 			{
 				return (_x);
 			}
+
+			void
+			x(std::string x)
+			{
+				_x = x;
+			}
 	};
 
-template<typename T, class Alloc = std::allocator<T> >
-	class SimpleIterator
+template<typename T>
+	class SimpleIterator :
+			public ft::iterator<ft::random_access_iterator_tag, T>
 	{
+		private:
+			typedef typename ft::iterator_traits<T> traits;
+
 		public:
-			typedef typename Alloc::difference_type difference_type;
-			typedef typename Alloc::value_type value_type;
-			typedef typename Alloc::reference reference;
-			typedef typename Alloc::pointer pointer;
-			typedef std::random_access_iterator_tag iterator_category;
+			typedef typename traits::iterator_category iterator_category;
+			typedef typename traits::value_type value_type;
+			typedef typename traits::difference_type difference_type;
+			typedef typename traits::reference reference;
+			typedef typename traits::pointer pointer;
 
 		private:
-			T *_ptr;
+			T _ptr;
 
 		public:
 			SimpleIterator() :
@@ -132,7 +144,7 @@ template<typename T, class Alloc = std::allocator<T> >
 			{
 			}
 
-			SimpleIterator(T *ptr) :
+			SimpleIterator(const T &ptr) :
 					_ptr(ptr)
 			{
 			}
@@ -178,13 +190,13 @@ template<typename T, class Alloc = std::allocator<T> >
 				return (cpy);
 			}
 
-			T
+			reference
 			operator*() const
 			{
 				return (*_ptr);
 			}
 
-			T
+			pointer
 			operator->() const
 			{
 				return (_ptr);
@@ -226,16 +238,16 @@ template<typename T, class Alloc = std::allocator<T> >
 				return (_ptr >= rhs._ptr);
 			}
 
-			const T*
+			const pointer
 			base() const
 			{
 				return (_ptr);
 			}
 	};
 
-template<class T, class Alloc>
-	typename SimpleIterator<T, Alloc>::difference_type
-	operator-(const SimpleIterator<T, Alloc> &left, const SimpleIterator<T, Alloc> &right)
+template<class T>
+	typename SimpleIterator<T>::difference_type
+	operator-(const SimpleIterator<T> &left, const SimpleIterator<T> &right)
 	{
 		return (left.base() - right.base());
 	}
