@@ -12,6 +12,7 @@ C_LIGHT_CYAN="\033[96m"
 
 C_TREE=$C_LIGHT_GRAY
 C_CONTAINER=$C_LIGHT_YELLOW
+C_IGNORED=$C_LIGHT_GRAY
 C_CATEGORY=$C_LIGHT_YELLOW
 C_TEST=$C_LIGHT_MAGENTA
 C_TEST_FILE=$C_LIGHT_CYAN
@@ -23,11 +24,13 @@ CONTAINERS_DIR=$TEST_DIR/containers
 
 TEST_STD=0
 NOTIFY_WHICH=0
+CONTAINERS=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -s|--std) TEST_STD=1 ;;
         -n|--std) NOTIFY_WHICH=1 ;;
+        -c|--std) CONTAINERS=$2; shift ;;
         *) echo "Unknown parameter: $1"; exit 1 ;;
     esac
     shift
@@ -37,6 +40,13 @@ for container_path in $CONTAINERS_DIR/*
 do
 	container=$(basename "$container_path")
 	printf $C_TREE". "$C_CONTAINER"%s"$C_RESET"\n" "$container"
+	
+	if [[ ! -z "$CONTAINERS" ]]; then
+		if [[ $container != *"$CONTAINERS"* ]]; then
+			printf $C_TREE"   |-- "$C_IGNORED"ignored..."$C_RESET"\n"
+			continue
+		fi
+	fi
 
 	for category_path in $container_path/*
 	do

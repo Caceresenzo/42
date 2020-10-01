@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unit_vector.hpp                                    :+:      :+:    :+:   */
+/*   clear.pass.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 18:03:51 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/09/29 18:03:51 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UNIT_VECTOR_HPP_
-# define UNIT_VECTOR_HPP_
+#include <unit_list.hpp>
 
-# include "test_macros.hpp"
-# include "test_containers.hpp"
-# include "support_std.hpp"
+int
+main(void)
+{
+	{
+		Aware<int> a[] = { 1, 2, 3 };
+		LIST<Aware<int> > c(a, a + 3);
 
-# if TEST_USE_STD
-#  include <vector>
-#  define VECTOR std::vector
-# else
-#  include <Vector.hpp>
-#  define VECTOR ft::Vector
-# endif
+		c.clear();
+		ASSERT(c.empty());
+	}
 
-#endif /* UNIT_VECTOR_HPP_ */
+	ASSERT_AWARE_ZERO();
+
+	return (0);
+}

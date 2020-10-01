@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unit_vector.hpp                                    :+:      :+:    :+:   */
+/*   push_front_rvalue.pass.cpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/09/29 18:03:51 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/09/29 18:03:51 by ecaceres         ###   ########.fr       */
+/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
+/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UNIT_VECTOR_HPP_
-# define UNIT_VECTOR_HPP_
+#include <unit_list.hpp>
 
-# include "test_macros.hpp"
-# include "test_containers.hpp"
-# include "support_std.hpp"
+int
+main(void)
+{
+	{
+		LIST<Aware<int> > l1;
 
-# if TEST_USE_STD
-#  include <vector>
-#  define VECTOR std::vector
-# else
-#  include <Vector.hpp>
-#  define VECTOR ft::Vector
-# endif
+		l1.push_front(Aware<int>(1));
+		ASSERT(l1.size() == 1);
+		ASSERT(l1.front() == Aware<int>(1));
 
-#endif /* UNIT_VECTOR_HPP_ */
+		l1.push_front(Aware<int>(2));
+		ASSERT(l1.size() == 2);
+		ASSERT(l1.front() == Aware<int>(2));
+		ASSERT(l1.back() == Aware<int>(1));
+	}
+
+	TEST_AWARE_BLOCK();
+
+	return (0);
+}

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <unit_vector.hpp>
+#include <vector>
 #include <Vector.hpp>
 
 template<class C, class Iterator>
@@ -18,7 +19,7 @@ template<class C, class Iterator>
 	test(Iterator first, Iterator last)
 	{
 		C c(first, last);
-		ASSERT(c.size() == static_cast<std::size_t>(ft::distance(first, last)));
+		ASSERT(c.size() == static_cast<std::size_t>(DISTANCE(first, last)));
 
 		for (typename C::const_iterator i = c.begin(), e = c.end(); i != e; ++i, ++first)
 			ASSERT(*i == *first);
@@ -30,12 +31,12 @@ basic_test_cases()
 	Aware<int> a[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 1, 0 };
 	Aware<int> *an = a + sizeof(a) / sizeof(a[0]);
 
-	if (!TEST_USE_STD)
-	{
-		test<ft::Vector<Aware<int> > >(SimpleIterator<const Aware<int>*>(a), SimpleIterator<const Aware<int>*>(an));
-		test<ft::Vector<Aware<int> > >(ft::Vector<Aware<int> >::iterator(a), ft::Vector<Aware<int> >::iterator(an));
-		test<ft::Vector<Aware<int> > >(ft::Vector<Aware<int> >::const_iterator(a), ft::Vector<Aware<int> >::const_iterator(an));
-	}
+	test<ft::Vector<Aware<int> > >(SimpleIterator<const Aware<int>*>(a), SimpleIterator<const Aware<int>*>(an));
+
+#if !(TEST_USE_STD)
+	test<ft::Vector<Aware<int> > >(ft::Vector<Aware<int> >::iterator(a), ft::Vector<Aware<int> >::iterator(an));
+	test<ft::Vector<Aware<int> > >(ft::Vector<Aware<int> >::const_iterator(a), ft::Vector<Aware<int> >::const_iterator(an));
+#endif
 
 	test<VECTOR<Aware<int> > >(a, an);
 }

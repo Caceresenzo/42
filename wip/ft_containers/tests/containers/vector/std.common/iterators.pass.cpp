@@ -28,7 +28,7 @@ main(int, char**)
 
 		C::iterator i = c.begin();
 		C::iterator j = c.end();
-		ASSERT(ft::distance(i, j) == 0);
+		ASSERT(DISTANCE(i, j) == 0);
 		ASSERT(i == j);
 	});
 
@@ -39,7 +39,7 @@ main(int, char**)
 
 		C::const_iterator i = c.begin();
 		C::const_iterator j = c.end();
-		ASSERT(ft::distance(i, j) == 0);
+		ASSERT(DISTANCE(i, j) == 0);
 		ASSERT(i == j);
 	});
 
@@ -50,7 +50,7 @@ main(int, char**)
 
         C::const_iterator i = c.begin();
         C::const_iterator j = c.end();
-        ASSERT(ft::distance(i, j) == 0);
+        ASSERT(DISTANCE(i, j) == 0);
         ASSERT(i == j);
         ASSERT(i == c.end());
     });
@@ -69,7 +69,7 @@ main(int, char**)
 
 		*i = 10;
 		ASSERT(*i == 10);
-        ASSERT(ft::distance(c.begin(), c.end()) == 10);
+        ASSERT(DISTANCE(c.begin(), c.end()) == 10);
 	}
 
 	ASSERT_AWARE_ZERO();

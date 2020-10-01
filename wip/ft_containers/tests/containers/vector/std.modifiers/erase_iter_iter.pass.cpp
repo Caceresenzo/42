@@ -23,7 +23,7 @@ main(void)
 
 		VECTOR<Aware<int> >::iterator i = l1.erase(l1.begin(), l1.begin());
 		ASSERT(l1.size() == 3);
-		ASSERT(ft::distance(l1.begin(), l1.end()) == 3);
+		ASSERT(DISTANCE(l1.begin(), l1.end()) == 3);
 		ASSERT(i == l1.begin());
 	});
 
@@ -39,7 +39,7 @@ main(void)
 
 		VECTOR<Aware<int> >::iterator i = l1.erase(l1.begin(), l1.begin() + 1);
 		ASSERT(l1.size() == 2);
-		ASSERT(ft::distance(l1.begin(), l1.end()) == 2);
+		ASSERT(DISTANCE(l1.begin(), l1.end()) == 2);
 		ASSERT(i == l1.begin());
 		ASSERT(l1 == l2);
 	});
@@ -55,7 +55,7 @@ main(void)
 
 		VECTOR<Aware<int> >::iterator i = l1.erase(l1.begin(), l1.begin() + 2);
 		ASSERT(l1.size() == 1);
-		ASSERT(ft::distance(l1.begin(), l1.end()) == 1);
+		ASSERT(DISTANCE(l1.begin(), l1.end()) == 1);
 		ASSERT(i == l1.begin());
 		ASSERT(l1 == l2);
 	});
@@ -69,7 +69,7 @@ main(void)
 
 		VECTOR<Aware<int> >::iterator i = l1.erase(l1.begin(), l1.begin() + 3);
 		ASSERT(l1.size() == 0);
-		ASSERT(ft::distance(l1.begin(), l1.end()) == 0);
+		ASSERT(DISTANCE(l1.begin(), l1.end()) == 0);
 		ASSERT(i == l1.begin());
 	});
 

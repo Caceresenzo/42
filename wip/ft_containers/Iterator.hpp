@@ -86,6 +86,15 @@ namespace ft
 				typedef const T &reference;
 		};
 
+	template<typename Iterator>
+		Iterator
+		next(Iterator iterator, unsigned long n = 1)
+		{
+			while (n--)
+				++iterator;
+			return (iterator);
+		}
+
 	template<class It>
 		typename ft::iterator_traits<It>::difference_type
 		do_distance(It first, It last, ft::input_iterator_tag)
@@ -543,7 +552,6 @@ namespace ft
 		{
 			return (rhs.base() - lhs.base());
 		}
-
 }
 
 #endif /* ITERATOR_HPP_ */

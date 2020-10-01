@@ -13,6 +13,8 @@
 #ifndef TEST_MACROS_HPP_
 # define TEST_MACROS_HPP_
 
+# include "support_std.hpp"
+
 # include <iostream>
 # include <exception>
 # include <memory>
@@ -123,10 +125,10 @@ template<class T>
 
 template<typename T>
 	class SimpleIterator :
-			public ft::iterator<ft::random_access_iterator_tag, T>
+			public ft::iterator<RANDOM_ACCESS_ITERATOR_TAG, T>
 	{
 		private:
-			typedef typename ft::iterator_traits<T> traits;
+			typedef typename ITERATOR_TRAITS<T> traits;
 
 		public:
 			typedef typename traits::iterator_category iterator_category;
