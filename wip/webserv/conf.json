@@ -1,0 +1,54 @@
+{
+	"cgi": {
+		"php": {
+			"path": "/path/to/php"
+		},
+		"ruby": {
+			"path": "/path/to/ruby"
+		}
+	},
+	"servers": [
+		{
+			"port": 8080,
+			"host": "0.0.0.0",
+			"name": "_",
+			"default": true,
+			"maxBodySize": "1M",
+			"errorPages": {
+				"500": "500.html",
+				"404": "not-found.html"
+			},
+			"root": "/var/www/html",
+			"locations": {
+				"/favicon.ico": {
+					"accepted": [
+						"GET"
+					],
+					"alias": "icon.png"
+				},
+				"/xx": {
+					"accepted": [
+						"GET",
+						"POST"
+					],
+					"root": "/var/www/html",
+					"listing": true,
+					"index": [
+						"index.html",
+						"index-webserv.html"
+					],
+					"uploads": {
+						"enabled": true,
+						"storeAt": "/var/www/html"
+					}
+				},
+				"~.php": {
+					"cgi": "php"
+				},
+				"~.rb": {
+					"cgi": "ruby"
+				}
+			}
+		}
+	]
+}

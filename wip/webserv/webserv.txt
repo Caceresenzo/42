@@ -1,0 +1,384 @@
+///**** iserver.c ****/
+//
+//#include <netinet/in.h>
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <sys/_endian.h>
+//#include <sys/socket.h>
+//#include <unistd.h>
+//#include <cstring>
+//
+//#define SERVER_PORT 12345
+//
+///* Run with a number of incoming connection as argument */
+//
+////int
+////main2(int argc, char *argv[])
+////{
+////
+////	int i, len, num, rc;
+////
+////	int listen_sd, accept_sd;
+////
+////	/* Buffer for data */
+////
+////	char buffer[100];
+////
+////	struct sockaddr_in addr;
+////
+////	/* If an argument was specified, use it to */
+////
+////	/* control the number of incoming connections */
+////
+////	if (argc >= 2)
+////
+////		num = atoi(argv[1]);
+////
+////	/* Prompt some message */
+////
+////	else
+////
+////	{
+////
+////		printf("Usage: %s <The_number_of_client_connection else 1 will be used>\n", argv[0]);
+////
+////		num = 1;
+////
+////	}
+////
+////	/* Create an AF_INET stream socket to receive */
+////
+////	/* incoming connections on */
+////
+////	listen_sd = socket(AF_INET, SOCK_STREAM, 0);
+////
+////	if (listen_sd < 0)
+////
+////	{
+////
+////		perror("Iserver - socket() error");
+////
+////		exit(-1);
+////
+////	}
+////
+////	else
+////
+////		printf("Iserver - socket() is OK\n");
+////
+////	printf("Binding the socket...\n");
+////
+////	/* Bind the socket */
+////
+////	memset(&addr, 0, sizeof(addr));
+////
+////	addr.sin_family = AF_INET;
+////
+////	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+////
+////	addr.sin_port = htons(SERVER_PORT);
+////
+////	rc = bind(listen_sd, (struct sockaddr*)&addr, sizeof(addr));
+////
+////	if (rc < 0)
+////
+////	{
+////
+////		perror("Iserver - bind() error");
+////
+////		close(listen_sd);
+////
+////		exit(-1);
+////
+////	}
+////
+////	else
+////
+////		printf("Iserver - bind() is OK\n");
+////
+////	/* Set the listen backlog */
+////
+////	rc = listen(listen_sd, 5);
+////
+////	if (rc < 0)
+////
+////	{
+////
+////		perror("Iserver - listen() error");
+////
+////		close(listen_sd);
+////
+////		exit(-1);
+////
+////	}
+////
+////	else
+////
+////		printf("Iserver - listen() is OK\n");
+////
+////	/* Inform the user that the server is ready */
+////
+////	printf("The Iserver is ready!\n");
+////
+////	/* Go through the loop once for each connection */
+////
+////	for (i = 0; i < num; i++)
+////
+////	{
+////
+////		/* Wait for an incoming connection */
+////
+////		printf("Iteration: #%d\n", i + 1);
+////
+////		printf(" waiting on accept()\n");
+////
+////		accept_sd = accept(listen_sd, NULL, NULL);
+////
+////		if (accept_sd < 0)
+////
+////		{
+////
+////			perror("Iserver - accept() error");
+////
+////			close(listen_sd);
+////
+////			exit(-1);
+////
+////		}
+////
+////		else
+////
+////			printf("accept() is OK and completed successfully!\n");
+////
+////		/* Receive a message from the client */
+////
+////		printf("I am waiting client(s) to send message(s) to me...\n");
+////
+////		rc = recv(accept_sd, buffer, sizeof(buffer), 0);
+////
+////		if (rc <= 0)
+////
+////		{
+////
+////			perror("Iserver - recv() error");
+////
+////			close(listen_sd);
+////
+////			close(accept_sd);
+////
+////			exit(-1);
+////
+////		}
+////
+////		else
+////
+////			printf("The message from client: \"%s\"\n", buffer);
+////
+////		/* Echo the data back to the client */
+////
+////		printf("Echoing it back to client...\n");
+////
+////		len = rc;
+////
+////		rc = send(accept_sd, buffer, len, 0);
+////
+////		if (rc <= 0)
+////
+////		{
+////
+////			perror("Iserver - send() error");
+////
+////			close(listen_sd);
+////
+////			close(accept_sd);
+////
+////			exit(-1);
+////
+////		}
+////
+////		else
+////
+////			printf("Iserver - send() is OK.\n");
+////
+////		/* Close the incoming connection */
+////
+////		close(accept_sd);
+////
+////	}
+////
+////	/* Close the listen socket */
+////
+////	close(listen_sd);
+////
+////	return 0;
+////
+////}
+//#include <stdio.h>
+//#include <string.h> /* memset() */
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <arpa/inet.h>
+//#include <unistd.h>
+//#include <netdb.h>
+//#include <iostream>
+//
+//#define PORT    "32001" /* Port to listen on */
+//#define BACKLOG     10  /* Passed to listen() */
+//
+//void
+//handleRead(int newsock, fd_set *set)
+//{
+//	/* send(), recv(), close() */
+//	/* Call FD_CLR(newsock, set) on disconnection */
+//	close(newsock);
+//	FD_CLR(newsock, set);
+//}
+//
+//void
+//handleWrite(int newsock, fd_set *set)
+//{
+//	/* send(), recv(), close() */
+//	/* Call FD_CLR(newsock, set) on disconnection */
+//	send(newsock, "Hello\n", 6, 0);
+//}
+//
+//int
+//main5(void)
+//{
+//	int sock;
+//	fd_set socks;
+//	fd_set readsocks;
+//	fd_set writesocks;
+//	int maxsock;
+//	int reuseaddr = 1; /* True */
+//	struct addrinfo hints, *res;
+//
+//	/* Get the address info */
+//	memset(&hints, 0, sizeof hints);
+//	hints.ai_family = AF_INET;
+//	hints.ai_socktype = SOCK_STREAM;
+//	if (getaddrinfo(NULL, PORT, &hints, &res) != 0)
+//	{
+//		perror("getaddrinfo");
+//		return 1;
+//	}
+//
+//	/* Create the socket */
+//	sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+//	if (sock == -1)
+//	{
+//		perror("socket");
+//		return 1;
+//	}
+//
+//	/* Enable the socket to reuse the address */
+//	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &reuseaddr, sizeof(int)) == -1)
+//	{
+//		perror("setsockopt");
+//		return 1;
+//	}
+//
+//	/* Bind to the address */
+//	if (bind(sock, res->ai_addr, res->ai_addrlen) == -1)
+//	{
+//		perror("bind");
+//		return 1;
+//	}
+//
+//	freeaddrinfo(res);
+//
+//	/* Listen */
+//	if (listen(sock, BACKLOG) == -1)
+//	{
+//		perror("listen");
+//		return 1;
+//	}
+//
+//	/* Set up the fd_set */
+//	FD_ZERO(&socks);
+//	FD_SET(sock, &socks);
+//	maxsock = sock;
+//
+//	/* Main loop */
+//	while (1)
+//	{
+//		unsigned int s;
+//		readsocks = socks;
+//		writesocks = socks;
+////		printf("selecting... \n");
+//		if (select(maxsock + 1, &readsocks, &writesocks, NULL, NULL) == -1)
+//		{
+//			perror("select");
+//			return 1;
+//		}
+//		for (s = 0; s <= maxsock; s++)
+//		{
+//			if (FD_ISSET(s, &readsocks))
+//			{
+//				printf("socket %d was ready\n", s);
+//				if (s == sock)
+//				{
+//					/* New connection */
+//					int newsock;
+//					struct sockaddr_in their_addr;
+//					socklen_t size = sizeof(struct sockaddr_in);
+//					newsock = accept(sock, (struct sockaddr*)&their_addr, &size);
+//					if (newsock == -1)
+//					{
+//						perror("accept");
+//					}
+//					else
+//					{
+//						printf("Got a connection from %s on port %d\n", inet_ntoa(their_addr.sin_addr), htons(their_addr.sin_port));
+//						FD_SET(newsock, &socks);
+//						if (newsock > maxsock)
+//						{
+//							maxsock = newsock;
+//						}
+//					}
+//				}
+//				else
+//				{
+//					/* Handle read or disconnection */
+//					handleRead(s, &socks);
+//				}
+//			}
+//			else if (FD_ISSET(s, &writesocks))
+//			{
+//				if (s != sock)
+//				{
+//					handleWrite(s, &socks);
+//				}
+//			}
+//		}
+//
+//	}
+//
+//	close(sock);
+//
+//	return 0;
+//}
+//
+////int
+////main(int argc, char **argv)
+////{
+////	int fd = 0;
+////	fd_set readfds;
+////
+////	FD_ZERO(&readfds);
+////	FD_SET(fd, &readfds);
+////	FD_SET(1, &readfds);
+////	FD_SET(2, &readfds);
+////
+////	for (int i = 0; i < 64; i++)
+////		std::cout << (FD_ISSET(i, &readfds) ? 1 : 0);
+////	std::cout << std::endl;
+////
+////	std::cout << "blocking" << std::endl;
+////	select(100, &readfds, NULL, NULL, NULL);
+////	std::cout << "unblocked: " << strerror(errno) << std::endl;
+////
+////	for (int i = 0; i < 64; i++)
+////		std::cout << (FD_ISSET(i, &readfds) ? 1 : 0);
+////	std::cout << std::endl;
+////}
