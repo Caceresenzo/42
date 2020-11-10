@@ -1,6 +1,8 @@
 DIRECTORY=$1
 EXECUTABLE=$2
 
+OS="wsl"
+
 function bar()
 {
 	printf "\n\e[44m%s\e[K\e[0m\n" "$(date)"
@@ -9,9 +11,16 @@ function bar()
 function do_watch()
 {
 	while kill -0 $PARENT_PID > /dev/null 2>&1; do
-		watch -n 1 -c -g -d find $DIRECTORY -type f -exec ls -lT {} \\\; > /dev/null 2> /dev/null
-	
-		kill -9 $(pidof $(basename $EXECUTABLE)) > /dev/null 2> /dev/null
+		watch -n 1 -c -g -d find $DIRECTORY -type f -exec ls -l {} \\\; > /dev/null 2> /dev/null
+		
+		if [[ "linux" == "$OS"  ]]; then
+			kill -9 $(pidof $(basename $EXECUTABLE)) > /dev/null 2> /dev/null
+		elif [[ "wsl" == "$OS" ]]; then
+			/mnt/c/Windows/System32/cmd.exe /c taskkill /f /im $(basename $EXECUTABLE) > /dev/null 2> /dev/null
+		else
+			echo "Unknown plateform: $OS"
+			exit 1
+		fi
 	done
 	
 	echo Watcher exited

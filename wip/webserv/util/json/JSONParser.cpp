@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <_ctype.h>
 #include <util/json/JSONException.hpp>
 #include <util/json/JSONParser.hpp>
+#include <cctype>
 #include <string>
 #include <sstream>
 

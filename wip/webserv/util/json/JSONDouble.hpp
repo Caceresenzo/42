@@ -13,8 +13,8 @@
 #ifndef JSONDOUBLE_HPP_
 # define JSONDOUBLE_HPP_
 
-# include <util/json/JSONBase.hpp>
-# include <util/json/JSONBoolean.hpp>
+#include <util/json/JSONBase.hpp>
+#include <util/json/JSONBoolean.hpp>
 
 class JSONDouble :
 		public JSONBase

@@ -13,7 +13,7 @@
 #ifndef JSONEXCEPTION_HPP_
 # define JSONEXCEPTION_HPP_
 
-# include <exception/Exception.hpp>
+#include <exception/Exception.hpp>
 
 class JSONException :
 		public Exception

@@ -43,11 +43,11 @@ JSONType::JSONType(double value) :
 }
 
 JSONType::JSONType(const char *value) :
-		m_ptr((value ? (JSONBase*)new JSONString(value) : (JSONBase*)new JSONNull()))
+		m_ptr((value ? (JSONBase*)new JSONString(std::string(value)) : (JSONBase*)new JSONNull()))
 {
 }
 
-JSONType::JSONType(std::string value) :
+JSONType::JSONType(const std::string &value) :
 		m_ptr(new JSONString(value))
 {
 }
@@ -107,7 +107,11 @@ JSONType::operator =(const JSONType &other)
 {
 	if (this != &other)
 	{
-		JSONType::~JSONType();
+		if (m_ptr)
+		{
+			delete m_ptr;
+			m_ptr = NULL;
+		}
 
 		if (other.m_ptr)
 			m_ptr = other.m_ptr->clone();

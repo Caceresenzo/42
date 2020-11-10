@@ -97,7 +97,7 @@ void // TODO need rework
 MimeRegistry::loadFromFile(const std::string &path)
 {
 	std::ifstream mimeMapFile;
-	mimeMapFile.open(path, std::ifstream::in);
+	mimeMapFile.open(path.c_str(), std::ifstream::in);
 
 	while (!mimeMapFile.eof())
 	{

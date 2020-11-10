@@ -13,7 +13,7 @@
 #ifndef JSONINTEGER_HPP_
 # define JSONINTEGER_HPP_
 
-# include <util/json/JSONBase.hpp>
+#include <util/json/JSONBase.hpp>
 
 class JSONInteger :
 		public JSONBase

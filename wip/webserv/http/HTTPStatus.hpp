@@ -13,7 +13,7 @@
 #ifndef HTTPSTATUS_HPP_
 # define HTTPSTATUS_HPP_
 
-# include <util/Enum.hpp>
+#include <util/Enum.hpp>
 # include <string>
 
 class HTTPStatus :

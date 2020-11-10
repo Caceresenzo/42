@@ -10,16 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef HTTP_HTTPRESPONSE_HPP_
-# define HTTP_HTTPRESPONSE_HPP_
+#ifndef SRC_HTTP_HTTPRESPONSE_HPP_
+# define SRC_HTTP_HTTPRESPONSE_HPP_
 
 #include <http/HTTPHeaderFields.hpp>
 #include <http/HTTPStatus.hpp>
 #include <http/HTTPVersion.hpp>
-#include <sys/_types/_ssize_t.h>
 #include <util/Byte.hpp>
-#include <iostream>
-#include <map>
+#include <sys/types.h>
+#include <string>
 
 # define AWAITING_BUFFER_SIZE 512
 
@@ -63,6 +62,7 @@ class HttpResponse
 		{
 			private:
 				int m_fd;
+				size_t m_size;
 				byte m_buffer[AWAITING_BUFFER_SIZE];
 
 			public:
@@ -70,6 +70,23 @@ class HttpResponse
 
 				virtual
 				~FileBody();
+
+				virtual ssize_t
+				write(int fd);
+		};
+
+		class StringBody :
+				public IBody
+		{
+			private:
+				std::string m_string;
+				std::size_t m_index;
+
+			public:
+				StringBody(std::string string);
+
+				virtual
+				~StringBody();
 
 				virtual ssize_t
 				write(int fd);
@@ -102,4 +119,4 @@ class HttpResponse
 		write(int fd);
 };
 
-#endif /* HTTP_HTTPRESPONSE_HPP_ */
+#endif /* SRC_HTTP_HTTPRESPONSE_HPP_ */

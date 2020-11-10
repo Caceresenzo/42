@@ -13,7 +13,7 @@
 #ifndef CLOSABLE_HPP_
 # define CLOSABLE_HPP_
 
-# include <exception/IOException.hpp>
+#include <exception/IOException.hpp>
 
 class Closable
 {

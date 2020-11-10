@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <_ctype.h>
 #include <exception/Exception.hpp>
 #include <http/HttpRequestParser.hpp>
+#include <cctype>
 #include <string>
 
 HttpRequestParser::HttpRequestParser() :

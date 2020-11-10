@@ -13,7 +13,7 @@
 #ifndef ILLEGALARGUMENTEXCEPTION_HPP_
 # define ILLEGALARGUMENTEXCEPTION_HPP_
 
-# include <exception/Exception.hpp>
+#include <exception/Exception.hpp>
 
 class IllegalArgumentException :
 		public Exception

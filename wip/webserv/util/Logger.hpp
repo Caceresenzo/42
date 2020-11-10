@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTIL_LOGGER_HPP_
-# define UTIL_LOGGER_HPP_
+#ifndef SRC_UTIL_LOGGER_HPP_
+# define SRC_UTIL_LOGGER_HPP_
 
 # include <iostream>
 # include <sstream>
@@ -81,4 +81,4 @@ class Logger
 		deleteAll(void);
 };
 
-#endif /* UTIL_LOGGER_HPP_ */
+#endif /* SRC_UTIL_LOGGER_HPP_ */

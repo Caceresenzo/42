@@ -13,11 +13,13 @@
 #include <config/block/LocationBlock.hpp>
 #include <config/block/ServerBlock.hpp>
 #include <config/Configuration.hpp>
+#include <exception/IOException.hpp>
 #include <http/HTTPMethod.hpp>
 #include <http/HTTPOrchestrator.hpp>
+#include <sys/errno.h>
 #include <util/ContainerBuilder.hpp>
 #include <util/unit/DataSize.hpp>
-#include <iostream>
+#include <string>
 #include <vector>
 
 int
@@ -54,6 +56,8 @@ main(int argc, char **argv)
 	/**/.build());
 
 	HTTPOrchestrator::create(configuration).start();
+
+	throw IOException("ORCHESTRATOR LOOP HAS BEEN EXITED", errno);
 
 	return (0);
 }

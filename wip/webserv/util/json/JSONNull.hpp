@@ -13,7 +13,7 @@
 #ifndef JSONNULL_HPP_
 # define JSONNULL_HPP_
 
-# include <util/json/JSONBase.hpp>
+#include <util/json/JSONBase.hpp>
 
 class JSONNull :
 		public JSONBase

@@ -12,7 +12,6 @@
 
 #include <exception/Exception.hpp>
 #include <http/HTTPDate.hpp>
-#include <sys/_types/_timeval.h>
 #include <sys/time.h>
 #include <ctime>
 #include <string>

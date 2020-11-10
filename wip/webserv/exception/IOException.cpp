@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include <exception/IOException.hpp>
-#include <cerrno>
+#include <sys/errno.h>
+#include <cstring>
+#include <string>
 
 IOException::IOException(void) :
 		Exception(strerror(0)),

@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <_ctype.h>
 #include <exception/IllegalArgumentException.hpp>
-#include <stddef.h>
 #include <util/unit/DataSize.hpp>
-#include <iostream>
+#include <stddef.h>
+#include <cctype>
+#include <string>
 #include <sstream>
 
 DataSize::DataSize(void) :
@@ -54,37 +54,37 @@ DataSize::toBytes() const
 DataSize
 DataSize::ofBytes(long bytes)
 {
-	return DataSize(bytes);
+	return (DataSize(bytes));
 }
 
 DataSize
 DataSize::ofKilobytes(long kilobytes)
 {
-	return DataSize(kilobytes * BYTES_PER_KB);
+	return (DataSize(kilobytes * BYTES_PER_KB));
 }
 
 DataSize
 DataSize::ofMegabytes(long megabytes)
 {
-	return DataSize(megabytes * BYTES_PER_KB);
+	return (DataSize(megabytes * BYTES_PER_KB));
 }
 
 DataSize
 DataSize::ofGigabytes(long gigabytes)
 {
-	return DataSize(gigabytes * BYTES_PER_KB);
+	return (DataSize(gigabytes * BYTES_PER_KB));
 }
 
 DataSize
 DataSize::ofTerabytes(long terabytes)
 {
-	return DataSize(terabytes * BYTES_PER_KB);
+	return (DataSize(terabytes * BYTES_PER_KB));
 }
 
 DataSize
 DataSize::of(long amount, const DataUnit &unit)
 {
-	return DataSize(amount * unit.size().toBytes());
+	return (DataSize(amount * unit.size().toBytes()));
 }
 
 DataSize

@@ -14,8 +14,8 @@
 # define SOCKET_HPP_
 
 # include <netinet/in.h>
+#include <util/Closable.hpp>
 # include <sys/socket.h>
-# include <util/Closable.hpp>
 
 class Socket :
 		public Closable

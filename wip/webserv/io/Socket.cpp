@@ -12,10 +12,9 @@
 
 #include <exception/IOException.hpp>
 #include <io/Socket.hpp>
-#include <sys/_endian.h>
+#include <util/Convert.hpp>
 #include <sys/errno.h>
 #include <unistd.h>
-#include <util/Convert.hpp>
 #include <cstring>
 #include <string>
 

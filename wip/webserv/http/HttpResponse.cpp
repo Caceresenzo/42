@@ -10,11 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <cygwin/socket.h>
+#include <exception/IOException.hpp>
 #include <http/HttpResponse.hpp>
 #include <http/HTTP.hpp>
+#include <sys/errno.h>
+#include <sys/ioctl.h>
 #include <sys/socket.h>
-#include <unistd.h>
-#include <string>
+#include <sys/unistd.h>
+#include <cstring>
+#include <iostream>
+#include <map>
 
 #if 1
 #include <sstream>
@@ -75,7 +81,8 @@ HttpResponse::IBody::~IBody()
 }
 
 HttpResponse::FileBody::FileBody(int fd) :
-		m_fd(fd)
+		m_fd(fd),
+		m_size(0)
 {
 }
 
@@ -87,8 +94,57 @@ HttpResponse::FileBody::~FileBody()
 ssize_t
 HttpResponse::FileBody::write(int fd)
 {
-	ssize_t r = ::read(m_fd, m_buffer, sizeof(m_buffer));
-	return (send(fd, m_buffer, r, 0));
+	if (m_size == 0)
+	{
+		ssize_t r = ::read(m_fd, m_buffer, sizeof(m_buffer));
+		if (r > 0)
+			m_size = r;
+
+		if (r == -1)
+			throw IOException("read");
+	}
+
+	ssize_t sent = ::send(fd, m_buffer, m_size, MSG_NOSIGNAL);
+	if (sent > 0)
+	{
+		if (m_size != sent) {
+			::memmove(m_buffer, m_buffer + sent, size_t(m_size - sent));
+		}
+
+		m_size -= sent;
+	}
+
+	if (sent == -1)
+	{
+		std::cout << IOException("sent", errno).what() << std::endl;
+		std::cout << "sent: " << sent << std::endl;
+		std::cout << "m_size: " << m_size << std::endl;
+	}
+
+	return (sent);
+}
+
+HttpResponse::StringBody::StringBody(std::string string) :
+		m_string(string),
+		m_index(0)
+{
+}
+
+HttpResponse::StringBody::~StringBody()
+{
+}
+
+ssize_t
+HttpResponse::StringBody::write(int fd)
+{
+	ssize_t r = send(fd, m_string.c_str() + m_index, m_string.size() - m_index, 0);
+
+	if (r > 0)
+	{
+		m_index += r;
+	}
+
+	return (r);
 }
 
 HttpResponse::HttpResponse(const HTTPVersion &version, const HTTPStatus &status, HTTPHeaderFields headers, IBody *body) :

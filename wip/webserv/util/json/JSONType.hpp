@@ -13,7 +13,7 @@
 #ifndef JSONTYPE_HPP_
 # define JSONTYPE_HPP_
 
-# include <util/json/JSONBase.hpp>
+#include <util/json/JSONBase.hpp>
 # include <string>
 
 class JSONArray;
@@ -37,7 +37,7 @@ class JSONType
 		JSONType(float value);
 		JSONType(double value);
 		JSONType(const char *value);
-		JSONType(std::string value);
+		JSONType(const std::string &value);
 		JSONType(const JSONNull &jsonNull);
 		JSONType(const JSONBoolean &jsonBoolean);
 		JSONType(const JSONInteger &jsonInteger);

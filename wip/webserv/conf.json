@@ -13,7 +13,7 @@
 			"host": "0.0.0.0",
 			"name": "_",
 			"default": true,
-			"maxBodySize": "1M",
+			"maxBodySize": "1MB",
 			"errorPages": {
 				"500": "500.html",
 				"404": "not-found.html"

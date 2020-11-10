@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include <config/block/ServerBlock.hpp>
+#include <sys/stat.h>
+#include <dirent.h>
 #include <exception/IOException.hpp>
 #include <http/HttpRequestParser.hpp>
 #include <http/HttpResponse.hpp>
@@ -20,25 +22,22 @@
 #include <http/HTTPVersion.hpp>
 #include <http/mime/MimeRegistry.hpp>
 #include <io/SocketServer.hpp>
-#include <sys/_select.h>
-#include <sys/_types/_fd_clr.h>
-#include <sys/_types/_fd_def.h>
-#include <sys/_types/_fd_isset.h>
-#include <sys/_types/_fd_set.h>
-#include <sys/_types/_fd_zero.h>
-#include <sys/_types/_timeval.h>
+#include <sys/select.h>
 #include <sys/errno.h>
-#include <sys/fcntl.h>
+#include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <unistd.h>
+#include <sys/unistd.h>
 #include <util/Optional.hpp>
+#include <cstring>
 #include <iostream>
 #include <iterator>
-#include <list>
 #include <map>
 #include <string>
+#include <sys/types.h>
+       #include <sys/stat.h>
+       #include <fcntl.h>
 
 class HttpResponse;
 
@@ -270,15 +269,49 @@ HTTPOrchestrator::start()
 								header.contentLength(8);
 								std::cout << "GET " + cli->parser.path() + " -> 404" << std::endl;
 								close(ffd);
+
+								cli->response = new HttpResponse(HTTPVersion::HTTP_1_1, *HTTPStatus::OK, header, new HttpResponse::StringBody("not found"));
 							}
 							else
 							{
-								header.contentType(mimeRegistry, file.substr(file.rfind(".") + 1));
-								header.contentLength(st.st_size);
 								std::cout << "GET " + cli->parser.path() + " -> 200" << std::endl;
-							}
 
-							cli->response = new HttpResponse(HTTPVersion::HTTP_1_1, *HTTPStatus::OK, header, new HttpResponse::FileBody(ffd));
+								if (S_ISDIR(st.st_mode))
+								{
+									std::cout << file << std::endl;
+
+									DIR *dir = ::opendir(cli->parser.path() == "/" ? "." : file.c_str());
+									std::cout << dir << std::endl;
+
+									std::string listing = "";
+
+									struct dirent *entry;
+									while ((entry = ::readdir(dir)))
+									{
+										std::string lfile(entry->d_name);
+
+										if (DT_DIR == entry->d_type) {
+											lfile += '/';
+										}
+
+										listing += std::string("<a href=\"./") + lfile + "\">" + lfile + "</a><br>";
+									}
+
+									::closedir(dir);
+
+									header.contentType("text/html");
+									header.contentLength(listing.size());
+
+									cli->response = new HttpResponse(HTTPVersion::HTTP_1_1, *HTTPStatus::OK, header, new HttpResponse::StringBody(listing));
+								}
+								else if (S_ISREG(st.st_mode))
+								{
+									header.contentType(mimeRegistry, file.substr(file.rfind(".") + 1));
+									header.contentLength(st.st_size);
+
+									cli->response = new HttpResponse(HTTPVersion::HTTP_1_1, *HTTPStatus::OK, header, new HttpResponse::FileBody(ffd));
+								}
+							}
 						}
 					}
 				}
@@ -289,8 +322,13 @@ HTTPOrchestrator::start()
 			{
 				if (cli->response)
 				{
-					if (cli->response->write(fd) <= 0)
+					if (cli->response->write(fd) >= 0)
 					{
+						cli->last_action = seconds();
+					}
+					else
+					{
+						std::cout << "closing: " << ::strerror(errno) << std::endl;
 						::close(fd);
 						FD_CLR(fd, &fds);
 						delete cli->response;

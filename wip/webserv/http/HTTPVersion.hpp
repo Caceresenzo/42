@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   HTTPVersion.hpp                                       :+:      :+:    :+:   */
+/*   HTTPVersion.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -44,4 +44,4 @@ class HTTPVersion
 		static HTTPVersion HTTP_1_1;
 };
 
-#endif /* HTTP_HTTPVERSION_HPP_ */
+#endif /* HTTPVERSION_HPP_ */

@@ -13,7 +13,7 @@
 #ifndef JSONBOOLEAN_HPP_
 # define JSONBOOLEAN_HPP_
 
-# include <util/json/JSONBase.hpp>
+#include <util/json/JSONBase.hpp>
 
 class JSONBoolean :
 		public JSONBase

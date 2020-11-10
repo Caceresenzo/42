@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONFIG_BLOCK_CGI_HPP_
-# define CONFIG_BLOCK_CGI_HPP_
+#ifndef SRC_CONFIG_BLOCK_CGI_HPP_
+# define SRC_CONFIG_BLOCK_CGI_HPP_
 
 #include <iostream>
 
@@ -30,4 +30,4 @@ class CGI
 		operator=(const CGI &other);
 };
 
-#endif /* CONFIG_BLOCK_CGI_HPP_ */
+#endif /* SRC_CONFIG_BLOCK_CGI_HPP_ */

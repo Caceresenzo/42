@@ -13,7 +13,7 @@
 #ifndef IOEXCEPTION_HPP_
 # define IOEXCEPTION_HPP_
 
-# include <exception/Exception.hpp>
+#include <exception/Exception.hpp>
 
 class IOException :
 		public Exception
