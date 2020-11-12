@@ -12,9 +12,11 @@
 
 #include <http/mime/MimeRegistry.hpp>
 #include <stddef.h>
+#include <util/json/JsonObject.hpp>
+#include <util/json/JsonReader.hpp>
+#include <fstream>
 #include <list>
 #include <string>
-#include <fstream>
 
 MimeRegistry::MimeRegistry(void) :
 		m_mapping(),
@@ -34,6 +36,11 @@ MimeRegistry::MimeRegistry(const MimeRegistry &other) :
 {
 }
 
+MimeRegistry::~MimeRegistry(void)
+{
+	clear();
+}
+
 MimeRegistry&
 MimeRegistry::operator =(const MimeRegistry &other)
 {
@@ -44,6 +51,18 @@ MimeRegistry::operator =(const MimeRegistry &other)
 	}
 
 	return (*this);
+}
+
+void
+MimeRegistry::clearMapping(map &mapping)
+{
+	if (mapping.empty())
+		return;
+
+	for (const_iterator it = mapping.begin(); it != mapping.end(); it++)
+		delete it->second;
+
+	return (mapping.clear());
 }
 
 void
@@ -71,6 +90,13 @@ MimeRegistry::add(const Mime &mime)
 	}
 }
 
+void
+MimeRegistry::clear(void)
+{
+	clearMapping(m_mapping);
+	clearMapping(m_reverse_mapping);
+}
+
 const Mime*
 MimeRegistry::MimeRegistry::findByMimeType(const std::string &type) const
 {
@@ -93,81 +119,50 @@ MimeRegistry::findByFileExtension(const std::string &type) const
 	return (it->second);
 }
 
-void // TODO need rework
+void
 MimeRegistry::loadFromFile(const std::string &path)
 {
-	std::ifstream mimeMapFile;
-	mimeMapFile.open(path.c_str(), std::ifstream::in);
+	JsonObject *object = JsonReader::fromFile(path).readObject();
 
-	while (!mimeMapFile.eof())
+	for (JsonObject::iterator it = object->begin(); it != object->end(); it++)
 	{
-		std::string line;
-		std::getline(mimeMapFile, line);
+		const std::string &mimeType = it->first;
+		JsonValue *jsonValue = it->second;
 
-		size_t tabPos = line.find('\t');
-		if (tabPos == std::string::npos)
+		if (jsonValue->type() != JsonValue::TYPE_ARRAY)
 		{
-			std::cout << "invalid mime.map line (no tab): " << line << std::endl;
+			std::cout << "not an array: " << jsonValue->typeString() << " (key: " << mimeType << ")" << std::endl; // TODO Replace with logger or throw
 			continue;
 		}
 
-		std::string type = line.substr(0, tabPos);
-		if (type.empty())
+		JsonArray *jsonArray = jsonValue->cast<JsonArray>();
+
+		std::list<std::string> extensions;
+
+		size_t index = 0;
+		for (JsonArray::iterator ait = jsonArray->begin(); ait != jsonArray->end(); ait++)
 		{
-			std::cout << "invalid mime.map line (empty type): " << line << std::endl;
+			jsonValue = *ait; /* Recycled variable */
+
+			if (jsonValue->type() != JsonValue::TYPE_STRING)
+			{
+				std::cout << "not a string (key: " << it->first << ", index: " << index << ")" << std::endl; // TODO Replace with logger or throw
+				continue;
+			}
+
+			extensions.push_back(*(jsonValue->cast<JsonString>())); // TODO Safe check?
+
+			index++;
+		}
+
+		if (extensions.empty())
+		{
+			std::cout << "no usable data (or empty, key: " << mimeType << ")" << std::endl; // TODO Replace with logger or throw
 			continue;
 		}
 
-		std::list<std::string> exts;
-
-		size_t comaPos = tabPos;
-		while (true)
-		{
-			size_t prev = comaPos;
-
-//			std::cout << comaPos << std::endl;
-//
-//			for (size_t i = 0; i < line.length(); i++)
-//				std::cout << (line[i] == '\t' ? ' ' : line[i]);
-//			std::cout << std::endl;
-//
-//			for (size_t i = 0; i < comaPos; i++)
-//				std::cout << " ";
-//			std::cout << "^" << " (" << comaPos << ")" << std::endl;
-
-			if ((comaPos = line.find(',', comaPos + 1)) != std::string::npos)
-			{
-				std::string ext = line.substr(prev + 1, comaPos - prev - 1);
-//				std::cout << ext << std::endl;
-
-				if (ext.empty())
-					std::cout << "invalid extension (empty type): " << line << std::endl;
-				else
-					exts.push_back(ext);
-			}
-			else if (comaPos == std::string::npos && prev != line.size() - 1)
-			{
-				std::string ext = line.substr(prev + 1, line.size() - 1);
-
-				if (!ext.empty())
-					exts.push_back(ext);
-
-				break;
-			}
-			else
-			{
-				break;
-			}
-		}
-
-		if (exts.empty())
-		{
-			std::cout << "invalid mime.map line (empty extensions): " << line << std::endl;
-			continue;
-		}
-
-		add(Mime(type, exts));
-
-//		std::cout << type << ".." << std::endl;
+		add(Mime(mimeType, extensions));
 	}
+
+	delete object;
 }

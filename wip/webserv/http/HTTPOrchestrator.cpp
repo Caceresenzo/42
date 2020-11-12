@@ -28,7 +28,17 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <sys/unistd.h>
+
+#ifdef __linux__
+# include <unistd.h>
+#elif __APPLE__
+# include <unistd.h>
+#elif __CYGWIN__
+# include <sys/unistd.h>
+#else
+# error Unknown plateform
+#endif
+
 #include <util/Optional.hpp>
 #include <cstring>
 #include <iostream>
@@ -36,8 +46,8 @@
 #include <map>
 #include <string>
 #include <sys/types.h>
-       #include <sys/stat.h>
-       #include <fcntl.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 class HttpResponse;
 
@@ -123,7 +133,7 @@ HTTPOrchestrator::start()
 	prepare();
 
 	MimeRegistry mimeRegistry;
-	mimeRegistry.loadFromFile("mime.map");
+	mimeRegistry.loadFromFile("mime.json");
 
 	fd_set fds;
 
@@ -133,11 +143,10 @@ HTTPOrchestrator::start()
 	iterator it = m_servers.begin();
 	while (it != m_servers.end())
 	{
-
 		int fd = it->serverSocket().fd();
 		std::cout << "server: " << fd << std::endl;
 
-		FD_SET(it->serverSocket().fd(), &fds);
+		FD_SET(fd, &fds);
 
 		if (fd > highest)
 			highest = fd;
@@ -184,7 +193,7 @@ HTTPOrchestrator::start()
 					FD_SET(socket_fd, &fds);
 
 					client *c = new client();
-					c->status = CS_CONNECTED;
+//					c->status = CS_CONNECTED;
 					c->last_action = seconds();
 					c->header_read = false;
 
@@ -280,7 +289,9 @@ HTTPOrchestrator::start()
 								{
 									std::cout << file << std::endl;
 
-									DIR *dir = ::opendir(cli->parser.path() == "/" ? "." : file.c_str());
+									std::string directory = cli->parser.path() == "/" ? "." : file;
+
+									DIR *dir = ::opendir(directory.c_str());
 									std::cout << dir << std::endl;
 
 									std::string listing = "";
@@ -289,8 +300,10 @@ HTTPOrchestrator::start()
 									while ((entry = ::readdir(dir)))
 									{
 										std::string lfile(entry->d_name);
+										std::string absolute = directory + "/" + lfile;
 
-										if (DT_DIR == entry->d_type) {
+										if (::stat(absolute.c_str(), &st) != -1 && S_ISDIR(st.st_mode))
+										{
 											lfile += '/';
 										}
 
@@ -322,7 +335,7 @@ HTTPOrchestrator::start()
 			{
 				if (cli->response)
 				{
-					if (cli->response->write(fd) >= 0)
+					if (cli->response->write(fd) >= 0) // TODO Add windows support
 					{
 						cli->last_action = seconds();
 					}

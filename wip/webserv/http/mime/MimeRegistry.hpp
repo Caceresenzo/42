@@ -32,11 +32,21 @@ class MimeRegistry
 		MimeRegistry(const map &mapping, const map &reverse_mapping);
 		MimeRegistry(const MimeRegistry &other);
 
+		~MimeRegistry(void);
+
 		MimeRegistry&
 		operator =(const MimeRegistry &other);
 
+	private:
+		void
+		clearMapping(map &mapping);
+
+	public:
 		void
 		add(const Mime &mime);
+
+		void
+		clear(void);
 
 		const Mime*
 		findByMimeType(const std::string &type) const;

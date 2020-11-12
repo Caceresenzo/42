@@ -13,17 +13,17 @@
 #include <exception/IllegalArgumentException.hpp>
 
 IllegalArgumentException::IllegalArgumentException(void) :
-		Exception()
+		RuntimeException()
 {
 }
 
 IllegalArgumentException::IllegalArgumentException(std::string message) :
-		Exception(message)
+		RuntimeException(message)
 {
 }
 
 IllegalArgumentException::IllegalArgumentException(const IllegalArgumentException &other) :
-		Exception(other)
+		RuntimeException(other)
 {
 }
 
@@ -34,7 +34,7 @@ IllegalArgumentException::~IllegalArgumentException() throw ()
 IllegalArgumentException&
 IllegalArgumentException::operator =(const IllegalArgumentException &other)
 {
-	Exception::operator =(other);
+	RuntimeException::operator =(other);
 
 	return (*this);
 }

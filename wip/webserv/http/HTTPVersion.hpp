@@ -15,6 +15,11 @@
 
 # include <iostream>
 
+# ifdef _SYS_SYSMACROS_H
+#  undef major
+#  undef minor
+# endif
+
 class HTTPVersion
 {
 	private:

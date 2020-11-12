@@ -13,8 +13,10 @@
 #ifndef ENUM_HPP_
 # define ENUM_HPP_
 
-# include <iostream>
-# include <vector>
+#include <util/Objects.hpp>
+#include <iostream>
+#include <string>
+#include <vector>
 
 # define ENUM_DEFINE(clazz, name, constructor) clazz *clazz::name = clazz::enumValue(#name, constructor);
 
@@ -27,8 +29,26 @@ template<typename E>
 			typedef typename Container::const_iterator iterator;
 
 		private:
-			static int s_ordinal;
-			static Container m_values;
+			class ContainerWrapper
+			{
+				private:
+					Container m_container;
+
+				public:
+					~ContainerWrapper() /* std::vector<*> don't free pointers. */
+					{
+						iterator ite = m_container.end();
+
+						for (iterator it = m_container.begin(); it != ite; it++)
+							delete *it;
+					}
+
+					Container&
+					storage()
+					{
+						return (m_container);
+					}
+			};
 
 		protected:
 			std::string m_name;
@@ -41,14 +61,30 @@ template<typename E>
 			{
 			}
 
+			static ContainerWrapper&
+			enumConstants()
+			{
+				static ContainerWrapper wrapper; /* Initialization order was causing issues with templates. */
+
+				return (wrapper);
+			}
+
+			static int
+			nextOrdinal()
+			{
+				static int ordinal = 0;
+
+				return (ordinal++);
+			}
+
 			static const Pointer
 			enumValue(const std::string &name, const E &from)
 			{
 				Pointer value = new E(from);
 				value->m_name = name;
-				value->m_ordinal = s_ordinal++;
+				value->m_ordinal = nextOrdinal();
 
-				m_values.push_back(value);
+				enumConstants().storage().push_back(value);
 
 				return (value);
 			}
@@ -59,30 +95,36 @@ template<typename E>
 			{
 			}
 
-			const std::string&
+			inline int
+			compareTo(const Enum<E> *other) const
+			{
+				return (compareTo(*Objects::requireNonNull(other)));
+			}
+
+			inline int
+			compareTo(const Enum<E> &other) const
+			{
+				return (m_ordinal - other.m_ordinal);
+			}
+
+			inline const std::string&
 			name() const
 			{
 				return (m_name);
 			}
 
-			int
+			inline int
 			ordinal() const
 			{
 				return (m_ordinal);
 			}
 
-			static const Container&
+			inline static const Container&
 			values()
 			{
-				return (m_values);
+				return (enumConstants().storage());
 			}
 	};
-
-template<typename E>
-	int Enum<E>::s_ordinal = 0;
-
-template<typename E>
-	typename Enum<E>::Container Enum<E>::m_values;
 
 template<typename E>
 	std::ostream&

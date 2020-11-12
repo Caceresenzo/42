@@ -13,10 +13,11 @@
 #ifndef ILLEGALARGUMENTEXCEPTION_HPP_
 # define ILLEGALARGUMENTEXCEPTION_HPP_
 
-#include <exception/Exception.hpp>
+#include <exception/RuntimeException.hpp>
+#include <string>
 
 class IllegalArgumentException :
-		public Exception
+		public RuntimeException
 {
 	public:
 		IllegalArgumentException(void);

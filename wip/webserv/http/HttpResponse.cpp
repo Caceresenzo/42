@@ -10,7 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cygwin/socket.h>
+#ifdef __linux__
+# include <sys/socket.h>
+# include <unistd.h>
+#elif __APPLE__
+# include <sys/socket.h>
+# include <unistd.h>
+#elif __CYGWIN__
+# include <cygwin/socket.h>
+# include <sys/unistd.h>
+#else
+# error Unknown plateform
+#endif
+
+#ifndef MSG_NOSIGNAL
+# define MSG_NOSIGNAL 0
+#endif
+
+
 #include <exception/IOException.hpp>
 #include <http/HttpResponse.hpp>
 #include <http/HTTP.hpp>
