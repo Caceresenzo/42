@@ -1,0 +1,139 @@
+{
+	"maxActiveClient": 250,
+	"mime": {
+		"includes": [
+			"source/mime.json"
+		],
+		"define": {
+			"application/octet-stream": [
+				"txt"
+			]
+		}
+	},
+	"cgi": {
+		"python3": {
+			"path": "/usr/bin/python3",
+			"extensions": [
+				"py"
+			]
+		},
+		"bash": {
+			"path": "/bin/bash",
+			"extensions": [
+				"sh"
+			]
+		},
+		"bla": {
+			"path": "docker/tests/42-testers/ubuntu_cgi_tester",
+			"extensions": [
+				"bla"
+			],
+			"handleNotFound": true
+		},
+		"php-cgi": {
+			"path": "/usr/bin/php-cgi",
+			"extensions": [
+				"php"
+			],
+			"environment": {
+				"REDIRECT_STATUS": "1"
+			}
+		}
+	},
+	"servers": [
+		{
+			"port": 80,
+			"host": "0.0.0.0",
+			"name": [
+				"boxplay.io"
+			],
+			"default": true,
+			"maxBodySize": "1MB",
+			"errors": {
+				"500": "500.html",
+				"404": "not-found.html"
+			},
+			"root": "",
+			"methods": [
+				"GET",
+				"HEAD"
+			],
+			"locations": {
+				"/": {
+					"methods": [
+						"GET",
+						"PUT"
+					],
+					"index": [
+						"index.html"
+					],
+					"cgi": "bla",
+					"listing": true
+				},
+				"/wordpress/": {
+					"methods": [
+						"POST"
+					],
+					"root": "/root/wordpress",
+					"cgi": "php-cgi",
+					"index": [
+						"index.php"
+					]
+				},
+				"/superform/": {
+					"root": "/root/",
+					"cgi": "php-cgi",
+					"index": [
+						"index.php"
+					]
+				},
+				"/directory/": {
+					"root": "./YoupiBanane/",
+					"methods": [
+						"GET",
+						"POST",
+						"PUT"
+					],
+					"cgi": "bla"
+				},
+				"/x.py": {
+					"root": "dummy-files/",
+					"methods": [
+						"GET"
+					],
+					"cgi": "python3"
+				},
+				"/x2.py": {
+					"root": "dummy-files/",
+					"methods": [
+						"GET"
+					],
+					"cgi": "python3"
+				},
+				"/_tests/x.php": {
+					"root": "dummy-files/",
+					"cgi": "php-cgi"
+				},
+				"/_tests/x.sh": {
+					"root": "dummy-files/",
+					"methods": [
+						"GET"
+					],
+					"cgi": "bash"
+				},
+				"/_tests/": {
+					"root": "dummy-files/",
+					"methods": [
+						"GET"
+					],
+					"index": [
+						"index.html",
+						"index.default.html"
+					],
+					"listing": true,
+					"cgi": "python3"
+				}
+			}
+		}
+	]
+}

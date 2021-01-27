@@ -1,0 +1,14 @@
+{
+	"servers": [
+		{
+			"locations": {
+				"/": {
+					"auth": {
+						"type": "basic",
+						"user": 42
+					}
+				}
+			}
+		}
+	]
+}

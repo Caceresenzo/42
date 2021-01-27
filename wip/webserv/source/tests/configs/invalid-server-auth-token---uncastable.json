@@ -1,0 +1,10 @@
+{
+	"servers": [
+		{
+			"auth": {
+				"type": "bearer",
+				"token": 42
+			}
+		}
+	]
+}

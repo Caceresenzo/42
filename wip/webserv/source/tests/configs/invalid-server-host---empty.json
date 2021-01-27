@@ -1,0 +1,8 @@
+{
+	"servers": [
+		{
+			"host": "",
+			"default": true
+		}
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"servers": [
+		{
+			"names": [
+				"hello.com"
+			]
+		},
+		{
+			"names": [
+				"hello.com"
+			]
+		}
+	]
+}

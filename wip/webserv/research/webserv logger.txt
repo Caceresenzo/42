@@ -1,0 +1,12 @@
+// --log-level=WARN
+
+static Logger &LOG = LoggerFactory::get("hello");
+
+LOG.trace() << 1 << std::endl;
+LOG.debug() << 1 << std::endl;
+LOG.info() << 1 << std::endl;
+LOG.warn() << 1 << std::endl;
+LOG.error() << 1 << std::endl;
+LOG.fatal() << 1 << std::endl;
+
+[ ERROR ] hello: 1\n

@@ -1,0 +1,13 @@
+{
+	"servers": [
+		{
+			"locations": {
+				"/": {
+					"auth": {
+						"type": "basic"
+					}
+				}
+			}
+		}
+	]
+}

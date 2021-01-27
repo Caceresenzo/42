@@ -1,0 +1,14 @@
+{
+	"servers": [
+		{
+			"locations": {
+				"/": {
+					"auth": {
+						"type": "bearer",
+						"token": 42
+					}
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,11 @@
+{
+	"servers": [
+		{
+			"locations": {
+				"/": {
+					"listing": 42
+				}
+			}
+		}
+	]
+}
