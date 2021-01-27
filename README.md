@@ -1,26 +1,26 @@
 # My 42 Repository
 
-|      Project     | Mark | Retry | Took |    Note    |   With   |
-|:----------------:|:----:|:-----:|:----:|:----------:|:--------:|
-|       libft      | 125% |   3   |  5d  |            |          |
-|   get_next_line  | 115% |   1   |  1d  |            |          |
-|      netwhat     | 100% |   2   |  0d  |            |          |
-|     ft_printf    | 100% |   2   |  3d  |            |          |
-|     ft_server    | 100% |   1   |  8h  |    quick   |          |
-|       cub3d      | 109% |   1   |  4d  |            |          |
-|      libasm      | 125% |   1   |  5d  |  very cool |          |
-|    ft_services   | 100% |   1   |  3w  |   boring   |          |
-|     minishell    | 100% |   1   |  5d  |    cool    | rosanche |
-|  CPP Modules/00  | 100% |   2   |  6h  |            |          |
-|  CPP Modules/01  | 100% |   1   |  1d  |            |          |
-|  CPP Modules/02  | 100% |   1   | 10h  |            |          |
-|  CPP Modules/03  | 100% |   1   |  8d  |   boring   |          |
-|  CPP Modules/04  | 100% |   1   | 10h  | repetitive |          |
-|  CPP Modules/05  | 100% |   1   | 14h  |            |          |
-|  CPP Modules/06  | 100% |   1   |  3h  |            |          |
-|  CPP Modules/07  | 100% |   1   |  4h  |            |          |
-|  CPP Modules/08  | 100% |   1   | 11h  |            |          |
-|   Philosophers   | 100% |   1   |  3d  |    cool    |          |
-|   ft_containers  |  wip |       |      |            |          |
-|      webserv     |      |       |      |            |          |
-| ft_transcendence |      |       |      |            |          |
+|      Project     | Mark | Retry | Took |    Note    |       With      | Language |
+|:----------------:|:----:|:-----:|:----:|:----------:|:---------------:|:-:|
+|       libft      | 125% |   3   |  5d  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
+|   get_next_line  | 115% |   1   |  1d  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
+|      netwhat     | 100% |   2   |  0d  |            |                 | n/a |
+|     ft_printf    | 100% |   2   |  3d  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
+|     ft_server    | 100% |   1   |  8h  |    quick   |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-plain.svg" alt="docker" width="40" height="40"/> |
+|       cub3d      | 109% |   1   |  4d  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
+|      libasm      | 125% |   1   |  5d  |  very cool |                 | assembly |
+|    ft_services   | 100% |   1   |  3w  |   boring   |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/kubernetes/kubernetes-plain.svg" alt="kubernetes" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-plain.svg" alt="docker" width="40" height="40"/> |
+|     minishell    | 100% |   1   |  5d  |    cool    |     rosanche    | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
+|  CPP Modules/00  | 100% |   2   |  6h  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/01  | 100% |   1   |  1d  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/02  | 100% |   1   | 10h  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/03  | 100% |   1   |  8d  |   boring   |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/04  | 100% |   1   | 10h  | repetitive |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/05  | 100% |   1   | 14h  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/06  | 100% |   1   |  3h  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/07  | 100% |   1   |  4h  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|  CPP Modules/08  | 100% |   1   | 11h  |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|   Philosophers   | 100% |   1   |  3d  |    cool    |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
+|   ft_containers  |  wip |       |      |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+|      webserv     |  wip |       |  2M  |  very cool | atetu, rosanche | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-plain.svg" alt="cpp" width="40" height="40"/> |
+| ft_transcendence |      |       |      |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/ruby/ruby-plain.svg" alt="ruby" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-plain.svg" alt="postgresql" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg" alt="html5" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-plain.svg" alt="html5" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/css3/css3-plain.svg" alt="html5" width="40" height="40"/> |
