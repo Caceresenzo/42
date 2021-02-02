@@ -1,0 +1,10 @@
+{
+	"servers": [
+		{
+			"default": true
+		},
+		{
+			"default": true
+		}
+	]
+}

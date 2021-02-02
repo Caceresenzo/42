@@ -1,0 +1,58 @@
+{
+	"maxActiveClient": 130,
+	"mime": {
+		"includes": [
+			"mime.json"
+		]
+	},
+	"cgi": {
+		"cgi_test": {
+			"path": "./ubuntu_cgi_tester",
+			"extensions": [
+				"bla"
+			],
+			"handleNotFound": true
+		}
+	},
+	"servers": [
+		{
+			"port": 80,
+			"host": "0.0.0.0",
+			"default": true,
+			"root": ".",
+			"locations": {
+				"/": {
+					"listing": true,
+					"methods": [
+						"GET"
+					],
+					"cgi": "cgi_test"
+				},
+				"/put_test/": {
+					"methods": [
+						"PUT"
+					],
+					"maxBodySize": "100000000B"
+				},
+				"/post_body/": {
+					"methods": [
+						"POST"
+					],
+					"maxBodySize": "100B"
+				},
+				"/directory/": {
+					"methods": [
+						"GET",
+						"POST"
+					],
+					"maxBodySize": "100000000B",
+					"index": [
+						"youpi.bad_extension"
+					],
+					"root": "./YoupiBanane/",
+					"cgi": "cgi_test"
+				}
+			}
+		}
+	]
+}

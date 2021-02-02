@@ -1,0 +1,122 @@
+{
+	"maxActiveClient": 300,
+	"mime": {
+		"includes": [
+			"mime.json"
+		],
+		"define": {
+			"application/octet-stream": [
+				"txt"
+			]
+		}
+	},
+	"cgi": {
+		"python3": {
+			"path": "/usr/bin/python3"
+		},
+		"bash": {
+			"path": "/bin/bash"
+		},
+		"bash0": {
+			"path": "/bin/ls"
+		},
+		"bla": {
+			"path": "../docker/tests/42-testers/ubuntu_cgi_tester",
+			"extensions": [
+				"bla"
+			],
+			"handleNotFound": true
+		},
+		"php-cgi": {
+			"path": "/usr/bin/php-cgi",
+			"extensions": [
+				"php"
+			],
+			"environment": {
+				"REDIRECT_STATUS": "1"
+			}
+		}
+	},
+	"servers": [
+		{
+			"port": 80,
+			"host": "0.0.0.0",
+			"name": [
+				"boxplay.io"
+			],
+			"default": true,
+			"maxBodySize": "1MB",
+			"errors": {
+				"500": "500.html",
+				"404": "not-found.html"
+			},
+			"root": "../",
+			"methods": [
+				"GET",
+				"HEAD"
+			],
+			"locations": {
+				"/": {
+					"methods": [
+						"GET",
+						"PUT"
+					],
+					"index": [
+						"index.html"
+					],
+					"cgi": "bla",
+					"listing": true
+				},
+				"/wordpress/": {
+					"methods": [
+						"POST"
+					],
+					"root": "/root/wordpress",
+					"cgi": "php-cgi",
+					"index": [
+						"index.php"
+					]
+				}
+			}
+		},
+
+		{
+			"port": 50,
+			"host": "0.0.0.0",
+			"name": [
+				"boxplay2.io"
+			],
+			"default": true,
+			"maxBodySize": "1MB",
+			"errors": {
+				"500": "500.html",
+				"404": "not-found.html"
+			},
+			"root": "../",
+			"methods": [
+				"POST",
+				"PUT"
+			],
+			"locations": {
+				"/": {
+					"index": [
+						"index.html"
+					],
+					"cgi": "bla",
+					"listing": true
+				},
+				"/wordpress/": {
+					"methods": [
+						"POST"
+					],
+					"root": "/root/wordpress",
+					"cgi": "php-cgi",
+					"index": [
+						"index.php"
+					]
+				}
+			}
+		}
+
+	]
+}

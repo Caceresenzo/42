@@ -1,0 +1,12 @@
+{
+	"servers": [
+		{
+			"default": true,
+			"locations": {
+				"/": {
+					"cgi": "x"
+				}
+			}
+		}
+	]
+}

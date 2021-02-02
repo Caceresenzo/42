@@ -1,0 +1,7 @@
+{
+	"servers": [
+		{
+			"maxBodySize": 42
+		}
+	]
+}
