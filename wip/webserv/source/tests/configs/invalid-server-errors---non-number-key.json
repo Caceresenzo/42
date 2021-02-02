@@ -1,9 +1,0 @@
-{
-	"servers": [
-		{
-			"errors": {
-				"hello": "x"
-			}
-		}
-	]
-}

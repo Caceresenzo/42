@@ -1,1 +1,0 @@
-This code come from https://grox.net/software/mine/slowcat/
