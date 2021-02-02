@@ -77,6 +77,9 @@ class FileDescriptorBuffer :
 		{
 			return (m_fd);
 		}
+		
+		ssize_t
+		storeZeros(size_t size);
 
 	public:
 		static FileDescriptorBuffer*

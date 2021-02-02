@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ErrorFilter.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 00:30:02 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/01/07 00:30:02 by ecaceres         ###   ########.fr       */
+/*   Updated: 2021/01/27 14:17:59 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <http/filter/Filter.hpp>
 #include <util/Singleton.hpp>
+#include <exception/IOException.hpp>
 
 class Logger;
 

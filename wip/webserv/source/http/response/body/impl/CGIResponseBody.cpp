@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   CGIResponseBody.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 17:24:51 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/01/07 17:24:51 by ecaceres         ###   ########.fr       */
+/*   Updated: 2021/01/27 10:29:37 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,5 @@ CGIResponseBody::store(BaseBuffer &buffer)
 	}
 
 	return (false);
+	
 }

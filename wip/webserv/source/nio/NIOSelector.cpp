@@ -6,7 +6,7 @@
 /*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 23:38:08 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/01/11 16:16:44 by atetu            ###   ########.fr       */
+/*   Updated: 2021/01/27 09:46:38 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,11 +169,13 @@ NIOSelector::select(FileDescriptorSet *read, FileDescriptorSet *write, struct ti
 					FileDescriptor &fd = *m_fileDescriptors[index];
 
 //					LOG.trace() << "Calling readable(" << index << ");" << std::endl;
-					bool r = m_callbacks[index]->readable(fd);
+					int r = m_callbacks[index]->readable(fd);
 //					LOG.trace() << "Returned from readable(" << index << "); -> " << r << std::endl;
 
 					if (r)
 						updateWithout(index, ACCEPT | READ);
+					// else if (r == -1)
+					// 	m_callbacks[index]->response
 				}
 			}
 

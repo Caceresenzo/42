@@ -154,7 +154,7 @@ normal_main(int argc, char **argv, char **envp)
 		}
 		catch (Exception &exception)
 		{
-			std::cout << "configuration error: " << exception.message() << std::endl;
+			std::cout << "error: " << exception.message() << std::endl;
 			return (1);
 		}
 	}

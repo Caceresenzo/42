@@ -6,7 +6,7 @@
 /*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/06 18:51:19 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/01/22 11:41:14 by atetu            ###   ########.fr       */
+/*   Updated: 2021/01/27 14:34:46 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,11 @@ HTTPResponse::store(BaseBuffer &buffer)
 		case S_NONE:
 			m_state = S_HEADERS;
 
+			// fall through
+
 		case S_HEADERS:
 		{
+			
 			buffer.store(HTTPStatusLine(*status().get()).format());
 			buffer.store(HTTP::CRLF);
 			buffer.store(headers().format());

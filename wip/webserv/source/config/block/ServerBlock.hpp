@@ -6,7 +6,7 @@
 /*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 11:34:45 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/01/21 13:39:49 by atetu            ###   ########.fr       */
+/*   Updated: 2021/01/27 14:09:31 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ class ServerBlock
 		ServerBlock&
 		auth(const AuthBlock &auth);
 
-		inline const Optional<int>
+		inline const Optional<int>&
 		port(void) const
 		{
 			return (m_port);
@@ -106,13 +106,13 @@ class ServerBlock
 			return (m_isDefault);
 		}
 
-		inline const Optional<std::list<std::string> >
+		inline const Optional<std::list<std::string> >&
 		names(void) const
 		{
 			return (m_names);
 		}
 
-		inline const Optional<DataSize>
+		inline const Optional<DataSize>&
 		maxBodySize(void) const
 		{
 			return (m_maxBodySize);

@@ -52,7 +52,7 @@ FilterChain::next()
 		m_current.pop_front();
 
 #ifdef HTTP_DEBUG_FILTERCHAIN
-		std::cout << m_client.socket().raw() << ": next()= " << typeid(*filter).name() << std::endl;
+		std::cout << m_client.socket().raw() << ": FilterChain::next()= " << typeid(*filter).name() << std::endl;
 #endif
 
 		filter->doFilter(m_client, m_request, m_response, *this);

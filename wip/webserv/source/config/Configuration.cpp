@@ -6,7 +6,7 @@
 /*   By: atetu <atetu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/28 11:33:47 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/01/22 11:02:53 by atetu            ###   ########.fr       */
+/*   Updated: 2021/01/27 14:10:53 by atetu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ Configuration::fromJsonFile(const std::string &path, bool ignoreMimeIncludesErro
 			{
 				const std::list<std::string> &includes = mimeBlock.includes().get();
 
-				LOG.trace() << "From " << includes.size() << " file(s)." << std::endl;
+				LOG.trace() << "From " << includes.size() << " file(s)" << std::endl;
 
 				for (std::list<std::string>::const_iterator it = includes.begin(); it != includes.end(); it++)
 				{
@@ -141,7 +141,7 @@ Configuration::fromJsonFile(const std::string &path, bool ignoreMimeIncludesErro
 			{
 				const std::list<MIME const*> &defines = mimeBlock.defines().get();
 
-				LOG.trace() << "From " << defines.size() << " define(s)." << std::endl;
+				LOG.trace() << "From " << defines.size() << " define(s)" << std::endl;
 
 				for (std::list<MIME const*>::const_iterator it = defines.begin(); it != defines.end(); it++)
 					mimeRegistry->add(*(*it));
@@ -330,7 +330,7 @@ Configuration::JsonBuilder::buildServerBlock(const std::string &path, const Json
 		BIND(jsonObject, KEY_SERVER_DEFAULT, JsonBoolean, bool, serverBlock, isDefault);
 		BIND(jsonObject, KEY_SERVER_ROOT, JsonString, std::string, serverBlock, root);
 		BIND(jsonObject, KEY_SERVER_LISTING, JsonBoolean, bool, serverBlock, listing);
-
+		
 		if (jsonObject.has(KEY_SERVER_NAME))
 		{
 			std::list<std::string> names;
@@ -652,11 +652,14 @@ Configuration::Validator::validate(const RootBlock &rootBlock, const ServerBlock
 	if (!serverBlock.isDefault().equals(true))
 	{
 		if (serverBlock.names().absent())
-			throw ConfigurationValidateException("non-default server is missing names");
+			throw ConfigurationValidateException("non-default server is missing name");
 
 		const std::list<std::string> &names = serverBlock.names().get();
+		
 		if (names.empty())
-			throw ConfigurationValidateException("non-default server is unnamed (names is empty)");
+		{
+			throw ConfigurationValidateException("non-default server is unnamed");
+		}
 	}
 
 	if (serverBlock.locations().present())
@@ -685,7 +688,7 @@ Configuration::Validator::validate(const RootBlock &rootBlock, const ServerBlock
 		const CGIBlock &cgiBlock = rootBlock.getCGI(cgi);
 
 		if (!cgiBlock.path().present())
-			throw ConfigurationValidateException("used CGI '" + cgiBlock.name() + "' does not have a defined path.");
+			throw ConfigurationValidateException("used CGI '" + cgiBlock.name() + "' does not have a defined path");
 
 		if (!cgiBlock.exists())
 			LOG.warn() << "cgi: " << cgiBlock.name() << ": " << cgiBlock.path().get() << ": stat() failed. (file does not exists?)" << std::endl;

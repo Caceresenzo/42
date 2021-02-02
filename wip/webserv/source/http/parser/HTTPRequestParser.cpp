@@ -56,12 +56,14 @@ HTTPRequestParser::consume(char c)
 	{
 		case S_NOT_STARTED:
 		{
-			if (c == '\r'|| c == '\n')
+			if (c == '\r' || c == '\n')
 				break;
 			else
 				m_state = S_METHOD;
 		}
-		
+
+			// fall through
+
 		case S_METHOD:
 		{
 			m_max = false;
@@ -238,7 +240,7 @@ HTTPRequestParser::consume(char c)
 				m_state = S_END;
 			else
 				m_state = S_END;
-				
+
 			break;
 		}
 
@@ -265,23 +267,23 @@ HTTPRequestParser::consume(char c)
 			if (c == 0)
 				break;
 
-		//	__attribute__ ((fallthrough));
+			// fall through
 
 		case S_BODY_DECODE:
 		{
 			size_t consumed = 0;
 			bool finished = m_bodyDecoder->consume(m_client.in().storage(), m_client.body(), consumed, m_max);
-		
+
 			m_client.in().skip(consumed);
 			m_totalSize += consumed;
-			
-			if (m_maxBodySize != -1 && (long long)m_client.body().size() > m_maxBodySize)
+
+			if (m_maxBodySize != -1 && (long long)m_client.body().size() > m_maxBodySize) // TODO This kept everything in RAM...
 			{
-				m_max = true; 
+				m_max = true;
 				if (finished)
 					throw HTTPRequestPayloadTooLargeException();
 			}
-		
+
 			if (finished)
 				m_state = S_END;
 

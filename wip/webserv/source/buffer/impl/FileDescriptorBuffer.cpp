@@ -13,6 +13,7 @@
 #include <buffer/impl/FileDescriptorBuffer.hpp>
 #include <algorithm>
 #include <iostream>
+#include <libs/ft.hpp>
 
 FileDescriptorBuffer::FileDescriptorBuffer(FileDescriptor &fileDescriptor, int actionOnDestroy, size_type maxSize) :
 		BaseBuffer(maxSize),
@@ -76,4 +77,27 @@ FileDescriptorBuffer*
 FileDescriptorBuffer::from(FileDescriptor &fileDescriptor, int actionOnDestroy, size_type maxSize)
 {
 	return (new FileDescriptorBuffer(fileDescriptor, actionOnDestroy, maxSize));
+}
+
+ssize_t
+FileDescriptorBuffer::storeZeros(size_t size)
+{
+		size_t capacity;
+
+	if (m_maxSize == std::string::npos)
+		capacity = size;
+	else
+		capacity = this->capacity();
+
+	if (!capacity)
+		capacity = 1;
+
+	char rbuffer[capacity];
+	ft::memset(rbuffer, '0', capacity);
+	
+	BaseBuffer::store(rbuffer, (int)capacity);
+	
+	m_readEverything = size == capacity;
+	
+	return (capacity);
 }
