@@ -24,7 +24,7 @@ void
 	if (stack_size(stack) < 2)
 		return ;
 	bottom = stack->elements[0];
-	size = (stack->size - 1) * sizeof(long);
+	size = (stack->size - 1) * sizeof(int);
 	memmove(stack->elements, stack->elements + 1, size);
 	stack->elements[stack->size - 1] = bottom;
 }
