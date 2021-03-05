@@ -24,7 +24,7 @@ static t_op
 		{ "ss", op_swap_x },
 		{ "pa", op_push_a },
 		{ "pb", op_push_b },
-		{ "rq", op_rotate_a },
+		{ "ra", op_rotate_a },
 		{ "rb", op_rotate_b },
 		{ "rr", op_rotate_x },
 		{ "rra", op_reverse_rotate_a },
