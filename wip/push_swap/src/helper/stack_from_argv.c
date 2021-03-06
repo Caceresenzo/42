@@ -13,8 +13,8 @@
 #include <limits.h>
 #include <stdbool.h>
 
-#include "../libft/libft.h"
-#include "../libstack/stack.h"
+#include "../../libft/libft.h"
+#include "../../libstack/stack.h"
 
 static bool
 	atoi_strict(const char *in, int *out)

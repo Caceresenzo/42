@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_struct.h                                        :+:      :+:    :+:   */
+/*   list_node_initialize.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/04 16:27:25 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/03/04 16:27:25 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/06 21:44:00 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/06 21:44:00 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OP_STRUCT_H
-# define OP_STRUCT_H
+#include <stddef.h>
 
-# include "../libstack/stack.h"
+#include "list.h"
 
-typedef struct	s_op
+void
+	list_node_initialize(t_list_node *node, void *data)
 {
-	const char	*name;
-	void		(*operation)(t_stack*, t_stack*);
-}				t_op;
-
-#endif
+	if (!node)
+		return ;
+	node->data = data;
+	node->next = NULL;
+}

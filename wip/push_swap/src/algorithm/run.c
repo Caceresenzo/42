@@ -1,48 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_impl_swap.c                                     :+:      :+:    :+:   */
+/*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/04 11:09:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/03/04 11:09:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/04 12:02:22 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/04 12:02:22 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libstack/stack.h"
+#include <stdbool.h>
+#include <stdio.h>
 
-void
-	opi_swap(t_stack *x)
+#include "../../libstack/stack.h"
+#include "../push_swap_structs.h"
+
+bool
+	algorithm_run(const t_algorithm *algo, t_result *r, t_stack *a, t_stack *b)
 {
-	long a;
-	long b;
-
-	if (stack_size(x) < 2)
-		return ;
-	a = stack_pop(x);
-	b = stack_pop(x);
-	stack_push(x, a);
-	stack_push(x, b);
-}
-
-void
-	op_swap_a(t_stack *a, t_stack *b)
-{
-	opi_swap(a);
-	(void)b;
-}
-
-void
-	op_swap_b(t_stack *a, t_stack *b)
-{
-	opi_swap(b);
-	(void)a;
-}
-
-void
-	op_swap_x(t_stack *a, t_stack *b)
-{
-	op_swap_a(a, b);
-	op_swap_b(a, b);
+	return ((*(algo->run))(r, a, b));
 }

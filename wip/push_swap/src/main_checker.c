@@ -12,20 +12,23 @@
 
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
 #include "../libft/get_next_line.h"
+#include "../libft/libft.h"
 #include "../libstack/stack.h"
-#include "op_struct.h"
 #include "push_swap.h"
+#include "push_swap_structs.h"
 
 #define OK 1
 #define KO 0
-#define IS_ERROR 1
-#define NO_ERROR 0
+//#define IS_ERROR 1
+//#define NO_ERROR 0
+#define IS_ERROR ""
+#define NO_ERROR NULL
 
 static int
-	quit(t_stack *a, t_stack *b, bool ok, bool as_err)
+	quit(t_stack *a, t_stack *b, bool ok, const char *err)
 {
 	stack_free(a);
 	stack_free(b);
@@ -33,12 +36,12 @@ static int
 		printf(MSG_OK "\n");
 	else
 	{
-		if (as_err)
-			printf(MSG_ERROR "\n");
+		if (err)
+			printf(MSG_ERROR ": %s\n", err);
 		else
 			printf(MSG_KO "\n");
 	}
-	return (as_err || !ok);
+	return (!!err || !ok);
 }
 
 static int
@@ -49,19 +52,26 @@ static int
 	int			ret;
 
 	line = NULL;
-	while ((ret = get_next_line(0, &line)) != -1)
+	while ((ret = get_next_line(0, &line)) != -1 && line)
 	{
+		if (strlen(line) == 0 && ret == 0)
+		{
+			ft_free_and_release((void**)&line);
+			break;
+		}
 		op = operation_find(line);
+//		dprintf(2, "`%s` %p\n", line, op);
 		ft_free_and_release((void**)&line);
 		if (!op)
-			return (quit(a, b, KO, IS_ERROR));
+			return (quit(a, b, KO, IS_ERROR "unknown op"));
 		operation_call(op, a, b);
 		if (ret == 0)
 			break ;
 	}
+//	printf("%d\n", ret);
 	ft_free_and_release((void**)&line);
 	if (ret == -1)
-		return (quit(a, b, KO, IS_ERROR));
+		return (quit(a, b, KO, IS_ERROR "ret == -1"));
 	if (stacks_validate(a, b))
 		return (quit(a, b, OK, NO_ERROR));
 	return (quit(a, b, KO, NO_ERROR));
@@ -78,8 +88,8 @@ int
 	if (argc == 1)
 		return (quit(&a, &b, OK, NO_ERROR));
 	if (!stack_allocate(&a, argc - 1) || !stack_allocate(&b, argc - 1))
-		return (quit(&a, &b, KO, IS_ERROR));
+		return (quit(&a, &b, KO, IS_ERROR "failed malloc"));
 	if (!stack_fill_from_argv(&a, argc, argv))
-		return (quit(&a, &b, KO, IS_ERROR));
+		return (quit(&a, &b, KO, IS_ERROR "failed from argv"));
 	return (check(&a, &b));
 }

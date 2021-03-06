@@ -2,17 +2,25 @@ TARGET_CHECKER = checker
 TARGET_PUSH_SWAP = push_swap
 
 SOURCES = \
-	src/operation_call.c \
-	src/operation_find.c \
-	src/op_impl_push.c \
-	src/op_impl_reverse_rotate.c \
-	src/op_impl_rotate.c \
-	src/op_impl_swap.c \
-	src/stacks_validate.c \
-	src/stack_from_argv.c
+	src/algorithm/action.c \
+	src/algorithm/find.c \
+	src/algorithm/run.c \
+	src/algorithm/impl/smallest.c \
+	src/algorithm/impl/insertion.c \
+	src/helper/stacks_validate.c \
+	src/helper/stack_from_argv.c \
+	src/helper/stack_is_sorted.c \
+	src/operation/call.c \
+	src/operation/find.c \
+	src/operation/impl/push.c \
+	src/operation/impl/reverse_rotate.c \
+	src/operation/impl/rotate.c \
+	src/operation/impl/swap.c \
+	src/solver/solver.c
 
 include libft/module.mk
 include libstack/module.mk
+include liblist/module.mk
 
 SOURCE_CHECKER = src/main_checker.c
 SOURCE_PUSH_SWAP = src/main_push_swap.c
@@ -50,5 +58,8 @@ fclean: clean
 
 re: fclean all
 
+norm:
+	norminette $(SOURCES)
+
 .SUFFIXES: .c .o
-.PHONY: all clean fclean re libs
+.PHONY: all clean fclean re norm

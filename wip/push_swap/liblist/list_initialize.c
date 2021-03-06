@@ -1,40 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_impl_rotate.c                                   :+:      :+:    :+:   */
+/*   list_initialize.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/04 11:09:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/03/04 11:09:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/06 21:42:31 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/06 21:42:31 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libstack/stack.h"
+#include <stddef.h>
+
+#include "list.h"
 
 void
-	opi_rotate(t_stack *x)
+	list_initialize(t_list *list)
 {
-	stack_rotate(x);
-}
-
-void
-	op_rotate_a(t_stack *a, t_stack *b)
-{
-	opi_rotate(a);
-	(void)b;
-}
-
-void
-	op_rotate_b(t_stack *a, t_stack *b)
-{
-	opi_rotate(b);
-	(void)a;
-}
-
-void
-	op_rotate_x(t_stack *a, t_stack *b)
-{
-	op_rotate_a(a, b);
-	op_rotate_b(a, b);
+	if (!list)
+		return ;
+	list->size = 0;
+	list->first = NULL;
+	list->last = NULL;
 }

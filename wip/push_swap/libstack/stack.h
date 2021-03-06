@@ -27,6 +27,9 @@ void			stack_initialize(t_stack *stack);
 bool			stack_allocate(t_stack *stack, int capacity);
 void			stack_free(t_stack *stack);
 
+bool			stack_copy(t_stack *from, t_stack *to);
+t_stack			*stack_duplicate(t_stack *stack);
+
 int				stack_size(const t_stack *stack);
 bool			stack_empty(const t_stack *stack);
 

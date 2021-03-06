@@ -1,42 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stacks_validate.c                                  :+:      :+:    :+:   */
+/*   stack_copy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/04 13:24:34 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/03/04 13:24:34 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/06 22:30:15 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/06 22:30:15 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdbool.h>
+#include <string.h>
 
-#include "../libstack/stack.h"
-
-static bool
-	is_sorted(const t_stack *stack)
-{
-	int index;
-	int size;
-
-	size = stack_size(stack);
-	if (size <= 1)
-		return (true);
-	index = 1;
-	while (index < size)
-	{
-		if (stack_get(stack, index - 1) < stack_get(stack, index))
-			return (false);
-		index++;
-	}
-	return (true);
-}
+#include "stack.h"
 
 bool
-	stacks_validate(const t_stack *a, const t_stack *b)
+	stack_copy(t_stack *from, t_stack *to)
 {
-	if (!stack_empty(b))
+	if (!from || !to)
+		return (NULL);
+	if (!stack_allocate(to, from->capacity))
+	{
+		stack_free(to);
 		return (false);
-	return (is_sorted(a));
+	}
+	memcpy(to->elements, from->elements, sizeof(int) * from->capacity);
+	to->size = from->size;
+	return (true);
 }

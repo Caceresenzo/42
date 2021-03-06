@@ -1,20 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operation_find.c                                   :+:      :+:    :+:   */
+/*   list_for_each.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/04 12:02:22 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/03/04 12:02:22 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/06 23:44:54 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/06 23:44:54 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libstack/stack.h"
-#include "op_struct.h"
+#include "list.h"
 
 void
-	operation_call(const t_op *op, t_stack *a, t_stack *b)
+	list_for_each(t_list *list, void (*consumer)(void*))
 {
-	(*(op->operation))(a, b);
+	t_list_node *node;
+
+	if (!list || !consumer)
+		return ;
+	node = list->first;
+	while (node)
+	{
+		(*(consumer))(node->data);
+		node = node->next;
+	}
 }

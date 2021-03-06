@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_impl_reverse_rotate.c                           :+:      :+:    :+:   */
+/*   push.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,31 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libstack/stack.h"
+#include "../../../libstack/stack.h"
 
 void
-	opi_reverse_rotate(t_stack *x)
+	opi_push(t_stack *from, t_stack *to)
 {
-	stack_reverse_rotate(x);
+	if (stack_size(from) < 1)
+		return ;
+	stack_push(to, stack_pop(from));
 }
 
 void
-	op_reverse_rotate_a(t_stack *a, t_stack *b)
+	op_push_a(t_stack *a, t_stack *b)
 {
-	opi_reverse_rotate(a);
-	(void)b;
+	opi_push(b, a);
 }
 
 void
-	op_reverse_rotate_b(t_stack *a, t_stack *b)
+	op_push_b(t_stack *a, t_stack *b)
 {
-	opi_reverse_rotate(b);
-	(void)a;
-}
-
-void
-	op_reverse_rotate_x(t_stack *a, t_stack *b)
-{
-	op_reverse_rotate_a(a, b);
-	op_reverse_rotate_b(a, b);
+	opi_push(a, b);
 }

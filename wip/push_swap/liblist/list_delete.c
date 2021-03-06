@@ -1,33 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   op_impl_push.c                                     :+:      :+:    :+:   */
+/*   list_delete.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/04 11:09:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2021/03/04 11:09:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/06 21:35:08 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/06 21:35:08 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libstack/stack.h"
+#include "list.h"
 
 void
-	opi_push(t_stack *from, t_stack *to)
+	list_delete(t_list *list, void (*del)(void*))
 {
-	if (stack_size(from) < 1)
+	t_list_node *node;
+	t_list_node *next;
+
+	if (!list)
 		return ;
-	stack_push(to, stack_pop(from));
-}
-
-void
-	op_push_a(t_stack *a, t_stack *b)
-{
-	opi_push(b, a);
-}
-
-void
-	op_push_b(t_stack *a, t_stack *b)
-{
-	opi_push(a, b);
+	node = list->first;
+	while (node)
+	{
+		next = node->next;
+		list_node_delete(node, del);
+		node = next;
+	}
+	list_initialize(list);
 }

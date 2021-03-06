@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   operation_find.c                                   :+:      :+:    :+:   */
+/*   find.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,43 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "../../libstack/stack.h"
+#include "../push_swap.h"
 
-#include "op_impls.h"
-#include "op_struct.h"
-
-static t_op
-	*operation_storage(void)
+void
+	operation_call(const t_op *op, t_stack *a, t_stack *b)
 {
-	static t_op storage[] = {
-		{ "sa", op_swap_a },
-		{ "sb", op_swap_b },
-		{ "ss", op_swap_x },
-		{ "pa", op_push_a },
-		{ "pb", op_push_b },
-		{ "ra", op_rotate_a },
-		{ "rb", op_rotate_b },
-		{ "rr", op_rotate_x },
-		{ "rra", op_reverse_rotate_a },
-		{ "rrb", op_reverse_rotate_b },
-		{ "rrr", op_reverse_rotate_x },
-		{ NULL, NULL },
-	};
-
-	return (storage);
-}
-
-const t_op
-	*operation_find(const char *name)
-{
-	t_op *op;
-
-	op = operation_storage();
-	while (op->name)
-	{
-		if (strcmp(op->name, name) == 0)
-			return (op);
-		op++;
-	}
-	return (NULL);
+	(*(op->operation))(a, b);
 }

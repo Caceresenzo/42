@@ -1,5 +1,7 @@
 SOURCES += \
 	libstack/stack_allocate.c \
+	libstack/stack_copy.c \
+	libstack/stack_duplicate.c \
 	libstack/stack_empty.c \
 	libstack/stack_free.c \
 	libstack/stack_get.c \
