@@ -1,34 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pop_front_rvalue.pass.cpp                          :+:      :+:    :+:   */
+/*   incomplete_type.pass.cpp                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/08 14:03:25 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/08 14:03:25 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unit_list.hpp>
 
+struct A {
+    LIST<A> l;
+    LIST<A>::iterator it;
+    LIST<A>::const_iterator cit;
+    LIST<A>::reverse_iterator rit;
+    LIST<A>::const_reverse_iterator crit;
+};
+
+struct B {
+    LIST<Aware<B> > l;
+    LIST<Aware<B> >::iterator it;
+    LIST<Aware<B> >::const_iterator cit;
+    LIST<Aware<B> >::reverse_iterator rit;
+    LIST<Aware<B> >::const_reverse_iterator crit;
+};
+
 int
 main(void)
 {
-	{
-		LIST<Aware<int> > l1;
+    {
+        A a;
+    }
 
-		l1.push_back(Aware<int>(1));
-		ASSERT(l1.size() == 1);
-		ASSERT(l1.front() == Aware<int>(1));
+    {
+        B b;
+    }
 
-		l1.push_back(Aware<int>(2));
-		ASSERT(l1.size() == 2);
-		ASSERT(l1.front() == Aware<int>(1));
-		ASSERT(l1.back() == Aware<int>(2));
-	}
-
-	ASSERT_AWARE_ZERO();
-
-	return 0;
+    ASSERT_AWARE_ZERO();
 }

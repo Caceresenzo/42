@@ -110,6 +110,12 @@ template<class T>
 				return (_x == right._x);
 			}
 
+			bool
+			operator <(const Aware &right) const
+			{
+				return (_x < right._x);
+			}
+
 			const T&
 			x() const
 			{
@@ -122,6 +128,13 @@ template<class T>
 				_x = x;
 			}
 	};
+
+template<class T>
+	std::ostream&
+	operator <<(std::ostream &out, const Aware<T> &aware)
+	{
+		return (out << "Aware(" << aware.x() << ");");
+	}
 
 template<typename T>
 	class SimpleIterator :

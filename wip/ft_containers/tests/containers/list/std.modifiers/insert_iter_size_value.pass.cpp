@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pop_front_rvalue.pass.cpp                          :+:      :+:    :+:   */
+/*   insert_iter_size_value.pass.cpp                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -16,19 +16,15 @@ int
 main(void)
 {
 	{
-		LIST<Aware<int> > l1;
+		int a1[] = { 1, 2, 3 };
+		int a2[] = { 1, 4, 4, 4, 4, 4, 2, 3 };
 
-		l1.push_back(Aware<int>(1));
-		ASSERT(l1.size() == 1);
-		ASSERT(l1.front() == Aware<int>(1));
-
-		l1.push_back(Aware<int>(2));
-		ASSERT(l1.size() == 2);
-		ASSERT(l1.front() == Aware<int>(1));
-		ASSERT(l1.back() == Aware<int>(2));
+		LIST<Aware<int> > l1(a1, a1 + 3);
+		l1.insert(NEXT(l1.begin()), 5, Aware<int>(4));
+		ASSERT(l1 == LIST<Aware<int> >(a2, a2 + 8));
 	}
 
 	ASSERT_AWARE_ZERO();
 
-	return 0;
+	return (0);
 }

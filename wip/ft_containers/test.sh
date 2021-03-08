@@ -24,14 +24,59 @@ CONTAINERS_DIR=$TEST_DIR/containers
 
 TEST_STD=0
 NOTIFY_WHICH=0
+FSANITIZE=0
+ERROR_LIMIT=1
 CONTAINERS=
+CATEGORIES=
+TESTS=
+COMPILER=g++
+
+function print_help()
+{
+	echo "ft_containers testing script"
+	echo " (by ecaceres, tests are adapted from official libc++ repository)"
+	echo
+	echo
+	echo " -s, --std"
+	echo "    use std:: instead of ft::"
+	echo
+	echo " -n, --notify"
+	echo "    notify with a compiler warning which namespace will be used"
+	echo
+	echo " -c, --container <name>"
+	echo "    specify container to test (all if none is provided)"
+	echo
+	echo " -k, --category <name>"
+	echo "    specify category to test (all if none is provided)"
+	echo
+	echo " -t, --test <name>"
+	echo "    specify test to do (all if none is provided)"
+	echo
+	echo " -f, --fsanitize"
+	echo "    compile with -fsanitize=address"
+	echo
+	echo " -l, --error-limit <value>"
+	echo "    compile with -ferror-limit=<value> (default: 1)"
+	echo
+	echo " -C, --compiler <executable>"
+	echo "    change compiler (default: g++)"
+	echo
+	echo " -h, --help"
+	echo "    display this help message"
+}
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -s|--std) TEST_STD=1 ;;
-        -n|--std) NOTIFY_WHICH=1 ;;
-        -c|--std) CONTAINERS=$2; shift ;;
-        *) echo "Unknown parameter: $1"; exit 1 ;;
+        -n|--notify) NOTIFY_WHICH=1 ;;
+        -c|--container) CONTAINERS+="$2 "; shift ;;
+        -k|--category) CATEGORIES+="$2 "; shift ;;
+        -t|--test) TESTS+="$2 "; shift ;;
+        -f|--fsanitize) FSANITIZE=1 ;;
+        -l|--error-limit) ERROR_LIMIT=$2; shift ;;
+        -C|--compiler) COMPILER=$2; shift ;;
+        -h|--help) print_help; exit 0 ;;
+        *) echo "unknown parameter: $1"; echo "use --help for more info"; exit 1 ;;
     esac
     shift
 done
@@ -42,7 +87,7 @@ do
 	printf $C_TREE". "$C_CONTAINER"%s"$C_RESET"\n" "$container"
 	
 	if [[ ! -z "$CONTAINERS" ]]; then
-		if [[ $container != *"$CONTAINERS"* ]]; then
+		if [[ "$CONTAINERS" != *"$container"* ]]; then
 			printf $C_TREE"   |-- "$C_IGNORED"ignored..."$C_RESET"\n"
 			continue
 		fi
@@ -52,6 +97,13 @@ do
 	do
 		category=$(basename "$category_path")
 		printf $C_TREE"   |-- "$C_CATEGORY"%s"$C_RESET"\n" "$category"
+		
+		if [[ ! -z "$CATEGORIES" ]]; then
+			if [[ "$CATEGORIES" != *"$category"* ]]; then
+				printf $C_TREE"   |    |-- "$C_IGNORED"ignored..."$C_RESET"\n"
+				continue
+			fi
+		fi
 
 		for test_file in $category_path/*.cpp
 		do
@@ -60,9 +112,28 @@ do
 			test_success=$(echo $test | awk -F . '{ print $2 }')
 			test_bin=/tmp/"$test".out
 			
+			if [[ ! -z "$TESTS" ]]; then
+				if [[ "$TESTS" != *"$test_name"* ]]; then
+					printf $C_TREE"   |    |-- "$C_IGNORED"ignored "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET"\n" "$test_name"
+					continue
+				fi
+			fi
+			
 			printf $C_TREE"   |    |-- "$C_TEST"Compiling "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET "$test"
 			
-			clang++ -ferror-limit=1 -std=c++98 -g3 -fsanitize=address -Wall -Wextra -Werror -I. -Itests/support -DTEST_USE_STD=$TEST_STD -DNOTIFY_WHICH=$NOTIFY_WHICH $test_file -o $test_bin
+			fsanitize_flag=
+			if [[ $FSANITIZE = 1 ]]; then
+				fsanitize_flag+="-fsanitize=address"
+			fi
+		
+			compiler_error_limit_flag=
+			if [[ $compiler = "clang++" ]]; then
+				compiler_error_limit_flag+=-ferror-limit="$ERROR_LIMIT"
+			elif [[ $compiler = "g++" ]]; then
+				compiler_error_limit_flag+=-fmax-errors="$ERROR_LIMIT"
+			fi
+			
+			$COMPILER $compiler_error_limit_flag -std=c++98 -g3 $fsanitize_flag -Wall -Wextra -Werror -I. -Itests/support -DTEST_USE_STD=$TEST_STD -DNOTIFY_WHICH=$NOTIFY_WHICH $test_file -o $test_bin
 			compiled_exit_code=$?
 
 			expected_exit_code=0

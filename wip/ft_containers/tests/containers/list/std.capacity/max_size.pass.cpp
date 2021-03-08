@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pop_front_rvalue.pass.cpp                          :+:      :+:    :+:   */
+/*   max_size.pass.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/08 13:20:24 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/08 13:20:24 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <limits>
 
 #include <unit_list.hpp>
 
 int
-main(void)
+main(int, char**)
 {
 	{
-		LIST<Aware<int> > l1;
-
-		l1.push_back(Aware<int>(1));
-		ASSERT(l1.size() == 1);
-		ASSERT(l1.front() == Aware<int>(1));
-
-		l1.push_back(Aware<int>(2));
-		ASSERT(l1.size() == 2);
-		ASSERT(l1.front() == Aware<int>(1));
-		ASSERT(l1.back() == Aware<int>(2));
+		typedef LIST<char> C;
+		const C::size_type max_dist = static_cast<C::size_type>(std::numeric_limits<C::difference_type>::max());
+		C c;
+		ASSERT(c.max_size() <= max_dist);
 	}
 
-	ASSERT_AWARE_ZERO();
+	{
+		typedef LIST<Aware<long> > C;
+		const C::size_type max_dist = static_cast<C::size_type>(std::numeric_limits<C::difference_type>::max());
+		C c;
+		ASSERT(c.max_size() <= max_dist);
+	}
 
 	return 0;
 }

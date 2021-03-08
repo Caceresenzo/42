@@ -1,34 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pop_front_rvalue.pass.cpp                          :+:      :+:    :+:   */
+/*   Functional.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/02/03 12:44:07 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/02/03 12:44:07 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unit_list.hpp>
+#ifndef FUNCTIONAL_H
+# define FUNCTIONAL_H
 
-int
-main(void)
+namespace ft
 {
-	{
-		LIST<Aware<int> > l1;
+	template<class T>
+		struct less
+		{
+			public:
+				bool
+				operator()(const T &lhs, const T &rhs) const
+				{
+					return (lhs < rhs);
+				}
+		};
 
-		l1.push_back(Aware<int>(1));
-		ASSERT(l1.size() == 1);
-		ASSERT(l1.front() == Aware<int>(1));
-
-		l1.push_back(Aware<int>(2));
-		ASSERT(l1.size() == 2);
-		ASSERT(l1.front() == Aware<int>(1));
-		ASSERT(l1.back() == Aware<int>(2));
-	}
-
-	ASSERT_AWARE_ZERO();
-
-	return 0;
+	template<class T>
+		struct equal_to
+		{
+			public:
+				bool
+				operator()(const T &lhs, const T &rhs) const
+				{
+					return (lhs == rhs);
+				}
+		};
 }
+
+#endif

@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pop_front_rvalue.pass.cpp                          :+:      :+:    :+:   */
+/*   unique.pass.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/08/26 17:35:33 by ecaceres          #+#    #+#             */
-/*   Updated: 2020/08/26 17:35:33 by ecaceres         ###   ########.fr       */
+/*   Created: 2021/03/08 22:43:41 by ecaceres          #+#    #+#             */
+/*   Updated: 2021/03/08 22:43:41 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unit_list.hpp>
 
+bool g(Aware<int> x, Aware<int> y)
+{
+    return (x == y);
+}
+
 int
 main(void)
 {
-	{
-		LIST<Aware<int> > l1;
+    {
+		int a1[] = { 2, 1, 1, 4, 4, 4, 4, 3, 3 };
+		int a2[] = { 2, 1, 4, 3 };
 
-		l1.push_back(Aware<int>(1));
-		ASSERT(l1.size() == 1);
-		ASSERT(l1.front() == Aware<int>(1));
+		LIST<Aware<int> > c(a1, a1 + sizeof(a1) / sizeof(a1[0]));
 
-		l1.push_back(Aware<int>(2));
-		ASSERT(l1.size() == 2);
-		ASSERT(l1.front() == Aware<int>(1));
-		ASSERT(l1.back() == Aware<int>(2));
+		c.unique(g);
+		ASSERT(c == LIST<Aware<int> >(a2, a2 + sizeof(a2) / sizeof(a2[0])));
 	}
 
 	ASSERT_AWARE_ZERO();
-
-	return 0;
 }

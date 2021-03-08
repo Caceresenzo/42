@@ -13,9 +13,12 @@
 #ifndef LIST_HPP_
 # define LIST_HPP_
 
-# include <memory>
-# include "Iterator.hpp"
-# include "Algorithm.hpp"
+#include <Algorithm.hpp>
+#include <Functional.hpp>
+#include <Iterator.hpp>
+#include <cstddef>
+#include <iostream>
+#include <memory>
 
 namespace ft
 {
@@ -84,6 +87,16 @@ namespace ft
 				to->previous() = this;
 			}
 
+			void
+			connect_next(BaseListNode *to)
+			{
+				to->next() = next();
+				to->previous() = this;
+
+				next()->previous() = to;
+				next() = to;
+			}
+
 			BaseListNode*
 			disconnect(void)
 			{
@@ -94,6 +107,39 @@ namespace ft
 
 				return (this);
 			}
+
+			void
+			transfer(BaseListNode *const first, BaseListNode *const last) _GLIBCXX_USE_NOEXCEPT
+			{
+				// from: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=libstdc%2B%2B-v3/src/c%2B%2B98/list.cc;hb=6bbf0dec66c0e719b06cd2fe67559fda6df09000
+				if (this != last)
+				{
+					// Remove [first, last) from its old position.
+					last->previous()->next() = this;
+					first->previous()->next() = last;
+					this->previous()->next() = first;
+
+					// Splice [first, last) into its new position.
+					BaseListNode *const tmp = this->previous();
+					this->previous() = last->previous();
+					last->previous() = first->previous();
+					first->previous() = tmp;
+				}
+			}
+
+			void
+			reverse()
+			{
+				BaseListNode *node = this;
+
+				do
+				{
+					ft::swap(node->next(), node->previous());
+
+					node = node->previous(); /* was `next` before the swap */
+				}
+				while (node != this);
+			}
 	};
 
 	template<>
@@ -102,26 +148,23 @@ namespace ft
 		{
 			if (x.next() != &x)
 			{
-				if (y.next() != &y)
+				if (y.next() != &y) /* Both x and y are not empty. */
 				{
-					// Both x and y are not empty.
 					ft::swap(x.next(), y.next());
 					ft::swap(x.previous(), y.previous());
 					x.next()->previous() = x.previous()->next() = &x;
 					y.next()->previous() = y.previous()->next() = &y;
 				}
-				else
+				else /* x is not empty, y is empty. */
 				{
-					// x is not empty, y is empty.
 					y.next() = x.next();
 					y.previous() = x.previous();
 					y.next()->previous() = y.previous()->next() = &y;
 					x.next() = x.previous() = &x;
 				}
 			}
-			else if (y.next() != &y)
+			else if (y.next() != &y) /* x is empty, y is not empty. */
 			{
-				// x is empty, y is not empty.
 				x.next() = y.next();
 				x.previous() = y.previous();
 				x.next()->previous() = x.previous()->next() = &x;
@@ -180,7 +223,7 @@ namespace ft
 
 				template<typename U>
 					ListNormalIterator(const ListNormalIterator<U> &other) :
-							_node(other.base())
+							_node(other.node())
 					{
 					}
 
@@ -282,13 +325,13 @@ namespace ft
 
 				template<typename U>
 					ListConstIterator(const ListNormalIterator<U> &other) :
-							_node(other.base())
+							_node(other.node())
 					{
 					}
 
 				template<typename U>
 					ListConstIterator(const ListConstIterator<U> &other) :
-							_node(other.base())
+							_node(other.node())
 					{
 					}
 
@@ -412,6 +455,34 @@ namespace ft
 	template<typename T, typename U>
 		inline bool
 		operator!=(const ListConstIterator<T> &lhs, const ListConstIterator<U> &rhs)
+		{
+			return (!(lhs.node() == rhs.node()));
+		}
+
+	template<typename T>
+		inline bool
+		operator==(const ListConstIterator<T> &lhs, const ListNormalIterator<T> &rhs)
+		{
+			return (lhs.node() == rhs.node());
+		}
+
+	template<typename T, typename U>
+		inline bool
+		operator==(const ListConstIterator<T> &lhs, const ListNormalIterator<U> &rhs)
+		{
+			return (lhs.node() == rhs.node());
+		}
+
+	template<typename T>
+		inline bool
+		operator!=(const ListConstIterator<T> &lhs, const ListNormalIterator<T> &rhs)
+		{
+			return (!(lhs.node() == rhs.node()));
+		}
+
+	template<typename T, typename U>
+		inline bool
+		operator!=(const ListConstIterator<T> &lhs, const ListNormalIterator<U> &rhs)
 		{
 			return (!(lhs.node() == rhs.node()));
 		}
@@ -605,6 +676,12 @@ namespace ft
 					return (length);
 				}
 
+				size_type
+				max_size() const
+				{
+					return (_allocator.max_size());
+				}
+
 				reference
 				front()
 				{
@@ -655,7 +732,7 @@ namespace ft
 				void
 				push_front(const value_type &val)
 				{
-					create_node(val)->connect(_base.next());
+					create_node(val)->connect(_base.next()); // TODO Protect memory
 				}
 
 				void
@@ -667,7 +744,7 @@ namespace ft
 				void
 				push_back(const value_type &val)
 				{
-					create_node(val)->connect(_base.previous()->next());
+					create_node(val)->connect(&_base);
 				}
 
 				void
@@ -681,54 +758,22 @@ namespace ft
 				{
 					insert(position, 1, val);
 
-					return (iterator(position.node()->next()));
+					return (iterator(static_cast<Node*>(position.node()->next())));
 				}
 
 				void
 				insert(iterator position, size_type n, const value_type &val)
 				{
-					if (n)
-					{
-						List l;
-
-						iterator it = begin();
-
-						while (it != position)
-							l.push_back(*it++);
-
-						while (n--)
-							l.push_back(val);
-
-						iterator ite = end();
-						while (it != ite)
-							l.push_back(*it++);
-
-						swap(l);
-					}
+					List lst(n, val, _allocator);
+					splice(position, lst);
 				}
 
 				template<class InputIterator>
 					void
 					insert(iterator position, InputIterator first, InputIterator last)
 					{
-						if (first != last)
-						{
-							List l;
-
-							iterator it = begin();
-
-							while (it != position)
-								l.push_back(*it++);
-
-							while (first != last)
-								l.push_back(*first++);
-
-							iterator ite = end();
-							while (it != ite)
-								l.push_back(*it++);
-
-							swap(l);
-						}
+						List lst(first, last, _allocator);
+						splice(position, lst);
 					}
 
 				iterator
@@ -779,6 +824,139 @@ namespace ft
 				clear()
 				{
 					erase(begin(), end());
+				}
+
+				void
+				splice(iterator position, List &x)
+				{
+					if (!x.empty())
+						position.node()->transfer(x.begin().node(), x.end().node());
+				}
+
+				void
+				splice(iterator position, List &x, iterator i);
+
+				void
+				splice(iterator position, List &x, iterator first, iterator last);
+
+				void
+				remove(const value_type &val)
+				{
+					iterator it = this->begin();
+					iterator end = this->end();
+					iterator input = end;
+
+					if (it == end)
+						return; /* empty */
+
+					while (it != end)
+					{
+						if (*it == val)
+						{
+							if (&val == &*it)
+								input = it++; /* avoid deleting if item is one the list */
+							else
+								it = erase(it);
+						}
+						else
+							it++;
+					}
+
+					if (input != end)
+						erase(input);
+				}
+
+				template<class Predicate>
+					void
+					remove_if(Predicate pred)
+					{
+						iterator it = this->begin();
+						iterator end = this->end();
+
+						if (it == end)
+							return; /* empty */
+
+						while (it != end)
+						{
+							if (pred(*it))
+								it = erase(it);
+							else
+								it++;
+						}
+					}
+
+				void
+				unique()
+				{
+					unique(ft::equal_to<value_type>());
+				}
+
+				template<class BinaryPredicate>
+					void
+					unique(BinaryPredicate binary_pred)
+					{
+						iterator it = this->begin();
+						iterator end = this->end();
+
+						if (it == end || ++it == end)
+							return; /* empty, or single element */
+
+						while (it != end)
+						{
+							iterator previous = it;
+							--previous;
+
+							if (binary_pred(*it, *previous))
+								it = erase(it);
+							else
+								it++;
+						}
+					}
+
+				void
+				sort()
+				{
+					sort(ft::less<value_type>());
+				}
+
+				template<class Compare>
+					void
+					sort(Compare comp)
+					{
+						BaseListNode *start = _base.next();
+
+						if (start == &_base)
+							return; /* empty */
+
+						bool swapped;
+						do
+						{
+							swapped = false;
+							BaseListNode *node = start;
+
+							while (node->next() != start)
+							{
+								BaseListNode *next = node->next();
+
+								if (!comp(static_cast<Node*>(node)->data(), static_cast<Node*>(next)->data()))
+								{
+									std::cout << static_cast<Node*>(node)->data() << " -- " << static_cast<Node*>(next)->data() << std::endl;
+									ft::swap(*node, *next);
+									swapped = true;
+								}
+								else
+									node = next;
+							}
+
+							start = node;
+						}
+						while (swapped);
+					}
+
+				void
+				reverse()
+				{
+					_base.reverse();
 				}
 		};
 

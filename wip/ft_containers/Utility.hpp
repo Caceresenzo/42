@@ -94,6 +94,82 @@ namespace ft
 
 			return (dest_last);
 		}
+
+	/**
+	 * This class couples together a pair of values, which may be of different types (T1 and T2). The individual values can be accessed through its public members first and second.
+	 *
+	 * @tparam T1 Type of member first, aliased as first_type.
+	 * @tparam T2 Type of member second, aliased as second_type.
+	 */
+	template<class T1, class T2>
+		struct pair
+		{
+			public:
+				/** The first template parameter (T1). */
+				typedef T1 first_type;
+
+				/** The second template parameter (T2). */
+				typedef T2 second_type;
+
+			public:
+				first_type first;
+				second_type second;
+
+			public:
+				/**
+				 * Constructs a pair object with its elements value-initialized.
+				 */
+				pair()
+				{
+				}
+
+				/**
+				 * The object is initialized with the contents of the pr pair object.
+				 *
+				 * @param pr Another pair object.
+				 */
+				template<class U, class V>
+					pair(const pair<U, V> &pr) :
+							first(pr.first),
+							second(pr.second)
+					{
+					}
+
+				/**
+				 *
+				 * @param a An object of the type of first, or some other type implicitly convertible to it.
+				 * @param b An object of the type of second, or some other type implicitly convertible to it.
+				 */
+				pair(const first_type &a, const second_type &b) :
+						first(a),
+						second(b)
+				{
+				}
+
+				pair&
+				operator=(const pair &pr)
+				{
+					first = pr.first;
+					second = pr.second;
+
+					return (*this);
+				}
+		};
+
+	/**
+	 * Constructs a pair object with its first element set to x and its second element set to y.
+	 *
+	 * @tparam T1 Type of member first.
+	 * @tparam T2 Type of member second.
+	 * @param x Value for the first member of the pair object being constructed.
+	 * @param y Value for the second member of the pair object being constructed.
+	 */
+	template<class T1, class T2>
+		pair<T1, T2>
+		make_pair(T1 x, T2 y)
+		{
+			return (pair<T1, T2>(x, y));
+		}
 }
 
 #endif /* FT_UTILITY_HPP_ */
