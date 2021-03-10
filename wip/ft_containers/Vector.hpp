@@ -269,7 +269,7 @@ namespace ft
 				 * Because the ranges used by functions of the standard library do not include the element pointed by their closing iterator, this function is often used in combination with vector::begin to specify a range including all the elements in the container.
 				 * If the container is empty, this function returns the same as vector::begin.
 				 *
-				 * @return An const-qualified iterator to the element past the end of the sequence.
+				 * @return A const-qualified iterator to the element past the end of the sequence.
 				 */
 				const_iterator
 				end() const

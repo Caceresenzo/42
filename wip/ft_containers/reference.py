@@ -8,10 +8,10 @@ C_PROTOTYPE2_REGEX = r"<div class=\"C_prototype\"><div class=\"C_SwitchCases\">[
 
 CONTAINERS = [
 #    "list",
-    "vector",
+#    "vector",
 #    "map",
 #    "stack",
-#    "deque"
+    "deque"
 ]
 
 REFERENCE_URL = "https://www.cplusplus.com"

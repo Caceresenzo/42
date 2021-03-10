@@ -140,37 +140,64 @@ namespace ft
 				}
 				while (node != this);
 			}
-	};
 
-	template<>
-		void
-		swap(BaseListNode &x, BaseListNode &y)
-		{
-			if (x.next() != &x)
+			static void
+			//		swap(BaseListNode &x, BaseListNode &y)
+			swap(BaseListNode &__x, BaseListNode &__y)
 			{
-				if (y.next() != &y) /* Both x and y are not empty. */
+				if (__x.next() != &__x)
 				{
-					ft::swap(x.next(), y.next());
-					ft::swap(x.previous(), y.previous());
-					x.next()->previous() = x.previous()->next() = &x;
-					y.next()->previous() = y.previous()->next() = &y;
+					if (__y.next() != &__y)
+					{
+						// Both __x and __y are not empty.
+						ft::swap(__x.next(), __y.next());
+						ft::swap(__x.previous(), __y.previous());
+						__x.next()->previous() = __x.previous()->next() = &__x;
+						__y.next()->previous() = __y.previous()->next() = &__y;
+					}
+					else
+					{
+						// __x is not empty, __y is empty.
+						__y.next() = __x.next();
+						__y.previous() = __x.previous();
+						__y.next()->previous() = __y.previous()->next() = &__y;
+						__x.next() = __x.previous() = &__x;
+					}
 				}
-				else /* x is not empty, y is empty. */
+				else if (__y.next() != &__y)
 				{
-					y.next() = x.next();
-					y.previous() = x.previous();
-					y.next()->previous() = y.previous()->next() = &y;
-					x.next() = x.previous() = &x;
+					// __x is empty, __y is not empty.
+					__x.next() = __y.next();
+					__x.previous() = __y.previous();
+					__x.next()->previous() = __x.previous()->next() = &__x;
+					__y.next() = __y.previous() = &__y;
 				}
+				//			if (x.next() != &x)
+				//			{
+				//				if (y.next() != &y) /* Both x and y are not empty. */
+				//				{
+				//					ft::swap(x.next(), y.next());
+				//					ft::swap(x.previous(), y.previous());
+				//					x.next()->previous() = x.previous()->next() = &x;
+				//					y.next()->previous() = y.previous()->next() = &y;
+				//				}
+				//				else /* x is not empty, y is empty. */
+				//				{
+				//					y.next() = x.next();
+				//					y.previous() = x.previous();
+				//					y.next()->previous() = y.previous()->next() = &y;
+				//					x.next() = x.previous() = &x;
+				//				}
+				//			}
+				//			else if (y.next() != &y) /* x is empty, y is not empty. */
+				//			{
+				//				x.next() = y.next();
+				//				x.previous() = y.previous();
+				//				x.next()->previous() = x.previous()->next() = &x;
+				//				y.next() = y.previous() = &y;
+				//			}
 			}
-			else if (y.next() != &y) /* x is empty, y is not empty. */
-			{
-				x.next() = y.next();
-				x.previous() = y.previous();
-				x.next()->previous() = x.previous()->next() = &x;
-				y.next() = y.previous() = &y;
-			}
-		}
+	};
 
 	template<typename T>
 		class ListNode :
@@ -286,6 +313,12 @@ namespace ft
 				operator->() const
 				{
 					return (&static_cast<Node*>(_node)->data());
+				}
+
+				Node*
+				node()
+				{
+					return (_node);
 				}
 
 				Node*
@@ -607,24 +640,54 @@ namespace ft
 					return (*this);
 				}
 
+				/**
+				 * Returns an iterator pointing to the first element in the list container.
+				 * Notice that, unlike member ::front, which returns a reference to the first element, this function returns a bidirectional iterator pointing to it.
+				 * If the container is empty, the returned iterator value shall not be dereferenced.
+				 *
+				 * @return An iterator to the beginning of the sequence container.
+				 */
 				iterator
 				begin()
 				{
 					return (iterator(static_cast<Node*>(_base.next())));
 				}
 
+				/**
+				 * Returns an iterator pointing to the first element in the list container.
+				 * Notice that, unlike member ::front, which returns a reference to the first element, this function returns a bidirectional iterator pointing to it.
+				 * If the container is empty, the returned iterator value shall not be dereferenced.
+				 *
+				 * @return A const-qualified iterator to the beginning of the sequence container.
+				 */
 				const_iterator
 				begin() const
 				{
 					return (const_iterator(static_cast<Node*>(_base.next())));
 				}
 
+				/**
+				 * Returns an iterator referring to the past-the-end element in the list container.
+				 * The past-the-end element is the theoretical element that would follow the last element in the list container. It does not point to any element, and thus shall not be dereferenced.
+				 * Because the ranges used by functions of the standard library do not include the element pointed by their closing iterator, this function is often used in combination with ::begin to specify a range including all the elements in the container.
+				 * If the container is empty, this function returns the same as ::begin.
+				 *
+				 * An iterator to the element past the end of the sequence.
+				 */
 				iterator
 				end()
 				{
 					return (iterator(static_cast<Node*>(&_base)));
 				}
 
+				/**
+				 * Returns an iterator referring to the past-the-end element in the list container.
+				 * The past-the-end element is the theoretical element that would follow the last element in the list container. It does not point to any element, and thus shall not be dereferenced.
+				 * Because the ranges used by functions of the standard library do not include the element pointed by their closing iterator, this function is often used in combination with ::begin to specify a range including all the elements in the container.
+				 * If the container is empty, this function returns the same as ::begin.
+				 *
+				 * A const-qualified iterator to the element past the end of the sequence.
+				 */
 				const_iterator
 				end() const
 				{
@@ -637,11 +700,11 @@ namespace ft
 					return (reverse_iterator(end()));
 				}
 
-//				const_reverse_iterator
-//				rbegin() const
-//				{
-//					return (const_reverse_iterator(reverse_iterator(end())));
-//				}
+				const_reverse_iterator
+				rbegin() const
+				{
+					return (const_reverse_iterator(end()));
+				}
 
 				reverse_iterator
 				rend()
@@ -649,57 +712,94 @@ namespace ft
 					return (reverse_iterator(begin()));
 				}
 
-//				const_reverse_iterator
-//				rend() const
-//				{
-//					return (const_reverse_iterator(reverse_iterator(begin())));
-//				}
+				const_reverse_iterator
+				rend() const
+				{
+					return (const_reverse_iterator(end()));
+				}
 
+				/**
+				 * Returns whether the list container is empty (i.e. whether its size is 0).
+				 * This function does not modify the container in any way. To clear the content of a list container, see ::clear.
+				 *
+				 * @return true if the container size is 0, false otherwise.
+				 */
 				bool
 				empty() const
 				{
 					return (_base.next() == &_base);
 				}
 
+				/**
+				 * Returns the number of elements in the list container.
+				 *
+				 * @return The number of elements in the container.
+				 */
 				size_type
 				size() const
 				{
-					size_type length = 0;
-					BaseListNode *node = _base.next();
-
-					while (node != &_base)
-					{
-						length++;
-						node = node->next();
-					}
-
-					return (length);
+					return (ft::distance(begin(), end()));
 				}
 
+				/**
+				 * Returns the maximum number of elements that the list container can hold.
+				 * This is the maximum potential size the container can reach due to known system or library implementation limitations, but the container is by no means guaranteed to be able to reach that size: it can still fail to allocate storage at any point before that size is reached.
+				 *
+				 * @return The maximum number of elements the object can hold as content.
+				 */
 				size_type
 				max_size() const
 				{
 					return (_allocator.max_size());
 				}
 
+				/**
+				 * Returns a reference to the first element in the list container.
+				 * Unlike member list::begin, which returns an iterator to this same element, this function returns a direct reference.
+				 * Calling this function on an empty container causes undefined behavior.
+				 *
+				 * @return A reference to the first element in the list container.
+				 */
 				reference
 				front()
 				{
 					return (*begin());
 				}
 
+				/**
+				 * Returns a reference to the first element in the list container.
+				 * Unlike member list::begin, which returns an iterator to this same element, this function returns a direct reference.
+				 * Calling this function on an empty container causes undefined behavior.
+				 *
+				 * @return A const-qualified reference to the first element in the list container.
+				 */
 				const_reference
 				front() const
 				{
 					return (*begin());
 				}
 
+				/**
+				 * Returns a reference to the last element in the list container.
+				 * Unlike member list::end, which returns an iterator just past this element, this function returns a direct reference.
+				 * Calling this function on an empty container causes undefined behavior.
+				 *
+				 * @return A reference to the last element in the list.
+				 */
 				reference
 				back()
 				{
 					return (*(--end()));
 				}
 
+
+				/**
+				 * Returns a reference to the last element in the list container.
+				 * Unlike member list::end, which returns an iterator just past this element, this function returns a direct reference.
+				 * Calling this function on an empty container causes undefined behavior.
+				 *
+				 * @return A  const-qualified reference to the last element in the list.
+				 */
 				const_reference
 				back() const
 				{
@@ -806,7 +906,7 @@ namespace ft
 				void
 				swap(List &x)
 				{
-					ft::swap(_base, x._base);
+					BaseListNode::swap(_base, x._base);
 				}
 
 				void
@@ -834,10 +934,25 @@ namespace ft
 				}
 
 				void
-				splice(iterator position, List &x, iterator i);
+				splice(iterator position, List &x, iterator i)
+				{
+					iterator next = i;
+					++next;
+
+					if (i != next) /* check of emptiness at the same time */
+						position.node()->transfer(i.node(), ft::next(i).node());
+
+					(void)x;
+				}
 
 				void
-				splice(iterator position, List &x, iterator first, iterator last);
+				splice(iterator position, List &x, iterator first, iterator last)
+				{
+					if (first != last) /* check of emptiness at the same time */
+						position.node()->transfer(first.node(), last.node());
+
+					(void)x;
+				}
 
 				void
 				remove(const value_type &val)
@@ -923,34 +1038,77 @@ namespace ft
 					void
 					sort(Compare comp)
 					{
-						BaseListNode *start = _base.next();
+						(void)comp;
+					}
+//					{
+//						BaseListNode *current;
+//						BaseListNode *end;
+//						bool swapped;
+//
+////						if (*begin_list == 0)
+////							return;
+//						swapped = true;
+//						end = &_base;
+//						while (swapped)
+//						{
+//							swapped = false;
+//							current = _base.next();
+//							while (current->next() != end)
+//							{
+//								BaseListNode *next = current->next();
+//
+//								std::cout << static_cast<Node*>(current)->data() << " < " << static_cast<Node*>(next)->data() << " = " << (comp(static_cast<Node*>(current)->data(), static_cast<Node*>(next)->data())) << std::endl;
+//
+//								if (!comp(static_cast<Node*>(current)->data(), static_cast<Node*>(next)->data()))
+//								{
+//									std::cout << "before swap: next: " << next << "(next: " << next->next() << ", previous: " << next->previous() << ")" << std::endl;
+//									BaseListNode::swap(*next, *current);
+////									ft::swap(static_cast<Node*>(current)->data(), static_cast<Node*>(next)->data());
+//									std::cout << "after  swap: next: " << next << "(next: " << next->next() << ", previous: " << next->previous() << ")" << std::endl;
+//									swapped = true;
+//								}
+//
+////								std::cout << "next: " << next << "(next: " << next->next() << ", previous: " << next->previous() << ")" << std::endl;
+//									current = next;
+//							}
+//							end = current;
+//						}
+//
+//						for (iterator it = begin(); it != this->end(); it++)
+//							std::cout << "{}= " << *it << std::endl;
+//					}
 
-						if (start == &_base)
-							return; /* empty */
+				void
+				merge(List &x)
+				{
+					merge(x, std::less<value_type>());
+				}
 
-						bool swapped;
-						do
+				template<class Compare>
+					void
+					merge(List &x, Compare comp)
+					{
+						if (this == &x || x.empty())
+							return;
+
+						iterator first1 = begin();
+						iterator last1 = end();
+						iterator first2 = x.begin();
+						iterator last2 = x.end();
+						while (first1 != last1 && first2 != last2)
 						{
-							swapped = false;
-							BaseListNode *node = start;
-
-							while (node->next() != start)
+							if (comp(*first2, *first1))
 							{
-								BaseListNode *next = node->next();
-
-								if (!comp(static_cast<Node*>(node)->data(), static_cast<Node*>(next)->data()))
-								{
-									std::cout << static_cast<Node*>(node)->data() << " -- " << static_cast<Node*>(next)->data() << std::endl;
-									ft::swap(*node, *next);
-									swapped = true;
-								}
-								else
-									node = next;
+								iterator next = first2;
+								first1.node()->transfer(first2.node(), (++next).node());
+								first2 = next;
 							}
-
-							start = node;
+							else
+								++first1;
 						}
-						while (swapped);
+
+						if (first2 != last2)
+							last1.node()->transfer(first2.node(), last2.node());
 					}
 
 				void

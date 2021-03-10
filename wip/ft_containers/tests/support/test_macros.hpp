@@ -116,6 +116,12 @@ template<class T>
 				return (_x < right._x);
 			}
 
+			bool
+			operator >(const Aware &right) const
+			{
+				return (_x > right._x);
+			}
+
 			const T&
 			x() const
 			{

@@ -27,6 +27,17 @@ namespace ft
 		};
 
 	template<class T>
+		struct greater
+		{
+			public:
+				bool
+				operator()(const T &lhs, const T &rhs) const
+				{
+					return (lhs > rhs);
+				}
+		};
+
+	template<class T>
 		struct equal_to
 		{
 			public:

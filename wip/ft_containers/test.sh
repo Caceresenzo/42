@@ -25,6 +25,7 @@ CONTAINERS_DIR=$TEST_DIR/containers
 TEST_STD=0
 NOTIFY_WHICH=0
 FSANITIZE=0
+VALGRIND=0
 ERROR_LIMIT=1
 CONTAINERS=
 CATEGORIES=
@@ -55,6 +56,9 @@ function print_help()
 	echo " -f, --fsanitize"
 	echo "    compile with -fsanitize=address"
 	echo
+	echo " -v, --valgrind"
+	echo "    run with valgrind"
+	echo
 	echo " -l, --error-limit <value>"
 	echo "    compile with -ferror-limit=<value> (default: 1)"
 	echo
@@ -73,6 +77,7 @@ while [[ "$#" -gt 0 ]]; do
         -k|--category) CATEGORIES+="$2 "; shift ;;
         -t|--test) TESTS+="$2 "; shift ;;
         -f|--fsanitize) FSANITIZE=1 ;;
+        -v|--valgrind) VALGRIND=1 ;;
         -l|--error-limit) ERROR_LIMIT=$2; shift ;;
         -C|--compiler) COMPILER=$2; shift ;;
         -h|--help) print_help; exit 0 ;;
@@ -87,7 +92,7 @@ do
 	printf $C_TREE". "$C_CONTAINER"%s"$C_RESET"\n" "$container"
 	
 	if [[ ! -z "$CONTAINERS" ]]; then
-		if [[ "$CONTAINERS" != *"$container"* ]]; then
+		if [[ " $CONTAINERS " != *" $container "* ]]; then
 			printf $C_TREE"   |-- "$C_IGNORED"ignored..."$C_RESET"\n"
 			continue
 		fi
@@ -99,7 +104,7 @@ do
 		printf $C_TREE"   |-- "$C_CATEGORY"%s"$C_RESET"\n" "$category"
 		
 		if [[ ! -z "$CATEGORIES" ]]; then
-			if [[ "$CATEGORIES" != *"$category"* ]]; then
+			if [[ " $CATEGORIES " != *" $category "* ]]; then
 				printf $C_TREE"   |    |-- "$C_IGNORED"ignored..."$C_RESET"\n"
 				continue
 			fi
@@ -113,7 +118,7 @@ do
 			test_bin=/tmp/"$test".out
 			
 			if [[ ! -z "$TESTS" ]]; then
-				if [[ "$TESTS" != *"$test_name"* ]]; then
+				if [[ " $TESTS " != *" $test_name "* ]]; then
 					printf $C_TREE"   |    |-- "$C_IGNORED"ignored "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET"\n" "$test_name"
 					continue
 				fi
@@ -144,7 +149,14 @@ do
 			if [ $compiled_exit_code = $expected_exit_code ]; then
 				printf $C_SAME_LINE$C_TREE"   |    |-- "$C_TEST"Testing "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET" "$C_FAIL "$test_name"
 				
-				if $test_bin; then
+				valgrind_exec=
+				valgrind_parameters=
+				if [[ $VALGRIND = 1 ]]; then
+					valgrind_exec=valgrind
+					valgrind_parameters=--leak-check=full
+				fi
+				
+				if $valgrind_exec $valgrind_parameters $test_bin 2>&1; then
 					printf $C_PASS"OK"$C_RESET"\n"
 				fi
 			else

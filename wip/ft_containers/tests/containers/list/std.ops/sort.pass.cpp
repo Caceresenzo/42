@@ -74,9 +74,10 @@ main(void)
 		int a2[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
 
 		LIST<Aware<int> > c1(a1, a1 + sizeof(a1) / sizeof(a1[0]));
+		LIST<Aware<int> > c2(a2, a2 + sizeof(a2) / sizeof(a2[0]));
 
 		c1.sort();
-		ASSERT(c1 == LIST<Aware<int> >(a2, a2 + sizeof(a2) / sizeof(a2[0])));
+		ASSERT(c1 == c2);
 	}
 
 	ASSERT_AWARE_ZERO();
