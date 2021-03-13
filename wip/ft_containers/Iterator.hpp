@@ -95,6 +95,15 @@ namespace ft
 			return (iterator);
 		}
 
+	template<typename Iterator>
+		Iterator
+		prev(Iterator iterator, unsigned long n = 1)
+		{
+			while (n--)
+				--iterator;
+			return (iterator);
+		}
+
 	template<class It>
 		typename ft::iterator_traits<It>::difference_type
 		do_distance(It first, It last, ft::input_iterator_tag)
@@ -364,7 +373,7 @@ namespace ft
 			return (lhs.base() - rhs.base());
 		}
 
-	template<class Iterator>
+	template<class Iterator, bool forward = true>
 		class reverse_iterator :
 				public ft::iterator<typename ft::iterator_traits<Iterator>::iterator_category, typename ft::iterator_traits<Iterator>::value_type, typename ft::iterator_traits<Iterator>::difference_type, typename ft::iterator_traits<Iterator>::pointer, typename ft::iterator_traits<Iterator>::reference>
 		{
@@ -408,8 +417,13 @@ namespace ft
 				reference
 				operator*() const
 				{
-					iterator_type copy = _it;
-					return (*--copy);
+					if (forward)
+					{
+						iterator_type copy = _it;
+						return (*--copy);
+					}
+					else
+						return (*_it);
 				}
 
 				reverse_iterator
@@ -497,58 +511,58 @@ namespace ft
 				}
 		};
 
-	template<class Iterator>
+	template<class Iterator, bool forward>
 		inline bool
-		operator==(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+		operator==(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (lhs.base() == rhs.base());
 		}
 
-	template<class Iterator>
+	template<class Iterator, bool forward>
 		inline bool
-		operator!=(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+		operator!=(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (!(lhs == rhs));
 		}
 
-	template<class Iterator>
+	template<class Iterator, bool forward>
 		inline bool
-		operator<(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+		operator<(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (rhs.base() < lhs.base());
 		}
 
-	template<class Iterator>
+	template<class Iterator, bool forward>
 		inline bool
-		operator<=(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+		operator<=(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (!(rhs < lhs));
 		}
 
-	template<class Iterator>
+	template<class Iterator, bool forward>
 		inline bool
-		operator>(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+		operator>(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (rhs < lhs);
 		}
 
-	template<class Iterator>
+	template<class Iterator, bool forward>
 		inline bool
-		operator>=(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+		operator>=(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (!(lhs < rhs));
 		}
 
-	template<class Iterator>
-		inline reverse_iterator<Iterator>
-		operator+(typename reverse_iterator<Iterator>::difference_type n, const reverse_iterator<Iterator> &rev_it)
+	template<class Iterator, bool forward>
+		inline reverse_iterator<Iterator, forward>
+		operator+(typename reverse_iterator<Iterator, forward>::difference_type n, const reverse_iterator<Iterator, forward> &rev_it)
 		{
-			return (reverse_iterator<Iterator>(rev_it.base() - n));
+			return (reverse_iterator<Iterator, forward>(rev_it.base() - n));
 		}
 
-	template<class Iterator>
-		inline typename reverse_iterator<Iterator>::difference_type
-		operator-(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+	template<class Iterator, bool forward>
+		inline typename reverse_iterator<Iterator, forward>::difference_type
+		operator-(const reverse_iterator<Iterator, forward> &lhs, const reverse_iterator<Iterator, forward> &rhs)
 		{
 			return (rhs.base() - lhs.base());
 		}

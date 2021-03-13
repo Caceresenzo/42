@@ -155,8 +155,13 @@ do
 					valgrind_exec=valgrind
 					valgrind_parameters=--leak-check=full
 				fi
+			
+				$valgrind_exec $valgrind_parameters $test_bin 2>&1
+				exit_code=$?
 				
-				if $valgrind_exec $valgrind_parameters $test_bin 2>&1; then
+				if [[ $exit_code = 139 ]]; then
+					printf $C_FAIL"SEGMENTATION FAULT"$C_RESET"\n"
+				elif [[ $exit_code = 0 ]]; then
 					printf $C_PASS"OK"$C_RESET"\n"
 				fi
 			else
