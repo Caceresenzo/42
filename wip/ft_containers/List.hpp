@@ -17,8 +17,10 @@
 #include <Functional.hpp>
 #include <Iterator.hpp>
 #include <cstddef>
+#include <functional>
 #include <iostream>
 #include <memory>
+#include <assert.h>
 
 namespace ft
 {
@@ -792,7 +794,6 @@ namespace ft
 					return (*(--end()));
 				}
 
-
 				/**
 				 * Returns a reference to the last element in the list container.
 				 * Unlike member list::end, which returns an iterator just past this element, this function returns a direct reference.
@@ -1038,45 +1039,60 @@ namespace ft
 					void
 					sort(Compare comp)
 					{
-						(void)comp;
+						bool swapped;
+						Node *ptr1;
+						Node *lptr = static_cast<Node*>(&_base);
+
+						do
+						{
+							swapped = 0;
+							ptr1 = begin().node();
+
+							while (ptr1->next() != lptr)
+							{
+//								std::cout << "comp(" << ptr1->next() << ": " << static_cast<Node*>(ptr1->next())->data() << ", " << ptr1 << ": " << static_cast<Node*>(ptr1)->data() << ") // " << !!(comp(static_cast<Node*>(ptr1->next())->data(), ptr1->data())) << std::endl;
+
+								if (comp(static_cast<Node*>(ptr1->next())->data(), ptr1->data()))
+								{
+									BaseListNode &x = *ptr1;
+									BaseListNode &y = *ptr1->next();
+
+									x.next() = y.next();
+									y.previous() = x.previous();
+									x.next()->previous() = &x;
+									y.previous()->next() = &y;
+									y.next() = &x;
+									x.previous() = &y;
+
+									assert(ptr1->next() != ptr1);
+
+									/**
+									 *       ->       x>       y>       ->
+									 * [ 0 ]    [ x ]    [ y ]    [ 3 ]    [ 4 ]
+									 *       <x       <y       <-       <-
+									 *
+									 *
+									 *       ->       y>       x>       ->
+									 * [ 0 ]    [ x ]    [ y ]    [ 3 ]    [ 4 ]
+									 *       <y       <x       <-       <-
+									 *
+									 *
+									 *       ->       ->       ->       ->
+									 * [ 0 ]    [ y ]    [ x ]    [ 3 ]    [ 4 ]
+									 *       <-       <-       <-       <-
+									 *
+									 */
+
+									swapped = true;
+								}
+								else
+									ptr1 = static_cast<Node*>(ptr1->next());
+							}
+
+//							lptr = ptr1;
+						}
+						while (swapped);
 					}
-//					{
-//						BaseListNode *current;
-//						BaseListNode *end;
-//						bool swapped;
-//
-////						if (*begin_list == 0)
-////							return;
-//						swapped = true;
-//						end = &_base;
-//						while (swapped)
-//						{
-//							swapped = false;
-//							current = _base.next();
-//							while (current->next() != end)
-//							{
-//								BaseListNode *next = current->next();
-//
-//								std::cout << static_cast<Node*>(current)->data() << " < " << static_cast<Node*>(next)->data() << " = " << (comp(static_cast<Node*>(current)->data(), static_cast<Node*>(next)->data())) << std::endl;
-//
-//								if (!comp(static_cast<Node*>(current)->data(), static_cast<Node*>(next)->data()))
-//								{
-//									std::cout << "before swap: next: " << next << "(next: " << next->next() << ", previous: " << next->previous() << ")" << std::endl;
-//									BaseListNode::swap(*next, *current);
-////									ft::swap(static_cast<Node*>(current)->data(), static_cast<Node*>(next)->data());
-//									std::cout << "after  swap: next: " << next << "(next: " << next->next() << ", previous: " << next->previous() << ")" << std::endl;
-//									swapped = true;
-//								}
-//
-////								std::cout << "next: " << next << "(next: " << next->next() << ", previous: " << next->previous() << ")" << std::endl;
-//									current = next;
-//							}
-//							end = current;
-//						}
-//
-//						for (iterator it = begin(); it != this->end(); it++)
-//							std::cout << "{}= " << *it << std::endl;
-//					}
 
 				void
 				merge(List &x)

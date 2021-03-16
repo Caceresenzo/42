@@ -10,7 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <Iterator.hpp>
+#include <List.hpp>
+#include <support_std.hpp>
+#include <test_macros.hpp>
 #include <unit_list.hpp>
+#include <unit_vector.hpp>
+#include <Vector.hpp>
+#include <cstdlib>
+#include <iostream>
+
+template<class RandomIt>
+	void
+	random_shuffle(RandomIt first, RandomIt last)
+	{
+		typename ITERATOR_TRAITS<RandomIt>::difference_type i, n;
+		n = last - first;
+		for (i = n - 1; i > 0; --i)
+		{
+			SWAP(first[i], first[std::rand() % (i + 1)]);
+		}
+	}
 
 struct Payload
 {
@@ -35,36 +55,45 @@ struct Payload
 			return val < rhs.val;
 		}
 };
-//
-//void test_stable(int N)
-//{
-//    typedef Payload T;
-//    typedef LIST<T> C;
-//    typedef std::vector<T> V;
-//    V v;
-//    for (int i = 0; i < N; ++i)
-//        v.push_back(Payload(i/2));
-//    std::shuffle(v.begin(), v.end(), randomness);
-//    for (int i = 0; i < N; ++i)
-//        v[i].side = i;
-//
-//    C c(v.begin(), v.end());
-//    c.sort();
-//    assert(distance(c.begin(), c.end()) == N);
-//
-////  Are we sorted?
-//    typename C::const_iterator j = c.begin();
-//    for (int i = 0; i < N; ++i, ++j)
-//        assert(j->val == i/2);
-//
-////  Are we stable?
-//    for (C::const_iterator it = c.begin(); it != c.end(); ++it)
-//    {
-//        C::const_iterator next = std::next(it);
-//        if (next != c.end() && it->val == next->val)
-//            assert(it->side < next->side);
-//    }
-//}
+
+std::ostream&
+operator <<(std::ostream &stream, const Payload &payload)
+{
+	return (stream << payload.val);
+}
+
+void
+test_stable(int N)
+{
+	typedef Payload T;
+	typedef LIST<T> C;
+	typedef VECTOR<T> V;
+	V v;
+
+	for (int i = 0; i < N; ++i)
+		v.push_back(Payload(i / 2));
+
+	random_shuffle(v.begin(), v.end());
+
+	for (int i = 0; i < N; ++i)
+		v[i].side = i;
+
+	C c(v.begin(), v.end());
+	c.sort();
+
+	ASSERT(DISTANCE(c.begin(), c.end()) == N);
+
+	typename C::const_iterator j = c.begin();
+	for (int i = 0; i < N; ++i, ++j)
+		ASSERT(j->val == i / 2);
+
+	for (C::const_iterator it = c.begin(); it != c.end(); ++it)
+	{
+		C::const_iterator next = NEXT(it);
+		if (next != c.end() && it->val == next->val)
+			ASSERT(it->side < next->side);
+	}
+}
 
 int
 main(void)
@@ -77,13 +106,25 @@ main(void)
 		LIST<Aware<int> > c2(a2, a2 + sizeof(a2) / sizeof(a2[0]));
 
 		c1.sort();
+
+		if (false)
+		{
+			LIST<Aware<int> >::iterator it;
+			for (it = c1.begin(); it != c1.end(); it++)
+				std::cout << *it << "  " << std::flush;
+			std::cout << std::endl;
+			std::cout << std::endl;
+			it--;
+			for (; it != PREV(c1.begin(), 1); it--)
+				std::cout << *it << "  " << std::flush;
+		}
+
 		ASSERT(c1 == c2);
 	}
 
 	ASSERT_AWARE_ZERO();
 
-//    for (int i = 0; i < 40; ++i)
-//        test_stable(i);
-
-  return 0;
+	srand(time(NULL));
+	for (int i = 0; i < 40; ++i)
+		test_stable(i);
 }
