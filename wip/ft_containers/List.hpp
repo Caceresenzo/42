@@ -13,14 +13,12 @@
 #ifndef LIST_HPP_
 # define LIST_HPP_
 
-#include <Algorithm.hpp>
-#include <Functional.hpp>
-#include <Iterator.hpp>
-#include <cstddef>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <assert.h>
+# include <Algorithm.hpp>
+# include <Functional.hpp>
+# include <Iterator.hpp>
+# include <cstddef>
+# include <functional>
+# include <memory>
 
 namespace ft
 {
@@ -495,49 +493,44 @@ namespace ft
 			return (x.m_node != y.m_node);
 		}
 
-	template<typename T, typename U>
-		inline bool
-		operator==(const ListConstIterator<T> &lhs, const ListConstIterator<U> &rhs)
-		{
-			return (lhs.node() == rhs.node());
-		}
-
-	template<typename T, typename U>
-		inline bool
-		operator!=(const ListConstIterator<T> &lhs, const ListConstIterator<U> &rhs)
-		{
-			return (!(lhs.node() == rhs.node()));
-		}
-
-	template<typename T, typename U>
-		inline bool
-		operator==(const ListConstIterator<T> &lhs, const ListIterator<U> &rhs)
-		{
-			return (lhs.node() == rhs.node());
-		}
-
-	template<typename T, typename U>
-		inline bool
-		operator!=(const ListConstIterator<T> &lhs, const ListIterator<U> &rhs)
-		{
-			return (!(lhs.node() == rhs.node()));
-		}
-
 	template<typename T, typename Alloc = std::allocator<T> >
 		class List
 		{
 			public:
+				/** The first template parameter (T) */
 				typedef T value_type;
+
+				/** The second template parameter (Alloc) */
 				typedef Alloc allocator_type;
+
+				/** allocator_type::reference */
 				typedef typename allocator_type::reference reference;
+
+				/** allocator_type::const_reference */
 				typedef typename allocator_type::const_reference const_reference;
+
+				/** allocator_type::pointer */
 				typedef typename allocator_type::pointer pointer;
+
+				/** allocator_type::const_pointer */
 				typedef typename allocator_type::const_pointer const_pointer;
+
+				/**	a bidirectional iterator to value_type */
 				typedef ListIterator<T> iterator;
+
+				/** a bidirectional iterator to const value_type */
 				typedef ListConstIterator<T> const_iterator;
+
+				/** reverse_iterator<iterator> */
 				typedef ft::reverse_iterator<iterator> reverse_iterator;
+
+				/** reverse_iterator<const_iterator> */
 				typedef ft::reverse_iterator<iterator> const_reverse_iterator;
+
+				/** a signed integral type, identical to: iterator_traits<iterator>::difference_type */
 				typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
+
+				/** an unsigned integral type that can represent any non-negative value of difference_type */
 				typedef size_t size_type;
 
 			private:
@@ -554,12 +547,24 @@ namespace ft
 				ListBaseNode m_base;
 
 			public:
+				/**
+				 * Constructs an empty container with the given allocator alloc.
+				 *
+				 * @param alloc Allocator to use for all memory allocations of this container.
+				 */
 				explicit
 				List(const allocator_type &alloc = allocator_type()) :
 						m_allocator(alloc)
 				{
 				}
 
+				/**
+				 * Constructs the container with count copies of elements with value value.
+				 *
+				 * @param n The size of the container.
+				 * @param val The value to initialize elements of the container with.
+				 * @param alloc Allocator to use for all memory allocations of this container.
+				 */
 				explicit
 				List(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) :
 						m_allocator(alloc)
@@ -568,6 +573,14 @@ namespace ft
 						assign(n, val);
 				}
 
+				/**
+				 * Constructs the container with the contents of the range [first, last).
+				 *
+				 * @tparam InputIterator Input iterator type.
+				 * @param first Input iterator to the initial position in a range.
+				 * @param last Input iterator to the final position in a range.
+				 * @param alloc Allocator to use for all memory allocations of this container.
+				 */
 				template<class InputIterator>
 					List(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()) :
 							m_allocator(alloc)
@@ -575,16 +588,34 @@ namespace ft
 						assign(first, last);
 					}
 
+				/**
+				 * Copy constructor.
+				 * Constructs the container with the copy of the contents of other.
+				 *
+				 * @param x Another container to be used as source to initialize the elements of the container with.
+				 */
 				List(const List &x)
 				{
 					assign(x.begin(), x.end());
 				}
 
+				/**
+				 * Destructs the list.
+				 * The destructors of the elements are called and the used storage is deallocated.
+				 * Note, that if the elements are pointers, the pointed-to objects are not destroyed.
+				 */
 				~List()
 				{
 					clear();
 				}
 
+				/**
+				 * Copy assignment operator.
+				 * Replaces the contents with a copy of the contents of other.
+				 *
+				 * @param x Another container to use as data source.
+				 * @return *this
+				 */
 				List&
 				operator=(const List &x)
 				{
@@ -648,24 +679,52 @@ namespace ft
 					return (const_iterator(&m_base));
 				}
 
+				/**
+				 * Returns a reverse iterator to the first element of the reversed list.
+				 * It corresponds to the last element of the non-reversed list.
+				 * If the list is empty, the returned iterator is equal to rend().
+				 *
+				 * @return A reverse iterator to the first element.
+				 */
 				reverse_iterator
 				rbegin()
 				{
 					return (reverse_iterator(end()));
 				}
 
+				/**
+				 * Returns a reverse iterator to the first element of the reversed list.
+				 * It corresponds to the last element of the non-reversed list.
+				 * If the list is empty, the returned iterator is equal to rend().
+				 *
+				 * @return A const-qualified reverse iterator to the first element.
+				 */
 				const_reverse_iterator
 				rbegin() const
 				{
 					return (const_reverse_iterator(end()));
 				}
 
+				/**
+				 * Returns a reverse iterator to the element following the last element of the reversed list.
+				 * It corresponds to the element preceding the first element of the non-reversed list.
+				 * This element acts as a placeholder, attempting to access it results in undefined behavior.
+				 *
+				 * @return A reverse iterator to the element following the last element.
+				 */
 				reverse_iterator
 				rend()
 				{
 					return (reverse_iterator(begin()));
 				}
 
+				/**
+				 * Returns a reverse iterator to the element following the last element of the reversed list.
+				 * It corresponds to the element preceding the first element of the non-reversed list.
+				 * This element acts as a placeholder, attempting to access it results in undefined behavior.
+				 *
+				 * @return A const-qualified reverse iterator to the element following the last element.
+				 */
 				const_reverse_iterator
 				rend() const
 				{
@@ -751,7 +810,7 @@ namespace ft
 				 * Unlike member list::end, which returns an iterator just past this element, this function returns a direct reference.
 				 * Calling this function on an empty container causes undefined behavior.
 				 *
-				 * @return A  const-qualified reference to the last element in the list.
+				 * @return A const-qualified reference to the last element in the list.
 				 */
 				const_reference
 				back() const
@@ -759,6 +818,13 @@ namespace ft
 					return (*(--end()));
 				}
 
+				/**
+				 * Replaces the contents with copies of those in the range [first, last).
+				 *
+				 * @tparam InputIterator Input iterator type.
+				 * @param first Input iterator to the initial position in a range.
+				 * @param last Input iterator to the final position in a range.
+				 */
 				template<class InputIterator>
 					void
 					assign(InputIterator first, InputIterator last)
@@ -771,6 +837,12 @@ namespace ft
 						swap(l);
 					}
 
+				/**
+				 * Replaces the contents with count copies of value value.
+				 *
+				 * @param n The new size of the container.
+				 * @param val The value to initialize elements of the container with.
+				 */
 				void
 				assign(size_type n, const value_type &val)
 				{
@@ -782,30 +854,53 @@ namespace ft
 					swap(l);
 				}
 
+				/**
+				 * Prepends the given element value to the beginning of the container.
+				 *
+				 * @param val The value of the element to prepend.
+				 */
 				void
 				push_front(const value_type &val)
 				{
 					create_node(val)->connect(m_base.next);
 				}
 
+				/**
+				 * Removes the first element of the container. If there are no elements in the container, the behavior is undefined.
+				 */
 				void
 				pop_front(void)
 				{
 					erase(begin());
 				}
 
+				/**
+				 * Appends the given element value to the end of the container.
+				 *
+				 * @param val The value of the element to append.
+				 */
 				void
 				push_back(const value_type &val)
 				{
 					create_node(val)->connect(&m_base);
 				}
 
+				/**
+				 * Removes the last element of the container. Calling pop_back on an empty container results in undefined behavior.
+				 */
 				void
 				pop_back(void)
 				{
 					erase(--end());
 				}
 
+				/**
+				 * Inserts value before position.
+				 *
+				 * @param position Iterator before which the content will be inserted. position may be the end() iterator.
+				 * @param val Element value to insert.
+				 * @return An iterator pointing to the inserted value.
+				 */
 				iterator
 				insert(iterator position, const value_type &val)
 				{
@@ -814,6 +909,14 @@ namespace ft
 					return (iterator(position.node()->next));
 				}
 
+				/**
+				 * Inserts count copies of the value before position.
+				 *
+				 * @param position Iterator before which the content will be inserted. position may be the end() iterator.
+				 * @param n Number of elements to insert. Each element is initialized to a copy of val..
+				 * @param val Value to be copied to the inserted elements.
+				 * @return An iterator pointing to the inserted value.
+				 */
 				void
 				insert(iterator position, size_type n, const value_type &val)
 				{
@@ -822,14 +925,28 @@ namespace ft
 					splice(position, lst);
 				}
 
+				/**
+				 * Inserts elements from range [first, last).
+				 *
+				 * @tparam InputIterator Input iterator type.
+				 * @param first Input iterator to the initial position in a range.
+				 * @param last Input iterator to the final position in a range.
+				 */
 				template<class InputIterator>
 					void
 					insert(iterator position, InputIterator first, InputIterator last)
 					{
 						List lst(first, last, m_allocator);
+
 						splice(position, lst);
 					}
 
+				/**
+				 * Erase the element at position from the container.
+				 *
+				 * @param position Iterator to the element to remove.
+				 * @return An iterator following the last removed element.
+				 */
 				iterator
 				erase(iterator position)
 				{
@@ -841,6 +958,13 @@ namespace ft
 					return (iterator(next));
 				}
 
+				/**
+				 * Erases the elements in the range [first, last) from the container.
+				 *
+				 * @param first Input iterator to the initial position in a range.
+				 * @param last Input iterator to the final position in a range.
+				 * @return An iterator following the last removed element.
+				 */
 				iterator
 				erase(iterator first, iterator last)
 				{
@@ -857,12 +981,24 @@ namespace ft
 					return (iterator(last));
 				}
 
+				/**
+				 * Exchanges the contents of the container with those of other.
+				 * Does not invoke any move, copy, or swap operations on individual elements.
+				 *
+				 * @param x Container to exchange the contents with.
+				 */
 				void
 				swap(List &x)
 				{
 					ListBaseNode::swap(m_base, x.m_base);
 				}
 
+				/**
+				 * Resizes the container to contain count elements.
+				 *
+				 * @param n New size of the container.
+				 * @param val The value to initialize the new elements with.
+				 */
 				void
 				resize(size_type n, value_type val = value_type())
 				{
@@ -874,12 +1010,21 @@ namespace ft
 						insert(end(), n - len, val);
 				}
 
+				/**
+				 * Erases all elements from the container. After this call, size() returns zero.
+				 */
 				void
 				clear()
 				{
 					erase(begin(), end());
 				}
 
+				/**
+				 * Transfers all elements from one list to another.
+				 *
+				 * @param position Element before which the content will be inserted.
+				 * @param x Another container to transfer the content from.
+				 */
 				void
 				splice(iterator position, List &x)
 				{
@@ -887,6 +1032,13 @@ namespace ft
 						position.node()->transfer(x.begin().node(), x.end().node());
 				}
 
+				/**
+				 * Transfers the element pointed to by i from one list to another.
+				 *
+				 * @param position Element before which the content will be inserted.
+				 * @param x Another container to transfer the content from.
+				 * @param i The element to transfer from other to *this.
+				 */
 				void
 				splice(iterator position, List &x, iterator i)
 				{
@@ -899,6 +1051,14 @@ namespace ft
 					(void)x;
 				}
 
+				/**
+				 * Transfers the elements in the range [first, last) from one list to another.
+				 *
+				 * @param position Element before which the content will be inserted.
+				 * @param x Another container to transfer the content from.
+				 * @param first Input iterator to the initial position in a range.
+				 * @param last Input iterator to the final position in a range.
+				 */
 				void
 				splice(iterator position, List &x, iterator first, iterator last)
 				{
@@ -908,6 +1068,11 @@ namespace ft
 					(void)x;
 				}
 
+				/**
+				 * Removes all elements that are equal to value.
+				 *
+				 * @param val Value of the elements to remove.
+				 */
 				void
 				remove(const value_type &val)
 				{
@@ -935,6 +1100,12 @@ namespace ft
 						erase(input);
 				}
 
+				/**
+				 * Removes all elements for which predicate pred returns.
+				 *
+				 * @tparam Predicate Predicate object type.
+				 * @param pred Unary predicate which returns true if the element should be removed.
+				 */
 				template<class Predicate>
 					void
 					remove_if(Predicate pred)
@@ -954,12 +1125,25 @@ namespace ft
 						}
 					}
 
+				/**
+				 * Removes all consecutive duplicate elements from the container.
+				 * Only the first element in each group of equal elements is left.
+				 * Uses operator== to compare the elements.
+				 */
 				void
 				unique()
 				{
 					unique(ft::equal_to<value_type>());
 				}
 
+				/**
+				 * Removes all consecutive duplicate elements from the container.
+				 * Only the first element in each group of equal elements is left.
+				 * Uses binary_pred to compare the elements.
+				 *
+				 * @tparam BinaryPredicate Binary predicate object type.
+				 * @param binary_pred Binary predicate which returns true if the elements should be treated as equal.
+				 */
 				template<class BinaryPredicate>
 					void
 					unique(BinaryPredicate binary_pred)
@@ -982,18 +1166,25 @@ namespace ft
 						}
 					}
 
+				/**
+				 * Sorts the elements in ascending order.
+				 * The order of equal elements is preserved.
+				 * Uses operator< to compare the elements.
+				 */
 				void
 				sort()
 				{
 					sort(ft::less<value_type>());
 				}
 
-				node_type*
-				cast(base_node_type *base)
-				{
-					return (static_cast<node_type*>(base));
-				}
-
+				/**
+				 * Sorts the elements in ascending order.
+				 * The order of equal elements is preserved.
+				 * Uses comp to compare the elements.
+				 *
+				 * @tparam Compare Comparison function object type.
+				 * @param comp Comparison function object (i.e. an object that satisfies the requirements of Compare) which returns true if the first argument is less than (i.e. is ordered before) the second.
+				 */
 				template<class Compare>
 					void
 					sort(Compare comp)
@@ -1032,12 +1223,28 @@ namespace ft
 						while (swapped);
 					}
 
+				/**
+				 * Merges two sorted lists into one.
+				 * The lists should be sorted into ascending order.
+				 * Uses operator< to compare the elements.
+				 *
+				 * @param x Another container to merge.
+				 */
 				void
 				merge(List &x)
 				{
 					merge(x, std::less<value_type>());
 				}
 
+				/**
+				 * Merges two sorted lists into one.
+				 * The lists should be sorted into ascending order.
+				 * Uses comp to compare the elements.
+				 *
+				 * @tparam Compare Comparison function object type.
+				 * @param x Another container to merge.
+				 * @param comp Comparison function object (i.e. an object that satisfies the requirements of Compare) which returns true if the first argument is less than (i.e. is ordered before) the second.
+				 */
 				template<class Compare>
 					void
 					merge(List &x, Compare comp)
@@ -1066,6 +1273,9 @@ namespace ft
 							last1.node()->transfer(first2.node(), last2.node());
 					}
 
+				/**
+				 * Reverses the order of the elements in the container.
+				 */
 				void
 				reverse()
 				{
@@ -1073,6 +1283,12 @@ namespace ft
 				}
 
 			private:
+				node_type*
+				cast(base_node_type *base)
+				{
+					return (static_cast<node_type*>(base));
+				}
+
 				node_type*
 				create_node(const_reference val)
 				{

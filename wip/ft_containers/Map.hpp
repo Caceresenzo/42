@@ -13,12 +13,12 @@
 #ifndef MAP_HPP_
 # define MAP_HPP_
 
-#include <bits/allocator.h>
-#include <BinarySearchTree.hpp>
-#include <Function.hpp>
-#include <Functional.hpp>
-#include <Iterator.hpp>
-#include <Utility.hpp>
+# include <bits/allocator.h>
+# include <BinarySearchTree.hpp>
+# include <Function.hpp>
+# include <Functional.hpp>
+# include <Iterator.hpp>
+# include <Utility.hpp>
 
 namespace ft
 {
@@ -116,6 +116,7 @@ namespace ft
 				/**
 				 * Constructs the container with the contents of the range [first, last). If multiple elements in the range have keys that compare equivalent, it is unspecified which element is inserted.
 				 *
+				 * @tparam InputIterator Input iterator type.
 				 * @param first Input iterator to the initial position in a range.
 				 * @param last Input iterator to the final position in a range.
 				 * @param comp Comparison function object to use for all comparisons of keys.
@@ -339,6 +340,7 @@ namespace ft
 				/**
 				 * Inserts elements from range [first, last).
 				 *
+				 * @tparam InputIterator Input iterator type.
 				 * @param first Input iterator to the initial position in a range.
 				 * @param last Input iterator to the final position in a range.
 				 */
@@ -351,18 +353,34 @@ namespace ft
 						insert_iter_impl(map.begin(), map.end());
 					}
 
+				/**
+				 * Removes the element at position.
+				 *
+				 * @param position Iterator to the element to remove.
+				 */
 				void
 				erase(iterator position)
 				{
 					m_tree.erase(position.node());
 				}
 
+				/**
+				 * Removes the element (if one exists) with the key equivalent to key.
+				 *
+				 * @param k Key value of the elements to remove.
+				 * @return Number of elements removed (0 or 1).
+				 */
 				size_type
 				erase(const key_type &k)
 				{
 					return (m_tree.erase(k));
 				}
-
+				/**
+				 * Removes the elements in the range [first; last), which must be a valid range in *this.
+				 *
+				 * @param first Input iterator to the initial position in a range.
+				 * @param last Input iterator to the final position in a range.
+				 */
 				void
 				erase(iterator first, iterator last)
 				{
