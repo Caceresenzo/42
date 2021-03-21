@@ -24,210 +24,144 @@
 
 namespace ft
 {
-	class BaseListNode
+	struct ListBaseNode
 	{
-		private:
-			BaseListNode *_next;
-			BaseListNode *_previous;
+		public:
+			typedef ListBaseNode base_type;
+			typedef const ListBaseNode const_base_type;
 
 		public:
-			BaseListNode(void)
-			{
-				this->_next = this;
-				this->_previous = this;
-			}
+			ListBaseNode *next;
+			ListBaseNode *previous;
 
-			BaseListNode(const BaseListNode &other) :
-					_next(other._next),
-					_previous(other._previous)
+		public:
+			ListBaseNode(void) :
+					next(this),
+					previous(this)
 			{
-			}
-
-			BaseListNode&
-			operator=(const BaseListNode &other)
-			{
-				if (&other != this)
-				{
-					this->_next = other._next;
-					this->_previous = other._previous;
-				}
-
-				return (*this);
-			}
-
-			BaseListNode*&
-			next()
-			{
-				return (_next);
-			}
-
-			BaseListNode*
-			next() const
-			{
-				return (_next);
-			}
-
-			BaseListNode*&
-			previous()
-			{
-				return (_previous);
-			}
-
-			BaseListNode*
-			previous() const
-			{
-				return (_previous);
 			}
 
 			void
-			connect(BaseListNode *to)
+			connect(base_type *to)
 			{
-				next() = to;
-				previous() = to->previous();
+				next = to;
+				previous = to->previous;
 
-				to->previous()->next() = this;
-				to->previous() = this;
+				to->previous->next = this;
+				to->previous = this;
 			}
 
 			void
-			connect_next(BaseListNode *to)
+			connect_next(base_type *to)
 			{
-				to->next() = next();
-				to->previous() = this;
+				to->next = next;
+				to->previous = this;
 
-				next()->previous() = to;
-				next() = to;
+				next->previous = to;
+				next = to;
 			}
 
-			BaseListNode*
+			base_type*
 			disconnect(void)
 			{
-				BaseListNode *const node = next();
+				base_type *node = next;
 
-				previous()->next() = node;
-				node->previous() = previous();
+				previous->next = node;
+				node->previous = previous;
 
 				return (this);
 			}
 
 			void
-			transfer(BaseListNode *const first, BaseListNode *const last) _GLIBCXX_USE_NOEXCEPT
+			transfer(base_type *first, base_type *last) _GLIBCXX_USE_NOEXCEPT
 			{
 				// from: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=libstdc%2B%2B-v3/src/c%2B%2B98/list.cc;hb=6bbf0dec66c0e719b06cd2fe67559fda6df09000
 				if (this != last)
 				{
-					// Remove [first, last) from its old position.
-					last->previous()->next() = this;
-					first->previous()->next() = last;
-					this->previous()->next() = first;
+					/* Remove [first, last) from its old position. */
+					last->previous->next = this;
+					first->previous->next = last;
+					this->previous->next = first;
 
-					// Splice [first, last) into its new position.
-					BaseListNode *const tmp = this->previous();
-					this->previous() = last->previous();
-					last->previous() = first->previous();
-					first->previous() = tmp;
+					/* Splice [first, last) into its new position. */
+					base_type *tmp = this->previous;
+					this->previous = last->previous;
+					last->previous = first->previous;
+					first->previous = tmp;
 				}
 			}
 
 			void
 			reverse()
 			{
-				BaseListNode *node = this;
+				ListBaseNode *node = this;
 
 				do
 				{
-					ft::swap(node->next(), node->previous());
+					ft::swap(node->next, node->previous);
 
-					node = node->previous(); /* was `next` before the swap */
+					node = node->previous; /* was `next` before the swap */
 				}
 				while (node != this);
 			}
 
 			static void
-			//		swap(BaseListNode &x, BaseListNode &y)
-			swap(BaseListNode &__x, BaseListNode &__y)
+			swap(base_type &x, base_type &y)
 			{
-				if (__x.next() != &__x)
+				if (x.next != &x)
 				{
-					if (__y.next() != &__y)
+					if (y.next != &y) /* Both __x and __y are not empty. */
 					{
-						// Both __x and __y are not empty.
-						ft::swap(__x.next(), __y.next());
-						ft::swap(__x.previous(), __y.previous());
-						__x.next()->previous() = __x.previous()->next() = &__x;
-						__y.next()->previous() = __y.previous()->next() = &__y;
+						ft::swap(x.next, y.next);
+						ft::swap(x.previous, y.previous);
+						x.next->previous = x.previous->next = &x;
+						y.next->previous = y.previous->next = &y;
 					}
-					else
+					else /* x is not empty, y is empty. */
 					{
-						// __x is not empty, __y is empty.
-						__y.next() = __x.next();
-						__y.previous() = __x.previous();
-						__y.next()->previous() = __y.previous()->next() = &__y;
-						__x.next() = __x.previous() = &__x;
+						y.next = x.next;
+						y.previous = x.previous;
+						y.next->previous = y.previous->next = &y;
+						x.next = x.previous = &x;
 					}
 				}
-				else if (__y.next() != &__y)
+				else if (y.next != &y) /* x is empty, y is not empty. */
 				{
-					// __x is empty, __y is not empty.
-					__x.next() = __y.next();
-					__x.previous() = __y.previous();
-					__x.next()->previous() = __x.previous()->next() = &__x;
-					__y.next() = __y.previous() = &__y;
+					x.next = y.next;
+					x.previous = y.previous;
+					x.next->previous = x.previous->next = &x;
+					y.next = y.previous = &y;
 				}
-				//			if (x.next() != &x)
-				//			{
-				//				if (y.next() != &y) /* Both x and y are not empty. */
-				//				{
-				//					ft::swap(x.next(), y.next());
-				//					ft::swap(x.previous(), y.previous());
-				//					x.next()->previous() = x.previous()->next() = &x;
-				//					y.next()->previous() = y.previous()->next() = &y;
-				//				}
-				//				else /* x is not empty, y is empty. */
-				//				{
-				//					y.next() = x.next();
-				//					y.previous() = x.previous();
-				//					y.next()->previous() = y.previous()->next() = &y;
-				//					x.next() = x.previous() = &x;
-				//				}
-				//			}
-				//			else if (y.next() != &y) /* x is empty, y is not empty. */
-				//			{
-				//				x.next() = y.next();
-				//				x.previous() = y.previous();
-				//				x.next()->previous() = x.previous()->next() = &x;
-				//				y.next() = y.previous() = &y;
-				//			}
 			}
 	};
 
 	template<typename T>
-		class ListNode :
-				public BaseListNode
+		struct ListNode :
+				public ListBaseNode
 		{
-			private:
-				T _data;
+			public:
+				typedef ListNode<T> node_type;
+				typedef const ListNode<T> const_node_type;
 
 			public:
-				T&
-				data()
-				{
-					return (_data);
-				}
+				T value;
 
-				const T&
-				data() const
+			public:
+				ListNode(const T &value) :
+						value(value)
 				{
-					return (_data);
 				}
 		};
 
 	template<class T>
-		class ListNormalIterator
-		{
-			private:
-				typedef ListNode<T> Node;
+		class ListIterator;
 
+	template<class T>
+		class ListConstIterator;
+
+	template<class T>
+		class ListIterator
+		{
 			public:
 				typedef ft::bidirectional_iterator_tag iterator_category;
 				typedef T value_type;
@@ -236,71 +170,63 @@ namespace ft
 				typedef T &reference;
 
 			private:
-				Node *_node;
+				typedef ListIterator<T> iterator_type;
+				typedef ListBaseNode base_node_type;
+				typedef ListNode<T> node_type;
+
+			private:
+				base_node_type *m_node;
 
 			public:
-				ListNormalIterator() :
-						_node(NULL)
+				ListIterator() :
+						m_node(NULL)
 				{
 				}
 
 				explicit
-				ListNormalIterator(Node *node) :
-						_node(node)
+				ListIterator(base_node_type *node) :
+						m_node(node)
 				{
 				}
 
 				template<typename U>
-					ListNormalIterator(const ListNormalIterator<U> &other) :
-							_node(other.node())
+					ListIterator(const ListIterator<U> &other) :
+							m_node(other.base_node())
 					{
 					}
 
-				~ListNormalIterator()
-				{
-				}
-
-				ListNormalIterator&
-				operator=(const ListNormalIterator &other)
-				{
-					if (this != &other)
-						_node = other._node;
-
-					return (*this);
-				}
-
-				ListNormalIterator&
+				iterator_type&
 				operator++()
 				{
-					_node = static_cast<Node*>(_node->next());
+					m_node = m_node->next;
 
 					return (*this);
 				}
 
-				ListNormalIterator
+				iterator_type
 				operator++(int)
 				{
-					ListNormalIterator copy = *this;
+					iterator_type copy = *this;
 
-					_node = static_cast<Node*>(_node->next());
+					m_node = m_node->next;
 
 					return (copy);
 				}
 
-				ListNormalIterator&
+				iterator_type&
 				operator--()
 				{
-					_node = static_cast<Node*>(_node->previous());
+					m_node = m_node->previous;
 
 					return (*this);
 				}
 
-				ListNormalIterator
+				iterator_type
 				operator--(int)
 				{
-					ListNormalIterator copy = *this;
+					iterator_type copy = *this;
 
-					_node = static_cast<Node*>(_node->previous());
+					m_node = m_node->previous;
 
 					return (copy);
 				}
@@ -308,34 +234,81 @@ namespace ft
 				reference
 				operator*() const
 				{
-					return (static_cast<Node*>(_node)->data());
+					return (node()->value);
 				}
 
 				pointer
 				operator->() const
 				{
-					return (&static_cast<Node*>(_node)->data());
+					return (&node()->value);
 				}
 
-				Node*
+				base_node_type*
+				base_node()
+				{
+					return (m_node);
+				}
+
+				node_type*
 				node()
 				{
-					return (_node);
+					return (static_cast<node_type*>(m_node));
 				}
 
-				Node*
+				base_node_type*
+				base_node() const
+				{
+					return (m_node);
+				}
+
+				node_type*
 				node() const
 				{
-					return (_node);
+					return (static_cast<node_type*>(m_node));
 				}
+
+				template<typename U>
+					friend bool
+					operator==(const ListIterator<U> &x, const ListIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator!=(const ListIterator<U> &x, const ListIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator==(const ListConstIterator<U> &x, const ListIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator!=(const ListConstIterator<U> &x, const ListIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator==(const ListIterator<U> &x, const ListConstIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator!=(const ListIterator<U> &x, const ListConstIterator<U> &y);
 		};
+
+	template<typename T>
+		bool
+		operator==(const ListIterator<T> &x, const ListIterator<T> &y)
+		{
+			return (x.m_node == y.m_node);
+		}
+
+	template<typename T>
+		bool
+		operator!=(const ListIterator<T> &x, const ListIterator<T> &y)
+		{
+			return (x.m_node != y.m_node);
+		}
 
 	template<class T>
 		class ListConstIterator
 		{
-			private:
-				typedef ListNode<T> Node;
-
 			public:
 				typedef ft::bidirectional_iterator_tag iterator_category;
 				typedef const T value_type;
@@ -344,77 +317,77 @@ namespace ft
 				typedef const T &reference;
 
 			private:
-				const Node *_node;
+				typedef ListIterator<T> iterator_type;
+				typedef ListConstIterator<T> const_iterator_type;
+				typedef ListBaseNode base_node_type;
+				typedef ListNode<T> node_type;
+				typedef const ListBaseNode const_base_node_type;
+				typedef const ListNode<T> const_node_type;
+
+			private:
+				const_base_node_type *m_node;
 
 			public:
 				ListConstIterator() :
-						_node(NULL)
+						m_node(NULL)
 				{
 				}
 
 				explicit
-				ListConstIterator(const Node *ptr) :
-						_node(ptr)
+				ListConstIterator(const_base_node_type *node) :
+						m_node(node)
+				{
+				}
+
+				ListConstIterator(const iterator_type &it) :
+						m_node(it.base_node())
 				{
 				}
 
 				template<typename U>
-					ListConstIterator(const ListNormalIterator<U> &other) :
-							_node(other.node())
+					ListConstIterator(const ListIterator<U> &other) :
+							m_node(other.base_node())
 					{
 					}
 
 				template<typename U>
 					ListConstIterator(const ListConstIterator<U> &other) :
-							_node(other.node())
+							m_node(other.base_node())
 					{
 					}
 
-				~ListConstIterator()
-				{
-				}
-
-				ListConstIterator&
-				operator=(const ListConstIterator &other)
-				{
-					if (this != &other)
-						_node = other._node;
-
-					return (*this);
-				}
-
-				ListConstIterator&
+				const_iterator_type&
 				operator++()
 				{
-					_node = static_cast<Node*>(_node->next());
+					m_node = m_node->next;
 
 					return (*this);
 				}
 
-				ListConstIterator
+				const_iterator_type
 				operator++(int)
 				{
-					ListConstIterator copy = *this;
+					const_iterator_type copy = *this;
 
-					_node = static_cast<Node*>(_node->next());
+					m_node = m_node->next;
 
 					return (copy);
 				}
 
-				ListConstIterator&
+				const_iterator_type&
 				operator--()
 				{
-					_node = static_cast<Node*>(_node->previous());
+					m_node = m_node->previous;
 
 					return (*this);
 				}
 
-				ListConstIterator
+				const_iterator_type
 				operator--(int)
 				{
-					ListConstIterator copy = *this;
+					const_iterator_type copy = *this;
 
-					_node = static_cast<Node*>(_node->previous());
+					m_node = m_node->previous;
 
 					return (copy);
 				}
@@ -422,55 +395,104 @@ namespace ft
 				reference
 				operator*() const
 				{
-					return (static_cast<const Node*>(_node)->data());
+					return (node()->value);
 				}
 
 				pointer
 				operator->() const
 				{
-					return (&static_cast<const Node*>(_node)->data());
+					return (&node()->value);
 				}
 
-				const Node*
+				const_base_node_type*
+				base_node()
+				{
+					return (m_node);
+				}
+
+				const_node_type*
+				node()
+				{
+					return (static_cast<const_node_type*>(m_node));
+				}
+
+				const_base_node_type*
+				base_node() const
+				{
+					return (m_node);
+				}
+
+				const_node_type*
 				node() const
 				{
-					return (_node);
+					return (static_cast<const_node_type*>(m_node));
 				}
+
+				template<typename U>
+					friend bool
+					operator==(const ListConstIterator<U> &x, const ListConstIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator!=(const ListConstIterator<U> &x, const ListConstIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator==(const ListConstIterator<U> &x, const ListIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator!=(const ListConstIterator<U> &x, const ListIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator==(const ListIterator<U> &x, const ListConstIterator<U> &y);
+
+				template<typename U>
+					friend bool
+					operator!=(const ListIterator<U> &x, const ListConstIterator<U> &y);
 		};
 
 	template<typename T>
-		inline bool
-		operator==(const ListNormalIterator<T> &lhs, const ListNormalIterator<T> &rhs)
+		bool
+		operator==(const ListConstIterator<T> &x, const ListConstIterator<T> &y)
 		{
-			return (lhs.node() == rhs.node());
-		}
-
-	template<typename T, typename U>
-		inline bool
-		operator==(const ListNormalIterator<T> &lhs, const ListNormalIterator<U> &rhs)
-		{
-			return (lhs.node() == rhs.node());
+			return (x.m_node == y.m_node);
 		}
 
 	template<typename T>
-		inline bool
-		operator!=(const ListNormalIterator<T> &lhs, const ListNormalIterator<T> &rhs)
+		bool
+		operator!=(const ListConstIterator<T> &x, const ListConstIterator<T> &y)
 		{
-			return (!(lhs.node() == rhs.node()));
-		}
-
-	template<typename T, typename U>
-		inline bool
-		operator!=(const ListNormalIterator<T> &lhs, const ListNormalIterator<U> &rhs)
-		{
-			return (!(lhs.node() == rhs.node()));
+			return (x.m_node != y.m_node);
 		}
 
 	template<typename T>
-		inline bool
-		operator==(const ListConstIterator<T> &lhs, const ListConstIterator<T> &rhs)
+		bool
+		operator==(const ListIterator<T> &x, const ListConstIterator<T> &y)
 		{
-			return (lhs.node() == rhs.node());
+			return (x.m_node == y.m_node);
+		}
+
+	template<typename T>
+		bool
+		operator!=(const ListIterator<T> &x, const ListConstIterator<T> &y)
+		{
+			return (x.m_node != y.m_node);
+		}
+
+	template<typename T>
+		bool
+		operator==(const ListConstIterator<T> &x, const ListIterator<T> &y)
+		{
+			return (x.m_node == y.m_node);
+		}
+
+	template<typename T>
+		bool
+		operator!=(const ListConstIterator<T> &x, const ListIterator<T> &y)
+		{
+			return (x.m_node != y.m_node);
 		}
 
 	template<typename T, typename U>
@@ -480,13 +502,6 @@ namespace ft
 			return (lhs.node() == rhs.node());
 		}
 
-	template<typename T>
-		inline bool
-		operator!=(const ListConstIterator<T> &lhs, const ListConstIterator<T> &rhs)
-		{
-			return (!(lhs.node() == rhs.node()));
-		}
-
 	template<typename T, typename U>
 		inline bool
 		operator!=(const ListConstIterator<T> &lhs, const ListConstIterator<U> &rhs)
@@ -494,30 +509,16 @@ namespace ft
 			return (!(lhs.node() == rhs.node()));
 		}
 
-	template<typename T>
+	template<typename T, typename U>
 		inline bool
-		operator==(const ListConstIterator<T> &lhs, const ListNormalIterator<T> &rhs)
+		operator==(const ListConstIterator<T> &lhs, const ListIterator<U> &rhs)
 		{
 			return (lhs.node() == rhs.node());
 		}
 
 	template<typename T, typename U>
 		inline bool
-		operator==(const ListConstIterator<T> &lhs, const ListNormalIterator<U> &rhs)
-		{
-			return (lhs.node() == rhs.node());
-		}
-
-	template<typename T>
-		inline bool
-		operator!=(const ListConstIterator<T> &lhs, const ListNormalIterator<T> &rhs)
-		{
-			return (!(lhs.node() == rhs.node()));
-		}
-
-	template<typename T, typename U>
-		inline bool
-		operator!=(const ListConstIterator<T> &lhs, const ListNormalIterator<U> &rhs)
+		operator!=(const ListConstIterator<T> &lhs, const ListIterator<U> &rhs)
 		{
 			return (!(lhs.node() == rhs.node()));
 		}
@@ -532,7 +533,7 @@ namespace ft
 				typedef typename allocator_type::const_reference const_reference;
 				typedef typename allocator_type::pointer pointer;
 				typedef typename allocator_type::const_pointer const_pointer;
-				typedef ListNormalIterator<T> iterator;
+				typedef ListIterator<T> iterator;
 				typedef ListConstIterator<T> const_iterator;
 				typedef ft::reverse_iterator<iterator> reverse_iterator;
 				typedef ft::reverse_iterator<iterator> const_reverse_iterator;
@@ -540,77 +541,28 @@ namespace ft
 				typedef size_t size_type;
 
 			private:
-				typedef ft::ListNode<T> Node;
-				typedef typename Alloc::template rebind<Node>::other NodeAlloc;
+				typedef ListBaseNode base_node_type;
+				typedef ListNode<value_type> node_type;
+				typedef base_node_type::const_base_type const_base_node_type;
+				typedef typename node_type::const_node_type const_node_type;
+
+				typedef typename Alloc::template rebind<node_type>::other node_allocator_type;
 
 			private:
-				Node*
-				allocate_node(void)
-				{
-					Node *node = _nodeAllocator.allocate(1);
-
-					node->next() = NULL;
-					node->previous() = NULL;
-
-					return (node);
-				}
-
-				void
-				deallocate_node(Node *node)
-				{
-					_nodeAllocator.deallocate(node, 1);
-				}
-
-				Node*
-				create_node(const_reference val)
-				{
-					Node *node = allocate_node();
-
-					ft::construct_copy(&(node->data()), val);
-
-					return (node);
-				}
-
-				Node*
-				create_node(void)
-				{
-					Node *node = allocate_node();
-
-					ft::construct(&(node->data()));
-
-					return (node);
-				}
-
-				void
-				delete_node(BaseListNode *node)
-				{
-					delete_node(static_cast<Node*>(node));
-				}
-
-				void
-				delete_node(Node *node)
-				{
-					node->disconnect();
-
-					ft::destruct(node->data());
-					deallocate_node(node);
-				}
-
-			private:
-				NodeAlloc _allocator;
-				NodeAlloc _nodeAllocator;
-				BaseListNode _base;
+				node_allocator_type m_allocator;
+				node_allocator_type m_node_allocator;
+				ListBaseNode m_base;
 
 			public:
 				explicit
 				List(const allocator_type &alloc = allocator_type()) :
-						_allocator(alloc)
+						m_allocator(alloc)
 				{
 				}
 
 				explicit
 				List(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) :
-						_allocator(alloc)
+						m_allocator(alloc)
 				{
 					if (n)
 						assign(n, val);
@@ -618,14 +570,14 @@ namespace ft
 
 				template<class InputIterator>
 					List(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type()) :
-							_allocator(alloc)
+							m_allocator(alloc)
 					{
 						assign(first, last);
 					}
 
 				List(const List &x)
 				{
-					operator =(x);
+					assign(x.begin(), x.end());
 				}
 
 				~List()
@@ -652,7 +604,7 @@ namespace ft
 				iterator
 				begin()
 				{
-					return (iterator(static_cast<Node*>(_base.next())));
+					return (iterator(m_base.next));
 				}
 
 				/**
@@ -665,7 +617,7 @@ namespace ft
 				const_iterator
 				begin() const
 				{
-					return (const_iterator(static_cast<Node*>(_base.next())));
+					return (const_iterator(m_base.next));
 				}
 
 				/**
@@ -679,7 +631,7 @@ namespace ft
 				iterator
 				end()
 				{
-					return (iterator(static_cast<Node*>(&_base)));
+					return (iterator(&m_base));
 				}
 
 				/**
@@ -693,7 +645,7 @@ namespace ft
 				const_iterator
 				end() const
 				{
-					return (const_iterator(static_cast<const Node*>(&_base)));
+					return (const_iterator(&m_base));
 				}
 
 				reverse_iterator
@@ -729,7 +681,7 @@ namespace ft
 				bool
 				empty() const
 				{
-					return (_base.next() == &_base);
+					return (m_base.next == &m_base);
 				}
 
 				/**
@@ -752,7 +704,7 @@ namespace ft
 				size_type
 				max_size() const
 				{
-					return (_allocator.max_size());
+					return (m_allocator.max_size());
 				}
 
 				/**
@@ -833,7 +785,7 @@ namespace ft
 				void
 				push_front(const value_type &val)
 				{
-					create_node(val)->connect(_base.next()); // TODO Protect memory
+					create_node(val)->connect(m_base.next);
 				}
 
 				void
@@ -845,7 +797,7 @@ namespace ft
 				void
 				push_back(const value_type &val)
 				{
-					create_node(val)->connect(&_base);
+					create_node(val)->connect(&m_base);
 				}
 
 				void
@@ -859,13 +811,14 @@ namespace ft
 				{
 					insert(position, 1, val);
 
-					return (iterator(static_cast<Node*>(position.node()->next())));
+					return (iterator(position.node()->next));
 				}
 
 				void
 				insert(iterator position, size_type n, const value_type &val)
 				{
-					List lst(n, val, _allocator);
+					List lst(n, val, m_allocator);
+
 					splice(position, lst);
 				}
 
@@ -873,17 +826,17 @@ namespace ft
 					void
 					insert(iterator position, InputIterator first, InputIterator last)
 					{
-						List lst(first, last, _allocator);
+						List lst(first, last, m_allocator);
 						splice(position, lst);
 					}
 
 				iterator
 				erase(iterator position)
 				{
-					Node *node = position.node();
-					Node *next = static_cast<Node*>(node->next());
+					base_node_type *node = position.base_node();
+					base_node_type *next = node->next;
 
-					delete_node(node);
+					destroy_node(node);
 
 					return (iterator(next));
 				}
@@ -895,10 +848,10 @@ namespace ft
 
 					while (it != last)
 					{
-						Node *node = it.node();
+						base_node_type *node = it.base_node();
 						it++;
 
-						delete_node(node);
+						destroy_node(node);
 					}
 
 					return (iterator(last));
@@ -907,7 +860,7 @@ namespace ft
 				void
 				swap(List &x)
 				{
-					BaseListNode::swap(_base, x._base);
+					ListBaseNode::swap(m_base, x.m_base);
 				}
 
 				void
@@ -1035,61 +988,46 @@ namespace ft
 					sort(ft::less<value_type>());
 				}
 
+				node_type*
+				cast(base_node_type *base)
+				{
+					return (static_cast<node_type*>(base));
+				}
+
 				template<class Compare>
 					void
 					sort(Compare comp)
 					{
 						bool swapped;
-						Node *ptr1;
-						Node *lptr = static_cast<Node*>(&_base);
+						base_node_type *current;
+						base_node_type *last = &m_base;
 
 						do
 						{
 							swapped = 0;
-							ptr1 = begin().node();
+							current = begin().node();
 
-							while (ptr1->next() != lptr)
+							while (current->next != last)
 							{
-//								std::cout << "comp(" << ptr1->next() << ": " << static_cast<Node*>(ptr1->next())->data() << ", " << ptr1 << ": " << static_cast<Node*>(ptr1)->data() << ") // " << !!(comp(static_cast<Node*>(ptr1->next())->data(), ptr1->data())) << std::endl;
-
-								if (comp(static_cast<Node*>(ptr1->next())->data(), ptr1->data()))
+								if (comp(cast(current->next)->value, cast(current)->value))
 								{
-									BaseListNode &x = *ptr1;
-									BaseListNode &y = *ptr1->next();
+									ListBaseNode &x = *current;
+									ListBaseNode &y = *current->next;
 
-									x.next() = y.next();
-									y.previous() = x.previous();
-									x.next()->previous() = &x;
-									y.previous()->next() = &y;
-									y.next() = &x;
-									x.previous() = &y;
-
-									assert(ptr1->next() != ptr1);
-
-									/**
-									 *       ->       x>       y>       ->
-									 * [ 0 ]    [ x ]    [ y ]    [ 3 ]    [ 4 ]
-									 *       <x       <y       <-       <-
-									 *
-									 *
-									 *       ->       y>       x>       ->
-									 * [ 0 ]    [ x ]    [ y ]    [ 3 ]    [ 4 ]
-									 *       <y       <x       <-       <-
-									 *
-									 *
-									 *       ->       ->       ->       ->
-									 * [ 0 ]    [ y ]    [ x ]    [ 3 ]    [ 4 ]
-									 *       <-       <-       <-       <-
-									 *
-									 */
+									x.next = y.next;
+									y.previous = x.previous;
+									x.next->previous = &x;
+									y.previous->next = &y;
+									y.next = &x;
+									x.previous = &y;
 
 									swapped = true;
 								}
 								else
-									ptr1 = static_cast<Node*>(ptr1->next());
+									current = current->next;
 							}
 
-//							lptr = ptr1;
+							last = current;
 						}
 						while (swapped);
 					}
@@ -1111,6 +1049,7 @@ namespace ft
 						iterator last1 = end();
 						iterator first2 = x.begin();
 						iterator last2 = x.end();
+
 						while (first1 != last1 && first2 != last2)
 						{
 							if (comp(*first2, *first1))
@@ -1130,7 +1069,28 @@ namespace ft
 				void
 				reverse()
 				{
-					_base.reverse();
+					m_base.reverse();
+				}
+
+			private:
+				node_type*
+				create_node(const_reference val)
+				{
+					node_type *node = m_node_allocator.allocate(1);
+					new (node) node_type(val);
+
+					return (node);
+				}
+
+				void
+				destroy_node(base_node_type *base)
+				{
+					node_type *node = cast(base);
+
+					node->disconnect();
+					node->~node_type();
+
+					m_node_allocator.deallocate(node, 1);
 				}
 		};
 
