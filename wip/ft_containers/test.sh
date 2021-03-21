@@ -18,6 +18,7 @@ C_TEST=$C_LIGHT_MAGENTA
 C_TEST_FILE=$C_LIGHT_CYAN
 C_PASS=$C_LIGHT_GREEN
 C_FAIL=$C_LIGHT_RED
+C_RESULT=$C_LIGHT_MAGENTA
 
 TEST_DIR=tests
 CONTAINERS_DIR=$TEST_DIR/containers
@@ -25,6 +26,7 @@ CONTAINERS_DIR=$TEST_DIR/containers
 TEST_STD=0
 NOTIFY_WHICH=0
 FSANITIZE=0
+FSANITIZE_MODE=address
 VALGRIND=0
 ERROR_LIMIT=1
 CONTAINERS=
@@ -56,6 +58,9 @@ function print_help()
 	echo " -f, --fsanitize"
 	echo "    compile with -fsanitize=address"
 	echo
+	echo " -m, --fsanitize-mode"
+	echo "    compile with -fsanitize=<mode> (default: address)"
+	echo
 	echo " -v, --valgrind"
 	echo "    run with valgrind"
 	echo
@@ -77,6 +82,7 @@ while [[ "$#" -gt 0 ]]; do
         -k|--category) CATEGORIES+="$2 "; shift ;;
         -t|--test) TESTS+="$2 "; shift ;;
         -f|--fsanitize) FSANITIZE=1 ;;
+        -m|--fsanitize-mode) FSANITIZE_MODE="$2 "; shift ;;
         -v|--valgrind) VALGRIND=1 ;;
         -l|--error-limit) ERROR_LIMIT=$2; shift ;;
         -C|--compiler) COMPILER=$2; shift ;;
@@ -85,6 +91,9 @@ while [[ "$#" -gt 0 ]]; do
     esac
     shift
 done
+
+TEST_COUNT=0
+TEST_PASSED=0
 
 for container_path in $CONTAINERS_DIR/*
 do
@@ -145,6 +154,8 @@ do
 			if [ $test_success = "fail" ]; then
 				expected_exit_code=1
 			fi
+		
+			((TEST_COUNT=TEST_COUNT+1))
 
 			if [ $compiled_exit_code = $expected_exit_code ]; then
 				printf $C_SAME_LINE$C_TREE"   |    |-- "$C_TEST"Testing "$C_TEST_FILE"%s"$C_TEST"..."$C_RESET" "$C_FAIL "$test_name"
@@ -163,6 +174,7 @@ do
 					printf $C_FAIL"SEGMENTATION FAULT"$C_RESET"\n"
 				elif [[ $exit_code = 0 ]]; then
 					printf $C_PASS"OK"$C_RESET"\n"
+					((TEST_PASSED=TEST_PASSED+1))
 				fi
 			else
 				if [ $test_success = "fail" ]; then
@@ -178,3 +190,5 @@ do
 		printf $C_TREE"   |"$C_RESET"\n"
 	done
 done
+
+printf $C_RESULT"\nPassed "$C_PASS"%s"$C_RESULT" / "$C_PASS"%s "$C_RESET"\n" "$TEST_PASSED" "$TEST_COUNT"
