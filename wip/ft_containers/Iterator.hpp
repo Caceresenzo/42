@@ -13,9 +13,8 @@
 #ifndef ITERATOR_HPP_
 # define ITERATOR_HPP_
 
-# include <iterator>
-# include <cstddef>
-# include "TypeTraits.hpp"
+#include <cstddef>
+
 
 namespace ft
 {

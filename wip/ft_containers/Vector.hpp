@@ -13,12 +13,14 @@
 #ifndef VECTOR_HPP_
 # define VECTOR_HPP_
 
-# include <Algorithm.hpp>
-# include <Iterator.hpp>
-# include <TypeTraits.hpp>
 # include <cstddef>
 # include <memory>
 # include <stdexcept>
+
+# include "Algorithm.hpp"
+# include "Iterator.hpp"
+# include "TypeTraits.hpp"
+# include "Utility.hpp"
 
 namespace ft
 {

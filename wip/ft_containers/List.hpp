@@ -13,12 +13,13 @@
 #ifndef LIST_HPP_
 # define LIST_HPP_
 
-# include <Algorithm.hpp>
-# include <Functional.hpp>
-# include <Iterator.hpp>
 # include <cstddef>
 # include <functional>
 # include <memory>
+
+# include "Algorithm.hpp"
+# include "Functional.hpp"
+# include "Iterator.hpp"
 
 namespace ft
 {

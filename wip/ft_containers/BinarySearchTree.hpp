@@ -13,12 +13,13 @@
 #ifndef BINARYSEARCHTREE_HPP_
 # define BINARYSEARCHTREE_HPP_
 
-#include <Algorithm.hpp>
-#include <Iterator.hpp>
-#include <Utility.hpp>
-#include <cstddef>
-#include <iostream>
-#include <iomanip>
+# include <cstddef>
+# include <iomanip>
+# include <iostream>
+
+# include "Algorithm.hpp"
+# include "Iterator.hpp"
+# include "Utility.hpp"
 
 namespace ft
 {
@@ -566,9 +567,6 @@ namespace ft
 	template<class Key, class T, class Compare, class Alloc>
 		class BinarySearchTree
 		{
-//				typedef less<Key> Compare;
-//				typedef std::allocator<pair<const Key, T> > Alloc;
-
 			public:
 				typedef Key key_type;
 				typedef T mapped_type;
@@ -841,8 +839,7 @@ namespace ft
 					node_type *node = cast(base);
 
 					node->~node_type();
-
-					m_node_allocator.deallocate(cast(node), 1);
+					m_node_allocator.deallocate(node, 1);
 				}
 
 				pair<node_type*, bool>
@@ -917,13 +914,8 @@ namespace ft
 				delete_node_impl(base_node_type *root)
 				{
 					if (root == NULL)
-						return NULL;
+						return (NULL);
 
-//					if (x < t->data)
-//						t->left = remove(x, t->left);
-//					else if (x > t->data)
-//						t->right = remove(x, t->right);
-//					else
 					if (root->left && root->right)
 					{
 						base_node_type *temp = base_node_type::min(root->right);
@@ -944,7 +936,7 @@ namespace ft
 						destroy_node(temp);
 					}
 
-					return root;
+					return (root);
 				}
 
 				base_node_type*

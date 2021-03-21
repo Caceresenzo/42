@@ -13,12 +13,13 @@
 #ifndef MAP_HPP_
 # define MAP_HPP_
 
-# include <bits/allocator.h>
-# include <BinarySearchTree.hpp>
-# include <Function.hpp>
-# include <Functional.hpp>
-# include <Iterator.hpp>
-# include <Utility.hpp>
+#include <memory>
+
+# include "BinarySearchTree.hpp"
+# include "Function.hpp"
+# include "Functional.hpp"
+# include "Iterator.hpp"
+# include "Utility.hpp"
 
 namespace ft
 {
