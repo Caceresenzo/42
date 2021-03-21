@@ -13,14 +13,12 @@
 #ifndef VECTOR_HPP_
 # define VECTOR_HPP_
 
-#include <Algorithm.hpp>
-#include <Iterator.hpp>
-#include <TypeTraits.hpp>
-#include <cstddef>
-#include <limits>
-#include <memory>
-#include <iostream>
-#include <stdexcept>
+# include <Algorithm.hpp>
+# include <Iterator.hpp>
+# include <TypeTraits.hpp>
+# include <cstddef>
+# include <memory>
+# include <stdexcept>
 
 namespace ft
 {
@@ -38,8 +36,6 @@ namespace ft
 	template<class T, class Alloc = std::allocator<T> >
 		class Vector
 		{
-			public:
-
 			public:
 				/** The first template parameter (T) */
 				typedef T value_type;
@@ -82,55 +78,6 @@ namespace ft
 				pointer _begin;
 				pointer _end;
 				pointer _end_capacity;
-
-			private:
-				void
-				throw_max_size(void) const
-				{
-					throw std::length_error("max size reached");
-				}
-
-				void
-				throw_out_of_bound(void) const
-				{
-					throw std::out_of_range("Vector");
-				}
-
-				void
-				allocate(size_type n)
-				{
-					if (n > max_size())
-						throw_max_size();
-					_begin = _end = _allocator.allocate(n);
-					_end_capacity = _begin + n;
-				}
-
-				void
-				deallocate()
-				{
-					if (_begin)
-					{
-						clear();
-						_allocator.deallocate(_begin, capacity());
-						_begin = _end = _end_capacity = NULL;
-					}
-				}
-
-				size_type
-				recommend(size_type new_size) const
-				{
-					const size_type max = max_size();
-
-					if (new_size > max)
-						throw_max_size();
-
-					const size_type capacity = this->capacity();
-
-					if (capacity >= max / 2)
-						return (max);
-
-					return ft::max<size_type>(2 * capacity, new_size);
-				}
 
 			public:
 				/**
@@ -201,7 +148,6 @@ namespace ft
 				/**
 				 * This destroys all container elements, and deallocates all the storage capacity allocated by the vector using its allocator.
 				 */
-				virtual
 				~Vector()
 				{
 					deallocate();
@@ -749,6 +695,55 @@ namespace ft
 				clear()
 				{
 					erase(begin(), end());
+				}
+
+			private:
+				void
+				throw_max_size(void) const
+				{
+					throw std::length_error("max size reached");
+				}
+
+				void
+				throw_out_of_bound(void) const
+				{
+					throw std::out_of_range("Vector");
+				}
+
+				void
+				allocate(size_type n)
+				{
+					if (n > max_size())
+						throw_max_size();
+					_begin = _end = _allocator.allocate(n);
+					_end_capacity = _begin + n;
+				}
+
+				void
+				deallocate()
+				{
+					if (_begin)
+					{
+						clear();
+						_allocator.deallocate(_begin, capacity());
+						_begin = _end = _end_capacity = NULL;
+					}
+				}
+
+				size_type
+				recommend(size_type new_size) const
+				{
+					const size_type max = max_size();
+
+					if (new_size > max)
+						throw_max_size();
+
+					const size_type capacity = this->capacity();
+
+					if (capacity >= max / 2)
+						return (max);
+
+					return ft::max<size_type>(2 * capacity, new_size);
 				}
 		}
 		;
