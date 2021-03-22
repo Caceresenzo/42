@@ -57,22 +57,26 @@ namespace ft
 		}
 
 	template<class T>
-		inline T*
-		construct_copy(T *ptr, const T &ref)
+		inline void
+		construct_by_copy(T *ptr, const T &ref)
 		{
 			::new (ptr++) T(ref);
-
-			return (ptr);
 		}
 
 	template<class T, class S>
-		inline T*
-		construct_copy(T *ptr, const T &ref, S n)
+		inline void
+		construct_n_by_copy(T *ptr, const T &ref, S n)
 		{
 			while (n--)
 				::new (ptr++) T(ref);
+		}
 
-			return (ptr);
+	template<class T, class U, class S>
+		inline void
+		construct_all_by_copy(T *to, U *from, S n)
+		{
+			while (n--)
+				construct_by_copy(to++, *from++);
 		}
 
 	template<class I, class O>

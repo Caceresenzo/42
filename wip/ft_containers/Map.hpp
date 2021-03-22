@@ -115,7 +115,8 @@ namespace ft
 				}
 
 				/**
-				 * Constructs the container with the contents of the range [first, last). If multiple elements in the range have keys that compare equivalent, it is unspecified which element is inserted.
+				 * Constructs the container with the contents of the range [first, last).
+				 * If multiple elements in the range have keys that compare equivalent, it is unspecified which element is inserted.
 				 *
 				 * @tparam InputIterator Input iterator type.
 				 * @param first Input iterator to the initial position in a range.
@@ -132,7 +133,8 @@ namespace ft
 					}
 
 				/**
-				 * Copy constructor. Constructs the container with the copy of the contents of other.
+				 * Copy constructor.
+				 * Constructs the container with the copy of the contents of other.
 				 *
 				 * @param x Another container to be used as source to initialize the elements of the container with.
 				 */
@@ -144,7 +146,9 @@ namespace ft
 				}
 
 				/**
-				 * Destructs the map. The destructors of the elements are called and the used storage is deallocated. Note, that if the elements are pointers, the pointed-to objects are not destroyed.
+				 * Destructs the map.
+				 * The destructors of the elements are called and the used storage is deallocated.
+				 * Note, that if the elements are pointers, the pointed-to objects are not destroyed.
 				 */
 				~Map()
 				{
@@ -215,7 +219,8 @@ namespace ft
 
 				/**
 				 * Returns a reverse iterator to the first element of the reversed map.
-				 * It corresponds to the last element of the non-reversed map. If the map is empty, the returned iterator is equal to rend().
+				 * It corresponds to the last element of the non-reversed map.
+				 * If the map is empty, the returned iterator is equal to rend().
 				 *
 				 * @return A reverse iterator to the first element.
 				 */
@@ -227,7 +232,8 @@ namespace ft
 
 				/**
 				 * Returns a reverse iterator to the first element of the reversed map.
-				 * It corresponds to the last element of the non-reversed map. If the map is empty, the returned iterator is equal to rend().
+				 * It corresponds to the last element of the non-reversed map.
+				 * If the map is empty, the returned iterator is equal to rend().
 				 *
 				 * @return A const-qualified reverse iterator to the first element.
 				 */
@@ -305,7 +311,7 @@ namespace ft
 				mapped_type&
 				operator[](const key_type &k)
 				{
-					return ((*((insert(make_pair(k, mapped_type()))).first)).second);
+					return ((*((insert(ft::make_pair(k, mapped_type()))).first)).second);
 				}
 
 				/**
@@ -319,7 +325,7 @@ namespace ft
 				{
 					pair<typename tree_type::node_type*, bool> pr = m_tree.insert(val);
 
-					return (make_pair(pr.first, pr.second));
+					return (ft::make_pair(iterator(pr.first), pr.second));
 				}
 
 				/**
@@ -525,7 +531,7 @@ namespace ft
 				pair<iterator, iterator>
 				equal_range(const key_type &k)
 				{
-					return (make_pair(m_tree.lower_bound(k), m_tree.upper_bound(k)));
+					return (ft::make_pair(m_tree.lower_bound(k), m_tree.upper_bound(k)));
 				}
 
 				/**
@@ -539,7 +545,7 @@ namespace ft
 				pair<const_iterator, const_iterator>
 				equal_range(const key_type &k) const
 				{
-					return (make_pair(m_tree.lower_bound(k), m_tree.upper_bound(k)));
+					return (ft::make_pair(m_tree.lower_bound(k), m_tree.upper_bound(k)));
 				}
 
 			private:

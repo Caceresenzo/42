@@ -77,9 +77,9 @@ namespace ft
 
 			private:
 				allocator_type _allocator;
-				pointer _begin;
-				pointer _end;
-				pointer _end_capacity;
+				pointer m_begin;
+				pointer m_end;
+				pointer m_end_capacity;
 
 			public:
 				/**
@@ -90,9 +90,9 @@ namespace ft
 				explicit
 				Vector(const allocator_type &alloc = allocator_type()) :
 						_allocator(alloc),
-						_begin(NULL),
-						_end(NULL),
-						_end_capacity(NULL)
+						m_begin(NULL),
+						m_end(NULL),
+						m_end_capacity(NULL)
 				{
 				}
 
@@ -106,9 +106,9 @@ namespace ft
 				explicit
 				Vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) :
 						_allocator(alloc),
-						_begin(NULL),
-						_end(NULL),
-						_end_capacity(NULL)
+						m_begin(NULL),
+						m_end(NULL),
+						m_end_capacity(NULL)
 				{
 					if (n)
 						assign(n, val);
@@ -126,9 +126,9 @@ namespace ft
 				template<class InputIterator>
 					Vector(InputIterator first, typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type &alloc = allocator_type()) :
 							_allocator(alloc),
-							_begin(NULL),
-							_end(NULL),
-							_end_capacity(NULL)
+							m_begin(NULL),
+							m_end(NULL),
+							m_end_capacity(NULL)
 					{
 						assign(first, last);
 					}
@@ -140,9 +140,9 @@ namespace ft
 				 */
 				Vector(const Vector &x) :
 						_allocator(x._allocator),
-						_begin(NULL),
-						_end(NULL),
-						_end_capacity(NULL)
+						m_begin(NULL),
+						m_end(NULL),
+						m_end_capacity(NULL)
 				{
 					operator =(x);
 				}
@@ -284,7 +284,7 @@ namespace ft
 				size_type
 				size() const
 				{
-					return (static_cast<size_type>(_end - _begin));
+					return (static_cast<size_type>(m_end - m_begin));
 				}
 
 				/**
@@ -331,7 +331,7 @@ namespace ft
 				size_type
 				capacity() const
 				{
-					return (static_cast<size_type>(_end_capacity - _begin));
+					return (static_cast<size_type>(m_end_capacity - m_begin));
 				}
 
 				/**
@@ -343,7 +343,7 @@ namespace ft
 				bool
 				empty() const
 				{
-					return (_end == _begin);
+					return (m_end == m_begin);
 				}
 
 				/**
@@ -367,16 +367,17 @@ namespace ft
 
 					pointer arr = _allocator.allocate(n);
 
-					if (_begin)
+					if (m_begin)
 					{
-						ft::copy(_begin, _end, arr);
+						ft::construct_all_by_copy(arr, m_begin, len);
 
-						_allocator.deallocate(_begin, capacity());
+						ft::destruct(m_begin, len);
+						_allocator.deallocate(m_begin, capacity());
 					}
 
-					_begin = arr;
-					_end = _begin + len;
-					_end_capacity = _begin + n;
+					m_begin = arr;
+					m_end = m_begin + len;
+					m_end_capacity = m_begin + n;
 				}
 
 				/**
@@ -390,7 +391,7 @@ namespace ft
 				reference
 				operator[](size_type n)
 				{
-					return (_begin[n]);
+					return (m_begin[n]);
 				}
 
 				/**
@@ -404,7 +405,7 @@ namespace ft
 				const_reference
 				operator[](size_type n) const
 				{
-					return (_begin[n]);
+					return (m_begin[n]);
 				}
 
 				/**
@@ -421,7 +422,7 @@ namespace ft
 					if (n >= size())
 						throw_out_of_bound();
 
-					return (_begin[n]);
+					return (m_begin[n]);
 				}
 
 				/**
@@ -438,7 +439,7 @@ namespace ft
 					if (n >= size())
 						throw_out_of_bound();
 
-					return (_begin[n]);
+					return (m_begin[n]);
 				}
 
 				/**
@@ -451,7 +452,7 @@ namespace ft
 				reference
 				front()
 				{
-					return (*_begin);
+					return (*m_begin);
 				}
 
 				/**
@@ -464,7 +465,7 @@ namespace ft
 				const_reference
 				front() const
 				{
-					return (*_begin);
+					return (*m_begin);
 				}
 
 				/**
@@ -477,7 +478,7 @@ namespace ft
 				reference
 				back()
 				{
-					return (*(_end - 1));
+					return (*(m_end - 1));
 				}
 
 				/**
@@ -490,7 +491,7 @@ namespace ft
 				const_reference
 				back() const
 				{
-					return (*(_end - 1));
+					return (*(m_end - 1));
 				}
 
 				/**
@@ -534,16 +535,16 @@ namespace ft
 				void
 				push_back(const_reference val)
 				{
-					if (_end == _end_capacity)
+					if (m_end == m_end_capacity)
 					{
 						value_type copy = value_type(val);
 
 						reserve(recommend(size() + 1));
 
-						ft::construct_copy(_end++, copy);
+						ft::construct_by_copy(m_end++, copy);
 					}
 					else
-						ft::construct_copy(_end++, val);
+						ft::construct_by_copy(m_end++, val);
 				}
 
 				/**
@@ -665,9 +666,9 @@ namespace ft
 						difference_type n = last - first;
 
 						ft::copy(last, end(), first);
-						ft::destruct(_end - n, n);
+						ft::destruct(m_end - n, n);
 
-						_end -= n;
+						m_end -= n;
 					}
 
 					return (iterator(first));
@@ -684,9 +685,9 @@ namespace ft
 				{
 					if (this != &x)
 					{
-						ft::swap(_begin, x._begin);
-						ft::swap(_end, x._end);
-						ft::swap(_end_capacity, x._end_capacity);
+						ft::swap(m_begin, x.m_begin);
+						ft::swap(m_end, x.m_end);
+						ft::swap(m_end_capacity, x.m_end_capacity);
 					}
 				}
 
@@ -717,18 +718,18 @@ namespace ft
 				{
 					if (n > max_size())
 						throw_max_size();
-					_begin = _end = _allocator.allocate(n);
-					_end_capacity = _begin + n;
+					m_begin = m_end = _allocator.allocate(n);
+					m_end_capacity = m_begin + n;
 				}
 
 				void
 				deallocate()
 				{
-					if (_begin)
+					if (m_begin)
 					{
 						clear();
-						_allocator.deallocate(_begin, capacity());
-						_begin = _end = _end_capacity = NULL;
+						_allocator.deallocate(m_begin, capacity());
+						m_begin = m_end = m_end_capacity = NULL;
 					}
 				}
 

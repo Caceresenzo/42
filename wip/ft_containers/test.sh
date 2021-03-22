@@ -137,7 +137,7 @@ do
 			
 			fsanitize_flag=
 			if [[ $FSANITIZE = 1 ]]; then
-				fsanitize_flag+="-fsanitize=address"
+				fsanitize_flag+="-fsanitize=$FSANITIZE_MODE"
 			fi
 		
 			compiler_error_limit_flag=

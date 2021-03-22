@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Vector.hpp>
+#include <iostream>
+#include <string>
+
+#include "Iterator.hpp"
+#include "Vector.hpp"
 
 int
 main(void)

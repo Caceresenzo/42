@@ -669,6 +669,16 @@ namespace ft
 				}
 
 				pair<node_type*, bool>
+				insert(const_base_node_type *first, const_base_node_type *last)
+				{
+					while (first != last)
+					{
+						insert(cast(last)->value);
+						first = base_node_type::next(first);
+					}
+				}
+
+				pair<node_type*, bool>
 				insert(const value_type &val)
 				{
 					return (insert_impl(val));
@@ -860,11 +870,11 @@ namespace ft
 					if (m_root.left == NULL)
 					{
 						m_root.left = create_node(NULL, val);
-						return (make_pair(cast(m_root.left), true));
+						return (ft::make_pair(cast(m_root.left), true));
 					}
 
 					if (are_keys_equal(val.first, node->value.first))
-						return (make_pair(node, false));
+						return (ft::make_pair(node, false));
 
 					bool is_left = do_compare(val.first, node->value.first);
 					node_type *child = cast(is_left ? node->left : node->right);
@@ -879,7 +889,7 @@ namespace ft
 					else
 						node->right = child;
 
-					return (make_pair(child, true));
+					return (ft::make_pair(child, true));
 				}
 
 				void
