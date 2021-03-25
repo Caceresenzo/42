@@ -72,7 +72,7 @@ namespace ft
 			}
 
 			void
-			transfer(base_type *first, base_type *last) _GLIBCXX_USE_NOEXCEPT
+			transfer(base_type *first, base_type *last)
 			{
 				// from: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=libstdc%2B%2B-v3/src/c%2B%2B98/list.cc;hb=6bbf0dec66c0e719b06cd2fe67559fda6df09000
 				if (this != last)

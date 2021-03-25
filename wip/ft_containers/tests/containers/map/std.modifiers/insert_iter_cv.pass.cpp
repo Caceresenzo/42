@@ -17,8 +17,8 @@ main(void)
 {
 	{
 		typedef MAP<int, double> M;
-		typedef typename M::iterator R;
-		typedef typename M::value_type VT;
+		typedef M::iterator R;
+		typedef M::value_type VT;
 
 		M m;
 

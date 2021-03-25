@@ -83,7 +83,7 @@ test_stable(int N)
 
 	ASSERT(DISTANCE(c.begin(), c.end()) == N);
 
-	typename C::const_iterator j = c.begin();
+	C::const_iterator j = c.begin();
 	for (int i = 0; i < N; ++i, ++j)
 		ASSERT(j->val == i / 2);
 
