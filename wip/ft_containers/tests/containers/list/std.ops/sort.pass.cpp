@@ -20,17 +20,20 @@
 #include <cstdlib>
 #include <iostream>
 
-template<class RandomIt>
-	void
-	random_shuffle(RandomIt first, RandomIt last)
-	{
-		typename ITERATOR_TRAITS<RandomIt>::difference_type i, n;
-		n = last - first;
-		for (i = n - 1; i > 0; --i)
+namespace tester
+{
+	template<class RandomIt>
+		void
+		random_shuffle(RandomIt first, RandomIt last)
 		{
-			SWAP(first[i], first[std::rand() % (i + 1)]);
+			typename ITERATOR_TRAITS<RandomIt>::difference_type i, n;
+			n = last - first;
+			for (i = n - 1; i > 0; --i)
+			{
+				SWAP(first[i], first[std::rand() % (i + 1)]);
+			}
 		}
-	}
+}
 
 struct Payload
 {
@@ -73,7 +76,7 @@ test_stable(int N)
 	for (int i = 0; i < N; ++i)
 		v.push_back(Payload(i / 2));
 
-	random_shuffle(v.begin(), v.end());
+	tester::random_shuffle(v.begin(), v.end());
 
 	for (int i = 0; i < N; ++i)
 		v[i].side = i;
@@ -124,7 +127,8 @@ main(void)
 
 	ASSERT_AWARE_ZERO();
 
-	srand(time(NULL));
-	for (int i = 0; i < 40; ++i)
-		test_stable(i);
+	srand (
+	time(NULL));for
+(	int i = 0; i < 40; ++i)
+	test_stable(i);
 }

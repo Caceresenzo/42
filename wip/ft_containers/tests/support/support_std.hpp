@@ -20,13 +20,13 @@
 #  include <algorithm>
 #  define DISTANCE std::distance
 #  define SWAP std::swap
-#  define NEXT std::next
-#  define PREV ft::prev
+#  define NEXT tester::next
+#  define PREV tester::prev
 #  define RANDOM_ACCESS_ITERATOR_TAG std::random_access_iterator_tag
 #  define ITERATOR_TRAITS std::iterator_traits
 #  define PAIR std::pair
 
-namespace std {
+namespace tester {
 	template<typename Iterator>
 		Iterator
 		next(Iterator iterator, unsigned long n = 1)
