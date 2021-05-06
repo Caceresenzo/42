@@ -1,0 +1,14 @@
+<script type="text/template" id="template-user-list">
+	<div class="list-group">
+		<%% _.each(users, function(user) { %>
+			<a href="/#user/<%%= user.id %>" class="list-group-item list-group-item-action">
+				<div class="d-flex">
+					<img src="<%%= user.picture %>" alt="<%%= user.username %>" class="rounded-circle" width="40">
+					<div class="ml-4 justify-content-between my-auto">
+						<h5 class="mb-1"><%%= user.username %></h5>
+					</div>
+				</div>
+			</a>
+		<%% }); %>
+	</div>
+</script>

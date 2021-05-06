@@ -1,0 +1,28 @@
+version: '2'
+services:
+  db:
+    image: postgres:9.4.1
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/myapp
+    depends_on:
+      - db
+  
+  php:
+    image: dockage/phppgadmin
+    ports:
+      - "80:80"
+    environment:
+      PHP_PG_ADMIN_SERVER_HOST: db
+      PHP_PG_ADMIN_SERVER_PORT: 5432

@@ -1,0 +1,250 @@
+<script type="text/template" id="template-channel-list">
+	<div>
+		<a href="/#channel/create">[create]</a>
+		<a href="javascript:void(0)" id="refresh-button">[refresh]</a>
+	</div>
+	<div class="dropdown-divider"></div>
+	<%% if (state.loading) { %>
+		<div class="d-flex justify-content-center">
+			<div class="spinner-border" role="status"></div>
+		</div>
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			<%%e state.error.responseJSON?.message || state.error.status || "failed to fetch the channels" %>
+		</div>
+	<%% } else { %>
+		<%% if (Object.keys(channels).length) { %>
+			<div class="list-group">
+				<%% _.each(channels, function(channel) { %>
+					<a href="/#channel/<%%e channel.id %>" class="list-group-item list-group-item-action">
+						<div class="d-flex w-100 justify-content-between">
+							<h5 class="mb-1"><%%e channel.name %></h5>
+							<small><%%e channel.visibility %></small>
+						</div>
+						<small>owner by <%%e channel.owner.username %></small>
+					</a>
+				<%% }); %>
+			</div>
+		<%% } else { %>
+			<div class="alert alert-secondary" role="alert">
+				no channel
+			</div>
+		<%% } %>
+	<%% } %>
+</script>
+
+<script type="text/template" id="template-channel-create">
+	<form id="channel-form" autocomplete="off">
+		<div class="form-group has-validation">
+			<label for="name-input">name</label>
+			<input class="form-control" id="name-input" value="<%%e name %>" autocomplete="off">
+			<div id="name-invalid" class="invalid-feedback"></div>
+		</div>
+		<div class="form-group has-validation">
+			<label for="visibility-input">visibility</label>
+			<select class="form-control" id="visibility-select">
+				<option value="public" <%%e visibility == "public" ? 'selected' : '' %>>public</option>
+				<option value="protected" <%%e visibility == "protected" ? 'selected' : '' %>>protected <small>(require a password)</small></option>
+				<option value="private" <%%e visibility == "private" ? 'selected' : '' %>>private</option>
+			</select>
+			<div id="visibility-invalid" class="invalid-feedback"></div>
+		</div>
+		<div class="form-group has-validation" style="display: none" id="password-form-group">
+			<label for="password-input">password (leave empty to not change it)</label>
+			<input type="password" class="form-control" id="password-input" value="<%%e this.password %>" autocomplete="new-password">
+			<div id="password-invalid" class="invalid-feedback"></div>
+		</div>
+	</form>
+	<div class="text-center">
+		<a href="javascript:void(0)" id="submit-button">[submit]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-loading">
+	<div class="text-center">
+		<div class="spinner-border" role="status"></div>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-error">
+	<div class="alert alert-danger" role="alert">
+		<%% if (status == 403) { %>
+			forbidden: <%%e message %>
+		<%% } else if (status == 404) { %>
+			not found
+		<%% } else if (status == 0) { %>
+			error: no status
+		<%% } else { %>
+			error: <%%e message %>
+		<%% } %>
+		<small>
+			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+		</small>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-password-protected">
+	<div class="alert alert-warning" role="alert">
+		password protected
+		<small>
+			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+		</small>
+	</div>
+	<div class="text-center" role="alert">
+		<a href="#channel/<%%e channel.id %>/unlock">[unlock]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-private">
+	<div class="alert alert-danger" role="alert">
+		private
+		<small>
+			<a id="refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+		</small>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-member">
+	<p class="channel-member">
+		<%%e member.user.username %>
+		<%% if (member.user.id == channel.owner.id) { %>
+			<i class="mdi mdi-crown" aria-hidden="true"></i>
+		<%% } %>
+		<%% if (member.admin) { %>
+			<i class="mdi mdi-account-supervisor" aria-hidden="true"></i>
+		<%% } %>
+		<%% if (member.muted) { %>
+			<i class="mdi mdi-volume-mute" aria-hidden="true"></i>
+		<%% } %>
+		<%% if (member.banned) { %>
+			<i class="mdi mdi-cancel" aria-hidden="true"></i>
+		<%% } %>
+		<br>
+		<%% if (isOwner && member.user.id != channel.owner.id) { %>
+			<%% if (member.admin) { %>
+				<a href="#channel/<%%e channel.id %>/demote/<%%e member.user.id %>">[demote]</a>
+			<%% } else { %>
+				<a href="#channel/<%%e channel.id %>/promote/<%%e member.user.id %>">[promote]</a>
+			<%% } %>
+		<%% } %>
+		<%% if (isAdmin || isOwner) { %>
+			<a href="#channel/<%%e channel.id %>/mute/<%%e member.user.id %>">[mute]</a>
+			<%% if (member.muted) { %>
+				<a href="#channel/<%%e channel.id %>/unmute/<%%e member.user.id %>">[unmute]</a>
+			<%% } %>
+			<%% if (member.banned) { %>
+				<a href="#channel/<%%e channel.id %>/unban/<%%e member.user.id %>">[unban]</a>
+			<%% } else { %>
+				<a href="#channel/<%%e channel.id %>/ban/<%%e member.user.id %>">[ban]</a>
+			<%% } %>
+			<a href="#channel/<%%e channel.id %>/remove/<%%e member.user.id %>">[remove]</a>
+		<%% } %>
+	</p>
+</script>
+
+<script type="text/template" id="template-channel-message-list">
+	<div id="message-container" style="height: 300px; overflow-y: scroll">
+		<!-- items -->
+	</div>
+	
+	<div class="dropdown-divider"></div>
+
+	<div id="message-input-container">
+		<!-- message input -->
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-message-input">
+	<div class="input-group has-validation">
+		<input id="message-input" type="text" class="form-control" autocomplete="off" placeholder="hello world">
+		<div class="input-group-append">
+			<button id="send-button" class="btn btn-primary">
+				<div id="loading-container" class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+				<i class="mdi mdi-send" aria-hidden="true"></i>
+			</button>
+		</div>
+		<div id="message-invalid" class="invalid-feedback"></div>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-message-input-must-join">
+	<div class="alert alert-primary" role="alert">
+		do you want to send messages?
+		<a href="#channel/<%%e channel.id %>/join">[join]</a>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel-message">
+	<div class="channel-message">
+		<a href="#user/<%%e user.id %>"><%%e user.username %></a>: <%%e content %>
+	</div>
+</script>
+
+<script type="text/template" id="template-channel">
+	<%% if (state.loading) { %>
+		<div class="text-center">
+			<div class="spinner-border" role="status">
+				<span class="sr-only">Loading...</span>
+			</div>
+		</div>
+	<%% } else if (state.error) { %>
+		<div class="alert alert-danger" role="alert">
+			<%% if (state.error.status == 403) { %>
+				forbidden: <%%e state.error.responseJSON.message %>
+			<%% } else if (state.error.status == 404) { %>
+				not found
+			<%% } else if (state.error.status == 0) { %>
+				error
+			<%% } else { %>
+				error: <%%e state.error.responseJSON.message %>
+			<%% } %>
+			<small>
+				<a id="error-refresh" href="javascript:void(0)" class="alert-link">(click here to refresh)</a>
+			</small>
+		</div>
+	
+		<%% if (state.error?.responseJSON?.message === "password protected") { %>
+			<div class="input-group mb-3">
+				<input id="password-input" type="password" class="form-control" placeholder="password">
+				<div class="input-group-append">
+					<button id="submit-password-button" class="btn btn-primary">submit</button>
+				</div>
+			</div>
+		<%% } %>
+	<%% } else { %>
+		<h3>
+			<%%e channel.name %>
+			<small class="text-muted"><%%e channel.visibility %></small>
+		</h3>
+		<div class="dropdown-divider"></div>
+		<div>
+			<%% if (isOwner) { %>
+				<a href="#channel/<%%e channel.id %>/edit">[edit]</a>
+				<a href="#channel/<%%e channel.id %>/transfer-ownership">[transfer-ownership]</a>
+				<a href="#channel/<%%e channel.id %>/delete">[delete]</a>
+				<a href="#channel/<%%e channel.id %>/clear">[clear]</a>
+			<%% } %>
+			<%% if (isOwner || isAdmin) { %>
+				<a href="#channel/<%%e channel.id %>/add">[add]</a>
+			<%% } %>
+			<%% if (isMember) { %>
+				<a href="#channel/<%%e channel.id %>/leave">[leave]</a>
+			<%% } else { %>
+				<a href="#channel/<%%e channel.id %>/join">[join]</a>
+			<%% } %>
+			<a href="javascript:void(0)" id="refresh-action">[refresh]</a>
+		</div>
+		<div class="dropdown-divider"></div>
+		<div class="container">
+			<div id="part-container" class="row">
+				<div id="messages-part" class="col-12 col-lg-9"></div>
+				<div id="members-part" class="col-0 col-lg-3"></div>
+			</div>
+		</div>
+		<%% if (!state.connected) { %>
+			<div class="alert alert-warning" role="alert">
+				not connected, connecting...
+			</div>
+		<%% }%>
+	<%% } %>
+</script>

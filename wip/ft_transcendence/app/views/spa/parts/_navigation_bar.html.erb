@@ -1,0 +1,35 @@
+<header class="mb-3 border-bottom">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light" id="navigation-bar">
+		<div class="container">
+			<a class="navbar-brand" href="#">ft_transcendence</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto" id="navigation-bar-links">
+					loading...
+				</ul>
+				<div class="dropdown text-right">
+					<a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-toggle="dropdown">
+						<img src="<%= current_user.picture %>" alt="mdo" width="32" height="32" class="rounded-circle">
+						<%= current_user.username %>
+					</a>
+					<ul class="dropdown-menu text-small">
+						<li>
+							<a class="dropdown-item" href="#profile/edit">settings</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="#profile">profile</a>
+						</li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+						<li>
+							<%= link_to "logout", destroy_user_session_path_path, method: :delete, class: "dropdown-item" %>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</nav>
+</header>

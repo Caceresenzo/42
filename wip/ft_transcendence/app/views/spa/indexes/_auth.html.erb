@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-center align-items-center text-center" style="height: 100vh !important;">
+  <div class="w-100" style="max-width: 330px">
+	<h1 class="h3 mb-3">ft_transcendence</h1>
+	<%# TODO MARVIN <%= link_to user_marvin_omniauth_authorize_path, method: :post do %>
+	<%#	TODO MARVIN <button class="w-100 btn btn-lg btn-primary">Sign in with 42</button>
+	<%# TODO MARVIN <% end %>
+	<%# <div style="height: 10px"></div> %>
+	<%= link_to user_google_oauth2_omniauth_authorize_path, method: :post do %>
+		<button class="w-100 btn btn-lg btn-primary">sign in with google</button>
+	<% end %>
+  </div>
+</div>

@@ -1,0 +1,2 @@
+module ChannelUserAdminHelper
+end

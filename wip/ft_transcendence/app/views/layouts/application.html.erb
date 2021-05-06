@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ft_transcendence</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+	<script>
+		<% if user_signed_in? %>
+			window.currentUser = <%= raw(current_user.to_json(methods: [:picture, :otp_provisioning_uri])) %>;
+		<% else %>
+			window.currentUser = null;
+		<% end %>
+	</script>
+
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= stylesheet_pack_tag "application", media: "all" %>
+  </head>
+
+  <body>
+      <%= yield %>
+  </body>
+  
+  <%= javascript_pack_tag "application" %>
+</html>
