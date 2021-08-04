@@ -1,0 +1,2452 @@
+commit 21806ef2862b565ab10e4592a96b39b9bee34f3f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 14:18:45 2021 +0200
+
+    Revert "feat(docker): making compose wait for the health checks"
+    
+    This reverts commit 0cf678d86b9e07d3e413d27e2489924926fedbd1.
+
+commit 10d889aee9c1c67ead4ffe0305720875c598d2f2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 14:09:52 2021 +0200
+
+    chore(back/auth): setting first user as an admin
+
+commit 9f6f5320ea375fc00cf79123e85e1d1c2b197f84
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 14:06:16 2021 +0200
+
+    fix(back/relationship): friends could not block each others
+
+commit 0cf678d86b9e07d3e413d27e2489924926fedbd1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 01:23:52 2021 +0200
+
+    feat(docker): making compose wait for the health checks
+
+commit 460c0eb32806e9bd763e0d9b9d09aef380eba94c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 01:23:27 2021 +0200
+
+    feat(docker): added healthcheck for the frontend
+
+commit 455493ea9606fd10266ccf16913e98cbb212076d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 01:15:26 2021 +0200
+
+    feat(docker): added healthcheck for the backend
+
+commit db94bc4552cbde5b14d6f24a3de57eb681733193
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Aug 2 01:05:59 2021 +0200
+
+    fix(front/user): icon was sometimes not displaying
+
+commit 5772c0303de4e7ede07a370113dc07c8bd5ef8ff
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 02:03:27 2021 +0200
+
+    feat(back/express): disabled etag
+
+commit c8451f6c588c4834595111dfaf02dd32749cd9ce
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:53:32 2021 +0200
+
+    chore(front/user): removed unused code
+
+commit 5a1466dfb965c26e5d068ec87755c852fbe54e2e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:52:47 2021 +0200
+
+    chore(front/user): removed unused 'joined <date>' text
+
+commit 0c8d8c0bc91e7b6a0ce9f9efdfd57ae262a3312f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:51:48 2021 +0200
+
+    feat(front/user): extracted into more components
+
+commit c4d55417915f4b6726d6b4a7ff6615b52592c5dd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:49:45 2021 +0200
+
+    feat(front/user): added a watch button on the profile page
+
+commit 27b1cd64378a73bc431f9a2048d6fa6a3fee692d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:37:35 2021 +0200
+
+    feat(front/matchmaking): trying to rejoin match if already in game
+
+commit ddee5e5666bc3971fe5be2df33e22a7d2fac18df
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:13:21 2021 +0200
+
+    feat(back/game): constant paddle rollback (3rd maybe?)
+    
+    previous attempt: https://github.com/atetu/Ft_transcendence/commit/25b96272e21849e354726fdfdf2d4415d101a000
+
+commit 953c84aac01e9d08033163cb43ee4166e7875817
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Aug 1 01:13:15 2021 +0200
+
+    feat(front/game): constant paddle rollback (3rd maybe?)
+    
+    previous attempt: https://github.com/atetu/Ft_transcendence/commit/25b96272e21849e354726fdfdf2d4415d101a000
+
+commit 9c350e696aee04e4fef770946c799b754dc1dc4b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 02:19:35 2021 +0200
+
+    feat(back/game): slightly changed obstable position on the 'square' map
+
+commit 25b96272e21849e354726fdfdf2d4415d101a000
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 02:02:21 2021 +0200
+
+    fix(front/game): constant paddle rollback (2nd maybe?)
+    
+    https://github.com/atetu/Ft_transcendence/commit/9dbce947b30df3c5e8727a2830f52d549e69610d
+
+commit 7d4c50979e16953d6c159ad380512b12fa3ed5b1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:59:46 2021 +0200
+
+    chore(front/game): renamed field `nbGame` to `pointToWin`
+
+commit 3bc560abdb2ba23971edf57c85841374d4e19ea9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:59:38 2021 +0200
+
+    chore(back/game): renamed field `nbGame` to `pointToWin`
+
+commit ad18f1bc668a6f10832e1e909306fff6a11a4664
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:49:06 2021 +0200
+
+    fix(back/avatar): removing usage of `next()`
+
+commit 2720a84e51043bc244fa71d26390a826d3e5ca57
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:42:27 2021 +0200
+
+    fix(back/database): changed by mistake
+
+commit 9dbce947b30df3c5e8727a2830f52d549e69610d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:37:45 2021 +0200
+
+    fix(front/game): constant paddle rollback (maybe?)
+
+commit 9ddc665ea5002d4c76c7a8b3ad06aa0e36605b50
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:31:07 2021 +0200
+
+    chore(backend): removed unused `console.log()` call
+
+commit b76fc9a76eba823b9ae083c09d2618e2074b6e8d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:30:22 2021 +0200
+
+    chore(frontend): removed unused `console.log()` call
+
+commit 36fd4e8f6b6667d005f2b4ff7b0f880cf034f3dc
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:28:57 2021 +0200
+
+    fix(front/user): user listing avatar (in settings) were not sized
+
+commit 9b1baaf76107b449203598a37d71b04282522244
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:26:20 2021 +0200
+
+    fix(front/user): reduced avatar status stroke
+
+commit f3a480bb0735f64edcbda0122c2d05bc6813f595
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:18:26 2021 +0200
+
+    fix(front/channel): user listing avatar were not sized
+
+commit 31e5b41b8cd06934f1a477db07b931cbd4240f09
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 01:16:50 2021 +0200
+
+    feat(front/channel): sorting user listing
+
+commit 58b70dc6bfdbb07f6dd9f25f34043789558f95de
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:53:13 2021 +0200
+
+    fix(front/axios): if the refresh token was invalidated, an infinite loop was occuring
+
+commit 63b35ba06044f9e970293f34ce053f912fcab6a0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:47:35 2021 +0200
+
+    chore(front/channel): opening the left drawer by default
+
+commit 40237626ce61a265c68c40b690e5b12f7ddf538f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:45:18 2021 +0200
+
+    feat(back/api): adding try-catch everywhere
+
+commit 995beebcac2a207007360e035f5f39b87dcdb806
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:23:55 2021 +0200
+
+    feat(front/user): sorting by connected first
+
+commit 4030aecdd944a2017da32f728784a3d1d35aa2f0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:19:40 2021 +0200
+
+    fix(front/layout): removed 'debug' link
+
+commit 0d9540bc850cde76ef6e38953ee7cbf09d4a3b91
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:18:02 2021 +0200
+
+    fix(front/matchmaking): event for leaving was not always fired
+
+commit 4af504c53bef68f1aa1d2611926f28f42753d9f9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 30 00:07:17 2021 +0200
+
+    feat(back/matchmaking): splitted rooms code into multiple files
+
+commit 69b57cfd4e81aa02e15cd0ac1cfbef23c35feb6e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 23:34:11 2021 +0200
+
+    feat(front/channel): using a dialog for the leave button
+
+commit f1895af2b32bf446e18710b86349ae55a3e0ea26
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 23:26:51 2021 +0200
+
+    feat(back/game): repositionning the ball at the absolute middle
+    
+    Removed the random part.
+
+commit 3104de1a23b22d31b09e9bebc2ab7389def87ff5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 23:23:42 2021 +0200
+
+    feat(back/database): accepting emoji
+
+commit a420678796a2309eb3753f725114684acef3420d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 19:03:49 2021 +0200
+
+    fix(backend): typing issues
+
+commit bc59597836a7182446eebd12b7dc644b31ce3494
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 18:52:21 2021 +0200
+
+    chore(front/channel): better mobile support
+
+commit 7f963c3833a2242ea388167c49dcabc45c64b2ba
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 18:01:13 2021 +0200
+
+    feat(front/channel): added button to show/hide right drawer
+
+commit 83ef1b7bddeaedbfa2416ba56649a4a9d6592f8e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:48:16 2021 +0200
+
+    feat(frontend): made main drawer stateless
+
+commit 7a386db569b9ab060bbaebba7ee7ce9d5f158078
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:44:31 2021 +0200
+
+    feat(front/game): extracted page into a separate component
+
+commit ef9e23b43d40ccb0591ad8c22a7d060aecbac813
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:37:59 2021 +0200
+
+    fix(front/channel): updating message was using the wrong event
+
+commit 4bd33b206186490a7e723015c2eacf85d896f767
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:37:39 2021 +0200
+
+    feat(back/channel): updating pending game message at game's end
+
+commit 6331d0d75505324a2d84a7bcc94ab7abeaaeb6a8
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:19:16 2021 +0200
+
+    fix(front/home): strange scrollbar at the bottom
+
+commit 4b28e225fbde11dac32437d84d28c0d225570b71
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:08:58 2021 +0200
+
+    feat(front/game): displaying a chip if a player has been disconnected
+
+commit 6332d32b36dd7d9b9492c68d46cbf2e3b96a3284
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 29 17:08:26 2021 +0200
+
+    feat(back/game): allowing for reconnect
+    
+    And general code cleaning.
+
+commit 79770363daa4ea40f9d315131b210081b16c2b24
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 28 18:03:09 2021 +0200
+
+    feat(front/user): displaying an icon if friend in the listing
+
+commit dc126e1846de103f2bc07b8cd2f44c0d7ec67599
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 28 18:02:49 2021 +0200
+
+    feat(front/home): using components
+
+commit 156143dd1b1fff9916cbc0c1cafcc93f3e3cb477
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 28 17:47:14 2021 +0200
+
+    feat(front/home): storing the intro gif as a static asset
+
+commit 8371d5b619e46ea67e74e987e610eac98c24230a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 28 17:41:17 2021 +0200
+
+    fix(front/home): added scrolling
+
+commit d9767652a30ea26ad68692ae459b76b43c2e9e2a
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Mon Jul 26 14:05:45 2021 +0200
+
+    feat(front/home): finalize home page
+
+commit 51e5af15445b6b4120fade0f8ae2d3c770970390
+Merge: 079a9b9 e2327c1
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Mon Jul 26 14:00:52 2021 +0200
+
+    Merge branch 'master' of https://github.com/atetu/Ft_transcendence
+
+commit 079a9b95cbdc775ab08d201ca6ff08ca4a790ded
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Mon Jul 26 14:00:40 2021 +0200
+
+    feat(front/home): finalized home page
+
+commit e2327c14e54e7e071b3708663bcc06c14cea5535
+Author: Enzo Caceres <caceresenzo1502@gmail.com>
+Date:   Mon Jul 26 00:50:21 2021 +0200
+
+    chore: added readme
+
+commit 5eae9328137bd9f2ec6f27f9037beaa385b6399d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jul 26 00:40:24 2021 +0200
+
+    feat(front/achievement): added new icons
+
+commit 45df66507db335d5f3e1645de4eb55fc1f13f3f5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jul 26 00:40:11 2021 +0200
+
+    feat(back/achievement): added a lot
+
+commit 8021efd8dec08e8a2df80033630ba42af9008a93
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 23:24:30 2021 +0200
+
+    feat(front/channel): notify user when he invited someone
+
+commit 4481ba9343faa83e58e7f225e19b4684be23984d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 23:09:52 2021 +0200
+
+    fix(front/direct-message): message index lookup was not working
+
+commit f4662b0cc1219a2cfe4d7dd7b6699807293e67db
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 23:09:00 2021 +0200
+
+    fix(front/direct-message): user avatar didn't have a size
+
+commit 186e9b7a0b0c714202092b0f9907ce242f9c8ee3
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 23:06:31 2021 +0200
+
+    feat(front/auth): added a redirection page that ping backend before the redirect
+
+commit e08306eecd07ce2b3d0880942e678c16f787d310
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 23:06:01 2021 +0200
+
+    feat(back/status): added a simple ping pong endpoint
+
+commit 7530675949f687db4c41f63757876b3401a981bb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 22:46:49 2021 +0200
+
+    fix(front/pending-game): redirection url was not valid
+
+commit 0d3885de2c9bc9fcb0d0a5e1d1a4ef4049efd184
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 22:28:34 2021 +0200
+
+    chore(back/matchmaking): added env variable to allow single matchmaking
+
+commit d70aae965b0071f14275e033c7d5f3131ea9c76d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 22:22:21 2021 +0200
+
+    fix(backend): compilation issues
+
+commit 62f81d1fbd886e6943e373eb6c638169d17d95c1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 22:12:29 2021 +0200
+
+    feat(front/user): added filtering options
+
+commit a78d12fcfd458bb57c936839308009c5e56d29b5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:45:58 2021 +0200
+
+    feat(back/game): setting ball initial position
+
+commit c3f4512771749ee6711b92a4acd6e41bd15d885e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:41:17 2021 +0200
+
+    chore(front/user): menu was using a `$dialog.message` instead of a `$dialog.notify`
+
+commit a77c2bd83e5aad43b5d4d453f8b86d4ea10391d9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:40:51 2021 +0200
+
+    chore(front/game): re-focusing
+
+commit c6e8ec5033c35e13771070a2a9f62a58f2ad1906
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:36:21 2021 +0200
+
+    feat(front/channel): displaying the discovery page by default
+
+commit fdfbb1eb09189637480c381ce3f1f3474e19280c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:17:48 2021 +0200
+
+    fix(front/game): sometimes match id is not returned from the backend, redirecting to `/` by default
+
+commit 4db62bf7ed9df13732f37c92cab46d7eee65a481
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:17:09 2021 +0200
+
+    chore(front/match): removed unused components
+
+commit e628723448a98e48dc7c441ad1ba7a269611f39f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:16:55 2021 +0200
+
+    feat(back/game): sending event when a player join/quit a game
+
+commit cb02f0dc50d741f4ac3b7611252f8c960b9de6b2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 21:04:22 2021 +0200
+
+    fix(front/match): key was a duplicate when playing against itself
+
+commit 067431aff959054fafa894021db4160fe1215079
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:39:16 2021 +0200
+
+    chore(front/game): displaying 'socket not connected'
+
+commit 0fcf4ebc319476032181584fe5536b11b4e77b14
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:35:47 2021 +0200
+
+    feat(front/layout): moved logout button to the bottom
+
+commit 96d23087ba551eb51e407513ecc45871871b4db0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:30:48 2021 +0200
+
+    feat(front/challenge): upgraded speed
+
+commit 77fbaf76ce8f6d70ce911bd598ad8bea37453202
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:30:37 2021 +0200
+
+    chore(backend): cleaning
+
+commit 343f6fbe57b9abdb0f2ba96c330bf9078ea5c022
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:27:06 2021 +0200
+
+    fix(back/game): settings from pending game were not working
+
+commit 997aa3e4e057d98f56352dc79259487f8111d022
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:23:47 2021 +0200
+
+    feat(front/challenge): fetching maps
+
+commit c19fb685a7f936b04f1e3fd7c902bd819dafe820
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:23:32 2021 +0200
+
+    chore(back/pending-game): validating map id
+
+commit 1627c8fd70bd6b33bf846557468dfdc09a81d413
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:09:22 2021 +0200
+
+    chore(front/user): displaying 'empty message' when no friend
+
+commit 8806319d8f0362aaf8684aa3cfc04a65a3b2336b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:05:34 2021 +0200
+
+    feat(front/user): new match form broke table
+
+commit 1c419c599eb7c26eb994c68a6f809adc894b18bc
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:05:21 2021 +0200
+
+    feat(front/match): added show page
+
+commit fcb04aa7c9e7fcc0311df4ec9d351a9da89a8ec3
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:05:01 2021 +0200
+
+    feat(back/match): sending JSON in another form
+
+commit c26206fe5cb355829062adafa28827c403e8533f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 20:04:42 2021 +0200
+
+    fix(back/match): route was not registered
+
+commit bf08f92416ec2ceffe99caacc58c59df54a23c8d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 19:30:59 2021 +0200
+
+    chore(front/game): moved page file
+
+commit 5e1444e3818fcf2e780c89c3b560b4317c441c4f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 19:29:50 2021 +0200
+
+    fix(back/match): added missing id in `toJSON()`
+
+commit 3ec3075ded66752becc36f5e05bb44ca4608e562
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 19:26:39 2021 +0200
+
+    feat(front/game): improved experience
+
+commit 5a0ea724f16cada70a3902cd76364c56e38cdbd5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 19:26:23 2021 +0200
+
+    fix(back/game): map bug
+
+commit eec4e58416e864d3947115ce37cb4538007b15fa
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 18:40:37 2021 +0200
+
+    feat(front/game): added support for multiple obstacle
+
+commit 12cab01c27da69f0d6fdbf3566ed799d3807741d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 18:40:20 2021 +0200
+
+    feat(back/game): splitted into files and added maps
+
+commit bd808362dbabe71f7335f85d52848cf5acf3c3d3
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 17:52:16 2021 +0200
+
+    fix(front/user): reversing friend and match list
+
+commit d9dfd23375363f2dc17debec7e944defbae9d3d2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 17:48:15 2021 +0200
+
+    feat(back/game): better collision and re-added sprites
+
+commit 6db424f7361faebd363a5fe8ef01d3d81411d375
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 00:34:24 2021 +0200
+
+    feat(front/game): optimized code
+
+commit 096e3bb416f02b8d272a32e604e5203a0b6fc2dd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Jul 25 00:33:50 2021 +0200
+
+    feat(back/game): refactoring of game state
+
+commit c1dcf0c8ef71784e83bdbbf206f3a8988a35cdff
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 22:15:07 2021 +0200
+
+    fix(back/game): random direction was not working
+
+commit d735acab9de771a5433b21920cc763359d7b66c2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 22:08:44 2021 +0200
+
+    feat(front/game): handling new refacto
+
+commit 2e338290f8cabb990393554a2a1c656708ef1a8a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 22:08:25 2021 +0200
+
+    feat(back/game): big refacto
+
+commit be8daa5b050910b815bd2f4b57e6de13984eaa52
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 14:35:22 2021 +0200
+
+    feat(front/game): refactored drawing code
+
+commit ea3d2e91c3499fa30e8b0ad85c6894efafb63cd8
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 13:12:47 2021 +0200
+
+    fix(front/game): movement code
+
+commit 62df639e617b60a12c9f71d3105512de994ee1b1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 12:36:15 2021 +0200
+
+    fix(docker): `expose` format was not correct
+
+commit 92c1a70a50ab6582f0e032cc1ac13469ee3ee781
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 12:32:13 2021 +0200
+
+    chore(front/game): removing anoying debug `alert()` call
+
+commit ea11638caef8d3b2bbcc12961171c493c01f1e0d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 12:29:47 2021 +0200
+
+    feat(front/direct-mesage): removing 'message' button
+
+commit 06a76af4dacb134ddfe9b3e13c20a33905986672
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 12:22:11 2021 +0200
+
+    fix(front/channel): improved user menu
+
+commit ba71a22b7b100429fd20956389052912e07b4d92
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 12:15:28 2021 +0200
+
+    fix(front/game): improved challenge dialog
+
+commit 6089b2ef40159514a2fb6a7ad231b77f8d407257
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 12:07:17 2021 +0200
+
+    fix(frontend): typing issues
+
+commit 41b0a7c1a112744ad29743c2ce914881d281582f
+Merge: 9a52092 1595c7a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 11:59:10 2021 +0200
+
+    Merge branch 'master' into alice2
+
+commit 1595c7a19ecd0ef08497467c21617643c71ad213
+Merge: c6dc038 f0bc979
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 24 11:53:41 2021 +0200
+
+    Merge branch 'master' of github.com:atetu/Ft_transcendence
+
+commit 9a52092b11674943a3307cbace5cd2d97dd99af7
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Fri Jul 23 19:07:09 2021 +0200
+
+    possible to watch the game and changing the join button in see
+
+commit d9914cd0a78c475c718775439b96679f360f9cda
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Fri Jul 23 13:58:17 2021 +0200
+
+    feat(front/home) :finalize page
+
+commit 35092a022b7b72362a6dc5e830aa8c9eed1bf776
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Thu Jul 22 21:01:06 2021 +0200
+
+    deconnexion + start possiblity of watching the game
+
+commit f0bc9797fa414e64bd620a5a2e721c63b8167172
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Thu Jul 22 17:51:03 2021 +0200
+
+    feat(front/home): redisigned page
+
+commit c6dc038f1a9916927fa6ea8a8443de6477554c2b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 22 16:17:15 2021 +0200
+
+    chore(front/i18n): typos for 'you didn't joined/contacted ...'
+
+commit 7b79314856f4da8a62aa1b94a97dd9a44e648a9d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 22 15:48:13 2021 +0200
+
+    fix(docker): picture were not saved
+
+commit 4bcd66f6b4663ceb5f0609aa45c7e4637a18dc74
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 17:02:04 2021 +0200
+
+    feat(frontend): added some titles
+
+commit e083c7d66045717995425c249f929441eebc7c66
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:50:46 2021 +0200
+
+    fix(back/channel): added length limit for messages
+
+commit 34265cbba14e478bf49e9e55d2ffdea9875efc77
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:49:15 2021 +0200
+
+    chore(front/achievement): added missing icons
+
+commit b1af7ca1bc8d38f680aff6d82bed7bfbba5b8c56
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:46:45 2021 +0200
+
+    fix(front/user): only displaying last 3 achievements
+
+commit b363ae1d0277a0c0a169d4de3a26a0ac86c6bba2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:43:33 2021 +0200
+
+    feat(back/achievement): added some
+
+commit a25b75026dd214c1113969c77b9eed2c8d9cac28
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:24:08 2021 +0200
+
+    feat(front/achievement): displaying message wwhen unlocking an achievement
+
+commit 50bee7477719bf36e47551e149dafd4509d9a4d9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:23:46 2021 +0200
+
+    feat(back/achievement): sending event to user
+
+commit a6e27a114396d454dbcb1d56ebc21a59f4a22f4c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 16:03:08 2021 +0200
+
+    feat(front/user): displaying message if user is banned
+
+commit bae26706a2c4f9c72d327872baf8f916daad971d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 15:58:43 2021 +0200
+
+    fix(front/user): friend list avatars was not sized correctly
+
+commit fc6729fcaccedbdf1cd84c70d576d363e424624e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 15:25:19 2021 +0200
+
+    feat(front/user): listing friends
+
+commit 412c8ea4970fb5c69e6bc8cec9d11bfdfd99d38d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 21 15:25:03 2021 +0200
+
+    feat(back/relationship): listing friends
+
+commit 129add454391498c89d782fb910210412b566ef6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 22:13:00 2021 +0200
+
+    feat(front/relationship); tab i18n
+
+commit 35e0195595ee6b169f0378efd09021c8f1e11333
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Tue Jul 20 17:06:26 2021 +0200
+
+    cleaning game
+
+commit 7d166bbe67c00513c583bc9a36cf1e535e5254f1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 16:50:41 2021 +0200
+
+    feat(front/user): added challenge button on profile
+
+commit 81652037195baa53fd54ecd96ce5cbac6aa08114
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 16:35:48 2021 +0200
+
+    feat(frontend): added authors
+
+commit 812dcdd84de53e80c9572ddd0952006c0859b0bb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 16:03:43 2021 +0200
+
+    feat(back/relationship): allowing blocking when outcoming
+
+commit 68118a90833f72208891293fd1d1c1d72465cba0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:56:07 2021 +0200
+
+    feat(front/user): block button
+
+commit c5097d26f919a6de3a80e998a64733d525c4ecea
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:45:13 2021 +0200
+
+    fix(front/axios): error when no internet
+
+commit a1dc9da586e04e941c8092f391012017ccffcbda
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:42:14 2021 +0200
+
+    feat(front/channel): hiding leave button when you are the owner
+
+commit c107f3727c42e414e47a5c90b73568106e86e1b9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:30:06 2021 +0200
+
+    feat(front/relationship): showing tab 'friends' by default if there is no one online
+
+commit 30d7c4cf69e414a315a17a47e11f3a9af3f8c0e9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:23:00 2021 +0200
+
+    fix(front/channel): remembering opened tab
+
+commit 5061814b1229a1381ce49c82d1a832dbd28ebe98
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:00:45 2021 +0200
+
+    feat(front/channel): handling generic errors when editing
+
+commit 8b6ca4c54dcee2fcad469309acf6ec660e783396
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 15:00:24 2021 +0200
+
+    fix(back/channel): preventing changing to a protected channel without providing a password
+
+commit 38b17c9ebd88c8fa73de4a74140d5225e6909363
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 14:53:15 2021 +0200
+
+    feat(front/channel): updating ui on edit
+
+commit 837310e8116538baef60f85940253f60f3ca5ac4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 20 14:52:55 2021 +0200
+
+    feat(back/channel): sending event on edit
+
+commit 32872a38511529da30199c2a0f198ab6dd54d2e0
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Mon Jul 19 19:22:08 2021 +0200
+
+    games'options + change of the avatar if user playing
+
+commit c65d23d522a2b40ac58e75e7a9e31443b6f104f6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 16:33:01 2021 +0200
+
+    fix(front/relationship): hiding accept button if the type is not incoming
+
+commit ed043810bbc66cb03d94abbe258fee436b2eed96
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 16:23:58 2021 +0200
+
+    chore(front/relationship): removed old page
+
+commit e902bf46ebad00ef3cb0745d3393cb67d3ad8d68
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 16:19:05 2021 +0200
+
+    feat(front/relationship): added top button
+
+commit 1331d161030b1606f3d17f0a9479a8b08d2a15d5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 16:09:23 2021 +0200
+
+    feat(front/relationship): make tabs listing generic
+
+commit d12aad507bcfcd7d2c0f7042ba96869c09fe6fda
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 15:28:40 2021 +0200
+
+    feat(front/index): removed nuxt default index page
+
+commit f3dab620bf3ee3ca053ddad5d5289b363a85a5fd
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Sat Jul 17 15:27:45 2021 +0200
+
+    feat(front/relationship): listing by categories
+
+commit bce088cf25c69a74abfc521c730a8d1ae4d2cc95
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 12:58:15 2021 +0200
+
+    feat(docker): using `expose` instead of `ports`
+
+commit 898fe760396221ff52ba9dfeecbb71a621a63bf6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 12:42:19 2021 +0200
+
+    feat(front/user): added a search bar
+
+commit 9dc02c31ac1227be249a2b2f17b9418c937460f7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 12:29:45 2021 +0200
+
+    feat(front/user): reworked listing page
+
+commit 5592196870400fc4c0a760dd962e833d0f427fe9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 12:14:30 2021 +0200
+
+    feat(front/channel): deleting messages
+
+commit 5e4768f7de5e6e2154aea00ec6afc13f8174b043
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 12:14:12 2021 +0200
+
+    feat(back/channel): clearing messages with their events
+
+commit 7288831958759a2a8720c4386761294bd7118d47
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Jul 17 11:54:39 2021 +0200
+
+    feat(front/channel): hiding banned users
+
+commit 7832e5c89d553b1dc14ed6fd605705e0eaabe50e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:57:31 2021 +0200
+
+    chore(front/socket): only logging events when `isDev` is `true`
+
+commit 8ade264ade37277f56d9ab266421a7242480b8cd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:56:53 2021 +0200
+
+    chore(front/socket): removed unused listener
+
+commit 7004d15be5d88f9e6b8aa4fc8a09d0ab7f8f3d7d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:53:42 2021 +0200
+
+    chore(frontend): removed console.log() calls
+
+commit f7d3c72c1e1aa4ce2c7afcac3ee819bcdd8d1c32
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:49:37 2021 +0200
+
+    fix(front/socket): letting library choose default uri
+
+commit b4de724183cec5c1254c058041287b52cb5a5349
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:49:17 2021 +0200
+
+    fix(nginx): added websocket support
+
+commit eb20381377fb3d04b659cb8513bdd68fd09f9469
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:31:25 2021 +0200
+
+    feat(docker): using volumes to store pictures and the database
+
+commit 47037328d4b426faa821b677a739cf5bfb4ff240
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:24:14 2021 +0200
+
+    feat(docker): wrote a docker-compose file
+
+commit fe1fbf84feb003fc0d982b3e219371e3d95587f2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:23:45 2021 +0200
+
+    fix(backend): typing issues
+
+commit 15391d8424a65b1c9951e55f2881459c2d74f0e1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jul 16 18:23:15 2021 +0200
+
+    fix(frontend): find a much better solution for the double drawer support
+    
+    https://github.com/vuetifyjs/vuetify/issues/13665#issuecomment-881567478
+    
+    As for the back twice, it has been fixed in newer version of vuetify
+
+commit e68f95fcdb0217670efdba68193412ad2b8e974e
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Fri Jul 16 16:06:19 2021 +0200
+
+    sprites working
+
+commit 23267e397de1421724a8e28a69b40a7c86d10117
+Merge: 74050e9 37f0274
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Fri Jul 16 14:17:00 2021 +0200
+
+    Merge branch 'master' into alice2
+
+commit 74050e9fa24897cc51b73551936557c65567a0bd
+Author: Alice TETU <atetu@e1r6p20.42.fr>
+Date:   Fri Jul 16 14:06:19 2021 +0200
+
+    sprites 2
+
+commit bb6c70a8d1aebb322f8f17b87f464970f09ee59c
+Author: Alice TETU <atetu@e1r6p20.42.fr>
+Date:   Fri Jul 16 13:56:40 2021 +0200
+
+    sprites
+
+commit 37f0274f6f083ae2f1e2160c67ada4312c9897c2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:27:18 2021 +0200
+
+    feat(front/channel): disconnecting channel on page leave
+
+commit 45da0c9063a98a095cde2eab443484fce3083f36
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:27:06 2021 +0200
+
+    feat(back/channel): added event to disconnect to current channel
+
+commit 1f3b7f29b562154aefdabadcd6d796ec94200a52
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:21:09 2021 +0200
+
+    feat(front/channel): redirecting when channel is deleted
+
+commit 60103033c089f946932be7b903f550877bca6184
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:20:47 2021 +0200
+
+    feat(back/channel): event when deleted
+
+commit a3dd7ac25ae56fb1a7672fb7585c9b656c044cbd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:13:03 2021 +0200
+
+    fix(front/channel): join button was never disappearing when as site admin
+
+commit 7cd2b791c4340a6b35cc53c9b2d9c16a3a5c7daf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:10:11 2021 +0200
+
+    fix(front/channel): bad condition was causing a component to never appear
+
+commit 040b0b4acd805f35a21a1a7e47a7ea4e4f0c13b6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 17:06:38 2021 +0200
+
+    fix(front/channel): leaving was not propagating event because dom was updated too fast
+
+commit 695b8a5e90a4ba25302ee75092d1f6b850dcb21e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 16:56:33 2021 +0200
+
+    feat(front/channel): added icon displaying if socket is not connected
+
+commit 54327a918a06e6cd16fb2d82827559f088521331
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 16:29:26 2021 +0200
+
+    feat(front/channel): added animated right hand indicator when nothing is selected
+
+commit 8176d18deef4500d1bacbdfa5cb244b33d98c98b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 16:14:04 2021 +0200
+
+    feat(front/direct-message): added peer clickable profile
+
+commit 6c73d19e11c3b2051b60d3f08e4a7517125d8388
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 15:29:01 2021 +0200
+
+    feat(front/relationship): receiving events
+
+commit cfab3e802f46cc8cfcbde3804fa0eada6e148d12
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 15:28:47 2021 +0200
+
+    feat(back/relationship): sending events
+
+commit 2fdcffa504ebedb550db5d81afb9dcb3dea3d7e0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 14:30:04 2021 +0200
+
+    feat(front/relationship): reworked button design
+
+commit 0e557d7df1e72dbff3c3f9d75a5ec59542c13c6c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 14:24:13 2021 +0200
+
+    feat(front/relationship): using store
+    
+    This will be used for the socket event.
+
+commit f70039b02395ea1df76e2fee3151f82e9bb597bc
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 13:58:45 2021 +0200
+
+    feat(front/relationship): displaying button even when blocked but disabling it
+
+commit 9e2db3f899c06d838596eb047e9ff73aa7ac08f6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 12:30:39 2021 +0200
+
+    feat(front/relationship): reworked asking button
+
+commit 8cbcb410c657759011f7dde25c9d602c47b717fb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 15 12:30:16 2021 +0200
+
+    feat(back/relationship): added delete endpoint
+
+commit 53cf8de6555b065e7d45c2b1a2f83693189b2e2b
+Author: Alice TETU <atetu@e1r6p20.42.fr>
+Date:   Tue Jul 13 18:37:07 2021 +0200
+
+    game progress
+
+commit 49d46179b6f89f4825572a119dc6d979063fa6c2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 13 17:49:15 2021 +0200
+
+    feat(front/pending-game): added simple joining page
+
+commit eb2e0736e6a5647a256eeda24ef79a08ee937ca4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 13 17:49:03 2021 +0200
+
+    feat(back/pending-game): added api endpoint
+
+commit 9fdae8e37d6dc913cef68327150fbdf443fe00ce
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 13 17:46:00 2021 +0200
+
+    fix(front/channel): using `text` as component name was causing a warning
+
+commit 0b2d5170938b2f109124e9297e16de8e80c12f87
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 13 17:35:15 2021 +0200
+
+    feat(front/game): updated matchmaking joining and leaving
+
+commit bcc8cc3cfee4db67333b566d210bc2219c0214b1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 13 17:34:48 2021 +0200
+
+    feat(back/matchmaking): reworked system
+
+commit 5932eab8148c5a596763e83b79a5a3b98bbc488e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jul 13 14:03:38 2021 +0200
+
+    chore(docker): added nginx script variants
+
+commit 8c319f9c2e168f061ab2e7f3e0d8c0c7a9e47ed8
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Mon Jul 12 20:20:32 2021 +0200
+
+    progress game with options
+
+commit 9bb0bba41abc5d205d78b887b4bb4c388a387438
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 7 18:52:27 2021 +0200
+
+    feat(back/avatar): added caching header
+
+commit a038ce91b39647ad3aa6ec66d7dac9fce3c48113
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 7 18:52:15 2021 +0200
+
+    feat(front/channel): pending games
+
+commit 7007c29498aa8ec81925cfca0c11c5100b38b31a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 7 18:51:39 2021 +0200
+
+    feat(backend): pending games
+
+commit e27e96d9b2a9841099171eb62c406ecb08215143
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 7 16:14:05 2021 +0200
+
+    feat(back/socket): rework
+
+commit b03387b3a5eb9d6de8a1e70721eb42c056eddd04
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 7 14:25:29 2021 +0200
+
+    feat(front/direct-message): hiding blocked users
+
+commit cbddeebec0563ece40d10bb22feb3e540b211308
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jul 7 14:08:56 2021 +0200
+
+    feat(front/channel): hiding message of blocked users
+
+commit 380ef2ddb14f6826b09fdb66a5e6dfc058eaeabd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 1 00:18:09 2021 +0200
+
+    fix(front/channel): recoded channels store to allow adding a channel on event
+
+commit 7a0a433c238bb4503e41ffe2736cf9231c9001df
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jul 1 00:17:46 2021 +0200
+
+    feat(back/channel): event to user when invited
+
+commit 0c5c498652cba215f7c72bad2e3542a585574574
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 23:56:29 2021 +0200
+
+    fix(back/channel): joining them without ever leaving previous
+
+commit 38a8041cfb9f433279ac1a0e5d729dffe41adfb9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 23:19:20 2021 +0200
+
+    feat(front/channel): updating owner on event
+
+commit 84e6a1e80d6f266406a63f2fabfd8ef47092f366
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 23:19:10 2021 +0200
+
+    feat(back/channel): event when owner change
+
+commit f05f6add9e2c44119abaae7997a2d6409036be21
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 23:02:07 2021 +0200
+
+    feat(front/channel): updating user on event
+
+commit 090193d009fcc17aadc3c066ebf58c0c8901686d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 23:01:32 2021 +0200
+
+    feat(back/channel): event when user state is changed
+
+commit 008f9dda01c3343b16cb0d277f2102410916681b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 18:40:56 2021 +0200
+
+    feat(front/channel): removing user on event
+
+commit b3bd733ae069b720ef2dacba6e4db13b4e165fb7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 18:40:38 2021 +0200
+
+    feat(back/channel): event when a user leave
+
+commit 5dda8ddb88b8bd05e16456f82fa205b0396e1964
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 18:10:39 2021 +0200
+
+    feat(front/channel): displaying user statistics when clicking on his profile
+
+commit c190c6f0d6a713a93a8d230f8bb85c0eed9cde50
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 16:28:22 2021 +0200
+
+    fix(front/achievement): using wrong component
+
+commit c7bd8a8aa9069743e5e38c1cde1f84c3f671d0c7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 16:27:13 2021 +0200
+
+    feat(front/channel): adding user on event
+
+commit 4c052c1f6a761781d51a3035f505260e3811ef05
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 30 16:26:42 2021 +0200
+
+    feat(back/channel): event when a user join
+
+commit e63f642ed2039d7c6ff6b375f8f011d26347390d
+Author: Alice TETU <atetu@e1r7p20.42.fr>
+Date:   Tue Jun 29 19:31:53 2021 +0200
+
+    progress on the game
+
+commit b162539d08188d6fbaa15da8c15e7e06574a317d
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Tue Jun 29 15:20:09 2021 +0200
+
+    feat(front/relationship): added asking buttons
+
+commit d34d630ef5285cc53e98196f1aa6c0751fed7957
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Tue Jun 29 15:19:15 2021 +0200
+
+    feat(back/relationship): added endpoint to check statut between me and a peer
+
+commit e45433d343cfe9d49fae4d7d6de5138c536fba32
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 29 14:35:55 2021 +0200
+
+    feat(front/channel): displaying a message if a message could not have been sent
+
+commit 124349f837b265f80f004f7d80062c285111cf41
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 29 14:35:19 2021 +0200
+
+    feat(back/channel): refusing message from muted user
+
+commit 7eca2485fd0cbeb49d52dd15ec4f7911bbaff7d9
+Author: Alice TETU <atetu@e1r6p20.42.fr>
+Date:   Fri Jun 25 19:36:27 2021 +0200
+
+    progress on the game button restart
+
+commit dd1eec1a4a8aa098188ebe9179d65154c687e2f5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 05:29:34 2021 +0200
+
+    feat(back/user): handling username collision
+
+commit b551a950ed430df101a21412d93dbd852780ae15
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 05:16:06 2021 +0200
+
+    fix(front/axios): interceptors were causing infinite refresh token loop
+
+commit 9541dd7d31ffbf339eea7a0e10558881305bd647
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 05:11:51 2021 +0200
+
+    feat(front/user): using a data table for the matches
+
+commit 642f62d824ac09893efbe066038ebf48e1c05047
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 04:41:25 2021 +0200
+
+    fix(front/user): columns size was producing a weird layout
+
+commit cbfba741e4d97d11b8c6245d90382e06673a5fcd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 04:38:58 2021 +0200
+
+    feat(front/user): unified profile and user page
+
+commit 17a65deb081813cb7331fa95dec49467c3c1f47c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 04:05:58 2021 +0200
+
+    feat(front/channel): listing private channel for admins
+
+commit cda75bab230f090e5ab501b90b69b4edd46efc14
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 04:05:42 2021 +0200
+
+    feat(back/channel): listing private channels for admins
+
+commit a134d72cb5fd33225fa7a66ef1875b356481d9f8
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 03:50:54 2021 +0200
+
+    feat(back/channel): protecting deletion endpoint
+
+commit e95255dc3d572aebd908ea65467a877ce7d2eab1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 03:45:19 2021 +0200
+
+    feat(front/user): statistics
+
+commit 94f6061a7e88409a005aaf4033986a46634eb593
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 03:45:13 2021 +0200
+
+    feat(back/user): statistics
+
+commit 947e449412b19853738c966d293d767c4d845dcb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 02:39:17 2021 +0200
+
+    feat(front/achievement): displayed them on the profile
+
+commit a79d92422d7ff3457630010585de8a3c417e82d0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 02:22:55 2021 +0200
+
+    feat(front/match): simple view on the profile
+
+commit 430f01c8fabd35276eb805cff94b898557ebd8a0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 02:22:34 2021 +0200
+
+    feat(back/match): simple api endpoints
+
+commit c9972f68817bee6d22947f182f8726b71c7bcf4c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 00:08:35 2021 +0200
+
+    feat(front/user): ban button
+
+commit 374de89d69bd7be2164d95c6276397ca858c4d1d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 23 00:08:27 2021 +0200
+
+    feat(back/user): ban action
+
+commit dffc1c9e2b2864b84c46162661579bec3d83f832
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:44:56 2021 +0200
+
+    feat(front/auth): redirecting to `/auth` if api report as banne
+
+commit 7c33a8560f68e8f12f3db039b3dd3133800c8467
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:44:23 2021 +0200
+
+    feat(back/auth): refusing banned user when authorizing
+
+commit 05d1410b23ca1f5f3d40cd51f80bce9dc072b451
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:28:55 2021 +0200
+
+    feat(front/user): handling ban state
+
+commit 083ba8cf48419362b1e46b0866d0238267d61169
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:28:43 2021 +0200
+
+    fat(back/user): ban
+
+commit af565bfee30d4de90788ab354fc5ceea878eaaaa
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:09:29 2021 +0200
+
+    feat(docker): added a basic nginx container
+
+commit ecbf16e7e8b55877ded1db4360d5ea9d1dd18102
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:09:09 2021 +0200
+
+    feat(front/channel): allowed site admin to do anything
+
+commit 70ccfeef38b252293ca7b49537de3c18b90c7cdd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 23:08:57 2021 +0200
+
+    feat(back/channel): allowed site admin to do anything
+
+commit 8e94e17eef1668eae2aae38603e602a45174de92
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 16:37:35 2021 +0200
+
+    chore(back/auth): using an env. variable for the base callback url
+
+commit ec4ab6a1200e6a67cd5ba618e66340a696f82cdd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 14:36:32 2021 +0200
+
+    fix(env): removed secrets from the exemple file....
+
+commit d249c7fc805d036f74c69a0a756dcef56cd84045
+Merge: cba6b99 653b0e1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 14:14:59 2021 +0200
+
+    Merge branch 'alice'
+
+commit cba6b9910eb6ff78e38c31004c943d9adb79725e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 22 14:14:17 2021 +0200
+
+    chore(frontend): removed unused component file
+
+commit 367c3055a8212b6a7321977352be61364592c415
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 18 16:37:46 2021 +0200
+
+    feat(front/channel): handling leaving refresh
+
+commit 58531fc5bd2d0997fb1c1d6384f6650ad253ed28
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 18 16:28:52 2021 +0200
+
+    feat(front/channel): user menu when clicking on them
+
+commit 763b9c887d582454c857f133b9f8afa947e1cfb8
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 18 16:14:05 2021 +0200
+
+    fix(front/channel): avatar size
+
+commit 07bdd4378a30b656417e539725f7f1bc97d25d7b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 18 15:53:19 2021 +0200
+
+    feat(front/direct-message): better reuse of code
+
+commit 1226979d3554e395a34fc8a0ae87b02c2e634339
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 18 14:20:58 2021 +0200
+
+    fix(front/user): avatar image size was not correct
+
+commit aefcf520a1ee843399f0bc859ee4937a80299f28
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 18 14:17:18 2021 +0200
+
+    fix(front/user): avatar was not updating because of cache
+
+commit 866134a41969cf38a61f128fb64c91504c267504
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 17 20:05:44 2021 +0200
+
+    feat(front/user): linked `message` button
+
+commit f0794236094ae77defa614028d391d8d02791212
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 17 19:51:38 2021 +0200
+
+    feat(front/direct-message): listing and viewing
+
+commit e4806dc2e8c3f00fbe10413548718bf67039e858
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 16 21:35:41 2021 +0200
+
+    feat(back/direct-message): basic api endpoint
+
+commit 19ef19c46ed20ca64a4b6e33a4eed7cd6ed61e1f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 16 21:35:25 2021 +0200
+
+    feat(front/direct-message): refactored channel listing code
+
+commit 7762af1d0b67eeebd2f05fc156c26ccd62e7f38b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 16 16:02:06 2021 +0200
+
+    fix(back/channel): hiding private channels
+
+commit 8f01c887a00f5e375d75ce7d7f7d7b1e549877f6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 16 15:52:14 2021 +0200
+
+    feat!(frontend): big rework of the store
+
+commit b3b511f043aa4aca234b86a67e608eddf48d57b4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 16 14:31:12 2021 +0200
+
+    chore(backend): flatten api routes when possible
+
+commit 58e041a9d2b9522e8406a7cd3ca3855be0428868
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 15 19:28:25 2021 +0200
+
+    feat(back/channel): filtering channels by type
+
+commit a1b5e2154d444e00aef97b2d0355916d226c02bd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 15 19:28:00 2021 +0200
+
+    feat(back/channel): added unique constraint on channel user
+
+commit e2a939b6c5d3a03cf466ee3a06173e04f91ca010
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 15 18:51:12 2021 +0200
+
+    feat(backend): direct messages
+
+commit 0b3f156eb88b192ecb8089822ccc913d3cc4ea0b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:31:45 2021 +0200
+
+    chore(back/channel): removed a console.log() call
+
+commit 6362a1a6aeb1e1566c628a768c41fdfc7c3b0167
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:29:38 2021 +0200
+
+    fix(front/channel): when not in channel, the button was not appearing
+
+commit 39604a576acd45195d82960aa564cb49e28abbce
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:26:15 2021 +0200
+
+    fix(back/channel): messages were not ordered by id
+
+commit 250b2829507ba21629ab610d62d9dd9479a36de5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:21:55 2021 +0200
+
+    chore(front/channel): added user avatar in messages
+
+commit e08910be1d73e0356c7ed353909f699a26b8703f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:21:43 2021 +0200
+
+    chore(front/channel): added loading animation on the discover page
+
+commit 83f00d73cd3112e23feac509ac986da2ee1f2d97
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:10:27 2021 +0200
+
+    feat(front/first-step): asking for an username after registration
+
+commit 0fc274954a0afd185ae453661acc3cd7f4140cfa
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:10:04 2021 +0200
+
+    feat(back/first-step): finalize registration endpoint
+
+commit ae8cc00fa96bebb4699e151c2e91bd8befe17bdd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 14 18:03:41 2021 +0200
+
+    chore(backend): moved `auth/oauth` file
+
+commit 16c466439a4b10ba3cc447fbce9d316b3a5ac323
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 11 17:55:50 2021 +0200
+
+    chore(front/oauth): increased marvin's popup size
+
+commit d886187d0d68348ed12947e0f31fa6fccb3cd30e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 11 17:49:31 2021 +0200
+
+    feat(front/auth): added otp
+
+commit 565e36e3cccccfc6d150737c43d668f35f3dafdb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 11 17:49:15 2021 +0200
+
+    feat(back/auth): added otp
+
+commit 924a67e7cd65af8b20b37caa1ba0ffce64a69652
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 9 17:06:08 2021 +0200
+
+    feat(front/2fa): making api calls
+
+commit 39f0f8664b63ceb7ff57a1b5dd00d4d020e97dd1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 9 17:05:47 2021 +0200
+
+    feat(back/2fa): added endpoint and entity
+
+commit 0501cde11df1c0824a5d05ecc131a286b0cfca05
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 9 12:08:45 2021 +0200
+
+    feat(front/avatar): updating
+
+commit ef3689e3f10b73ed26261da49b9574ad0e339bb0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 9 12:08:30 2021 +0200
+
+    feat(back/avatar): updating
+
+commit 292832a18fc7dffd5bbf5b3b547268eb1301d193
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 8 16:51:50 2021 +0200
+
+    feat(front/avatar): unified code into one component
+
+commit 27e1673a0c82929c5782a80714ee8b43d8ba81ed
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 8 16:51:29 2021 +0200
+
+    feat(back/avatar): storing and serving
+
+commit 653b0e1bba716b3f91aaac34edd52b2fe4e1513f
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Mon Jun 7 18:29:50 2021 +0200
+
+    feat-game-save match history
+
+commit 5c754190721be3a32ddecbaae1fa2dc8d9cc3c11
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 7 18:02:24 2021 +0200
+
+    feat(front/profile): started work on the settings
+
+commit 7595750f6c3a7d94a91d92d5341b50c3e32267ad
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Mon Jun 7 16:55:09 2021 +0200
+
+    feat(front/profile): extracted info card to a component
+
+commit f1c38a02f25d6cf437e734c9d273fc899b14f2f1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 7 15:43:11 2021 +0200
+
+    feat(front/achievement): added simple icons
+
+commit 54e66c28a2c621b2524d2437d070f5608faca6f5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Jun 7 15:37:18 2021 +0200
+
+    feat(frontend): added new dialog library
+
+commit aff386d6688ecd1ef7c334094acb1c3786151d0c
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Fri Jun 4 18:28:37 2021 +0200
+
+    feet-game- progress on scores, button restart
+
+commit 2fac2b930442ec36f1ce558208faea79c3119784
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 4 16:10:35 2021 +0200
+
+    feat(front/channel): displaying muted until value in user settings list
+
+commit 221a79f78832161bf776c48eff2bbfe632b1d872
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 4 16:05:38 2021 +0200
+
+    feat(front/channel): message when the channel list is empty
+
+commit 3e1b36600b29cb2cbf356f1cf76d917a3124cec9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 4 15:52:09 2021 +0200
+
+    fix(back/channel): accepting empty password was causing problem
+
+commit 82965c1e9b2b1e393b7b3a3596b76d6bd6c1f8e2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 4 15:51:36 2021 +0200
+
+    feat(front/channel): Unlocking
+
+commit 6da3dc87bdf2ce5710f82ce3bb59459817e6fd73
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Jun 4 15:16:18 2021 +0200
+
+    feat(back/channel): unmuting with a cron task
+
+commit de6ad62b6089e0a33e44b058272b1a7472d27139
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 17:42:36 2021 +0200
+
+    feat(front/channel): muting
+
+commit aab144cd7b78416c02da24bde8bc739f7bd0c3d0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 17:42:17 2021 +0200
+
+    feat(back/channel): muting
+
+commit 6cc167d85f998b1146ec0b0e1ddec78d30394eb9
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Thu Jun 3 17:06:14 2021 +0200
+
+    feat-game-progess on the back and the database
+
+commit 9ae40ec328fdb8e1d2a8d19b11727936f632fccf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 17:00:11 2021 +0200
+
+    fix(back/channel): ChannelUser.muted was using .admin in toJSON()
+
+commit 9b182e1e1721be867022a9d59ce712573c246d88
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 16:55:15 2021 +0200
+
+    feat(front/channel): Refreshing on action
+
+commit 5247d5df51bf60f92d77fa1bdf7253857c5fda00
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 16:30:43 2021 +0200
+
+    feat(front/channel): Field validation
+
+commit e08197307d05b5e6570c920a56b55b16f0decd95
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 16:30:25 2021 +0200
+
+    feat(front/channel): Passing refresh event
+
+commit 013cff5d7f5d30707925d3d858304fbd049ebb25
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 16:30:08 2021 +0200
+
+    feat(front/channel): Refreshing my channels when removing one
+
+commit ddfbdf4439dffd7797d54dbe12ed5a6892bb0852
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 16:29:10 2021 +0200
+
+    chore: Removed console.log calls
+
+commit 1e2deb48a2acabc5eac694632dc1d2e32eaa4501
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 16:28:18 2021 +0200
+
+    feat(back/channel): Better validation
+
+commit 5e781d0bd2018d4f54cc82b801869a19e4b7cbe6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 14:42:52 2021 +0200
+
+    fix(back/channel): Using wrong variable when checking for admin
+
+commit a8e988ca66a2cc3a45527c389506d68961fe6a58
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 14:42:30 2021 +0200
+
+    fix(back/channel): Missing try-catch
+
+commit 930ea803039e8ddf8cc8c434769aa45f2b9b1973
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 14:41:49 2021 +0200
+
+    feat(front/channel): Restricted some action to some users
+
+commit 4a41360589742675382d640fdf92ab11a86c2b16
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 11:57:45 2021 +0200
+
+    feat(back/channel): Returning 403 when a non admin user try to ban someone
+
+commit 181924f9a3f038a539b5c065d4e317741ce7464e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 11:57:04 2021 +0200
+
+    fix(back/channel): Renamed `selfUserChannel` to `selfChannelUser`
+
+commit cfda8159c8c5e7d7a280fa155de748cc20c0c603
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 11:54:53 2021 +0200
+
+    feat(back/channel): Returning 403 when a user try to transfer ownership of it is not an admin
+
+commit 48eb60def8022be6ee10739687107ee5f384e19f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 11:44:23 2021 +0200
+
+    feat(back/channel): Returning 403 when a user try to access a non public channel
+
+commit e80a2524b45ec4faae987828801c4a17994c529c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 11:42:47 2021 +0200
+
+    feat(back/channel): Returning 403 when a banned user try to access a channel
+
+commit 832da4573ed56e453d0cbb8289b5bf6327af6185
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Jun 3 11:25:15 2021 +0200
+
+    feat(back/channel): Securized ./users/{id}/admin
+
+commit 2fee23e72ac6d33895b7d1391bbed13758082f5a
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Thu Jun 3 07:39:09 2021 +0200
+
+    game working
+
+commit 5a4e8262933b5435793362feb6744d52f0a69e58
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 2 22:07:14 2021 +0200
+
+    feat(front/api): Reworked API into a centralized place
+
+commit 00652e69d98caa6714d5aae3982593f3af88d52b
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Wed Jun 2 16:26:14 2021 +0200
+
+    game ....
+
+commit 8833e1d6e368fb97698a792bd94e5769e07cf4f4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Jun 2 14:37:09 2021 +0200
+
+    feat(back/channel): Leaving
+
+commit d04994002ff91e4a0eb1a0426de8c92ced5d6705
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 1 19:48:43 2021 +0200
+
+    feat(front/channel): Join button
+
+commit ee92fc11d3600eb99720a8c20e207f4f3a6a3b84
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 1 12:11:45 2021 +0200
+
+    feat(front/channel): Added a leave button
+
+commit 291bc96e8c8cf1af05a19b2b55a515932096f8b9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Jun 1 12:11:30 2021 +0200
+
+    chore(front/i18n): translated some keys
+
+commit e61265de106f1c41ad361f17504e7ca65a672f2d
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Mon May 31 18:08:22 2021 +0200
+
+    feat-game-broke it a little
+
+commit 7e41396a98985fe7c5be2dead47bf155106ac3d9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 27 17:53:33 2021 +0200
+
+    feat(front/channel): started work on the discover page
+
+commit c094159fcc4dd62ca6f73c655700351dff015698
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 27 17:53:05 2021 +0200
+
+    fix(backend): forgot to commit `package.json`
+
+commit 9ea16d3e395266293a1db7341ee049162a63dd8d
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Thu May 27 17:21:02 2021 +0200
+
+    feat(game): first iteration of the matchmaking system
+
+commit a101ca9bde97fbe2e52afecdc5d0ad5f1cc54d7b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 27 15:10:07 2021 +0200
+
+    feat(back/channel): Joining with a password
+
+commit 88b584cbb01829cfbb30c8a27016d49d9885aa01
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 17:51:19 2021 +0200
+
+    feat(front/channel): Scrolling to bottom on new message
+
+commit 958f91dcd041ac2c1a7b0b0ad6f327061c18b239
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 17:38:52 2021 +0200
+
+    feat(front/channel): Auto-focusing back the input after a message
+
+commit 975941348376e1d1a5705e24bdfe3435a4a25dfa
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 17:38:32 2021 +0200
+
+    feat(back/channel): Updating
+
+commit 4876df73b3c83f82241005337728da81b8b7b9d5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 17:27:03 2021 +0200
+
+    fix(backend): Restored authentication
+
+commit 8b98ce81f0aacbb6944d0bd9df2cb11417f78f1c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 17:26:51 2021 +0200
+
+    feat(back/channel): Added invitation route
+
+commit f8cf7fa34326514544296ccf45e0d0e3e795ee4f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 17:26:31 2021 +0200
+
+    feat(front/channel): Working invitation
+
+commit 34f7a847d3f19d464f224b29f013f06f534c3f4c
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Wed May 26 16:25:05 2021 +0200
+
+    FEAT: game working
+
+commit 0acc14bcf609e45e25f1bfb3cf2e78b4086a76aa
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 14:57:27 2021 +0200
+
+    add(backend): Search
+
+commit 95cf652f860380a8de45ef9ea94eec30530f12e7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 13:24:30 2021 +0200
+
+    feat(front/channe): New settings page
+
+commit b8c1bddc8baaa4021056ab58f207309697123dc7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 11:50:46 2021 +0200
+
+    feat(front/channel): Invite dialog
+
+commit 85aef3734a00eeb55b08712c92c17c50f21b4392
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 11:02:10 2021 +0200
+
+    feat(front/channel): Added actions
+
+commit 3044d84b3e17db788e7b1f3de8ccf37793db2b5a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 26 11:01:53 2021 +0200
+
+    feat(back/channel): Loosely implemented routes
+
+commit e0d51600af55e76f4e21aa5e2bcc48563a0b1614
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Tue May 25 17:41:15 2021 +0200
+
+    game still working but a lot of progress
+
+commit dfff19b6674994285b4b25d5c40686e0ef7ab096
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 25 16:13:15 2021 +0200
+
+    feat(back/channel): Reworked routes
+
+commit 89d069487b0a3d80d3e7c4038096686e418a3b5e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 25 14:26:06 2021 +0200
+
+    add(frontend): Relationships
+
+commit dea9ef11bfb0fdebc808f5e8261863d77e99ab12
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 25 14:25:13 2021 +0200
+
+    add(backend): Relationships
+
+commit 0494dc61da7a10eaa55a3fbe37c9e06f82e937de
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Mon May 24 18:16:13 2021 +0200
+
+    progress on the game but not working at all
+
+commit b7ccbfef1fea577113cbd90f8272470faffe53f0
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Mon May 24 15:10:18 2021 +0200
+
+    feat(front/profile): Starting layouts
+
+commit 035a3c61fb4bbad7756fa6ffe074892e8b3f2a32
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon May 24 14:35:24 2021 +0200
+
+    feat(back/game): Added research
+
+commit a41d05d243ae9fdfae2b23983fd1126d8b8898e7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 21:43:10 2021 +0200
+
+    feat(front/user): Better listing
+
+commit ff331b279eea6845b6721309364d550d786ef720
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 21:09:07 2021 +0200
+
+    feat(front/socket): Displaying how many user is connected
+
+commit 0973710e398ba4851c3d179ebc511405a662cf7f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 20:46:31 2021 +0200
+
+    feat(back/achievement): Added routes for other users
+
+commit a9846ba2187817240235929ef6ad6677623da080
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 20:35:44 2021 +0200
+
+    feat(front/achievement): Added basic page
+
+commit c3f394b88f983c7121def54ceb866c3b27201d4d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 19:16:06 2021 +0200
+
+    feat(back/channel): Deletion
+
+commit f432c591687bd667f88e46531a44de9d7d7f7c5d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 19:15:33 2021 +0200
+
+    chore(frontend): Removed unused links
+
+commit 57216775636d18b47ad73cc85420ecbd4a79c821
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 19:14:01 2021 +0200
+
+    feat(back/auth): Giving `Registered!` achievement on account creation
+
+commit f8c56f9cc337eaed0d798b6b363e0cc796b00820
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 19:13:30 2021 +0200
+
+    chore(front/debug): Change debug page layout
+
+commit 6ee60d2f9be62785cf9425d59175739e26202964
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 18:58:39 2021 +0200
+
+    chore(back/orm): Better entity relationships
+
+commit bc55b9eb9f6500cc68464196b21e49a11b81ed8d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 18:46:06 2021 +0200
+
+    chore(front/game): Fixed typing issue
+
+commit ab4c761a91caaecc0638b77227544c4727da534a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 18:45:52 2021 +0200
+
+    chore(back/auth): Added `ON DELETE CASCADE` to refresh token
+
+commit 3d6f9c17bd914f3ceb0272ff383eaa08bc497a1e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 18:45:25 2021 +0200
+
+    add: Achievement Progresses
+
+commit d4b9058fcaf21ba214389ebfb71006a236bbce46
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 23 18:43:30 2021 +0200
+
+    chore(backend): Removed old `users.ts` route file
+
+commit 1451591175b45452031746dd4b53e865c926c0f5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 22 22:57:37 2021 +0200
+
+    add: Achievements
+
+commit d310249eab0950a54f279a298eca02ce34d902eb
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Fri May 21 17:23:58 2021 +0200
+
+    add: Game
+
+commit 64b50ab23cf4bed2df4d11afaa4e2f9276ecc493
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 21 17:09:47 2021 +0200
+
+    feat(front/channel): Deletion
+
+commit 38e18b1769c4564a2d44410bb0067ca960c49ab1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 20 12:46:49 2021 +0200
+
+    feat(back/channel): Adding the owner at channel creation
+
+commit 8bdd99c256e24c77208dcaed74994b3757d879ca
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 20 12:31:45 2021 +0200
+
+    feat(front/channel): Refreshing on new channel
+
+commit 67956f05b717be62055d1f8476044a6cc05b671c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 20 12:31:26 2021 +0200
+
+    feat(back/channel): Creation
+
+commit a37353fe52f2d29461729a5a21d8d46558775e4c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 19 17:32:50 2021 +0200
+
+    feat(front/channel): Settings with edition and creation
+
+commit b1c2c86080e3dcc9a12a05534545054448502c02
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 19 16:28:20 2021 +0200
+
+    feat(front/channel): Started work on settings
+
+commit c57e43656c3c4f6d90cdc6278bc1c9cca4109026
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 19 12:02:00 2021 +0200
+
+    feat(front/channel): Handling fetch error
+
+commit b83284ed73537589f2a3d6bedc1cf69e59c21e77
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 17:39:29 2021 +0200
+
+    feat(feat/channel): Switching pages
+
+commit 156e7966f30bfc055aeb935ff026d4a09ee4e974
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 17:39:06 2021 +0200
+
+    feat(back/socket): Remove usage of limiting 3rd party library
+
+commit f09fc8896fe6780b0cf418b7f3404a5deeed8205
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 16:12:09 2021 +0200
+
+    feat(back/channel): API and WebSockets
+
+commit 84cd5ba2d9ff2073be1cdb27fabacaf387cea4f6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 16:11:46 2021 +0200
+
+    feat(front/channel): Working with the API
+
+commit 1eb1be2ca93cb71f31c66aff46ac63537d723e5f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 00:25:13 2021 +0200
+
+    chore(back/auth): Reorganized Users API route directories
+
+commit ba2717d3de38b77c98fcba122a2e8aadcae948a6
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 00:20:35 2021 +0200
+
+    chore(back/auth): Reorganized Auth API route directories
+
+commit 37fc16f564c8b79607d433c4adc77555f418aa60
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue May 18 00:15:14 2021 +0200
+
+    feat(back/channel): Added basic endpoint and database entity
+
+commit bfef63f0073ca68d9725b8817025292e4bc32676
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon May 17 21:05:58 2021 +0200
+
+    chore(backend): Removed old routes code
+
+commit 072bcd7a6e8ead9947efe4e9d7df1b5f51851699
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon May 17 17:45:26 2021 +0200
+
+    fix(frontend): Added a (temporary) patch for vuetify and its application service code
+    
+    https://github.com/vuetifyjs/vuetify/issues/13665
+
+commit 38206b3d07114aa1fe9d21438b34f98668bb3f4f
+Merge: 9883612 7a485d4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 18:04:46 2021 +0200
+
+    Merge branch 'master' of github.com:atetu/Ft_transcendence
+
+commit 9883612ab5aaeb2032e339790216c050ab8c148f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 18:03:25 2021 +0200
+
+    feat(back/socket): Sending currently connected user list
+
+commit 8e75015b91b1eb2108ab80bdfc9a4dfe8dbeadbe
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 18:02:47 2021 +0200
+
+    feat(front/socket): Added currently connected user list
+
+commit cc1d4841e40e18d55ab260e66a6ffa95e39bed31
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 18:01:47 2021 +0200
+
+    chore(frontend): Removed unused file
+
+commit b5274455794ea50a95b740175b750a2d239b01e9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 16:27:45 2021 +0200
+
+    fix(frontend): Reading in null value
+
+commit 7a485d4e741002003864144427f161f9dbf8540f
+Author: bmellouk <badriamellouk@gmail.com>
+Date:   Sat May 15 15:57:14 2021 +0200
+
+    feat(front/profile): First work
+
+commit 32420d0eba0bf358b698b5bbf508721946526b8d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 14:25:15 2021 +0200
+
+    feat(frontend): Fitting new backend architecture
+
+commit f833112d842d9167c7af8fe5191364f203775db7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 14:25:00 2021 +0200
+
+    feat(frontend): Added a debug page
+
+commit 2c39244e732ac51ea8252b3f66c859b7d7bac809
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 14:24:33 2021 +0200
+
+    fix(frontend): Store action `auth/refreshTokens` was not named correctly
+
+commit 38f14afaf16bd44be2b348f4c75afc8506ae2cb1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 15 14:23:39 2021 +0200
+
+    feat(backend): New architecture
+
+commit add7bd09ca21b778c95dfc21e117326d2f34d70d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 14 16:53:13 2021 +0200
+
+    add: SocketIO
+
+commit 977af6a9958927f778538582d9d590ebbdf57aa0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 13 17:31:15 2021 +0200
+
+    fix(docker): Using wrong port for backend dev
+
+commit 703b8f875a141b5fad450093053349f0ee6cd4ac
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 13 15:22:20 2021 +0200
+
+    fix(front/channel): Bad import
+
+commit bd775a92b3d7df66ccbbdda3e0798cd36bfc8f77
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 13 15:21:27 2021 +0200
+
+    fix(front/store): Missing auth.user
+
+commit ec0350757f43483595a711579010c28c86a61257
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 13 15:11:19 2021 +0200
+
+    add: Docker
+
+commit b2174860960e13864344cdbf0642c48625f3d71a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu May 13 12:10:49 2021 +0200
+
+    fix(front/channel): Component was not being imported correctly
+
+commit 24eed0dc6cde234a5d044ced3ecc9f657e080213
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 20:30:29 2021 +0200
+
+    feat(backend/marvin): Finished verify code
+
+commit 5f887d0ba75dc321cb5f2abf14b53179afbf2410
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 20:23:17 2021 +0200
+
+    feat(frontend): Added title to some of authentication pages
+
+commit 5693f54402f0a23b067e9a15ba834a5691575e83
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 20:18:48 2021 +0200
+
+    feat(frontend): Logout
+
+commit b547ed51819af51c6cebecc050486a69fdc85cc5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 19:53:08 2021 +0200
+
+    feat(backend): Authentication
+
+commit 97699501567e31403dc0f0d3e8d65d0907952adf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 19:52:51 2021 +0200
+
+    feat(frontend): Authentication
+
+commit b2635e85c52f29036eb127336f6f3b0d3d7badf0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 00:20:21 2021 +0200
+
+    feat(backend): First step in authentication
+
+commit f5b912343c474dfabf7c81076a882e31284fd61f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 12 00:19:48 2021 +0200
+
+    feat(frontend): First step in authentication
+
+commit fea7ce79fc3feac32fd21dfd4ceb58b19d356f9d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon May 10 16:03:39 2021 +0200
+
+    research: Added simple project with socketio
+
+commit a926aac28ceb2642f6d9da23e26ad06ed54775e7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 9 03:12:53 2021 +0200
+
+    feat(frontend): Basic head() usage
+
+commit 2848ad7141255d998ed9e16446c2468766e2a43c
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 9 03:08:40 2021 +0200
+
+    chore(frontend): Removed testing code
+
+commit 51d96f66ee5421ccf54d16d01af2495849bf861e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 9 03:07:09 2021 +0200
+
+    feat(frontend): Virtual scroller
+
+commit 1826d959f48c538688941ed6bb35d5af8a1c9279
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun May 9 01:14:05 2021 +0200
+
+    feat(frontend): Passing height to all components...
+
+commit 9badded832d321b6917d0a77165a954502c7ff78
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 8 20:52:07 2021 +0200
+
+    feat(frontend): Refactored some code
+
+commit 89e77f89f120886b6e7bcf8e9c312eae8dc19cdf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 8 18:15:18 2021 +0200
+
+    feat(frontend): Reworked the store
+
+commit 7693e1b138fcab8a951904e1d4ab905447df5331
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat May 8 18:15:00 2021 +0200
+
+    add: Simple JSON Server database
+
+commit 8270c3f45d1c62681f3e1ad83725a1617e92cf0d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 7 16:07:17 2021 +0200
+
+    feat(frontend): Started channels
+
+commit adcffa26de797571a3c1b8e693643f34a96f46cf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 7 15:57:34 2021 +0200
+
+    fix(frontend): Nuxt Vuejs template has invalid History API handling
+    
+    Reported by: https://github.com/nuxt/nuxt.js/issues/9111
+    Fixed by: https://github.com/nuxt/nuxt.js/pull/9201/commits/76494b17632005cb8d4fe472537d04328efdcc8e
+
+commit 5aa98a1b100e6e60e557b011606b95ad3bf28f68
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 7 15:53:23 2021 +0200
+
+    add: Backend
+
+commit 53704169042d277e26ecf815238f8a3e6d3830b3
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 7 15:51:46 2021 +0200
+
+    add: Frontend
+
+commit 2fbaff64b158b171a775e20d0fad31705dca628a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri May 7 15:49:46 2021 +0200
+
+    first commit

@@ -1,0 +1,530 @@
+Delivered-To: caceresenzo1502@gmail.com
+Received: by 2002:a05:7000:8691:0:0:0:0 with SMTP id bl17csp3534427mab;
+        Wed, 4 Aug 2021 03:15:17 -0700 (PDT)
+In-Reply-To: <CANKG6h1xOtpGvBHozNouEafp9J2jE+7S4HU3Je-i9+eDxcyX_w@mail.gmail.com>
+From: =?UTF-8?Q?Alice_T=C3=AAtu?= <atetu@student.42.fr.com>
+Date: Wed, 4 Aug 2021 12:15:05 +0200
+Message-ID: <CANKG6h2UEA1mxpK-oCmAWp2ufGeSLhdPvocJ3vfUir+2VmEL_g@mail.gmail.com>
+Subject: Fwd: Ft-transcendence
+To: caceresenzo1502@gmail.com
+Content-Type: multipart/alternative; boundary="0000000000002c532405c8b9143c"
+
+--0000000000002c532405c8b9143c
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+---------- Forwarded message ---------
+De : Alice T=C3=AAtu <atetu@student.42.fr.com>
+Date: lun. 2 ao=C3=BBt 2021 =C3=A0 17:48
+Subject: Fwd: Ft-transcendence
+To: <ecaceres@student.42.fr>, <bmellouk@student.42.fr>
+
+
+
+
+---------- Forwarded message ---------
+De : Adrien Hanot <salty@42.fr>
+Date: jeu. 17 juin 2021 =C3=A0 13:31
+Subject: Re: Ft-transcendence
+To: Alice T=C3=AAtu <atetu@student.42.fr.com>
+Cc: pedago <pedago@42.fr>
+
+
+Bonjour Alice,
+
+Exceptionnellement dans la mesure o=C3=B9 il y a eu plusieurs changements e=
+ntre
+la r=C3=A9ponse que nous t'avons fait et maintenant oui, il te faudra juste
+pr=C3=A9senter ce mail =C3=A0 tes correcteurs.
+C'est =C3=A0 titre exceptionnel et uniquement pour votre groupe.
+
+Bon courage,
+
+Salty
+
+Le jeu. 17 juin 2021 =C3=A0 11:23, Alice T=C3=AAtu <atetu@student.42.fr.com>=
+ a =C3=A9crit :
+
+> Bonjour,
+>
+> Je me permets de revenir vers vous pour savoir si nous pouvons bien
+> conserver pour ft_ftranscendence mysql et express dans la mesure o=C3=B9 =
+nous y
+> avions =C3=A9t=C3=A9 autoris=C3=A9s par mail.
+>
+> Je vous remercie d'avance pour votre retour.
+>
+> Bien =C3=A0 vous,
+>
+> Alice.
+>
+> Le lun. 31 mai 2021 =C3=A0 10:34, Alice T=C3=AAtu <atetu@student.42.fr.com=
+> a =C3=A9crit :
+>
+>> Bonjour,
+>>
+>> Nous travaillons actuellement sur ft_transcendence et au vu des
+>> changements annonc=C3=A9s de sujets nous avions demand=C3=A9 si nous pou=
+vions dans ce
+>> cadre utiliser :
+>> - database: mysql
+>> - backend: nodejs (express)
+>> - frontend: vuejs + nuxt.
+>>
+>> Nous avons obtenu une r=C3=A9ponse positive et nous sommes donc partis
+>> l=C3=A0-dessus. Cependant, le sujet actuellement en ligne nous demande
+>> d'utiliser postgresql et NestJS.
+>>
+>> Est ce que nous pouvons conserver express et mysql =C3=A9tant donn=C3=A9=
+ qu'il y
+>> avait =C3=A9t=C3=A9 autoris=C3=A9?
+>>
+>> Merci d'avance pour vos retours!
+>>
+>> Alice.
+>> ---------- Forwarded message ---------
+>> De : Adrien Hanot <salty@42.fr>
+>> Date: jeu. 6 mai 2021 =C3=A0 15:46
+>> Subject: Re: Ft-transcendence
+>> To: Alice T=C3=AAtu <atetu@student.42.fr.com>
+>>
+>>
+>> pas de soucis bon week-end !
+>>
+>> Le jeu. 6 mai 2021 =C3=A0 15:45, Alice T=C3=AAtu <atetu@student.42.fr.com=
+> a =C3=A9crit :
+>>
+>>> Merci mille fois pour ces r=C3=A9ponses d=C3=A9taill=C3=A9es et d=C3=A9=
+sol=C3=A9e de t'avoir
+>>> d=C3=A9rang=C3=A9!
+>>> Tr=C3=A8s bonne fin de journ=C3=A9e!
+>>>
+>>> Le jeu. 6 mai 2021 =C3=A0 15:36, Adrien Hanot <salty@42.fr> a =C3=A9cri=
+t :
+>>>
+>>>> Yep carr=C3=A9ment, quitte a utiliser vue js utilisez m=C3=AAme nuxt c=
+'est un
+>>>> tr=C3=A8s bon framework vue
+>>>> Vous devrez par contre utiliser typescript avec vue mais c'est tout
+>>>>
+>>>> en gros pour faire simple vous avez le droit =C3=A0 n'importe quel fra=
+mework
+>>>> front et back, tant que le code est cod=C3=A9 en typescript
+>>>>
+>>>> C'est du javascript typ=C3=A9 et ca donne de meilleur pratique de code=
+ que
+>>>> le js simple qui est un peu "yolo" ou on peut vite prendre des libert=
+=C3=A9s qui
+>>>> am=C3=A8nent par la suite des difficult=C3=A9s pour maintenir les apps
+>>>>
+>>>> Le jeu. 6 mai 2021 =C3=A0 15:17, Alice T=C3=AAtu <atetu@student.42.fr.c=
+om> a
+>>>> =C3=A9crit :
+>>>>
+>>>>> Pardon pardon! Nous avons bien le droit =C3=A0 vuejs et nuxt?
+>>>>>
+>>>>> Le jeu. 6 mai 2021 =C3=A0 15:15, Adrien Hanot <salty@42.fr> a =C3=A9c=
+rit :
+>>>>>
+>>>>>> Merci beaucoup, belle fin de semaine =C3=A9galement :)
+>>>>>>
+>>>>>> Le jeu. 6 mai 2021 =C3=A0 15:09, Alice T=C3=AAtu <atetu@student.42.fr=
+.com> a
+>>>>>> =C3=A9crit :
+>>>>>>
+>>>>>>> Top! Merci beaucoup et tr=C3=A8s belle fin de semaine !
+>>>>>>> Alice
+>>>>>>>
+>>>>>>> Le jeu. 6 mai 2021 =C3=A0 15:07, Adrien Hanot <salty@42.fr> a =C3=
+=A9crit :
+>>>>>>>
+>>>>>>>> Bonjour Alice,
+>>>>>>>>
+>>>>>>>> Pour le backend vous pourrez effectivement utiliser express, sous
+>>>>>>>> condition que ce soit en typescript. Vous pouvez aussi utiliser lo=
+opback ou
+>>>>>>>> de plus gros frameworks comme https://nestjs.com/.
+>>>>>>>> Tant que vous respectez la contrainte typescript en front et en
+>>>>>>>> back vous =C3=AAtes libres sur les technologies.
+>>>>>>>> Pour la base de donn=C3=A9e pareil, vous pouvez effectivement cons=
+erver
+>>>>>>>> mysql ou partir sur des alternatves comme
+>>>>>>>> https://www.postgresql.org/
+>>>>>>>>
+>>>>>>>> Le sujet restera le m=C3=AAme, seul les contraintes de langage cha=
+ngent
+>>>>>>>>
+>>>>>>>> Le jeu. 6 mai 2021 =C3=A0 14:39, Alice T=C3=AAtu <alice.tetu01@gma=
+il.com> a
+>>>>>>>> =C3=A9crit :
+>>>>>>>>
+>>>>>>>>> Bonjour Salty,
+>>>>>>>>>
+>>>>>>>>> Suite =C3=A0 ton message sur ft-transcendence, avec mon groupe, n=
+ous
+>>>>>>>>> avons d=C3=A9cid=C3=A9 de repartir sur le nouveau sujet.
+>>>>>>>>>
+>>>>>>>>> Afin que l'on puisse quand m=C3=AAme commencer =C3=A0 avancer ser=
+ait-il
+>>>>>>>>> possible de nous confirmer que nous aurions le droit =C3=A0 :
+>>>>>>>>> - database: mysql
+>>>>>>>>> - backend: nodejs (express ou loopback)
+>>>>>>>>> - frontend: vuejs + nuxt
+>>>>>>>>>
+>>>>>>>>> Est ce que cela sera toujours un jeu de pong un peu sur le m=C3=
+=AAme
+>>>>>>>>> principe que le jeu actuel?
+>>>>>>>>>
+>>>>>>>>> Merci d'avance!
+>>>>>>>>>
+>>>>>>>>> Alice.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> --
+>>>>>>>> Adrien Hanot
+>>>>>>>>
+>>>>>>>> RESPONSABLE P=C3=89DAGOGIQUE ET TECHNIQUE ADJOINT
+>>>>>>>>
+>>>>>>>> salty@42paris.fr
+>>>>>>>>
+>>>>>>>>
+>>>>>>
+>>>>>> --
+>>>>>> Adrien Hanot
+>>>>>>
+>>>>>> RESPONSABLE P=C3=89DAGOGIQUE ET TECHNIQUE ADJOINT
+>>>>>>
+>>>>>> salty@42paris.fr
+>>>>>>
+>>>>>>
+>>>>
+>>>> --
+>>>> Adrien Hanot
+>>>>
+>>>> RESPONSABLE P=C3=89DAGOGIQUE ET TECHNIQUE ADJOINT
+>>>>
+>>>> salty@42paris.fr
+>>>>
+>>>>
+>>
+>> --
+>> Adrien Hanot
+>>
+>> RESPONSABLE P=C3=89DAGOGIQUE ET TECHNIQUE ADJOINT
+>>
+>> salty@42paris.fr
+>>
+>>
+
+--=20
+Adrien Hanot
+
+RESPONSABLE P=C3=89DAGOGIQUE ET TECHNIQUE ADJOINT
+
+salty@42paris.fr
+
+--0000000000002c532405c8b9143c
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><br><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=
+=3D"gmail_attr">---------- Forwarded message ---------<br>De=C2=A0: <strong=
+ class=3D"gmail_sendername" dir=3D"auto">Alice T=C3=AAtu</strong> <span dir=
+=3D"auto">&lt;<a href=3D"mailto:atetu@student.42.fr.com">atetu@student.42.fr.=
+com</a>&gt;</span><br>Date: lun. 2 ao=C3=BBt 2021 =C3=A0=C2=A017:48<br>Subj=
+ect: Fwd: Ft-transcendence<br>To:  &lt;<a href=3D"mailto:cacerenzo@gmail.co=
+m">ecaceres@student.42.fr</a>&gt;,  &lt;<a href=3D"mailto:badriamellouk@gmail.=
+com">bmellouk@student.42.fr</a>&gt;<br></div><br><br><div dir=3D"ltr"><br>=
+<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">------=
+---- Forwarded message ---------<br>De=C2=A0: <strong class=3D"gmail_sender=
+name" dir=3D"auto">Adrien Hanot</strong> <span dir=3D"auto">&lt;<a href=3D"=
+mailto:salty@42.fr" target=3D"_blank">salty@42.fr</a>&gt;</span><br>Date: j=
+eu. 17 juin 2021 =C3=A0=C2=A013:31<br>Subject: Re: Ft-transcendence<br>To: =
+Alice T=C3=AAtu &lt;<a href=3D"mailto:atetu@student.42.fr.com" target=3D"_bl=
+ank">atetu@student.42.fr.com</a>&gt;<br>Cc: pedago &lt;<a href=3D"mailto:ped=
+ago@42.fr" target=3D"_blank">pedago@42.fr</a>&gt;<br></div><br><br><div dir=
+=3D"ltr">Bonjour Alice,<br><br>Exceptionnellement dans la mesure o=C3=B9 il=
+ y a eu plusieurs changements entre la r=C3=A9ponse que nous t&#39;avons fa=
+it et maintenant oui, il te faudra juste pr=C3=A9senter ce mail =C3=A0 tes =
+correcteurs.<br>C&#39;est =C3=A0 titre exceptionnel et uniquement pour votr=
+e groupe.<br><br>Bon courage,<br><br>Salty</div><br><div class=3D"gmail_quo=
+te"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 17 juin 2021 =C3=A0=
+=C2=A011:23, Alice T=C3=AAtu &lt;<a href=3D"mailto:atetu@student.42.fr.com" =
+target=3D"_blank">atetu@student.42.fr.com</a>&gt; a =C3=A9crit=C2=A0:<br></d=
+iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
+er-left:1px solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">Bonjo=
+ur,<div><br></div><div>Je me permets de revenir vers vous pour savoir si no=
+us pouvons bien conserver pour ft_ftranscendence mysql et express dans la m=
+esure o=C3=B9 nous y avions =C3=A9t=C3=A9 autoris=C3=A9s par mail.</div><di=
+v><br></div><div>Je vous remercie d&#39;avance pour votre retour.</div><div=
+><br></div><div>Bien =C3=A0 vous,</div><div><br></div><div>Alice.=C2=A0</di=
+v></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr=
+">Le=C2=A0lun. 31 mai 2021 =C3=A0=C2=A010:34, Alice T=C3=AAtu &lt;<a href=
+=3D"mailto:atetu@student.42.fr.com" target=3D"_blank">atetu@student.42.fr.com=
+</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" sty=
+le=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);paddi=
+ng-left:1ex"><div dir=3D"ltr">Bonjour,<div><br></div><div>Nous travaillons =
+actuellement sur ft_transcendence=C2=A0et au vu des changements annonc=C3=
+=A9s de sujets nous avions demand=C3=A9 si nous pouvions dans ce cadre util=
+iser :</div><div>- database: mysql<br>- backend: nodejs (express)<br>- fron=
+tend: vuejs + nuxt.</div><div><br></div><div>Nous avons obtenu une r=C3=A9p=
+onse=C2=A0positive et nous sommes donc partis l=C3=A0-dessus. Cependant, le=
+ sujet actuellement=C2=A0en ligne nous demande d&#39;utiliser postgresql et=
+ NestJS.</div><div><br></div><div>Est ce que nous pouvons conserver express=
+ et mysql =C3=A9tant donn=C3=A9=C2=A0qu&#39;il y avait =C3=A9t=C3=A9=C2=A0a=
+utoris=C3=A9?</div><div><br></div><div>Merci d&#39;avance pour vos retours!=
+</div><div><br></div><div>Alice.=C2=A0</div><div><div class=3D"gmail_quote"=
+><div dir=3D"ltr" class=3D"gmail_attr">---------- Forwarded message -------=
+--<br>De=C2=A0: <strong class=3D"gmail_sendername" dir=3D"auto">Adrien Hano=
+t</strong> <span dir=3D"auto">&lt;<a href=3D"mailto:salty@42.fr" target=3D"=
+_blank">salty@42.fr</a>&gt;</span><br>Date: jeu. 6 mai 2021 =C3=A0=C2=A015:=
+46<br>Subject: Re: Ft-transcendence<br>To: Alice T=C3=AAtu &lt;<a href=3D"m=
+ailto:atetu@student.42.fr.com" target=3D"_blank">atetu@student.42.fr.com</a>&=
+gt;<br></div><br><br><div dir=3D"ltr">pas de soucis bon week-end !</div><br=
+><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0j=
+eu. 6 mai 2021 =C3=A0=C2=A015:45, Alice T=C3=AAtu &lt;<a href=3D"mailto:ali=
+ce.tetu01@gmail.com" target=3D"_blank">atetu@student.42.fr.com</a>&gt; a =C3=
+=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0=
+px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex"><=
+div dir=3D"ltr">Merci mille fois pour ces r=C3=A9ponses d=C3=A9taill=C3=A9e=
+s et d=C3=A9sol=C3=A9e de t&#39;avoir d=C3=A9rang=C3=A9!=C2=A0<div>Tr=C3=A8=
+s bonne fin de journ=C3=A9e!</div></div><br><div class=3D"gmail_quote"><div=
+ dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 6 mai 2021 =C3=A0=C2=A015:36=
+, Adrien Hanot &lt;<a href=3D"mailto:salty@42.fr" target=3D"_blank">salty@4=
+2.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex"><div dir=3D"ltr">Yep carr=C3=A9ment, quitte a utiliser vue=
+ js utilisez m=C3=AAme nuxt c&#39;est un tr=C3=A8s bon framework vue<br>Vou=
+s devrez par contre utiliser typescript avec vue mais c&#39;est tout<div><b=
+r></div><div>en gros pour faire simple vous avez le droit =C3=A0 n&#39;impo=
+rte quel framework front et back, tant que le code est cod=C3=A9 en typescr=
+ipt<br><br>C&#39;est du javascript typ=C3=A9 et ca donne de meilleur pratiq=
+ue de code que le js simple qui est un peu &quot;yolo&quot; ou on peut vite=
+ prendre des libert=C3=A9s qui am=C3=A8nent par la suite des difficult=C3=
+=A9s pour maintenir les apps</div></div><br><div class=3D"gmail_quote"><div=
+ dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 6 mai 2021 =C3=A0=C2=A015:17=
+, Alice T=C3=AAtu &lt;<a href=3D"mailto:atetu@student.42.fr.com" target=3D"_=
+blank">atetu@student.42.fr.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockqu=
+ote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px=
+ solid rgb(204,204,204);padding-left:1ex"><div dir=3D"ltr">Pardon pardon! N=
+ous avons bien le droit =C3=A0 vuejs et nuxt?</div><br><div class=3D"gmail_=
+quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 6 mai 2021 =C3=A0=
+=C2=A015:15, Adrien Hanot &lt;<a href=3D"mailto:salty@42.fr" target=3D"_bla=
+nk">salty@42.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
+,204,204);padding-left:1ex"><div dir=3D"ltr">Merci beaucoup, belle fin de s=
+emaine =C3=A9galement :)</div><br><div class=3D"gmail_quote"><div dir=3D"lt=
+r" class=3D"gmail_attr">Le=C2=A0jeu. 6 mai 2021 =C3=A0=C2=A015:09, Alice T=
+=C3=AAtu &lt;<a href=3D"mailto:atetu@student.42.fr.com" target=3D"_blank">al=
+ice.tetu01@gmail.com</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex"><div dir=3D"ltr">Top! Merci beaucoup et tr=
+=C3=A8s belle fin de semaine !<div>Alice</div></div><br><div class=3D"gmail=
+_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=A0jeu. 6 mai 2021 =C3=
+=A0=C2=A015:07, Adrien Hanot &lt;<a href=3D"mailto:salty@42.fr" target=3D"_=
+blank">salty@42.fr</a>&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex"><div dir=3D"ltr">Bonjour=C2=A0Alice,<br><b=
+r>Pour le backend vous pourrez effectivement utiliser express, sous conditi=
+on que ce soit en typescript.=C2=A0Vous pouvez aussi utiliser loopback ou d=
+e plus gros frameworks comme=C2=A0<a href=3D"https://nestjs.com/" target=3D=
+"_blank">https://nestjs.com/</a>.<br>Tant que vous respectez la contrainte =
+typescript en front et en back vous =C3=AAtes libres sur les technologies.<=
+br>Pour la base de donn=C3=A9e pareil, vous pouvez effectivement conserver =
+mysql ou partir sur des alternatves comme=C2=A0<a href=3D"https://www.postg=
+resql.org/" target=3D"_blank">https://www.postgresql.org/</a><br><br>Le suj=
+et restera le m=C3=AAme, seul les contraintes de langage=C2=A0changent</div=
+><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Le=C2=
+=A0jeu. 6 mai 2021 =C3=A0=C2=A014:39, Alice T=C3=AAtu &lt;<a href=3D"mailto=
+:atetu@student.42.fr.com" target=3D"_blank">atetu@student.42.fr.com</a>&gt; a=
+ =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=3D"marg=
+in:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1e=
+x"><div dir=3D"ltr">Bonjour Salty,<div><br></div><div>Suite =C3=A0 ton mess=
+age sur ft-transcendence, avec mon groupe, nous avons d=C3=A9cid=C3=A9 de r=
+epartir sur le nouveau sujet.</div><div><br></div><div>Afin que l&#39;on pu=
+isse quand m=C3=AAme commencer =C3=A0 avancer serait-il possible de nous co=
+nfirmer que nous aurions le droit =C3=A0 :</div><div>- database: mysql<br>-=
+ backend: nodejs (express ou loopback)<br>- frontend: vuejs + nuxt<br></div=
+><div><br></div><div>Est ce que cela sera toujours un jeu de pong un peu su=
+r le m=C3=AAme principe que le jeu actuel?</div><div><br></div><div>Merci d=
+&#39;avance!=C2=A0</div><div><br></div><div>Alice.</div></div>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+><div dir=3D"ltr"><table cellspacing=3D"0" cellpadding=3D"0" style=3D"color=
+:rgb(255,255,255);font-size:medium;vertical-align:-webkit-baseline-middle;f=
+ont-family:Arial"><tbody><tr><td style=3D"vertical-align:top"><table cellsp=
+acing=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-midd=
+le;font-family:Arial"><tbody><tr><td style=3D"text-align:center"><img src=
+=3D"https://drive.google.com/uc?id=3D1qzmcilyL15MLfI7AqjjnVwaCakKselp2" wid=
+th=3D"96" style=3D"max-width:130px;display:block" height=3D"67"></td></tr><=
+/tbody></table></td><td width=3D"46"><div></div></td><td style=3D"padding:0=
+px;vertical-align:middle"><h3 color=3D"#000000" style=3D"margin:0px;color:r=
+gb(0,0,0)"><font size=3D"4">Adrien Hanot<br></font></h3><div><font size=3D"=
+2"><br></font></div><div><font color=3D"#000000" size=3D"2">RESPONSABLE P=
+=C3=89DAGOGIQUE=C2=A0ET TECHNIQUE ADJOINT</font></div><div><table cellspaci=
+ng=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;=
+font-family:Arial;width:197px"><tbody><tr><td color=3D"#2600ff" height=3D"1=
+" style=3D"width:197px;border-bottom:1px solid rgb(38,0,255);border-left-st=
+yle:none;display:block"></td></tr></tbody></table></div><table cellspacing=
+=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;fo=
+nt-family:Arial"><tbody><tr height=3D"25" style=3D"vertical-align:middle"><=
+td width=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" ce=
+llpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family=
+:Arial"><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600=
+ff" width=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"></s=
+pan></td></tr></tbody></table></td><td style=3D"padding:0px;color:rgb(0,0,0=
+)"><br></td></tr><tr height=3D"25" style=3D"vertical-align:middle"><td widt=
+h=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" cellpaddi=
+ng=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family:Arial"=
+><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600ff" wid=
+th=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"><img src=
+=3D"https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons=
+/email-icon-2x.png" color=3D"#2600ff" width=3D"13" style=3D"display:block">=
+</span></td></tr></tbody></table></td><td style=3D"padding:0px"><a color=3D=
+"#000000" style=3D"color:rgb(0,0,0);font-size:12px">salty@42paris.fr<br><br=
+></a></td></tr></tbody></table></td></tr></tbody></table></div></div>
+</blockquote></div>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+><div dir=3D"ltr"><table cellspacing=3D"0" cellpadding=3D"0" style=3D"color=
+:rgb(255,255,255);font-size:medium;vertical-align:-webkit-baseline-middle;f=
+ont-family:Arial"><tbody><tr><td style=3D"vertical-align:top"><table cellsp=
+acing=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-midd=
+le;font-family:Arial"><tbody><tr><td style=3D"text-align:center"><img src=
+=3D"https://drive.google.com/uc?id=3D1qzmcilyL15MLfI7AqjjnVwaCakKselp2" wid=
+th=3D"96" style=3D"max-width:130px;display:block" height=3D"67"></td></tr><=
+/tbody></table></td><td width=3D"46"><div></div></td><td style=3D"padding:0=
+px;vertical-align:middle"><h3 color=3D"#000000" style=3D"margin:0px;color:r=
+gb(0,0,0)"><font size=3D"4">Adrien Hanot<br></font></h3><div><font size=3D"=
+2"><br></font></div><div><font color=3D"#000000" size=3D"2">RESPONSABLE P=
+=C3=89DAGOGIQUE=C2=A0ET TECHNIQUE ADJOINT</font></div><div><table cellspaci=
+ng=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;=
+font-family:Arial;width:197px"><tbody><tr><td color=3D"#2600ff" height=3D"1=
+" style=3D"width:197px;border-bottom:1px solid rgb(38,0,255);border-left-st=
+yle:none;display:block"></td></tr></tbody></table></div><table cellspacing=
+=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;fo=
+nt-family:Arial"><tbody><tr height=3D"25" style=3D"vertical-align:middle"><=
+td width=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" ce=
+llpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family=
+:Arial"><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600=
+ff" width=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"></s=
+pan></td></tr></tbody></table></td><td style=3D"padding:0px;color:rgb(0,0,0=
+)"><br></td></tr><tr height=3D"25" style=3D"vertical-align:middle"><td widt=
+h=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" cellpaddi=
+ng=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family:Arial"=
+><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600ff" wid=
+th=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"><img src=
+=3D"https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons=
+/email-icon-2x.png" color=3D"#2600ff" width=3D"13" style=3D"display:block">=
+</span></td></tr></tbody></table></td><td style=3D"padding:0px"><a color=3D=
+"#000000" style=3D"color:rgb(0,0,0);font-size:12px">salty@42paris.fr<br><br=
+></a></td></tr></tbody></table></td></tr></tbody></table></div></div>
+</blockquote></div>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+><div dir=3D"ltr"><table cellspacing=3D"0" cellpadding=3D"0" style=3D"color=
+:rgb(255,255,255);font-size:medium;vertical-align:-webkit-baseline-middle;f=
+ont-family:Arial"><tbody><tr><td style=3D"vertical-align:top"><table cellsp=
+acing=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-midd=
+le;font-family:Arial"><tbody><tr><td style=3D"text-align:center"><img src=
+=3D"https://drive.google.com/uc?id=3D1qzmcilyL15MLfI7AqjjnVwaCakKselp2" wid=
+th=3D"96" style=3D"max-width:130px;display:block" height=3D"67"></td></tr><=
+/tbody></table></td><td width=3D"46"><div></div></td><td style=3D"padding:0=
+px;vertical-align:middle"><h3 color=3D"#000000" style=3D"margin:0px;color:r=
+gb(0,0,0)"><font size=3D"4">Adrien Hanot<br></font></h3><div><font size=3D"=
+2"><br></font></div><div><font color=3D"#000000" size=3D"2">RESPONSABLE P=
+=C3=89DAGOGIQUE=C2=A0ET TECHNIQUE ADJOINT</font></div><div><table cellspaci=
+ng=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;=
+font-family:Arial;width:197px"><tbody><tr><td color=3D"#2600ff" height=3D"1=
+" style=3D"width:197px;border-bottom:1px solid rgb(38,0,255);border-left-st=
+yle:none;display:block"></td></tr></tbody></table></div><table cellspacing=
+=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;fo=
+nt-family:Arial"><tbody><tr height=3D"25" style=3D"vertical-align:middle"><=
+td width=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" ce=
+llpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family=
+:Arial"><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600=
+ff" width=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"></s=
+pan></td></tr></tbody></table></td><td style=3D"padding:0px;color:rgb(0,0,0=
+)"><br></td></tr><tr height=3D"25" style=3D"vertical-align:middle"><td widt=
+h=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" cellpaddi=
+ng=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family:Arial"=
+><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600ff" wid=
+th=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"><img src=
+=3D"https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons=
+/email-icon-2x.png" color=3D"#2600ff" width=3D"13" style=3D"display:block">=
+</span></td></tr></tbody></table></td><td style=3D"padding:0px"><a color=3D=
+"#000000" style=3D"color:rgb(0,0,0);font-size:12px">salty@42paris.fr<br><br=
+></a></td></tr></tbody></table></td></tr></tbody></table></div></div>
+</blockquote></div>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+><div dir=3D"ltr"><table cellspacing=3D"0" cellpadding=3D"0" style=3D"color=
+:rgb(255,255,255);font-size:medium;vertical-align:-webkit-baseline-middle;f=
+ont-family:Arial"><tbody><tr><td style=3D"vertical-align:top"><table cellsp=
+acing=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-midd=
+le;font-family:Arial"><tbody><tr><td style=3D"text-align:center"><img src=
+=3D"https://drive.google.com/uc?id=3D1qzmcilyL15MLfI7AqjjnVwaCakKselp2" wid=
+th=3D"96" style=3D"max-width:130px;display:block" height=3D"67"></td></tr><=
+/tbody></table></td><td width=3D"46"><div></div></td><td style=3D"padding:0=
+px;vertical-align:middle"><h3 color=3D"#000000" style=3D"margin:0px;color:r=
+gb(0,0,0)"><font size=3D"4">Adrien Hanot<br></font></h3><div><font size=3D"=
+2"><br></font></div><div><font color=3D"#000000" size=3D"2">RESPONSABLE P=
+=C3=89DAGOGIQUE=C2=A0ET TECHNIQUE ADJOINT</font></div><div><table cellspaci=
+ng=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;=
+font-family:Arial;width:197px"><tbody><tr><td color=3D"#2600ff" height=3D"1=
+" style=3D"width:197px;border-bottom:1px solid rgb(38,0,255);border-left-st=
+yle:none;display:block"></td></tr></tbody></table></div><table cellspacing=
+=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;fo=
+nt-family:Arial"><tbody><tr height=3D"25" style=3D"vertical-align:middle"><=
+td width=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" ce=
+llpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family=
+:Arial"><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600=
+ff" width=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"></s=
+pan></td></tr></tbody></table></td><td style=3D"padding:0px;color:rgb(0,0,0=
+)"><br></td></tr><tr height=3D"25" style=3D"vertical-align:middle"><td widt=
+h=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" cellpaddi=
+ng=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family:Arial"=
+><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600ff" wid=
+th=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"><img src=
+=3D"https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons=
+/email-icon-2x.png" color=3D"#2600ff" width=3D"13" style=3D"display:block">=
+</span></td></tr></tbody></table></td><td style=3D"padding:0px"><a color=3D=
+"#000000" style=3D"color:rgb(0,0,0);font-size:12px">salty@42paris.fr<br><br=
+></a></td></tr></tbody></table></td></tr></tbody></table></div></div>
+</div></div></div>
+</blockquote></div>
+</blockquote></div><br clear=3D"all"><div><br></div>-- <br><div dir=3D"ltr"=
+><div dir=3D"ltr"><table cellspacing=3D"0" cellpadding=3D"0" style=3D"color=
+:rgb(255,255,255);font-size:medium;vertical-align:-webkit-baseline-middle;f=
+ont-family:Arial"><tbody><tr><td style=3D"vertical-align:top"><table cellsp=
+acing=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-midd=
+le;font-family:Arial"><tbody><tr><td style=3D"text-align:center"><img src=
+=3D"https://drive.google.com/uc?id=3D1qzmcilyL15MLfI7AqjjnVwaCakKselp2" wid=
+th=3D"96" style=3D"max-width:130px;display:block" height=3D"67"></td></tr><=
+/tbody></table></td><td width=3D"46"><div></div></td><td style=3D"padding:0=
+px;vertical-align:middle"><h3 color=3D"#000000" style=3D"margin:0px;color:r=
+gb(0,0,0)"><font size=3D"4">Adrien Hanot<br></font></h3><div><font size=3D"=
+2"><br></font></div><div><font color=3D"#000000" size=3D"2">RESPONSABLE P=
+=C3=89DAGOGIQUE=C2=A0ET TECHNIQUE ADJOINT</font></div><div><table cellspaci=
+ng=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;=
+font-family:Arial;width:197px"><tbody><tr><td color=3D"#2600ff" height=3D"1=
+" style=3D"width:197px;border-bottom:1px solid rgb(38,0,255);border-left-st=
+yle:none;display:block"></td></tr></tbody></table></div><table cellspacing=
+=3D"0" cellpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;fo=
+nt-family:Arial"><tbody><tr height=3D"25" style=3D"vertical-align:middle"><=
+td width=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" ce=
+llpadding=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family=
+:Arial"><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600=
+ff" width=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"></s=
+pan></td></tr></tbody></table></td><td style=3D"padding:0px;color:rgb(0,0,0=
+)"><br></td></tr><tr height=3D"25" style=3D"vertical-align:middle"><td widt=
+h=3D"30" style=3D"vertical-align:middle"><table cellspacing=3D"0" cellpaddi=
+ng=3D"0" style=3D"vertical-align:-webkit-baseline-middle;font-family:Arial"=
+><tbody><tr><td style=3D"vertical-align:bottom"><span color=3D"#2600ff" wid=
+th=3D"11" style=3D"display:block;background-color:rgb(38,0,255)"><img src=
+=3D"https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons=
+/email-icon-2x.png" color=3D"#2600ff" width=3D"13" style=3D"display:block">=
+</span></td></tr></tbody></table></td><td style=3D"padding:0px"><a color=3D=
+"#000000" style=3D"color:rgb(0,0,0);font-size:12px">salty@42paris.fr<br><br=
+></a></td></tr></tbody></table></td></tr></tbody></table></div></div>
+</div></div>
+</div></div>
+
+--0000000000002c532405c8b9143c--

@@ -1,0 +1,44 @@
+version: '2.0'
+services:
+  mysql:
+    image: mysql:5
+    expose:
+    - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: ft_transcendence
+    volumes:
+      - database:/var/lib/mysql
+  frontend:
+    build:
+      context: ./frontend
+    expose:
+    - "3000"
+  backend:
+    build:
+      context: ./backend
+    expose:
+    - "3001"
+    depends_on:
+      - "mysql"
+    links:
+      - "mysql:ft-transcendence-mysql"
+    volumes:
+      - pictures:/app/data/pictures
+  nginx:
+    image: nginx
+    restart: always
+    volumes:
+      - "./docker/nginx/default.compose.conf:/etc/nginx/conf.d/default.conf:ro"
+    ports:
+    - "80:80"
+    depends_on:
+      - "backend"
+      - "frontend"
+    links:
+      - "backend:ft-transcendence-backend"
+      - "frontend:ft-transcendence-frontend"
+volumes:
+  database:
+  pictures:

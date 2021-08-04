@@ -1,0 +1,12 @@
+FROM ubuntu:latest
+
+RUN apt-get update && \
+    apt-get install -y git zsh nano vim wget curl screen && \
+	  sh -c "$(wget -O- https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
+    apt-get install -y nodejs
+
+WORKDIR /app
+
+CMD [ "zsh" ]
