@@ -1,0 +1,446 @@
+commit 68726f285b34b81dbb10ab606ca1b2abb9d89c71
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 19:53:38 2021 +0200
+
+    feat(friendship): Refactored code
+
+commit 2d55b8f4e017c8ae77365a30627fd3ff2645824a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 19:46:32 2021 +0200
+
+    feat(friendship): Different view per friendship 'status'
+
+commit 6941dccbfab1efc278f22022ab696964837b52b9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 19:24:12 2021 +0200
+
+    feat(friendship): Listing 3 states (friends, pending, requests)
+
+commit cb7c3b76f386312e1f95243203fe7c797dee1685
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 19:23:55 2021 +0200
+
+    feat(user-profile): Removing button if self
+
+commit a4e205182ff36799111b9cd4ab39ee264992fdbb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 18:56:52 2021 +0200
+
+    feat(friendship): Preventing self requests
+
+commit 61800def2e65c2a1a1b4418b17fd8c722085450f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 18:52:19 2021 +0200
+
+    feat(friendship): Requesting
+
+commit da93205bd59d16373e9469583c7c0574427f422e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed May 5 18:00:26 2021 +0200
+
+    feat(friendship): Added basic UI
+
+commit 74e8f3f2fdc1667883bc4a292ca5200dbd6c08aa
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Apr 30 01:58:48 2021 +0200
+
+    feat(friendship): Base
+
+commit dab40eb206093fe32dcbbee2c72f953ee1109e8e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 29 23:10:22 2021 +0200
+
+    chore: Added comments on controllers' methods to better see their endpoint
+
+commit 242c59be979959d4182ef4c05452b0c08a1a9154
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Apr 26 21:45:49 2021 +0200
+
+    feat(account): Settings and 2-factor authentication
+
+commit b068714897338f0d1a3e58b3e0dc6adbdf1db939
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Mon Apr 26 03:09:48 2021 +0200
+
+    feat(account): One Time Password
+
+commit cb9e796f1ca3383ef985c43bf5d3cee44769e430
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 21:19:48 2021 +0200
+
+    feat(channel): Added a refresh button to the list
+
+commit 9d1a9d39cd2479838eba16e71b08fae957f091e5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 21:03:57 2021 +0200
+
+    feat(channel): Clearing and deleting as events
+
+commit 00e4bd837ba3bb5b0cad79fd3b8ce6124dd0f1a8
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 20:51:36 2021 +0200
+
+    feat(channel): Displaying action only if user have privileges
+
+commit 3c742d5e30593c6736e49778f4ced780433677d9
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 20:00:39 2021 +0200
+
+    feat(channel): Refreshing if you are the target of the update
+
+commit feb9d27547901aa124c22d5b9fb33c966a3f7335
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 19:54:04 2021 +0200
+
+    feat(channel): Events
+
+commit b3a762ab46cdedd32bc46ad686b2e580d7ed30fd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 01:43:56 2021 +0200
+
+    feat(channel): Started patching (banning and promoting/demoting)
+
+commit 06b5438187007319cd1f724de764fcb6ead2a6c3
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 00:54:54 2021 +0200
+
+    feat(channel): Clearing
+
+commit 9779a26ce208aba3560bfcb99ed2254b06a6e778
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 00:41:43 2021 +0200
+
+    chore(back): Better not found message
+
+commit a6abe2713be47e591b0934bbab1f54ffe64d5861
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 25 00:33:23 2021 +0200
+
+    feat(channel): Refactored message input
+
+commit 5da49d45631abfc4956141594b0107c58723adbb
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 23:12:01 2021 +0200
+
+    feat(channel): Removed the 'success' message when adding an user
+
+commit 2e9d3df2c4bbc62b137d4f66ca8cc3b210651e12
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 23:08:25 2021 +0200
+
+    feat(channel): Better errors
+
+commit c9deebea74766ca46fe2ebc105d206cdc32bb8dc
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 22:40:47 2021 +0200
+
+    feat(channel): Ownership transfer
+
+commit 305d4f203dc2ecc66f765119c681cd7fd56f5c30
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 22:24:41 2021 +0200
+
+    feat(channel): Joining and leaving
+
+commit 3b0cea6fb7e0acf5b764c09c5a2a22940aa4e418
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 22:13:37 2021 +0200
+
+    feat(channel): Deletion
+
+commit 6c0bba5d6bfcaaa9728e9972e5b7eed834534277
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 21:59:00 2021 +0200
+
+    feat(channel): Fixed small issue with error handling
+
+commit ff834f311875a2587ee8763598c38b6c04a935f7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 24 21:42:39 2021 +0200
+
+    fea(channel): Added action to add and remove user
+
+commit f3f739aafdaeada73fbe49b0b8e152bed741f1cd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Apr 23 01:16:50 2021 +0200
+
+    feat(channel): Add user page and search endpoint
+
+commit 4dac14e61cad3f8b7db1484fecbea5e5db4f01bd
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 22 23:59:43 2021 +0200
+
+    feat(channel): Added all page that will be used (placeholder for now)
+
+commit 77878f4bfbe40645305bcacdc9938ea0292674ef
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 22 20:13:23 2021 +0200
+
+    chore(front): Removed debug console.log
+
+commit f1736d5e2fc3d403c1b126ae7903551924e01086
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 22 20:11:17 2021 +0200
+
+    chore: Now using `<%%e` instead of `<%%-` in .erb files since the vs-code extension don't do the syntax highlighting correctly....
+    
+    I made an issue on the official extension github, and i am waiting for the answer.
+    https://github.com/rubyide/vscode-ruby/issues/728
+
+commit 68cadf734b40c93aeda21bf9a03cff49e40e62a5
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 22 18:27:28 2021 +0200
+
+    chore(back): Rewrote some code for the application controller
+
+commit d088b70cf62e1f6ee8de51aaf27629a869f55d1e
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 22 18:12:18 2021 +0200
+
+    feat(front): Rewrote router routes for better readeability
+
+commit 6021bb10ee3c440496a4d31514e113b33f86f7f0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 22 16:56:12 2021 +0200
+
+    feat(front): Using methods instead of names
+
+commit edaeef3d59861b5f2de8d75313f6af6670af1949
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 15 23:46:11 2021 +0200
+
+    feat(channel): Reworked password edition
+
+commit b96223b1e5fc09fda7e27ef6ac1ecfc26fb2b705
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 15 21:57:17 2021 +0200
+
+    feat(channel): Added joining for protected channels
+
+commit a49751956a3d9b48c65327de200d99e94c400604
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 15 19:22:59 2021 +0200
+
+    refactor(channel): Changed files layout and reworked ChannelView
+
+commit 5e2f49f3532f020185912e16197f821a28151325
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 15 16:36:30 2021 +0200
+
+    feat(channel): Prepared front for password protected channels
+
+commit b8a76c94a8c672c09ef8824925bcddf2527aeab2
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 15 01:45:59 2021 +0200
+
+    feat(channel): Linked some routes (but not tested them)
+
+commit 6e1c8f1b9a39e4b644cb72cf823e315c87221db7
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 15 01:42:56 2021 +0200
+
+    feat(channel): #join, #leave, (and some not linked) plus first tests
+
+commit 9cb286fbe93353500113342185f71299dadd4919
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 14 18:38:22 2021 +0200
+
+    feat(channel): Permission and work on the front
+
+commit 520e5cf647ed340950342c31d6e0ec1c48ecb24f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sat Apr 10 00:10:16 2021 +0200
+
+    feat(user): Added edit view (not linked)
+
+commit d7c0e035f657c68a731f869533359636262ce05d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Apr 9 21:38:02 2021 +0200
+
+    fix(achievement): Percent was not displayed when flag was on
+
+commit 8250ab777bf0452c21b1ee413494cb63f2e3eb90
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Apr 9 21:37:33 2021 +0200
+
+    feat(achievement): Added an endpoint
+
+commit 373fca5e6a1ebebbccd6c3b413da8db460b1647d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Fri Apr 9 21:28:15 2021 +0200
+
+    add: Achievements
+
+commit 509fbe6b5e8e8a431e237f7183830ce32d6771d4
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 8 21:52:18 2021 +0200
+
+    feat(user): Added user profile and started statistics
+
+commit b56a67ad6cd0434b318ba06e82eeb47138f8c03d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 8 17:05:47 2021 +0200
+
+    chore: Removed old code
+
+commit 69c874bde7ad1043584572e046b675ddd36cb3ee
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 8 00:25:59 2021 +0200
+
+    feat(user): Downloading profile picture at first login
+
+commit 7795303852b54b042ad6ee2bf7b3937c736c31ea
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 23:10:00 2021 +0200
+
+    feat(channel): Reworked channel list
+
+commit b7b5ab438554777552f487ab1467256e2c72dfe3
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 22:51:55 2021 +0200
+
+    chore: Removed unused scss file
+
+commit bd69516f132638d503df5d027b640daa3d124cef
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 22:51:28 2021 +0200
+
+    feat(auth): Reworked login screen
+
+commit 54488dac323841da121c52c02e07d8407c382304
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 22:41:11 2021 +0200
+
+    feat(front): Work on navigation bar
+
+commit 9937f82ed879780feb3e1791602ff84ef3a9a48d
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 21:47:01 2021 +0200
+
+    feat(front): Reworked navigation bar
+
+commit 5fb7e19ab2cd57abafdbb9b8fe4264937e014f3a
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 21:08:02 2021 +0200
+
+    fix(channel): Page was not scrolled to bottom
+
+commit 68e3e535d679c23a791505c69f8661e8148ccec0
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 19:06:23 2021 +0200
+
+    chore(channel): Added missing " in router.js
+
+commit 04a6a584e1af03a8b5ea48df967ab3b6cd42130b
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 18:56:16 2021 +0200
+
+    feat(channel): Added edition
+
+commit fd5fda9c6245b7b43dc9bb31ae0724538e9d4c72
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 18:55:49 2021 +0200
+
+    feat(channel): Creating a `ChannelUser` on channel creation
+
+commit ef895482823516a84f3e0e874b825e8a0457d6bf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Apr 7 18:03:58 2021 +0200
+
+    feat(channel): Added validation
+
+commit c43579eae0675ee1e54d2ebc6b891bb3aec35c11
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Apr 6 19:28:47 2021 +0200
+
+    feat(channel): Views and web sockets
+
+commit 51a33d0996cd7642232a1d0a34304302fa1207cc
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Sun Apr 4 20:18:41 2021 +0200
+
+    add: First working backbone view
+
+commit 4d807ffaabfa4e7d2fc133a0d4454080948b31cf
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 1 22:36:25 2021 +0200
+
+    add: First (front) templated view
+
+commit b0140b738eaba613bf1dfb30ae0909b273475a77
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Thu Apr 1 13:45:23 2021 +0200
+
+    add: New channel and message controller
+
+commit ab44090f0a515704c6cb2768340fc6fa7fcc7b48
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Mar 31 15:58:27 2021 +0200
+
+    feat(spa): Added basic login and home page
+
+commit 5fddc73a3f6e3c6426703e313bcf57e176f2f5f7
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Wed Mar 31 15:56:10 2021 +0200
+
+    attempts to undertand rails
+
+commit 08e659992f065d7aa94336df3d80013f57df7936
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Mar 31 12:11:46 2021 +0200
+
+    change: ID type from `integer` to `UUID`
+
+commit 54953db5bd20d038709f8a5e65034b4cb8aa8d54
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Tue Mar 30 17:48:15 2021 +0200
+
+    wahtever
+
+commit 9ef3969a3815e53efc818dac1074c23a420747d7
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Tue Mar 30 14:34:40 2021 +0200
+
+    installation ok
+
+commit 1285f10013687fd8f5529d005e2c5130f7a0900f
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Tue Mar 30 12:02:03 2021 +0200
+
+    docker working
+
+commit 2b887c66488414ba64610f4a53c5012907851da2
+Author: atetu <alice.tetu01@gmail.com>
+Date:   Mon Mar 29 22:58:40 2021 +0200
+
+    docker still not working
+
+commit 6435f502bf42f0b1fef12f36c1c26cd56170fe51
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Mon Mar 29 16:59:12 2021 +0200
+
+    Docker not working
+
+commit 08af8dfc8c2cb80f77b64b8a05e9dec3c4dd9fd9
+Author: Alice TETU <atetu@student.42.fr>
+Date:   Fri Mar 26 17:03:15 2021 +0100
+
+    dockerfile not working
+
+commit f3bb7918ccc5d2a8bc66f679eed97e0f98e78232
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Wed Mar 24 00:30:49 2021 +0100
+
+    feat: Added validation for chatroom and message models
+
+commit 49a6e18e255c0c619115bc1957ea7d2e1e246fe1
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Mar 23 21:54:32 2021 +0100
+
+    feat(user): Added 42 OAuth method
+
+commit d0b0e593bc389e19269a0a7137752b6c8579049f
+Author: Caceresenzo <caceresenzo1502@gmail.com>
+Date:   Tue Mar 23 20:19:48 2021 +0100
+
+    first commit
