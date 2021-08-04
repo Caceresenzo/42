@@ -1,1 +1,0 @@
-docker build -t ft-transcendence-base -f Dockerfile.base .
