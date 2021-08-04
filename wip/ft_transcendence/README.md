@@ -1,24 +1,27 @@
-# README
+# ft-transcendence
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A 42 project!
 
-Things you may want to cover:
+- [ft-transcendence](#ft-transcendence)
+  - [Goal](#goal)
+  - [Demo](#demo)
+  - [Progress](#progress)
+  - [Team](#team)
 
-* Ruby version
+## Goal
 
-* System dependencies
+Create a full website with backend and frontend.
 
-* Configuration
+## Demo
 
-* Database creation
+Not always the latest, but a version is currently hosted at: https://ft-transcendence.caceresenzo.dev/
 
-* Database initialization
+## Progress
 
-* How to run the test suite
+A Trello is available at: https://trello.com/b/LmU4LEal/fttranscendence
 
-* Services (job queues, cache servers, search engines, etc.)
+## Team
 
-* Deployment instructions
-
-* ...
+- [Alice TÊTU](https://profile.intra.42.fr/users/atetu)
+- [Enzo CACERES](https://profile.intra.42.fr/users/ecaceres)
+- [Badria MELLOUK](https://profile.intra.42.fr/users/bmellouk)

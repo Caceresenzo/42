@@ -1,7 +1,0 @@
-<% if !user_signed_in? %>
-	<%= render "spa/indexes/auth" %>
-<% elsif session[:require_otp] %>
-	<%= render "spa/indexes/otp" %>
-<% else %>
-	<%= render "spa/indexes/home" %>
-<% end %>

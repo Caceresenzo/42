@@ -1,0 +1,9 @@
+<template>
+  <drawer-top-link
+    to="/channels/"
+    param="id"
+    icon="mdi-flare"
+    :title="$t('channel.discover.action')"
+    always-exact
+  />
+</template>

@@ -1,0 +1,35 @@
+{
+  "users": [
+    { "id": 1, "username": "enzo" },
+    { "id": 2, "username": "alice" },
+    { "id": 3, "username": "badria" }
+  ],
+  "channels": [
+    {
+      "id": 1,
+      "name": "hello everyone",
+      "visibility": "public",
+      "owner": { "id": 1, "username": "enzo" },
+      "users": [
+        {
+          "user": { "id": 1, "username": "enzo" },
+          "admin": true,
+          "banned": false,
+          "muted": false
+        },
+        {
+          "user": { "id": 2, "username": "alice" },
+          "admin": false,
+          "banned": false,
+          "muted": false
+        },
+        {
+          "user": { "id": 3, "username": "badria" },
+          "admin": true,
+          "banned": false,
+          "muted": false
+        }
+      ]
+    }
+  ]
+}

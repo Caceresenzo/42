@@ -1,0 +1,27 @@
+const Icons = {
+  '1000': 'mdi-account-circle',
+  '2000': 'mdi-forum',
+  '2100': 'mdi-access-point-plus',
+  '2200': 'mdi-perspective-more',
+  '2300': 'mdi-incognito',
+  '3000': 'mdi-nintendo-game-boy',
+  '3100': 'mdi-gamepad',
+  '3200': 'mdi-controller-classic',
+  '3300': 'mdi-white-balance-sunny',
+  '4000': 'mdi-saxophone',
+  '4100': 'mdi-chess-king',
+  '4200': 'mdi-currency-usd',
+  '5000': 'mdi-cancel',
+  '5100': 'mdi-account-remove',
+  '5200': 'mdi-account-plus',
+  '5300': 'mdi-upload',
+  '5400': 'mdi-download',
+  '6000': 'mdi-account-group',
+  '6100': 'mdi-soccer',
+  '6200': 'mdi-star-face',
+  '6300': 'mdi-earth',
+  '7000': 'mdi-hand-peace',
+  '7100': 'mdi-fencing',
+}
+
+export { Icons }
