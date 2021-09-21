@@ -23,6 +23,9 @@ typedef struct s_v3f
 t_v3f*
 v3f_initialize(t_v3f *v3, float f);
 
+t_v3f*
+v3f_copy(t_v3f *v3, const t_v3f *template);
+
 float
 v3f_length_squared(t_v3f *v3);
 
@@ -34,6 +37,9 @@ v3f_dot(const t_v3f *a, const t_v3f *b);
 
 t_v3f*
 v3f_cross(t_v3f *v3, const t_v3f *a, const t_v3f *b);
+
+t_v3f*
+v3f_add_v3(t_v3f *v3, const t_v3f *a, const t_v3f *b);
 
 t_v3f*
 v3f_sub_v3(t_v3f *v3, const t_v3f *a, const t_v3f *b);

@@ -35,6 +35,9 @@ void
 camera_update(t_camera *camera);
 
 t_m4f*
-camera_look_at(const t_camera *camera, t_m4f *m4);
+camera_view_matrix(const t_camera *camera, t_m4f *m4);
+
+void
+camera_process_keyboard(t_camera *camera, float delta);
 
 #endif

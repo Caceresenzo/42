@@ -24,10 +24,8 @@ camera_update(t_camera *camera)
 	camera->front.z = sinf(radiansf(camera->yaw)) * cos(radiansf(camera->pitch));
 	v3f_normalize(&camera->front);
 
-	printf("camera: %8.4f %8.4f %8.4f\n", camera->front.x, camera->front.y, camera->front.z);
+//	printf("camera: %8.4f %8.4f %8.4f\n", camera->front.x, camera->front.y, camera->front.z);
 
 	v3f_normalize(v3f_cross(&camera->right, &camera->front, &camera->world_up));
 	v3f_normalize(v3f_cross(&camera->up, &camera->right, &camera->front));
-
-	camera->pitch = clampf(camera->pitch, -90.0f, 90.0f);
 }

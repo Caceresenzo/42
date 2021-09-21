@@ -19,8 +19,9 @@
 #include "matrix.h"
 #include "trigonometric.h"
 #include "arraylist.h"
+#include "keyboard.h"
 
-//t_camera camera;
+t_camera camera;
 
 //t_m4f model;
 //t_m4f view;
@@ -35,6 +36,7 @@ GLuint colorbuffer;
 void *win;
 
 t_v3f rot = { 0, 0, 0 };
+t_v3f cam_pos = { 20, 3, 15 };
 
 t_m4f model;
 t_arraylist vertex_buffer_data;
@@ -46,18 +48,25 @@ loop(void *x)
 	rot.y = 0.05;
 	rot.z = 0.003;
 
+	if (keyboard_key_get(KEY_CONTROL))
+	{
+		rot.y = 0;
+	}
+
 	mlx_opengl_swap_buffers(win);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	camera_process_keyboard(&camera, 0.01);
 
 	t_m4f projection;
 	m4f_perspective(&projection, radiansf(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 
 	t_m4f view;
-	t_v3f cam_pos = { 20, 3, 15 };
-	t_v3f cam_origin = { 0, 0, 0 };
-	t_v3f cam_up = { 0, 1, 0 };
-	m4f_look_at(&view, &cam_pos, &cam_origin, &cam_up);
+	camera_view_matrix(&camera, &view);
+//	t_v3f cam_origin = { 0, 0, 0 };
+//	t_v3f cam_up = { 0, 1, 0 };
+//	m4f_look_at(&view, &cam_pos, &cam_origin, &cam_up);
 
 	t_v3f rot_axis2 = { 0, 1, 0 };
 	m4f_rotate_v3(&model, rot.y, &rot_axis2);
@@ -130,9 +139,9 @@ load_mesh()
 				{
 					t_v3f *to = arraylist_add_to(&vertices);
 					memcpy(to, &vertice, sizeof(t_v3f));
-					printf("added %f %f %f from `%s`\n", to->x, to->y, to->z, buffer);
+//					printf("added %f %f %f from `%s`\n", to->x, to->y, to->z, buffer);
 				}
-				printf("scanned %d\n", scanned);
+//				printf("scanned %d\n", scanned);
 			}
 			else if (first == 'f' && second == ' ')
 			{
@@ -161,16 +170,39 @@ load_mesh()
 	for (size_t i = 0; i < indices.size; i++)
 	{
 		int index = *((int*)arraylist_at(&indices, i));
-		printf("%d out of %lu\n", index, vertices.size);
+//		printf("%d out of %lu\n", index, vertices.size);
 
 		t_v3f *to = arraylist_add_to(&vertex_buffer_data);
 		t_v3f *from = arraylist_at(&vertices, index - 1);
 
-		printf("%f %f %f\n", from->x, from->y, from->z);
+//		printf("%f %f %f\n", from->x, from->y, from->z);
 
 		memcpy(to, from, sizeof(t_v3f));
 	}
 }
+
+int
+on_key_press(int keycode, void *data)
+{
+	keyboard_key_set(keycode, KEY_STATE_PRESSED);
+
+	return (0);
+}
+
+int
+on_key_released(int keycode, void *data)
+{
+	keyboard_key_set(keycode, KEY_STATE_RELEASED);
+
+	return (0);
+}
+
+#define X_EVENT_KEY_PRESS		2
+#define X_EVENT_KEY_RELEASE		3
+#define X_EVENT_MOUSE_PRESS		4
+#define X_EVENT_MOUSE_RELEASE	5
+#define X_EVENT_MOUSE_MOVE		6
+#define X_EVENT_EXIT			17
 
 int
 main(void)
@@ -181,6 +213,9 @@ main(void)
 	void *mlx = mlx_init();
 	win = mlx_new_opengl_window(mlx, width, height, "hello");
 
+	mlx_hook(win, X_EVENT_KEY_PRESS, 0, &on_key_press, NULL);
+	mlx_hook(win, X_EVENT_KEY_RELEASE, 0, &on_key_released, NULL);
+
 	mlx_opengl_window_set_context(win);
 	shader_load_at(&shader, "shaders/vertex.glsl", "shaders/fragment.glsl");
 
@@ -188,7 +223,7 @@ main(void)
 
 	load_mesh();
 
-//	camera_initialize(&camera);
+	camera_initialize(&camera);
 //
 //	m4f_zero(&model);
 //	m4f_zero(&view);
