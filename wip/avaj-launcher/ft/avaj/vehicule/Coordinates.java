@@ -24,7 +24,7 @@ public class Coordinates {
 	}
 	
 	public void addLongitude(int value) {
-		setLongitude(Math.addExact(getLongitude(), value));
+		setLongitude(getLongitude() + value);
 	}
 	
 	public int getLatitude() {
@@ -36,7 +36,7 @@ public class Coordinates {
 	}
 	
 	public void addLatitude(int value) {
-		setLatitude(Math.addExact(getLatitude(), value));
+		setLatitude(getLatitude() + value);
 	}
 	
 	public int getHeight() {
@@ -48,7 +48,7 @@ public class Coordinates {
 	}
 	
 	public void addHeight(int value) {
-		setHeight(Math.addExact(getHeight(), value));
+		setHeight(getHeight() + value);
 	}
 	
 	private static int ensurePositiveOrZero(int value) {
