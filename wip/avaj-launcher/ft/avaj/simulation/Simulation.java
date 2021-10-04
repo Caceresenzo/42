@@ -8,6 +8,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ft.avaj.Bootstrap;
 import ft.avaj.exception.InvalidFileFormatException;
 import ft.avaj.vehicule.AircraftFactory;
 import ft.avaj.vehicule.Flyable;
@@ -66,8 +67,12 @@ public class Simulation implements Runnable {
 					String type = matcher.group(1);
 					String name = matcher.group(2);
 					int longitude = Integer.parseInt(matcher.group(3));
-					int latitude = Integer.parseInt(matcher.group(3));
-					int height = Integer.parseInt(matcher.group(3));
+					int latitude = Integer.parseInt(matcher.group(4));
+					int height = Integer.parseInt(matcher.group(5));
+					
+					if (Bootstrap.DEBUG) {
+						System.err.println(String.format("new aircraft: %15s %4s %4d %4d %4d", type, name, longitude, latitude, height));
+					}
 					
 					Flyable flyable = AircraftFactory.newAircraft(type, name, longitude, latitude, height);
 					

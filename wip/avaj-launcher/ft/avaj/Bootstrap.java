@@ -13,6 +13,7 @@ import ft.avaj.simulation.Simulation;
 
 public class Bootstrap {
 	
+	public static final boolean DEBUG = false;
 	public static final String OUTPUT_FILE = "simulation.txt";
 	
 	public static void main(String[] args) {
@@ -26,6 +27,10 @@ public class Bootstrap {
 			System.out.print("could not run the simulation: ");
 			System.out.println(exception.getClass().getName());
 			System.out.println(exception.getMessage());
+			
+			if (DEBUG) {
+				exception.printStackTrace();
+			}
 			
 			System.exit(1);
 		}
@@ -50,8 +55,12 @@ public class Bootstrap {
 		
 		FileOutputStream fileOutputStream = new FileOutputStream(OUTPUT_FILE);
 		try (PrintStream printStream = new PrintStream(fileOutputStream, true, StandardCharsets.UTF_8.name())) {
-			System.setOut(printStream);
+			if (!DEBUG) {
+				System.setOut(printStream);
+			}
+			
 			simulation.run();
+		} finally {
 			System.setOut(stdout);
 		}
 	}
