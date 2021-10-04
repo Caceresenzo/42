@@ -20,6 +20,10 @@ public class Coordinates {
 	}
 	
 	public void setLongitude(int longitude) {
+		if (isOnGround()) {
+			return;
+		}
+		
 		this.longitude = ensurePositiveOrZero(longitude);
 	}
 	
@@ -32,6 +36,10 @@ public class Coordinates {
 	}
 	
 	public void setLatitude(int latitude) {
+		if (isOnGround()) {
+			return;
+		}
+		
 		this.latitude = ensurePositiveOrZero(latitude);
 	}
 	
