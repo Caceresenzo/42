@@ -10,9 +10,9 @@ public class Coordinates {
 	private int height;
 	
 	Coordinates(int longitude, int latitude, int height) {
-		this.longitude = safeValue(longitude);
-		this.latitude = safeValue(latitude);
-		this.height = safeHeight(height);
+		this.longitude = ensurePositiveOrZero(longitude);
+		this.latitude = ensurePositiveOrZero(latitude);
+		this.height = safeHeight(height, true);
 	}
 	
 	public int getLongitude() {
@@ -20,11 +20,11 @@ public class Coordinates {
 	}
 	
 	public void setLongitude(int longitude) {
-		this.longitude = safeValue(longitude);
+		this.longitude = ensurePositiveOrZero(longitude);
 	}
 	
 	public void addLongitude(int value) {
-		setLongitude(getLongitude() + value);
+		setLongitude(Math.addExact(getLongitude(), value));
 	}
 	
 	public int getLatitude() {
@@ -32,11 +32,11 @@ public class Coordinates {
 	}
 	
 	public void setLatitude(int latitude) {
-		this.latitude = safeValue(latitude);
+		this.latitude = ensurePositiveOrZero(latitude);
 	}
 	
 	public void addLatitude(int value) {
-		setLatitude(getLatitude() + value);
+		setLatitude(Math.addExact(getLatitude(), value));
 	}
 	
 	public int getHeight() {
@@ -44,19 +44,31 @@ public class Coordinates {
 	}
 	
 	public void setHeight(int height) {
-		this.height = safeHeight(height);
+		this.height = safeHeight(height, false);
 	}
 	
 	public void addHeight(int value) {
-		setHeight(getHeight() + value);
+		setHeight(Math.addExact(getHeight(), value));
 	}
 	
-	private static int safeValue(int value) {
-		return Math.max(value, MIN_VALUE);
+	private static int ensurePositiveOrZero(int value) {
+		if (value < 0) {
+			throw new IllegalArgumentException("< 0");
+		}
+		
+		return value;
 	}
 	
-	private static int safeHeight(int height) {
-		return Math.min(safeValue(height), MAX_HEIGHT);
+	private static int safeHeight(int height, boolean ensure) {
+		int value;
+		
+		if (ensure) {
+			value = ensurePositiveOrZero(height);
+		} else {
+			value = Math.max(MIN_VALUE, height);
+		}
+		
+		return Math.min(value, MAX_HEIGHT);
 	}
 	
 	public boolean isOnGround() {
