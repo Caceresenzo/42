@@ -1,6 +1,5 @@
 package ft.hangouts.adapter;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,13 +43,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         Contact contact = mContacts.get(position);
 
-        viewHolder.getNameTextView().setText(contact.getName());
-        viewHolder.getPhoneTextView().setText(contact.getPhone());
+        viewHolder.setName(contact.getName());
+        viewHolder.setPhone(contact.getPhone());
 
-        viewHolder.getView().setOnClickListener(new View.OnClickListener() {
+        viewHolder.getView().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onLongClick(View view) {
                 ContactEditorActivity.start(mMainActivity, MainActivity.REQUEST_CODE_CONTACT_EDITOR, contact);
+
+                return true;
             }
         });
     }
@@ -86,6 +87,25 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             return mPhoneTextView;
         }
 
+        public void setName(String name) {
+            if (name != null) {
+                name = name.trim();
+            } else {
+                name = "<???>";
+            }
+
+            mNameTextView.setText(name);
+        }
+
+        public void setPhone(String phone) {
+            if (phone != null) {
+                phone = phone.trim();
+            } else {
+                phone = "+???";
+            }
+
+            mPhoneTextView.setText(phone);
+        }
     }
 
 }

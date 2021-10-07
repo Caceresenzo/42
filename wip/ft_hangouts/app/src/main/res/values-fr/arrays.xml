@@ -1,0 +1,9 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="color_entries">
+        <item>Violet</item>
+        <item>Vert</item>
+        <item>Bleu</item>
+        <item>Rouge</item>
+    </string-array>
+</resources>

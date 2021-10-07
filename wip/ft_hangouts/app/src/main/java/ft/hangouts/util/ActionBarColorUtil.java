@@ -9,11 +9,20 @@ import android.view.WindowManager;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
+import androidx.preference.PreferenceManager;
+
+import ft.hangouts.R;
 
 public class ActionBarColorUtil {
 
     public static void apply(AppCompatActivity activity) {
-        int color = Color.MAGENTA;
+        int color = activity.getResources().getColor(R.color.purple_500);
+
+        String value = PreferenceManager.getDefaultSharedPreferences(activity).getString(activity.getString(R.string.pref_theme_color_key), null);
+        if (value != null) {
+            color = Color.parseColor(value);
+        }
+
         int darken = ColorUtils.blendARGB(color, Color.BLACK, 0.2f);
 
         ActionBar actionBar = activity.getSupportActionBar();

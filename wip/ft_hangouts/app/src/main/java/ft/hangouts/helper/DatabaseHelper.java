@@ -76,6 +76,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return contact;
     }
 
+    public void delete(Contact contact) {
+        delete(Contact.Columns.TABLE_NAME, contact.getId());
+    }
+
     private long insert(String table, ContentValues values) {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -85,7 +89,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private long update(String table, ContentValues values, long id) {
         SQLiteDatabase db = getWritableDatabase();
 
-        return db.update(table, values, WHERE_ID, new String[]{ String.valueOf(id) });
+        return db.update(table, values, WHERE_ID, whereId(id));
     }
 
+    public void delete(String table, long id) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(table, WHERE_ID, whereId(id));
+    }
+
+    private String[] whereId(long id) {
+        return new String[]{ String.valueOf(id) };
+    }
 }

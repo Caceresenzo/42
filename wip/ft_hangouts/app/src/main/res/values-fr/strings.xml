@@ -1,4 +1,12 @@
 <resources>
+    <string name="settings">Parametres</string>
+
+    <string name="pref_theme">Theme</string>
+    <string name="pref_theme_color">Couleur</string>
+
+    <string name="action_settings">Parametres</string>
+    <string name="action_delete">Supprimer</string>
+
     <string name="contact_phone">Numero de Telephone</string>
     <string name="contact_name">Nom</string>
     <string name="contact_nickname">Surnom</string>

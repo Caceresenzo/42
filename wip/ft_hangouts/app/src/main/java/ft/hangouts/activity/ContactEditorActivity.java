@@ -2,6 +2,7 @@ package ft.hangouts.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -11,6 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -66,6 +69,11 @@ public class ContactEditorActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(String.format("Contact: %s", mContact.getPhone()));
         }
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         new ContactTextWatch(mPhoneInput, Contact.Columns.COLUMN_NAME_PHONE);
         new ContactTextWatch(mNameInput, Contact.Columns.COLUMN_NAME_NAME);
         new ContactTextWatch(mNicknameInput, Contact.Columns.COLUMN_NAME_NICKNAME);
@@ -92,6 +100,35 @@ public class ContactEditorActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         mContact = (Contact) savedInstanceState.getSerializable(KEY_CONTACT);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!isNew()) {
+            getMenuInflater().inflate(R.menu.menu_contact_edit, menu);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+
+                return true;
+            }
+
+            case R.id.action_delete: {
+                new DatabaseHelper(this).delete(mContact);
+                finish();
+
+                return true;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void save() {

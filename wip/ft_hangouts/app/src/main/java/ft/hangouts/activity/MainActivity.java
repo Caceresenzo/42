@@ -47,21 +47,18 @@ public class MainActivity extends AppCompatActivity {
 
         ActionBarColorUtil.apply(this);
 
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Contact contact = new Contact();
-                contact.setName("asd");
-
-                ContactEditorActivity.start(MainActivity.this, REQUEST_CODE_CONTACT_EDITOR, contact);
-            }
-        });
-
         mContactAdapter = new ContactAdapter(new DatabaseHelper(this), this);
         mContactAdapter.refresh();
 
         mRecyclerView.setAdapter(mContactAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContactEditorActivity.start(MainActivity.this, REQUEST_CODE_CONTACT_EDITOR, null);
+            }
+        });
     }
 
     @Override
@@ -81,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        ActionBarColorUtil.apply(this);
+
+        super.onResume();
     }
 
     @Override
