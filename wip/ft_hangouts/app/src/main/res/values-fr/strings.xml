@@ -1,0 +1,7 @@
+<resources>
+    <string name="contact_phone">Numero de Telephone</string>
+    <string name="contact_name">Nom</string>
+    <string name="contact_nickname">Surnom</string>
+    <string name="contact_email">Email</string>
+    <string name="contact_address">Adresse</string>
+</resources>
