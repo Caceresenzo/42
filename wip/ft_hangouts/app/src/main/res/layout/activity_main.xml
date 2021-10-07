@@ -38,6 +38,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        android:src="@drawable/ic_baseline_add_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
