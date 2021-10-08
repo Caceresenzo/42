@@ -1,4 +1,7 @@
 <resources>
+    <string name="permission_required">Permission SMS Requise</string>
+    <string name="permission_authorize">Autoriser</string>
+
     <string name="settings">Parametres</string>
 
     <string name="pref_theme">Theme</string>

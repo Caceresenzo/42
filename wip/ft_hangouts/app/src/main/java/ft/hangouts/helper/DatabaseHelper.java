@@ -46,20 +46,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                null
+                Contact.Columns.COLUMN_NAME_LATEST_UPDATE + " DESC"
         )) {
             List<Contact> contacts = new ArrayList<>();
 
             while(cursor.moveToNext()) {
-                contacts.add(new Contact()
-                        .setId(cursor.getLong(cursor.getColumnIndexOrThrow(Contact.Columns._ID)))
-                        .setPhone(cursor.getString(cursor.getColumnIndexOrThrow(Contact.Columns.COLUMN_NAME_PHONE)))
-                        .setName(cursor.getString(cursor.getColumnIndexOrThrow(Contact.Columns.COLUMN_NAME_NAME)))
-                        .setNickname(cursor.getString(cursor.getColumnIndexOrThrow(Contact.Columns.COLUMN_NAME_NICKNAME)))
-                        .setAddress(cursor.getString(cursor.getColumnIndexOrThrow(Contact.Columns.COLUMN_NAME_ADDRESS))));
+                contacts.add(Contact.fromCursor(cursor));
             }
 
             return contacts;
+        }
+    }
+
+    public Contact findContactByPhone(String phone) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        try(Cursor cursor = db.query(
+                Contact.Columns.TABLE_NAME,
+                Contact.Columns.PROJECTION,
+                "phone = ?",
+                new String[] { phone },
+                null,
+                null,
+                null
+        )) {
+            if (cursor.moveToNext()) {
+                return Contact.fromCursor(cursor);
+            }
+
+            return null;
         }
     }
 
@@ -101,4 +116,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String[] whereId(long id) {
         return new String[]{ String.valueOf(id) };
     }
+
 }

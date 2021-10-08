@@ -2,12 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ft.hangouts">
 
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.BROADCAST_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Ft_hangouts">
+
+        <receiver android:name=".receiver.SMSReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".activity.ContactEditorActivity"
             android:exported="true" />

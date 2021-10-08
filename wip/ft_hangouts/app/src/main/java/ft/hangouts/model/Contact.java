@@ -1,9 +1,11 @@
 package ft.hangouts.model;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.provider.BaseColumns;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Contact implements Serializable {
 
@@ -13,6 +15,11 @@ public class Contact implements Serializable {
     private String nickname;
     private String email;
     private String address;
+    private Date latestUpdate;
+
+    public Contact() {
+        this.latestUpdate = new Date();
+    }
 
     public long getId() {
         return id;
@@ -74,6 +81,16 @@ public class Contact implements Serializable {
         return this;
     }
 
+    public Date getLatestUpdate() {
+        return latestUpdate;
+    }
+
+    public Contact setLatestUpdate(Date latestUpdate) {
+        this.latestUpdate = latestUpdate;
+
+        return this;
+    }
+
     public ContentValues toValues() {
         ContentValues values = new ContentValues();
 
@@ -82,8 +99,19 @@ public class Contact implements Serializable {
         values.put(Contact.Columns.COLUMN_NAME_NICKNAME, nickname);
         values.put(Contact.Columns.COLUMN_NAME_EMAIL, email);
         values.put(Contact.Columns.COLUMN_NAME_ADDRESS, address);
+        values.put(Contact.Columns.COLUMN_NAME_LATEST_UPDATE, latestUpdate.getTime());
 
         return values;
+    }
+
+    public static Contact fromCursor(Cursor cursor) {
+        return new Contact()
+                .setId(cursor.getLong(cursor.getColumnIndexOrThrow(Columns._ID)))
+                .setPhone(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_PHONE)))
+                .setName(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_NAME)))
+                .setNickname(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_NICKNAME)))
+                .setAddress(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_ADDRESS)))
+                .setLatestUpdate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_LATEST_UPDATE))));
     }
 
     /* Inner class that defines the table contents */
@@ -95,6 +123,7 @@ public class Contact implements Serializable {
         public static final String COLUMN_NAME_NICKNAME = "nickname";
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_ADDRESS = "address";
+        public static final String COLUMN_NAME_LATEST_UPDATE = "latest_update";
 
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE " + TABLE_NAME + " (" +
@@ -103,7 +132,8 @@ public class Contact implements Serializable {
                         COLUMN_NAME_NAME + " TEXT," +
                         COLUMN_NAME_NICKNAME + " TEXT," +
                         COLUMN_NAME_EMAIL + " TEXT," +
-                        COLUMN_NAME_ADDRESS + " TEXT)";
+                        COLUMN_NAME_ADDRESS + " TEXT," +
+                        COLUMN_NAME_LATEST_UPDATE + " INTEGER)";
 
         public static final String SQL_DELETE_ENTRIES =
                 "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -115,6 +145,7 @@ public class Contact implements Serializable {
                 COLUMN_NAME_NICKNAME,
                 COLUMN_NAME_EMAIL,
                 COLUMN_NAME_ADDRESS,
+                COLUMN_NAME_LATEST_UPDATE,
         };
 
     }
