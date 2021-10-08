@@ -12,9 +12,8 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_weight="0.1"
-        android:src="@mipmap/ic_launcher"
-        android:padding="4dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:src="@drawable/ic_baseline_account_circle_24"
+        android:padding="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
