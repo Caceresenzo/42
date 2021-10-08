@@ -69,10 +69,7 @@ public class ContactEditorActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(String.format("Contact: %s", mContact.getPhone()));
         }
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         new ContactTextWatch(mPhoneInput, Contact.Columns.COLUMN_NAME_PHONE);
         new ContactTextWatch(mNameInput, Contact.Columns.COLUMN_NAME_NAME);

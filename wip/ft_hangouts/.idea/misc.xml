@@ -4,9 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5041666666666667" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.2296875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5041666666666667" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_contact_edit.xml" value="0.31875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_main.xml" value="0.313953488372093" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_messages.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/content_main.xml" value="0.31875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/fragment_contacts.xml" value="0.48854166666666665" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/fragment_first.xml" value="0.1125" />
@@ -16,6 +18,7 @@
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/settings_activity.xml" value="0.1125" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_contact_edit.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_main.xml" value="0.1125" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_messages.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.5041666666666667" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/xml/root_preferences.xml" value="0.1125" />
       </map>

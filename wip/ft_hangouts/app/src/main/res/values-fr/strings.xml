@@ -9,6 +9,7 @@
 
     <string name="action_settings">Parametres</string>
     <string name="action_delete">Supprimer</string>
+    <string name="action_show_contact">Afficher le contact</string>
 
     <string name="contact_phone">Numero de Telephone</string>
     <string name="contact_name">Nom</string>

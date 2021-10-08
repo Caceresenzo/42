@@ -12,6 +12,7 @@ import java.util.List;
 import ft.hangouts.R;
 import ft.hangouts.activity.ContactEditorActivity;
 import ft.hangouts.activity.MainActivity;
+import ft.hangouts.activity.MessagesActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 
@@ -45,6 +46,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
         viewHolder.setName(contact.getName());
         viewHolder.setPhone(contact.getPhone());
+
+        viewHolder.getView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MessagesActivity.start(mMainActivity, MainActivity.REQUEST_CODE_CONTACT_EDITOR, contact);
+            }
+        });
 
         viewHolder.getView().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
