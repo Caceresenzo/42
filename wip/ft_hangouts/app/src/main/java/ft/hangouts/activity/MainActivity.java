@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String[] PERMISSIONS = new String[] {
             Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.SEND_SMS,
             Manifest.permission.CALL_PHONE,
     };
 

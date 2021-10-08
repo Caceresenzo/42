@@ -72,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(contact.getId())},
                 null,
                 null,
-                Message.Columns.COLUMN_NAME_AT + " DESC"
+                Message.Columns.COLUMN_NAME_AT + " ASC"
         )) {
             List<Message> messages = new ArrayList<>();
 

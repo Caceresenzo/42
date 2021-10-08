@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.telephony.SmsManager;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Date;
 
 import ft.hangouts.R;
 import ft.hangouts.adapter.MessageAdapter;
@@ -33,7 +39,9 @@ public class MessagesActivity extends AppCompatActivity {
 
     private static MessagesActivity sInstance;
 
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
+    private EditText mInputEditText;
+    private ImageButton mSendImageButton;
 
     private Contact mContact;
     private MessageAdapter mMessageAdapter;
@@ -43,7 +51,9 @@ public class MessagesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mInputEditText = findViewById(R.id.message);
+        mSendImageButton = findViewById(R.id.send);
 
         mContact = (Contact) getIntent().getSerializableExtra(KEY_CONTACT);
         if (mContact == null) {
@@ -59,10 +69,31 @@ public class MessagesActivity extends AppCompatActivity {
         mMessageAdapter = new MessageAdapter(new DatabaseHelper(this), mContact);
         mMessageAdapter.refresh();
 
-        recyclerView.setAdapter(mMessageAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mMessageAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         scrollToBottom();
+
+        mInputEditText.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mSendImageButton.setEnabled(s.length() != 0);
+            }
+        });
+
+        mSendImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
+            }
+        });
 
         sInstance = this;
     }
@@ -143,16 +174,41 @@ public class MessagesActivity extends AppCompatActivity {
         }
     }
 
+    private void sendMessage() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+            DatabaseHelper helper = new DatabaseHelper(this);
+
+            Message message = helper.save(new Message()
+                    .setContact(mContact)
+                    .setSide(Message.SIDE_SEND)
+                    .setAt(new Date())
+                    .setBody(mInputEditText.getText().toString()));
+
+            mInputEditText.setText(null);
+
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(mContact.getPhone(), null, message.getBody(), null, null);
+
+            add(message, true);
+        } else {
+            Toast.makeText(this, R.string.permission_not_given, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void add(Message message) {
         if (message.getContactId() != mContact.getId()) {
             return;
         }
 
-        boolean autoScroll = !recyclerView.canScrollVertically(1);
+        boolean autoScroll = !mRecyclerView.canScrollVertically(1);
 
+        add(message, autoScroll);
+    }
+
+    public void add(Message message, boolean scroll) {
         mMessageAdapter.add(message);
 
-        if (autoScroll) {
+        if (scroll) {
             scrollToBottom();
         }
     }
@@ -160,7 +216,7 @@ public class MessagesActivity extends AppCompatActivity {
     public void scrollToBottom() {
         int last = mMessageAdapter.getItemCount() - 1;
         if (last != -1) {
-            recyclerView.scrollToPosition(last);
+            mRecyclerView.scrollToPosition(last);
         }
     }
 

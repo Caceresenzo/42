@@ -12,6 +12,7 @@
         android:layout_height="0dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@+id/view"
+        app:stackFromEnd="true"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
@@ -41,13 +42,14 @@
             android:maxLines="6"
             tools:ignore="Autofill" />
 
-        <Button
+        <ImageButton
             android:id="@+id/send"
             android:layout_width="64dp"
             android:layout_height="48dp"
             android:layout_alignParentEnd="true"
+            android:enabled="false"
             android:background="?attr/selectableItemBackground"
-            android:text="Send"
+            android:src="@drawable/ic_baseline_send_24"
             android:textColor="@color/black" />
     </RelativeLayout>
 
