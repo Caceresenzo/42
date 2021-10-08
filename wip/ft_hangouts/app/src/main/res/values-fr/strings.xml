@@ -1,6 +1,7 @@
 <resources>
     <string name="permission_required">Permission SMS &amp; Appel Requise</string>
     <string name="permission_authorize">Autoriser</string>
+    <string name="permission_not_given">La permission n\'a pas été donnée</string>
 
     <string name="settings">Parametres</string>
 
@@ -9,6 +10,7 @@
 
     <string name="action_settings">Parametres</string>
     <string name="action_delete">Supprimer</string>
+    <string name="action_call">Appeler</string>
     <string name="action_show_contact">Afficher le contact</string>
 
     <string name="contact_phone">Numero de Telephone</string>

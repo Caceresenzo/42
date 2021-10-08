@@ -26,6 +26,7 @@
 
     <string name="permission_required">SMS &amp; Call Permission Required</string>
     <string name="permission_authorize">Authorize</string>
+    <string name="permission_not_given">Permission not given</string>
 
     <string name="settings">Settings</string>
 
@@ -35,6 +36,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="action_delete">Delete</string>
+    <string name="action_call">Call</string>
     <string name="action_show_contact">Show contact</string>
 
     <string name="contact_phone">Phone</string>

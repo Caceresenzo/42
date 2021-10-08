@@ -1,23 +1,28 @@
 package ft.hangouts.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import ft.hangouts.R;
-import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
 public class MessagesActivity extends AppCompatActivity {
 
     public static final String KEY_CONTACT = "contact";
+    public static final String TELEPHONE_SCHEMA = "tel:";
 
     private static MessagesActivity sInstance;
 
@@ -90,6 +95,11 @@ public class MessagesActivity extends AppCompatActivity {
                 ContactEditorActivity.start(this, 0, mContact);
                 return true;
             }
+
+            case R.id.action_call: {
+                call();
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -100,6 +110,17 @@ public class MessagesActivity extends AppCompatActivity {
         super.onDestroy();
 
         sInstance = null;
+    }
+
+    public void call() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse(TELEPHONE_SCHEMA + mContact.getPhone()));
+
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.permission_not_given, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static MessagesActivity getInstance() {
