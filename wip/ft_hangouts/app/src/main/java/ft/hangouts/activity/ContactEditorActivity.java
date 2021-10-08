@@ -118,7 +118,11 @@ public class ContactEditorActivity extends AppCompatActivity {
             }
 
             case R.id.action_delete: {
-                new DatabaseHelper(this).delete(mContact);
+                DatabaseHelper helper = new DatabaseHelper(this);
+
+                helper.deleteAllMessageByContact(mContact);
+                helper.delete(mContact);
+
                 finish();
 
                 return true;

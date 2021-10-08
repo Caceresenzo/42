@@ -114,7 +114,6 @@ public class Contact implements Serializable {
                 .setLatestUpdate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_LATEST_UPDATE))));
     }
 
-    /* Inner class that defines the table contents */
     public static class Columns implements BaseColumns {
 
         public static final String TABLE_NAME = "contacts";

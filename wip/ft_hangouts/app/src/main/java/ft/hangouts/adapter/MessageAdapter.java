@@ -28,10 +28,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private final DatabaseHelper mDatabaseHelper;
+    private final Contact mContact;
     private List<Message> mMessages;
 
-    public MessageAdapter(DatabaseHelper databaseHelper) {
+    public MessageAdapter(DatabaseHelper databaseHelper, Contact contact) {
         this.mDatabaseHelper = databaseHelper;
+        this.mContact = contact;
     }
 
     @Override
@@ -87,16 +89,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public void refresh() {
-        mMessages = new ArrayList<>();
-
-        for (int i = 0; i < 100; i++) {
-            mMessages.add(new Message()
-                    .setBody("Hello: " + i)
-                    .setSide(i % 3 == 0)
-                    .setAt(new Date()));
-        }
+        mMessages = mDatabaseHelper.findAllMessageByContact(mContact);
 
         notifyDataSetChanged();
+    }
+
+    public void add(Message message) {
+        mMessages.add(message);
+
+        notifyItemInserted(mMessages.size() - 1);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

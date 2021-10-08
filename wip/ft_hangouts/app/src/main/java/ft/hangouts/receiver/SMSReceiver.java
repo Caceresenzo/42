@@ -9,8 +9,10 @@ import android.widget.Toast;
 import java.util.Date;
 
 import ft.hangouts.activity.MainActivity;
+import ft.hangouts.activity.MessagesActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
+import ft.hangouts.model.Message;
 
 public class SMSReceiver extends BroadcastReceiver {
 
@@ -40,13 +42,26 @@ public class SMSReceiver extends BroadcastReceiver {
         return helper.save(contact);
     }
 
+    private Message createMessage(DatabaseHelper helper, Contact contact, String body) {
+        return helper.save(new Message()
+                .setBody(body)
+                .setContact(contact)
+                .setAt(new Date())
+                .setSide(Message.SIDE_RECEIVED));
+    }
+
     private void handleMessage(Context context, String address, String body) {
         DatabaseHelper helper = new DatabaseHelper(context);
 
         Contact contact = createContactIfMissing(helper, address);
+        Message message = createMessage(helper, contact, body);
 
         if (MainActivity.getInstance() != null) {
             MainActivity.getInstance().getContactAdapter().refresh();
+        }
+
+        if (MessagesActivity.getInstance() != null) {
+            MessagesActivity.getInstance().add(message);
         }
     }
 

@@ -23,6 +23,7 @@ import ft.hangouts.R;
 import ft.hangouts.adapter.MessageAdapter;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
+import ft.hangouts.model.Message;
 import ft.hangouts.util.ActionBarColorUtil;
 
 public class MessagesActivity extends AppCompatActivity {
@@ -55,16 +56,13 @@ public class MessagesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setNameInActionBar();
 
-        mMessageAdapter = new MessageAdapter(new DatabaseHelper(this));
+        mMessageAdapter = new MessageAdapter(new DatabaseHelper(this), mContact);
         mMessageAdapter.refresh();
 
         recyclerView.setAdapter(mMessageAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        int last = mMessageAdapter.getItemCount() - 1;
-        if (last != -1) {
-            recyclerView.scrollToPosition(last);
-        }
+        scrollToBottom();
 
         sInstance = this;
     }
@@ -142,6 +140,27 @@ public class MessagesActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             Toast.makeText(this, R.string.permission_not_given, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void add(Message message) {
+        if (message.getContactId() != mContact.getId()) {
+            return;
+        }
+
+        boolean autoScroll = !recyclerView.canScrollVertically(1);
+
+        mMessageAdapter.add(message);
+
+        if (autoScroll) {
+            scrollToBottom();
+        }
+    }
+
+    public void scrollToBottom() {
+        int last = mMessageAdapter.getItemCount() - 1;
+        if (last != -1) {
+            recyclerView.scrollToPosition(last);
         }
     }
 
