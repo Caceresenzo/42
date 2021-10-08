@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,8 +16,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import ft.hangouts.R;
+import ft.hangouts.adapter.MessageAdapter;
+import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
@@ -26,12 +32,17 @@ public class MessagesActivity extends AppCompatActivity {
 
     private static MessagesActivity sInstance;
 
+    private RecyclerView recyclerView;
+
     private Contact mContact;
+    private MessageAdapter mMessageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages);
+
+        recyclerView = findViewById(R.id.recyclerView);
 
         mContact = (Contact) getIntent().getSerializableExtra(KEY_CONTACT);
         if (mContact == null) {
@@ -43,6 +54,17 @@ public class MessagesActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setNameInActionBar();
+
+        mMessageAdapter = new MessageAdapter(new DatabaseHelper(this));
+        mMessageAdapter.refresh();
+
+        recyclerView.setAdapter(mMessageAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        int last = mMessageAdapter.getItemCount() - 1;
+        if (last != -1) {
+            recyclerView.scrollToPosition(last);
+        }
 
         sInstance = this;
     }
