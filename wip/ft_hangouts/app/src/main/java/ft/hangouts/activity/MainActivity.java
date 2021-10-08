@@ -34,8 +34,13 @@ import ft.hangouts.util.ActionBarColorUtil;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final int REQUEST_CODE_SMS_PERMISSION = 1;
+    public static final int REQUEST_CODE_PERMISSION = 1;
     public static final int REQUEST_CODE_CONTACT_EDITOR = 2;
+
+    public static final String[] PERMISSIONS = new String[] {
+            Manifest.permission.RECEIVE_SMS,
+            Manifest.permission.CALL_PHONE,
+    };
 
     private static MainActivity sInstance;
 
@@ -97,14 +102,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void requestPermissions() {
-        if (ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED) {
+        boolean granted = true;
+        for (String permission : PERMISSIONS) {
+            granted &= ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+        }
+
+        if (granted) {
             mPermissionRequiredSnackbar.dismiss();
         } else {
             mPermissionRequiredSnackbar.show();
 
-            ActivityCompat.requestPermissions(this, new String[] {
-                    Manifest.permission.RECEIVE_SMS
-            }, REQUEST_CODE_SMS_PERMISSION);
+            ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_PERMISSION);
         }
     }
 
@@ -145,8 +153,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (REQUEST_CODE_SMS_PERMISSION == requestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (REQUEST_CODE_PERMISSION == requestCode) {
+            boolean granted = true;
+            for (int grantResult : grantResults) {
+                granted &= grantResult == PackageManager.PERMISSION_GRANTED;
+            }
+
+            if (granted) {
                 mPermissionRequiredSnackbar.dismiss();
             } else {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {

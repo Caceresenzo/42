@@ -1,5 +1,5 @@
 <resources>
-    <string name="permission_required">Permission SMS Requise</string>
+    <string name="permission_required">Permission SMS &amp; Appel Requise</string>
     <string name="permission_authorize">Autoriser</string>
 
     <string name="settings">Parametres</string>
