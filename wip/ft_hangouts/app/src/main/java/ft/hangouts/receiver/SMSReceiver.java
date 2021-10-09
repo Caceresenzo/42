@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-import ft.hangouts.activity.MainActivity;
+import ft.hangouts.activity.ContactsActivity;
 import ft.hangouts.activity.MessagesActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
@@ -56,8 +56,8 @@ public class SMSReceiver extends BroadcastReceiver {
         Contact contact = createContactIfMissing(helper, address);
         Message message = createMessage(helper, contact, body);
 
-        if (MainActivity.getInstance() != null) {
-            MainActivity.getInstance().getContactAdapter().refresh();
+        if (ContactsActivity.getInstance() != null) {
+            ContactsActivity.getInstance().getContactAdapter().refresh();
         }
 
         if (MessagesActivity.getInstance() != null) {

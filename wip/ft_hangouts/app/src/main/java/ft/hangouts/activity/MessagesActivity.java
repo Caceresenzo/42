@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +34,7 @@ import ft.hangouts.util.ActionBarColorUtil;
 
 public class MessagesActivity extends AppCompatActivity {
 
-    public static final int REQUEST_CODE_CONTACT_EDITOR = MainActivity.REQUEST_CODE_CONTACT_EDITOR;
+    public static final int REQUEST_CODE_CONTACT_EDITOR = ContactsActivity.REQUEST_CODE_CONTACT_EDITOR;
 
     public static final String KEY_CONTACT = "contact";
 

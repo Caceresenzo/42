@@ -9,13 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import ft.hangouts.R;
-import ft.hangouts.activity.MainActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.model.Message;

@@ -11,8 +11,7 @@ import java.util.List;
 
 import ft.hangouts.R;
 import ft.hangouts.activity.ContactActivity;
-import ft.hangouts.activity.ContactEditorActivity;
-import ft.hangouts.activity.MainActivity;
+import ft.hangouts.activity.ContactsActivity;
 import ft.hangouts.activity.MessagesActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
@@ -20,12 +19,12 @@ import ft.hangouts.model.Contact;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
     private final DatabaseHelper mDatabaseHelper;
-    private final MainActivity mMainActivity;
+    private final ContactsActivity mContactsActivity;
     private List<Contact> mContacts;
 
-    public ContactAdapter(DatabaseHelper databaseHelper, MainActivity mainActivity) {
+    public ContactAdapter(DatabaseHelper databaseHelper, ContactsActivity contactsActivity) {
         this.mDatabaseHelper = databaseHelper;
-        this.mMainActivity = mainActivity;
+        this.mContactsActivity = contactsActivity;
     }
 
     public void refresh() {
@@ -51,14 +50,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessagesActivity.start(mMainActivity, MainActivity.REQUEST_CODE_CONTACT_EDITOR, contact);
+                MessagesActivity.start(mContactsActivity, ContactsActivity.REQUEST_CODE_CONTACT_EDITOR, contact);
             }
         });
 
         viewHolder.getView().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                ContactActivity.start(mMainActivity, MainActivity.REQUEST_CODE_CONTACT_EDITOR, contact, true);
+                ContactActivity.start(mContactsActivity, ContactsActivity.REQUEST_CODE_CONTACT_EDITOR, contact, true);
 
                 return true;
             }

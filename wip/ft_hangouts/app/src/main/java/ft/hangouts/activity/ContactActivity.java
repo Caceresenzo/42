@@ -12,8 +12,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
 import android.view.Menu;
@@ -21,14 +19,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import ft.hangouts.R;
-import ft.hangouts.adapter.MessageAdapter;
-import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
 public class ContactActivity extends AppCompatActivity {
 
-    public static final int REQUEST_CODE_CONTACT_EDITOR = MainActivity.REQUEST_CODE_CONTACT_EDITOR;
+    public static final int REQUEST_CODE_CONTACT_EDITOR = ContactsActivity.REQUEST_CODE_CONTACT_EDITOR;
 
     public static final String KEY_CONTACT = "contact";
     public static final String KEY_MESSAGE_BUTTON = "message_button";

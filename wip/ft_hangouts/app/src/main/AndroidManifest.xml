@@ -37,7 +37,7 @@
             android:exported="true"
             android:label="@string/settings" />
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.ContactsActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Ft_hangouts.NoActionBar">

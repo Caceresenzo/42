@@ -6,11 +6,9 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,14 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Arrays;
-
 import ft.hangouts.R;
 import ft.hangouts.adapter.ContactAdapter;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class MainActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_PERMISSION = 1;
     public static final int REQUEST_CODE_CONTACT_EDITOR = 2;
@@ -43,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.CALL_PHONE,
     };
 
-    private static MainActivity sInstance;
+    private static ContactsActivity sInstance;
 
     private CoordinatorLayout mCoordinatorLayout;
     private Toolbar mToolbar;
@@ -57,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_contacts);
 
         mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
         mToolbar = findViewById(R.id.toolbar);
@@ -77,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ContactEditorActivity.start(MainActivity.this, REQUEST_CODE_CONTACT_EDITOR, null);
+                ContactEditorActivity.start(ContactsActivity.this, REQUEST_CODE_CONTACT_EDITOR, null);
             }
         });
 
@@ -119,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_contacts, menu);
         return true;
     }
 
@@ -179,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         return mContactAdapter;
     }
 
-    public static MainActivity getInstance() {
+    public static ContactsActivity getInstance() {
         return sInstance;
     }
 }
