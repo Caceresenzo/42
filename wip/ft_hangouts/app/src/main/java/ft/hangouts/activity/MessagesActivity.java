@@ -26,13 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Date;
 
 import ft.hangouts.R;
+import ft.hangouts.activity.base.TrackedAppCompatActivity;
 import ft.hangouts.adapter.MessageAdapter;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.model.Message;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class MessagesActivity extends AppCompatActivity {
+public class MessagesActivity extends TrackedAppCompatActivity {
 
     public static final int REQUEST_CODE_CONTACT_EDITOR = ContactsActivity.REQUEST_CODE_CONTACT_EDITOR;
 

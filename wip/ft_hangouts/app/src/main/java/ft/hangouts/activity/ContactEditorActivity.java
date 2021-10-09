@@ -16,11 +16,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import ft.hangouts.R;
+import ft.hangouts.activity.base.TrackedAppCompatActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class ContactEditorActivity extends AppCompatActivity {
+public class ContactEditorActivity extends TrackedAppCompatActivity {
 
     public static final int RESULT_CODE_EDITED = 1;
     public static final int RESULT_CODE_REMOVED = 2;

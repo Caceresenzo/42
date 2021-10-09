@@ -9,9 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceFragmentCompat;
 
 import ft.hangouts.R;
+import ft.hangouts.activity.base.TrackedAppCompatActivity;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends TrackedAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

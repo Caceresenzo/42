@@ -24,11 +24,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import ft.hangouts.R;
+import ft.hangouts.activity.base.TrackedAppCompatActivity;
 import ft.hangouts.adapter.ContactAdapter;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends TrackedAppCompatActivity {
 
     public static final int REQUEST_CODE_PERMISSION = 1;
     public static final int REQUEST_CODE_CONTACT_EDITOR = 2;

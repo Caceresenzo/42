@@ -19,10 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import ft.hangouts.R;
+import ft.hangouts.activity.base.TrackedAppCompatActivity;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class ContactActivity extends AppCompatActivity {
+public class ContactActivity extends TrackedAppCompatActivity {
 
     public static final int REQUEST_CODE_CONTACT_EDITOR = ContactsActivity.REQUEST_CODE_CONTACT_EDITOR;
 
