@@ -55,7 +55,7 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
         if (mContact == null) {
             mContact = new Contact();
 
-            getSupportActionBar().setTitle("New contact");
+            getSupportActionBar().setTitle(R.string.contact_new);
         } else {
             mPhoneInput.setText(mContact.getPhone());
             mNameInput.setText(mContact.getName());
@@ -63,7 +63,7 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
             mEmailInput.setText(mContact.getEmail());
             mAddressInput.setText(mContact.getAddress());
 
-            getSupportActionBar().setTitle(String.format("Contact: %s", mContact.getPhone()));
+            getSupportActionBar().setTitle(getString(R.string.contact_edit, mContact.getPhone()));
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

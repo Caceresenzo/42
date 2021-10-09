@@ -8,6 +8,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+
+import ft.hangouts.R;
 
 public abstract class TrackedAppCompatActivity extends AppCompatActivity {
 
@@ -32,7 +35,7 @@ public abstract class TrackedAppCompatActivity extends AppCompatActivity {
             String at = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(mPausedAt);
             double pausedFor = (new Date().getTime() - mPausedAt.getTime()) / 1000.0;
 
-            String message = String.format("Resumed %s\nPaused at: %s\nPaused for: %.1fs", clazz, at, pausedFor);
+            String message = getString(R.string.pause_tracking_summary, clazz, at, pausedFor);
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
 
