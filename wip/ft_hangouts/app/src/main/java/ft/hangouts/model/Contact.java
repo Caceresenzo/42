@@ -3,6 +3,7 @@ package ft.hangouts.model;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import android.text.TextUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -112,6 +113,22 @@ public class Contact implements Serializable {
                 .setNickname(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_NICKNAME)))
                 .setAddress(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_ADDRESS)))
                 .setLatestUpdate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_LATEST_UPDATE))));
+    }
+
+    public String getDisplayableTitle() {
+        if (TextUtils.isEmpty(name)) {
+            return phone;
+        }
+
+        return name;
+    }
+
+    public String getDisplayableSubtitle() {
+        if (TextUtils.isEmpty(name)) {
+            return null;
+        }
+
+        return phone;
     }
 
     public static class Columns implements BaseColumns {

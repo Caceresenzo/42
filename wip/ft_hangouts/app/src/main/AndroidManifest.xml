@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Ft_hangouts">
         <activity
+            android:name=".activity.ContactActivity"
+            android:exported="true"
+            android:label="@string/title_activity_contact"
+            android:theme="@style/Theme.Ft_hangouts.NoActionBar" />
+        <activity
             android:name=".activity.MessagesActivity"
             android:exported="true" />
 

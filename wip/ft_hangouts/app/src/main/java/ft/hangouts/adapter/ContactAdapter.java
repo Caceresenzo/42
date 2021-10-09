@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ft.hangouts.R;
+import ft.hangouts.activity.ContactActivity;
 import ft.hangouts.activity.ContactEditorActivity;
 import ft.hangouts.activity.MainActivity;
 import ft.hangouts.activity.MessagesActivity;
@@ -57,7 +58,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         viewHolder.getView().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                ContactEditorActivity.start(mMainActivity, MainActivity.REQUEST_CODE_CONTACT_EDITOR, contact);
+                ContactActivity.start(mMainActivity, MainActivity.REQUEST_CODE_CONTACT_EDITOR, contact, true);
 
                 return true;
             }

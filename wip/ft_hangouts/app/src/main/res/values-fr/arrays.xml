@@ -5,5 +5,6 @@
         <item>Vert</item>
         <item>Bleu</item>
         <item>Rouge</item>
+        <item>Gris</item>
     </string-array>
 </resources>

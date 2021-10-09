@@ -11,11 +11,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import ft.hangouts.R;
 
 public class ActionBarColorUtil {
 
     public static void apply(AppCompatActivity activity) {
+        apply(activity, null);
+    }
+
+    public static void apply(AppCompatActivity activity, CollapsingToolbarLayout collapsingToolbarLayout) {
         int color = activity.getResources().getColor(R.color.purple_500);
 
         String value = PreferenceManager.getDefaultSharedPreferences(activity).getString(activity.getString(R.string.pref_theme_color_key), null);
@@ -36,6 +42,10 @@ public class ActionBarColorUtil {
             Window window = activity.getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(darken);
+        }
+
+        if (collapsingToolbarLayout != null) {
+            collapsingToolbarLayout.setBackground(new ColorDrawable(color));
         }
     }
 

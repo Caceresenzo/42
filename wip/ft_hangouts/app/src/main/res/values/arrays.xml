@@ -5,6 +5,7 @@
         <item>Green</item>
         <item>Blue</item>
         <item>Red</item>
+        <item>Gray</item>
     </string-array>
 
     <string-array name="color_values">
@@ -12,5 +13,6 @@
         <item>#FF4CAF50</item>
         <item>#FF2196F3</item>
         <item>#FFF44336</item>
+        <item>#FF9E9E9E</item>
     </string-array>
 </resources>

@@ -6,10 +6,12 @@
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.5041666666666667" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_baseline_account_circle_24.xml" value="0.2296875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5041666666666667" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_contact.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_contact_edit.xml" value="0.31875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_main.xml" value="0.313953488372093" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_messages.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/content_main.xml" value="0.31875" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/content_scrolling.xml" value="0.31875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/fragment_contacts.xml" value="0.48854166666666665" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/fragment_first.xml" value="0.1125" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/fragment_second.xml" value="0.1125" />
@@ -18,6 +20,7 @@
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/row_message_received.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/row_message_sent.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/settings_activity.xml" value="0.1125" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_contact.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_contact_edit.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_main.xml" value="0.1125" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_messages.xml" value="0.21354166666666666" />

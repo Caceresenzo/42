@@ -29,6 +29,9 @@ import ft.hangouts.util.ActionBarColorUtil;
 
 public class ContactEditorActivity extends AppCompatActivity {
 
+    public static final int RESULT_CODE_EDITED = 1;
+    public static final int RESULT_CODE_REMOVED = 2;
+
     public static final String KEY_CONTACT = "contact";
 
     private TextInputEditText mPhoneInput;
@@ -123,6 +126,7 @@ public class ContactEditorActivity extends AppCompatActivity {
                 helper.deleteAllMessageByContact(mContact);
                 helper.delete(mContact);
 
+                setResult(RESULT_CODE_REMOVED);
                 finish();
 
                 return true;
@@ -135,6 +139,7 @@ public class ContactEditorActivity extends AppCompatActivity {
     public void save() {
         new DatabaseHelper(this).save(mContact);
 
+        setResult(RESULT_CODE_EDITED);
         finish();
     }
 

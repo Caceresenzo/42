@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,7 +35,10 @@ import ft.hangouts.util.ActionBarColorUtil;
 
 public class MessagesActivity extends AppCompatActivity {
 
+    public static final int REQUEST_CODE_CONTACT_EDITOR = MainActivity.REQUEST_CODE_CONTACT_EDITOR;
+
     public static final String KEY_CONTACT = "contact";
+
     public static final String TELEPHONE_SCHEMA = "tel:";
 
     private static MessagesActivity sInstance;
@@ -99,17 +103,8 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     private void setNameInActionBar() {
-        String title = mContact.getName();
-        String subtitle = null;
-
-        if (TextUtils.isEmpty(title)) {
-            title = mContact.getPhone();
-        } else {
-            subtitle = mContact.getPhone();
-        }
-
-        getSupportActionBar().setTitle(title);
-        getSupportActionBar().setSubtitle(subtitle);
+        getSupportActionBar().setTitle(mContact.getDisplayableTitle());
+        getSupportActionBar().setSubtitle(mContact.getDisplayableSubtitle());
     }
 
     @Override
@@ -143,7 +138,7 @@ public class MessagesActivity extends AppCompatActivity {
             }
 
             case R.id.action_show_contact: {
-                ContactEditorActivity.start(this, 0, mContact);
+                ContactActivity.start(this, 0, mContact, false);
                 return true;
             }
 
@@ -161,6 +156,17 @@ public class MessagesActivity extends AppCompatActivity {
         super.onDestroy();
 
         sInstance = null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE_CONTACT_EDITOR) {
+            if (resultCode == ContactEditorActivity.RESULT_CODE_REMOVED) {
+                finish();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void call() {
