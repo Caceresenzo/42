@@ -12,7 +12,7 @@ public class JetPlane extends Aircraft implements Flyable {
 	
 	@Override
 	public void updateConditions() {
-		switch (getCurrentWeather()) {
+		switch (getCurrentWeather(weatherTower)) {
 			case SUN: {
 				coordinates.addLatitude(10);
 				coordinates.addHeight(2);

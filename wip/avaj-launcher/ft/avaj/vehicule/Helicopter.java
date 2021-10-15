@@ -12,7 +12,7 @@ public class Helicopter extends Aircraft implements Flyable {
 	
 	@Override
 	public void updateConditions() {
-		switch (getCurrentWeather()) {
+		switch (getCurrentWeather(weatherTower)) {
 			case SUN: {
 				coordinates.addLongitude(10);
 				coordinates.addHeight(2);

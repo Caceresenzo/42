@@ -1,7 +1,7 @@
 package ft.avaj.vehicule;
 
 import ft.avaj.simulation.Weather;
-import ft.avaj.simulation.WeatherProvider;
+import ft.avaj.simulation.WeatherTower;
 
 public class Aircraft {
 	
@@ -18,8 +18,8 @@ public class Aircraft {
 		this.id = nextId();
 	}
 	
-	protected Weather getCurrentWeather() {
-		String weather = WeatherProvider.getProvider().getCurrentWeather(coordinates);
+	protected Weather getCurrentWeather(WeatherTower weatherTower) {
+		String weather = weatherTower.getWeather(coordinates);
 		
 		return Weather.valueOf(weather);
 	}
