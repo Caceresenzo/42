@@ -1,15 +1,14 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/pref_theme">
+    <PreferenceCategory android:title="@string/pref_theme">
 
         <ListPreference
-            app:defaultValue="#FF6200EE"
-            app:entries="@array/color_entries"
-            app:entryValues="@array/color_values"
-            app:key="@string/pref_theme_color_key"
-            app:icon="@drawable/ic_baseline_color_lens_24"
-            app:title="@string/pref_theme_color"
-            app:useSimpleSummaryProvider="true" />
+            android:defaultValue="#FF6200EE"
+            android:entries="@array/color_entries"
+            android:entryValues="@array/color_values"
+            android:key="@string/pref_theme_color_key"
+            android:icon="@drawable/ic_baseline_color_lens_24"
+            android:title="@string/pref_theme_color" />
 
     </PreferenceCategory>
 

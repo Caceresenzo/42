@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 public class Contact implements Serializable {
 
@@ -111,6 +112,7 @@ public class Contact implements Serializable {
                 .setPhone(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_PHONE)))
                 .setName(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_NAME)))
                 .setNickname(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_NICKNAME)))
+                .setEmail(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_EMAIL)))
                 .setAddress(cursor.getString(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_ADDRESS)))
                 .setLatestUpdate(new Date(cursor.getLong(cursor.getColumnIndexOrThrow(Columns.COLUMN_NAME_LATEST_UPDATE))));
     }
@@ -129,6 +131,19 @@ public class Contact implements Serializable {
         }
 
         return phone;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return id == contact.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public static class Columns implements BaseColumns {

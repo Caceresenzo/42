@@ -8,5 +8,12 @@
         android:orderInCategory="100"
         android:icon="@drawable/ic_baseline_edit_24"
         android:title="@string/action_settings"
-        app:showAsAction="always" />
+        android:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_message"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_baseline_message_24"
+        android:title="@string/action_message"
+        android:showAsAction="always" />
 </menu>

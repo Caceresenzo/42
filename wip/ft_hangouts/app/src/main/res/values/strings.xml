@@ -41,8 +41,11 @@
     <string name="pref_theme_color">Color</string>
     <string name="pref_theme_color_key">theme_color</string>
 
+    <string name="action_add">Add</string>
     <string name="action_settings">Settings</string>
+    <string name="action_message">Message</string>
     <string name="action_delete">Delete</string>
+    <string name="action_save">Save</string>
     <string name="action_call">Call</string>
     <string name="action_show_contact">Show contact</string>
 

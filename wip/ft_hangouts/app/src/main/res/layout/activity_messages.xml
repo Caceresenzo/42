@@ -1,56 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".activity.MessagesActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/view"
-        app:stackFromEnd="true"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/sendLayout"
+        android:divider="@android:color/transparent"
+        android:listSelector="@android:color/transparent"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll" />
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#e0e0e0"
-        app:layout_constraintBottom_toTopOf="@+id/sendLayout" />
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/sendLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/message"
+        <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_toStartOf="@+id/send"
-            android:background="@android:color/transparent"
-            android:hint="@string/enter_message"
-            android:inputType="text"
-            android:maxLines="6"
-            tools:ignore="Autofill" />
+            android:layout_height="1dp"
+            android:background="#e0e0e0" />
 
-        <ImageButton
-            android:id="@+id/send"
-            android:layout_width="64dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:enabled="false"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/ic_baseline_send_24"
-            android:textColor="@color/black" />
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <EditText
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_toStartOf="@+id/send"
+                android:background="@android:color/transparent"
+                android:hint="@string/enter_message"
+                android:inputType="text"
+                android:maxLines="6"
+                tools:ignore="Autofill" />
+
+            <ImageButton
+                android:id="@+id/send"
+                android:layout_width="64dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:enabled="false"
+                android:src="@drawable/ic_baseline_send_24"
+                android:textColor="@color/black" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>

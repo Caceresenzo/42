@@ -1,39 +1,34 @@
 package ft.hangouts.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-
+import ft.hangouts.Constants;
 import ft.hangouts.R;
-import ft.hangouts.activity.base.TrackedAppCompatActivity;
+import ft.hangouts.activity.base.TrackedActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class ContactEditorActivity extends TrackedAppCompatActivity {
-
-    public static final int RESULT_CODE_EDITED = 1;
-    public static final int RESULT_CODE_REMOVED = 2;
+public class ContactEditorActivity extends TrackedActivity {
 
     public static final String KEY_CONTACT = "contact";
 
-    private TextInputEditText mPhoneInput;
-    private TextInputEditText mNameInput;
-    private TextInputEditText mNicknameInput;
-    private TextInputEditText mEmailInput;
-    private TextInputEditText mAddressInput;
-    private FloatingActionButton mFloatingActionButton;
+    private EditText mPhoneInput;
+    private EditText mNameInput;
+    private EditText mNicknameInput;
+    private EditText mEmailInput;
+    private EditText mAddressInput;
+    private Button mSaveButton;
 
     private Contact mContact;
 
@@ -49,13 +44,13 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
         mNicknameInput = findViewById(R.id.nickname);
         mEmailInput = findViewById(R.id.email);
         mAddressInput = findViewById(R.id.address);
-        mFloatingActionButton = findViewById(R.id.floatingActionButton);
+        mSaveButton = findViewById(R.id.save);
 
         mContact = (Contact) getIntent().getSerializableExtra(KEY_CONTACT);
         if (mContact == null) {
             mContact = new Contact();
 
-            getSupportActionBar().setTitle(R.string.contact_new);
+            getActionBar().setTitle(R.string.contact_new);
         } else {
             mPhoneInput.setText(mContact.getPhone());
             mNameInput.setText(mContact.getName());
@@ -63,34 +58,36 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
             mEmailInput.setText(mContact.getEmail());
             mAddressInput.setText(mContact.getAddress());
 
-            getSupportActionBar().setTitle(getString(R.string.contact_edit, mContact.getPhone()));
+            getActionBar().setTitle(mContact.getDisplayableTitle());
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        new ContactTextWatch(mPhoneInput, Contact.Columns.COLUMN_NAME_PHONE);
+        new ContactTextWatch(mPhoneInput, Contact.Columns.COLUMN_NAME_PHONE, true);
         new ContactTextWatch(mNameInput, Contact.Columns.COLUMN_NAME_NAME);
         new ContactTextWatch(mNicknameInput, Contact.Columns.COLUMN_NAME_NICKNAME);
         new ContactTextWatch(mEmailInput, Contact.Columns.COLUMN_NAME_EMAIL);
         new ContactTextWatch(mAddressInput, Contact.Columns.COLUMN_NAME_ADDRESS);
 
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 save();
             }
         });
+
+        mSaveButton.setEnabled(!TextUtils.isEmpty(mContact.getPhone()));
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(KEY_CONTACT, mContact);
     }
 
     @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         mContact = (Contact) savedInstanceState.getSerializable(KEY_CONTACT);
@@ -120,7 +117,10 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
                 helper.deleteAllMessageByContact(mContact);
                 helper.delete(mContact);
 
-                setResult(RESULT_CODE_REMOVED);
+                Intent intent = new Intent();
+                intent.putExtra(Constants.KEY_CONTACT, mContact);
+
+                setResult(Constants.RESULT_CODE_REMOVED, intent);
                 finish();
 
                 return true;
@@ -133,7 +133,10 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
     public void save() {
         new DatabaseHelper(this).save(mContact);
 
-        setResult(RESULT_CODE_EDITED);
+        Intent intent = new Intent();
+        intent.putExtra(Constants.KEY_CONTACT, mContact);
+
+        setResult(Constants.RESULT_CODE_EDITED, intent);
         finish();
     }
 
@@ -150,21 +153,29 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
 
     public class ContactTextWatch implements TextWatcher {
 
-        private final TextInputEditText mInput;
+        private final EditText mInput;
         private final String mField;
+        private final boolean mDisableSave;
 
-        public ContactTextWatch(TextInputEditText input, String field) {
+        public ContactTextWatch(EditText input, String field) {
+            this(input, field, false);
+        }
+
+        public ContactTextWatch(EditText input, String field, boolean disableSave) {
             mInput = input;
             mField = field;
+            mDisableSave = disableSave;
 
             mInput.addTextChangedListener(this);
         }
 
         @Override
-        public void afterTextChanged(Editable s) {}
+        public void afterTextChanged(Editable s) {
+        }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -195,6 +206,10 @@ public class ContactEditorActivity extends TrackedAppCompatActivity {
                     mContact.setAddress(value);
                     break;
                 }
+            }
+
+            if (mDisableSave) {
+                mSaveButton.setEnabled(!value.isEmpty());
             }
         }
 

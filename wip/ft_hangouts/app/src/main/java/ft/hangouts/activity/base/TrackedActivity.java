@@ -1,18 +1,15 @@
 package ft.hangouts.activity.base;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import ft.hangouts.R;
 
-public abstract class TrackedAppCompatActivity extends AppCompatActivity {
+public abstract class TrackedActivity extends Activity {
 
     private static final String KEY_PAUSED = "paused";
     private static final String KEY_PAUSED_AT = "paused_at";
@@ -46,7 +43,7 @@ public abstract class TrackedAppCompatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(KEY_PAUSED, mPaused);
         outState.putLong(KEY_PAUSED_AT, mPausedAt != null ? mPausedAt.getTime() : -1);
 
@@ -54,7 +51,7 @@ public abstract class TrackedAppCompatActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         mPaused = savedInstanceState.getBoolean(KEY_PAUSED);
 
         long at = savedInstanceState.getLong(KEY_PAUSED_AT, -1);

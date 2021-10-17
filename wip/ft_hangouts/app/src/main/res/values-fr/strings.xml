@@ -15,8 +15,11 @@
     <string name="pref_theme">Thème</string>
     <string name="pref_theme_color">Couleur</string>
 
+    <string name="action_add">Ajouter</string>
     <string name="action_settings">Paramètres</string>
+    <string name="action_message">Contacter</string>
     <string name="action_delete">Supprimer</string>
+    <string name="action_save">Sauvegarder</string>
     <string name="action_call">Appeler</string>
     <string name="action_show_contact">Afficher le contact</string>
 

@@ -3,38 +3,25 @@ package ft.hangouts.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
+import ft.hangouts.Constants;
 import ft.hangouts.R;
-import ft.hangouts.activity.base.TrackedAppCompatActivity;
+import ft.hangouts.activity.base.TrackedActivity;
 import ft.hangouts.adapter.ContactAdapter;
 import ft.hangouts.helper.DatabaseHelper;
+import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class ContactsActivity extends TrackedAppCompatActivity {
+public class ContactsActivity extends TrackedActivity {
 
-    public static final int REQUEST_CODE_PERMISSION = 1;
-    public static final int REQUEST_CODE_CONTACT_EDITOR = 2;
-
-    public static final String[] PERMISSIONS = new String[] {
+    public static final String[] PERMISSIONS = new String[]{
             Manifest.permission.RECEIVE_SMS,
             Manifest.permission.SEND_SMS,
             Manifest.permission.CALL_PHONE,
@@ -42,12 +29,7 @@ public class ContactsActivity extends TrackedAppCompatActivity {
 
     private static ContactsActivity sInstance;
 
-    private CoordinatorLayout mCoordinatorLayout;
-    private Toolbar mToolbar;
-    private RecyclerView mRecyclerView;
-    private FloatingActionButton mFloatingActionButton;
-
-    private Snackbar mPermissionRequiredSnackbar;
+    private ListView mListView;
 
     private ContactAdapter mContactAdapter;
 
@@ -56,36 +38,14 @@ public class ContactsActivity extends TrackedAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        mCoordinatorLayout = findViewById(R.id.coordinatorLayout);
-        mToolbar = findViewById(R.id.toolbar);
-        mRecyclerView = findViewById(R.id.recyclerView);
-        mFloatingActionButton = findViewById(R.id.floatingActionButton);
-
-        setSupportActionBar(mToolbar);
+        mListView = findViewById(R.id.listView);
 
         ActionBarColorUtil.apply(this);
 
-        mContactAdapter = new ContactAdapter(new DatabaseHelper(this), this);
+        mContactAdapter = new ContactAdapter(this, new DatabaseHelper(this));
         mContactAdapter.refresh();
 
-        mRecyclerView.setAdapter(mContactAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContactEditorActivity.start(ContactsActivity.this, REQUEST_CODE_CONTACT_EDITOR, null);
-            }
-        });
-
-        mPermissionRequiredSnackbar = Snackbar
-                .make(mCoordinatorLayout, R.string.permission_required, Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.permission_authorize, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        requestPermissions();
-                    }
-                });
+        mListView.setAdapter(mContactAdapter);
 
         requestPermissions();
 
@@ -100,17 +60,21 @@ public class ContactsActivity extends TrackedAppCompatActivity {
     }
 
     public void requestPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return;
+        }
+
         boolean granted = true;
         for (String permission : PERMISSIONS) {
-            granted &= ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
+            granted &= checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED;
         }
 
         if (granted) {
-            mPermissionRequiredSnackbar.dismiss();
+            // mPermissionRequiredSnackbar.dismiss();
         } else {
-            mPermissionRequiredSnackbar.show();
+            // mPermissionRequiredSnackbar.show();
 
-            ActivityCompat.requestPermissions(this, PERMISSIONS, REQUEST_CODE_PERMISSION);
+            requestPermissions(PERMISSIONS, Constants.REQUEST_CODE_PERMISSION);
         }
     }
 
@@ -123,9 +87,13 @@ public class ContactsActivity extends TrackedAppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_add: {
+                ContactEditorActivity.start(this, Constants.REQUEST_CODE_CONTACT_ACTIVITY, null);
+                return true;
+            }
+
             case R.id.action_settings: {
                 startActivity(new Intent(this, SettingsActivity.class));
-
                 return true;
             }
         }
@@ -141,29 +109,44 @@ public class ContactsActivity extends TrackedAppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_CODE_CONTACT_EDITOR) {
-            mContactAdapter.refresh();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_CONTACT_ACTIVITY) {
+            switch (resultCode) {
+                case Constants.RESULT_CODE_EDITED: {
+                    Contact contact = (Contact) data.getSerializableExtra(Constants.KEY_CONTACT);
+                    mContactAdapter.remove(contact);
+                    mContactAdapter.insert(contact, 0);
+
+                    break;
+                }
+
+                case Constants.RESULT_CODE_REMOVED: {
+                    Contact contact = (Contact) data.getSerializableExtra(Constants.KEY_CONTACT);
+                    mContactAdapter.remove(contact);
+
+                    break;
+                }
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (REQUEST_CODE_PERMISSION == requestCode) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (Constants.REQUEST_CODE_PERMISSION == requestCode) {
             boolean granted = true;
             for (int grantResult : grantResults) {
                 granted &= grantResult == PackageManager.PERMISSION_GRANTED;
             }
 
             if (granted) {
-                mPermissionRequiredSnackbar.dismiss();
+                // mPermissionRequiredSnackbar.dismiss();
             } else {
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mPermissionRequiredSnackbar.show();
+                        // mPermissionRequiredSnackbar.show();
                     }
                 }, 500);
             }

@@ -3,12 +3,10 @@ package ft.hangouts.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.List;
-
+import ft.hangouts.Constants;
 import ft.hangouts.R;
 import ft.hangouts.activity.ContactActivity;
 import ft.hangouts.activity.ContactsActivity;
@@ -16,83 +14,73 @@ import ft.hangouts.activity.MessagesActivity;
 import ft.hangouts.helper.DatabaseHelper;
 import ft.hangouts.model.Contact;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
+public class ContactAdapter extends ArrayAdapter<Contact> {
 
-    private final DatabaseHelper mDatabaseHelper;
     private final ContactsActivity mContactsActivity;
-    private List<Contact> mContacts;
+    private final DatabaseHelper mDatabaseHelper;
 
-    public ContactAdapter(DatabaseHelper databaseHelper, ContactsActivity contactsActivity) {
-        this.mDatabaseHelper = databaseHelper;
+    public ContactAdapter(ContactsActivity contactsActivity, DatabaseHelper databaseHelper) {
+        super(contactsActivity, 0);
+
         this.mContactsActivity = contactsActivity;
+        this.mDatabaseHelper = databaseHelper;
     }
 
     public void refresh() {
-        this.mContacts = mDatabaseHelper.findAllContacts();
-
-        notifyDataSetChanged();
+        clear();
+        addAll(mDatabaseHelper.findAllContacts());
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_contact, viewGroup, false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Contact contact = getItem(position);
 
-        return new ViewHolder(view);
-    }
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.row_contact, parent, false);
+            convertView.setTag(new ViewHolder(convertView));
+        }
 
-    @Override
-    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        Contact contact = mContacts.get(position);
+        ViewHolder holder = (ViewHolder) convertView.getTag();
 
-        viewHolder.setName(contact.getName());
-        viewHolder.setPhone(contact.getPhone());
-
-        viewHolder.getView().setOnClickListener(new View.OnClickListener() {
+        holder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessagesActivity.start(mContactsActivity, ContactsActivity.REQUEST_CODE_CONTACT_EDITOR, contact);
+                MessagesActivity.start(mContactsActivity, Constants.REQUEST_CODE_CONTACT_ACTIVITY, contact);
             }
         });
 
-        viewHolder.getView().setOnLongClickListener(new View.OnLongClickListener() {
+        holder.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                ContactActivity.start(mContactsActivity, ContactsActivity.REQUEST_CODE_CONTACT_EDITOR, contact, true);
-
+                ContactActivity.start(mContactsActivity, Constants.REQUEST_CODE_CONTACT_ACTIVITY, contact, true);
                 return true;
             }
         });
+
+        holder.setName(contact.getName());
+        holder.setPhone(contact.getPhone());
+
+        return convertView;
     }
 
-    @Override
-    public int getItemCount() {
-        return mContacts.size();
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder {
 
         private final View mView;
         private final TextView mNameTextView;
         private final TextView mPhoneTextView;
 
         public ViewHolder(View view) {
-            super(view);
-
             mView = view;
             mNameTextView = view.findViewById(R.id.name);
             mPhoneTextView = view.findViewById(R.id.phone);
         }
 
-        public View getView() {
-            return mView;
+        public void setOnLongClickListener(View.OnLongClickListener listener) {
+            mView.setOnLongClickListener(listener);
         }
 
-        public TextView getNameTextView() {
-            return mNameTextView;
-        }
-
-        public TextView getPhoneTextView() {
-            return mPhoneTextView;
+        public void setOnClickListener(View.OnClickListener listener) {
+            mView.setOnClickListener(listener);
         }
 
         public void setName(String name) {

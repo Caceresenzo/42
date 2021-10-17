@@ -1,18 +1,18 @@
 package ft.hangouts.activity;
 
+import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceFragmentCompat;
-
 import ft.hangouts.R;
-import ft.hangouts.activity.base.TrackedAppCompatActivity;
+import ft.hangouts.activity.base.TrackedActivity;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class SettingsActivity extends TrackedAppCompatActivity {
+public class SettingsActivity extends TrackedActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,13 +20,13 @@ public class SettingsActivity extends TrackedAppCompatActivity {
         setContentView(R.layout.settings_activity);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager()
+            getFragmentManager()
                     .beginTransaction()
                     .replace(R.id.settings, new SettingsFragment())
                     .commit();
         }
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -46,10 +46,15 @@ public class SettingsActivity extends TrackedAppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+
         @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            addPreferencesFromResource(R.xml.root_preferences);
+
+            updateSummary();
         }
 
         @Override
@@ -69,8 +74,16 @@ public class SettingsActivity extends TrackedAppCompatActivity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             if (getString(R.string.pref_theme_color_key).equals(key)) {
-                ActionBarColorUtil.apply((AppCompatActivity) getActivity());
+                ActionBarColorUtil.apply(getActivity());
             }
+
+            updateSummary();
         }
+
+        private void updateSummary() {
+            ListPreference themeColorPreference = (ListPreference) findPreference(getString(R.string.pref_theme_color_key));
+            themeColorPreference.setSummary(themeColorPreference.getEntry());
+        }
+
     }
 }

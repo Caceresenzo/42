@@ -3,38 +3,23 @@ package ft.hangouts.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
+import ft.hangouts.Constants;
 import ft.hangouts.R;
-import ft.hangouts.activity.base.TrackedAppCompatActivity;
+import ft.hangouts.activity.base.TrackedActivity;
 import ft.hangouts.model.Contact;
 import ft.hangouts.util.ActionBarColorUtil;
 
-public class ContactActivity extends TrackedAppCompatActivity {
-
-    public static final int REQUEST_CODE_CONTACT_EDITOR = ContactsActivity.REQUEST_CODE_CONTACT_EDITOR;
-
-    public static final String KEY_CONTACT = "contact";
-    public static final String KEY_MESSAGE_BUTTON = "message_button";
-
-    private Toolbar mToolbar;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private FloatingActionButton mFloatingActionButton;
+public class ContactActivity extends TrackedActivity {
 
     private Contact mContact;
+    private boolean mMessageButton;
 
     private LayoutGroup mPhoneGroup;
     private LayoutGroup mNameGroup;
@@ -47,58 +32,54 @@ public class ContactActivity extends TrackedAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 
-        mToolbar = findViewById(R.id.toolbar);
-        mCollapsingToolbarLayout = findViewById(R.id.toolbar_layout);
-        mFloatingActionButton = findViewById(R.id.floatingActionButton);
-
         mPhoneGroup = new LayoutGroup(R.id.phoneLayout, R.id.phone);
         mNameGroup = new LayoutGroup(R.id.nameLayout, R.id.name);
         mNicknameGroup = new LayoutGroup(R.id.nicknameLayout, R.id.nickname);
         mEmailGroup = new LayoutGroup(R.id.emailLayout, R.id.email);
         mAddressGroup = new LayoutGroup(R.id.addressLayout, R.id.address);
 
-        mContact = (Contact) getIntent().getSerializableExtra(KEY_CONTACT);
+        mContact = (Contact) getIntent().getSerializableExtra(Constants.KEY_CONTACT);
+        mMessageButton = getIntent().getBooleanExtra(Constants.KEY_MESSAGE_BUTTON, true);
+
         if (mContact == null) {
             finish();
             return;
         }
 
-        boolean messageButton = getIntent().getBooleanExtra(KEY_MESSAGE_BUTTON, true);
+        ActionBarColorUtil.apply(this);
 
-        setSupportActionBar(mToolbar);
-        ActionBarColorUtil.apply(this, mCollapsingToolbarLayout);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        String title = mContact.getDisplayableTitle();
-        mToolbar.setTitle(title);
-        mCollapsingToolbarLayout.setTitle(title);
-
-        if (messageButton) {
-            mFloatingActionButton.show();
-        } else {
-            mFloatingActionButton.hide();
-        }
-
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MessagesActivity.start(ContactActivity.this, REQUEST_CODE_CONTACT_EDITOR, mContact);
-            }
-        });
-
+        updateTitle();
         updateGroups();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_contact, menu);
+
+        menu.findItem(R.id.action_message).setVisible(mMessageButton);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+
+                return true;
+            }
+
             case R.id.action_edit: {
-                ContactEditorActivity.start(this, REQUEST_CODE_CONTACT_EDITOR, mContact);
+                ContactEditorActivity.start(this, Constants.REQUEST_CODE_CONTACT_ACTIVITY, mContact);
+
+                return true;
+            }
+
+            case R.id.action_message: {
+                MessagesActivity.start(this, Constants.REQUEST_CODE_CONTACT_ACTIVITY, mContact);
 
                 return true;
             }
@@ -108,14 +89,39 @@ public class ContactActivity extends TrackedAppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == REQUEST_CODE_CONTACT_EDITOR) {
-           if (resultCode == ContactEditorActivity.RESULT_CODE_REMOVED) {
-               finish();
-           }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_CONTACT_ACTIVITY) {
+            switch (resultCode) {
+                case Constants.RESULT_CODE_EDITED: {
+                    setResult(resultCode, data);
+
+                    mContact = (Contact) data.getSerializableExtra(Constants.KEY_CONTACT);
+
+                    updateTitle();
+                    updateGroups();
+
+                    break;
+                }
+
+                case Constants.RESULT_CODE_REMOVED: {
+                    setResult(resultCode, data);
+                    finish();
+
+                    break;
+                }
+            }
+
+            if (resultCode == Constants.RESULT_CODE_REMOVED) {
+                finish();
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void updateTitle() {
+        String title = mContact.getDisplayableTitle();
+        getActionBar().setTitle(title);
     }
 
     public void updateGroups() {
@@ -128,27 +134,27 @@ public class ContactActivity extends TrackedAppCompatActivity {
 
     public static void start(Activity context, int requestCode, Contact contact, boolean messageButton) {
         Intent intent = new Intent(context, ContactActivity.class);
-        intent.putExtra(KEY_CONTACT, contact);
-        intent.putExtra(KEY_MESSAGE_BUTTON, messageButton);
+        intent.putExtra(Constants.KEY_CONTACT, contact);
+        intent.putExtra(Constants.KEY_MESSAGE_BUTTON, messageButton);
 
         context.startActivityForResult(intent, requestCode);
     }
 
     private class LayoutGroup {
 
-        private final TextInputLayout mTextInputLayout;
-        private final TextInputEditText mTextInputEditText;
+        private final LinearLayout mLinearLayout;
+        private final EditText mEditText;
 
-        public LayoutGroup(int textInputLayoutId, int textInputEditTextId) {
-            this.mTextInputLayout = findViewById(textInputLayoutId);
-            this.mTextInputEditText = findViewById(textInputEditTextId);
+        public LayoutGroup(int linearLayoutId, int editTextId) {
+            this.mLinearLayout = findViewById(linearLayoutId);
+            this.mEditText = findViewById(editTextId);
         }
 
         public void update(String value) {
             boolean valid = TextUtils.isEmpty(value);
 
-            mTextInputLayout.setVisibility(valid ? View.GONE : View.VISIBLE);
-            mTextInputEditText.setText(valid ? null : value);
+            mLinearLayout.setVisibility(valid ? View.GONE : View.VISIBLE);
+            mEditText.setText(valid ? null : value);
         }
     }
 }
