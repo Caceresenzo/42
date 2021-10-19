@@ -19,6 +19,8 @@
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_baseline_short_text_24.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5041666666666667" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.3020833333333333" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/drawable/ic_logo.xml" value="0.35572916666666665" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_contact.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_contact_edit.xml" value="0.31875" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/layout/activity_contact_editor.xml" value="0.175" />
@@ -42,6 +44,7 @@
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_main.xml" value="0.1125" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/menu/menu_messages.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.5041666666666667" />
+        <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/mipmap/ic_launcher.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/cacer/Desktop/ft_hangouts/app/src/main/res/xml/root_preferences.xml" value="0.1125" />
       </map>
     </option>
