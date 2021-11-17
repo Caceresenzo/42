@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/pref_theme">
+
+        <ListPreference
+            android:defaultValue="#FF6200EE"
+            android:entries="@array/color_entries"
+            android:entryValues="@array/color_values"
+            android:key="@string/pref_theme_color_key"
+            android:icon="@drawable/ic_baseline_color_lens_24"
+            android:title="@string/pref_theme_color" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

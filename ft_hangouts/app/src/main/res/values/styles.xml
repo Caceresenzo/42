@@ -1,0 +1,14 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Theme.Ft_hangouts" parent="android:Theme.Material">
+
+        <!-- Primary brand color. -->
+        <!--<item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorAccent">@color/teal_200</item>-->
+        <!-- Customize your theme here. -->
+
+        <!--<item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>-->
+    </style>
+</resources>

@@ -1,0 +1,31 @@
+<resources>
+    <string name="pause_tracking_summary">Résumé %s\nPausé à: %s\nPausé pendant: %.1fs</string>
+
+    <string name="contact_edit">Contact: %s</string>
+    <string name="contact_new">Nouveau contact</string>
+
+    <string name="enter_message">Message...</string>
+
+    <string name="permission_required">Permission SMS &amp; Appel Requise</string>
+    <string name="permission_authorize">Autoriser</string>
+    <string name="permission_not_given">La permission n\'a pas été donnée</string>
+
+    <string name="settings">Paramètres</string>
+
+    <string name="pref_theme">Thème</string>
+    <string name="pref_theme_color">Couleur</string>
+
+    <string name="action_add">Ajouter</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="action_message">Contacter</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_save">Sauvegarder</string>
+    <string name="action_call">Appeler</string>
+    <string name="action_show_contact">Afficher le contact</string>
+
+    <string name="contact_phone">Numéro de Telephone</string>
+    <string name="contact_name">Nom</string>
+    <string name="contact_nickname">Surnom</string>
+    <string name="contact_email">Email</string>
+    <string name="contact_address">Adresse</string>
+</resources>

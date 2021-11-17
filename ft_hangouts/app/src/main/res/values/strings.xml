@@ -1,0 +1,59 @@
+<resources>
+    <string name="app_name">ft_hangouts</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="pause_tracking_summary">Resumed %s\nPaused at: %s\nPaused for: %.1fs</string>
+
+    <string name="contact_edit">Contact: %s</string>
+    <string name="contact_new">New contact</string>
+
+    <string name="enter_message">Message...</string>
+
+    <string name="permission_required">SMS &amp; Call Permission Required</string>
+    <string name="permission_authorize">Authorize</string>
+    <string name="permission_not_given">Permission not given</string>
+
+    <string name="settings">Settings</string>
+
+    <string name="pref_theme">Theme</string>
+    <string name="pref_theme_color">Color</string>
+    <string name="pref_theme_color_key">theme_color</string>
+
+    <string name="action_add">Add</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_message">Message</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_save">Save</string>
+    <string name="action_call">Call</string>
+    <string name="action_show_contact">Show contact</string>
+
+    <string name="contact_phone">Phone</string>
+    <string name="contact_name">Name</string>
+    <string name="contact_nickname">Nickname</string>
+    <string name="contact_email">Email</string>
+    <string name="contact_address">Address</string>
+
+    <string name="title_activity_contact">ContactActivity</string>
+</resources>
