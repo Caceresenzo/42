@@ -13,7 +13,7 @@ public class Baloon extends Aircraft implements Flyable {
 	
 	@Override
 	public void updateConditions() {
-		Weather weather = getCurrentWeather();
+		Weather weather = getCurrentWeather(weatherTower);
 		
 		switch (weather) {
 			case SUN: {
