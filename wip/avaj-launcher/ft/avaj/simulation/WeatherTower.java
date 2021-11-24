@@ -6,8 +6,8 @@ import ft.avaj.vehicule.Flyable;
 public class WeatherTower extends Tower {
 	
 	@Override
-	public void add(Flyable flyable) {
-		super.add(flyable);
+	public void register(Flyable flyable) {
+		super.register(flyable);
 		
 		flyable.registerTower(this);
 		
@@ -15,8 +15,8 @@ public class WeatherTower extends Tower {
 	}
 	
 	@Override
-	public void remove(Flyable flyable) {
-		super.remove(flyable);
+	public void unregister(Flyable flyable) {
+		super.unregister(flyable);
 		
 		flyable.registerTower(null);
 		
