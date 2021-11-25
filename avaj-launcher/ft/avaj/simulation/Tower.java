@@ -13,13 +13,13 @@ public class Tower {
 		this.observers = new ArrayList<>();
 	}
 	
-	public void add(Flyable flyable) {
+	public void register(Flyable flyable) {
 		ensureNotNull(flyable);
 		
 		observers.add(flyable);
 	}
 	
-	public void remove(Flyable flyable) {
+	public void unregister(Flyable flyable) {
 		ensureNotNull(flyable);
 		
 		observers.remove(flyable);

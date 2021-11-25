@@ -27,7 +27,7 @@ public class Simulation implements Runnable {
 	public void run() {
 		WeatherTower weatherTower = new WeatherTower();
 		for (Flyable flyable : flyables) {
-			weatherTower.add(flyable);
+			weatherTower.register(flyable);
 		}
 		
 		for (int time = 0; time < times; time++) {

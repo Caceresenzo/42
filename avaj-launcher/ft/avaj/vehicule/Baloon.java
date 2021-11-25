@@ -53,7 +53,7 @@ public class Baloon extends Aircraft implements Flyable {
 		if (!Weather.SUN.equals(weather) && coordinates.isOnGround()) {
 			logLanding();
 			
-			weatherTower.remove(this);
+			weatherTower.unregister(this);
 		}
 	}
 	
