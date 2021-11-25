@@ -87,4 +87,9 @@ public class Coordinates {
 		return longitude + latitude + height;
 	}
 	
+	@Override
+	public String toString() {
+		return "LONGITUDE=" + longitude + " LATITUDE=" + latitude + " HEIGHT=" + height;
+	}
+	
 }

@@ -30,7 +30,7 @@ public class Aircraft {
 	}
 	
 	protected void logLanding() {
-		System.out.println(String.format("%s landing.", toString()));
+		System.out.println(String.format("%s landing. (%s)", toString(), coordinates));
 	}
 
 	protected void log(String message) {
