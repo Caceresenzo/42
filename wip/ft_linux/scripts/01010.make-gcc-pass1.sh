@@ -4,12 +4,17 @@ pushd $LFS/sources
 	. $base/$(dirname $0)/helper/untar.sh gcc
 
 	pushd $name
-		tar -xf ../mpfr-*.tar.*
-		mv -v mpfr-*/ mpfr
-		tar -xf ../gmp-*.tar.*
-		mv -v gmp-* gmp
-		tar -xf ../mpc-*.tar.*
-		mv -v mpc-* mpc
+    rm -rf mpfr/
+    tar -xf ../mpfr-*.tar.*
+    mv -v mpfr-*/ mpfr
+  
+    rm -rf gmp/
+    tar -xf ../gmp-*.tar.*
+    mv -v gmp-*/ gmp
+  
+    rm -rf mpc/
+    tar -xf ../mpc-*.tar.*
+    mv -v mpc-*/ mpc
 
 		case $(uname -m) in
 			x86_64) sed -e '/m64=/s/lib64/lib/' -i.orig gcc/config/i386/t-linux64 ;;
