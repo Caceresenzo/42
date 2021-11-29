@@ -17,7 +17,7 @@ cd        build
     --prefix=/usr                    \
     --disable-multilib               \
     --disable-nls                    \
-    --host=$(uname -m)-lfs-linux-gnu \
+    --host=\$(uname -m)-lfs-linux-gnu \
     --disable-libstdcxx-pch
 
 make
