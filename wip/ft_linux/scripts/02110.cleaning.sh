@@ -18,5 +18,12 @@ umount $LFS/{sys,proc,run} || true
 
 pushd $LFS
   rm -rf $(find sources/ -maxdepth 1 -mindepth 1 -type d)
-  tar cJpvf $HOME/lfs-backup.tar.xz .
+  tar cJpvf /workspace/lfs-backup.tar.xz .
 popd
+
+mount -v --bind /dev $LFS/dev
+
+mount -v --bind /dev/pts $LFS/dev/pts
+mount -vt proc proc $LFS/proc
+mount -vt sysfs sysfs $LFS/sys
+mount -vt tmpfs tmpfs $LFS/run
