@@ -35,7 +35,9 @@ public class Simulation implements Runnable {
 		}
 	}
 	
+	/* The input file needs to be validated. If the input file data is not correct the program stops execution. */
 	public static Simulation fromFile(File file) throws FileNotFoundException {
+		/* format: TYPE NAME LONGITUDE LATITUDE HEIGHT */
 		final Pattern linePattern = Pattern.compile("^(\\w+) (\\w+) (\\d+) (\\d+) (\\d+)$");
 		
 		try (Scanner scanner = new Scanner(file)) {
@@ -45,6 +47,8 @@ public class Simulation implements Runnable {
 			
 			while (scanner.hasNextLine()) {
 				if (first) {
+					/* The first line of the file contains a positive integer number. */
+					
 					if (!scanner.hasNextInt()) {
 						throw new InvalidFileFormatException("expected the first line to be an int");
 					}
@@ -59,6 +63,7 @@ public class Simulation implements Runnable {
 						continue;
 					}
 					
+					/* Each following line describes an aircraft that will be part of the simulation, with this format: TYPE NAME LONGITUDE LATITUDE HEIGHT. */
 					Matcher matcher = linePattern.matcher(line);
 					if (!matcher.find()) {
 						throw new InvalidFileFormatException(String.format("expected pattern `%s` but got `%s`", linePattern, line));

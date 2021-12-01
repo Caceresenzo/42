@@ -30,6 +30,7 @@ public class AircraftFactory {
 		return new Coordinates(longitude, latitude, height);
 	}
 	
+	/* UML: __+newAircraft(type : string, name : string, longitude : int, latitude : int, height : int) : Flyable__ */
 	public static Flyable newAircraft(String type, String name, int longitude, int latitude, int height) {
 		Coordinates coordinates = newCoordinates(longitude, latitude, height);
 		
@@ -37,7 +38,7 @@ public class AircraftFactory {
 		
 		try {
 			Constructor<? extends Flyable> constructor = clazz.getDeclaredConstructor(String.class, Coordinates.class);
-
+			
 			return constructor.newInstance(name, coordinates);
 		} catch (Exception exception) {
 			throw new IllegalStateException("could not instanciate flyable object", exception);
