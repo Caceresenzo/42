@@ -13,7 +13,7 @@ import ft.avaj.simulation.Simulation;
 
 public class Bootstrap {
 	
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 	public static final String OUTPUT_FILE = "simulation.txt";
 	
 	public static void main(String[] args) {
