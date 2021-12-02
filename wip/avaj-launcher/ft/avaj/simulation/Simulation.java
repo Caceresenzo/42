@@ -44,20 +44,17 @@ public class Simulation implements Runnable {
 			Builder builder = builder();
 			
 			boolean first = true;
+			int lineNumber = 1;
 			
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
 				
 				if (line.isEmpty()) {
 					if (first) {
-						throw new InvalidFileFormatException("expected the first line to be an int");
+						throw new InvalidFileFormatException("expected the first line to be an int", lineNumber);
 					}
 					
-					if (scanner.hasNextLine()) {
-						throw new InvalidFileFormatException("empty line");
-					}
-					
-					break; /* end of file */
+					throw new InvalidFileFormatException("empty line", lineNumber);
 				}
 				
 				if (first) {
@@ -71,7 +68,7 @@ public class Simulation implements Runnable {
 					
 					Matcher matcher = linePattern.matcher(line);
 					if (!matcher.find()) {
-						throw new InvalidFileFormatException(String.format("expected pattern `%s` but got `%s`", linePattern, line));
+						throw new InvalidFileFormatException(String.format("expected pattern `%s` but got `%s`", linePattern, line), lineNumber);
 					}
 					
 					String type = matcher.group(1);
@@ -88,6 +85,8 @@ public class Simulation implements Runnable {
 					
 					builder.flyable(flyable);
 				}
+				
+				lineNumber++;
 			}
 			
 			return builder.build();
