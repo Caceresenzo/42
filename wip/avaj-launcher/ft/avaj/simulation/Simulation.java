@@ -46,24 +46,29 @@ public class Simulation implements Runnable {
 			boolean first = true;
 			
 			while (scanner.hasNextLine()) {
-				if (first) {
-					/* The first line of the file contains a positive integer number. */
-					
-					if (!scanner.hasNextInt()) {
+				String line = scanner.nextLine();
+				
+				if (line.isEmpty()) {
+					if (first) {
 						throw new InvalidFileFormatException("expected the first line to be an int");
 					}
 					
-					builder.times(scanner.nextInt());
+					if (scanner.hasNextLine()) {
+						throw new InvalidFileFormatException("empty line");
+					}
+					
+					break; /* end of file */
+				}
+				
+				if (first) {
+					/* The first line of the file contains a positive integer number. */
+					
+					builder.times(Integer.parseInt(line));
 					
 					first = false;
 				} else {
-					String line = scanner.nextLine().trim();
-					
-					if (line.isEmpty()) {
-						continue;
-					}
-					
 					/* Each following line describes an aircraft that will be part of the simulation, with this format: TYPE NAME LONGITUDE LATITUDE HEIGHT. */
+					
 					Matcher matcher = linePattern.matcher(line);
 					if (!matcher.find()) {
 						throw new InvalidFileFormatException(String.format("expected pattern `%s` but got `%s`", linePattern, line));
