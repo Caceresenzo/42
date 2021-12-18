@@ -10,6 +10,25 @@
 // @run-at       document-start
 // ==/UserScript==
 
+/// Installation
+// 1. Install Tampermonkey: https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo
+// 2. Click on the extension
+// 3. Click on "Dashboard"
+// 4. Create a new script
+// 5. Paste the content of this script in Tampermonkey
+// 6. Save (CTRL + S)
+
+/// Usage
+// You need to go on the defence subscription page, the script will automatically start.
+// (you will be able to see a little 1 (one) on the Tampermonkey extension's icon)
+
+/// How does it works?
+// The script will refresh the page every 5 seconds.
+// If a defence has been found, a notification will appear at the bottom right of the screen.
+// Clicking on it will take you back to the correct tab.
+// The cells will be colored to allow an easier visibility of the current day.
+// You just have to select the slot you want, then register to it as you normally would do.
+
 function colorTable(color, hours) {
     const {
         end,
