@@ -65,6 +65,9 @@ function colorTable(color, hours) {
     'use strict';
 
     const settings = {
+        detector: {
+            restrictToToday: true
+        },
         coloring: {
             enabled: true,
             color: '#4444FF10',
@@ -79,7 +82,13 @@ function colorTable(color, hours) {
 
     const handle = (responseText) => {
         const response = JSON.parse(responseText)
-        const slotCount = response.length
+        let slotCount = response.length
+
+        if (settings.detector.restrictToToday) {
+            const today = new Date().toISOString().split('T')[0]
+
+            slotCount = response.filter((slot) => new Date(slot.start).toISOString().split('T')[0] == today).length
+        }
 
         if (slotCount) {
             GM_notification({
