@@ -35,33 +35,40 @@ public class Simulation implements Runnable {
 		}
 	}
 	
+	/* The input file needs to be validated. If the input file data is not correct the program stops execution. */
 	public static Simulation fromFile(File file) throws FileNotFoundException {
+		/* format: TYPE NAME LONGITUDE LATITUDE HEIGHT */
 		final Pattern linePattern = Pattern.compile("^(\\w+) (\\w+) (\\d+) (\\d+) (\\d+)$");
 		
 		try (Scanner scanner = new Scanner(file)) {
 			Builder builder = builder();
 			
 			boolean first = true;
+			int lineNumber = 1;
 			
 			while (scanner.hasNextLine()) {
-				if (first) {
-					if (!scanner.hasNextInt()) {
-						throw new InvalidFileFormatException("expected the first line to be an int");
+				String line = scanner.nextLine();
+				
+				if (line.isEmpty()) {
+					if (first) {
+						throw new InvalidFileFormatException("expected the first line to be an int", lineNumber);
 					}
 					
-					builder.times(scanner.nextInt());
+					throw new InvalidFileFormatException("empty line", lineNumber);
+				}
+				
+				if (first) {
+					/* The first line of the file contains a positive integer number. */
+					
+					builder.times(Integer.parseInt(line));
 					
 					first = false;
 				} else {
-					String line = scanner.nextLine().trim();
-					
-					if (line.isEmpty()) {
-						continue;
-					}
+					/* Each following line describes an aircraft that will be part of the simulation, with this format: TYPE NAME LONGITUDE LATITUDE HEIGHT. */
 					
 					Matcher matcher = linePattern.matcher(line);
 					if (!matcher.find()) {
-						throw new InvalidFileFormatException(String.format("expected pattern `%s` but got `%s`", linePattern, line));
+						throw new InvalidFileFormatException(String.format("expected pattern `%s` but got `%s`", linePattern, line), lineNumber);
 					}
 					
 					String type = matcher.group(1);
@@ -78,6 +85,8 @@ public class Simulation implements Runnable {
 					
 					builder.flyable(flyable);
 				}
+				
+				lineNumber++;
 			}
 			
 			return builder.build();

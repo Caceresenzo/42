@@ -24,6 +24,8 @@ public class Bootstrap {
 			
 			run(simulation);
 		} catch (Exception exception) {
+			/* Any error messages will be printed to the standard output. */
+			
 			System.out.print("could not run the simulation: ");
 			System.out.println(exception.getClass().getName());
 			System.out.println(exception.getMessage());
@@ -36,6 +38,7 @@ public class Bootstrap {
 		}
 	}
 	
+	/* Your program will take one and only one argument from the command line. */
 	private static File getScenarioFileFromArguments(String[] args) {
 		int got = args.length;
 		
@@ -53,6 +56,7 @@ public class Bootstrap {
 	private static void run(Simulation simulation) throws FileNotFoundException, UnsupportedEncodingException {
 		PrintStream stdout = System.out;
 		
+		/* Executing the program will generate a file simulation.txt that describes the outcome of the simulation */
 		FileOutputStream fileOutputStream = new FileOutputStream(OUTPUT_FILE);
 		try (PrintStream printStream = new PrintStream(fileOutputStream, true, StandardCharsets.UTF_8.name())) {
 			if (!DEBUG) {

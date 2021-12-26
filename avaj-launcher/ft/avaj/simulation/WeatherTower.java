@@ -11,6 +11,7 @@ public class WeatherTower extends Tower {
 		
 		flyable.registerTower(this);
 		
+		/* Each time an aircraft registers or unregisters to/from the weather tower, a message will be logged. */
 		says("%s registered to weather tower.", flyable);
 	}
 	
@@ -20,13 +21,16 @@ public class WeatherTower extends Tower {
 		
 		flyable.registerTower(null);
 		
+		/* Each time an aircraft registers or unregisters to/from the weather tower, a message will be logged. */
 		says("%s unregistered from weather tower.", flyable);
 	}
 	
+	/* UML: +getWeather(coordinates : Coordinates) : String */
 	public String getWeather(Coordinates coordinates) {
 		return WeatherProvider.getProvider().getCurrentWeather(coordinates);
 	}
 	
+	/* UML: ~changeWeather() : void */
 	void changeWeather() {
 		conditionsChanged();
 	}
