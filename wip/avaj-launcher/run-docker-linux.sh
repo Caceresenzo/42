@@ -1,1 +1,0 @@
-docker run -it --rm -v $(pwd):/app openjdk:7 bash -c "cd /app && sh compile.sh && sh run.sh"
