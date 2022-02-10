@@ -39,4 +39,7 @@ arraylist_add_to(t_arraylist *arraylist);
 void*
 arraylist_at(t_arraylist *arraylist, ssize_t index);
 
+void
+arraylist_destroy(t_arraylist *arraylist);
+
 #endif

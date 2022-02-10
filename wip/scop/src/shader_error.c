@@ -32,23 +32,20 @@ shader_error(GLuint id, const char *name, bool is_program)
 
 	if (info_log_length > 0)
 	{
-		printf("err len: %d\n", info_log_length);
 		char err[info_log_length + 1];
 		bzero(err, info_log_length + 1);
 
 		if (is_program)
-			glGetShaderInfoLog(id, info_log_length, NULL, err);
-		else
 			glGetProgramInfoLog(id, info_log_length, NULL, err);
+		else
+			glGetShaderInfoLog(id, info_log_length, NULL, err);
 
-		printf("%s: \n", name);
-		for (int i = 0; i < info_log_length; i++) {
-			printf("%c", err[i]);
-		}
-		printf("\n");
+		err[info_log_length] = '\0';
+
+		printf("%s: %s\n", name, err);
 
 		return (false);
 	}
 
-	return (true);
+	return (result);
 }

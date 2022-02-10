@@ -20,6 +20,14 @@ typedef struct s_v3f
 	float z;
 } t_v3f;
 
+typedef struct s_v4u
+{
+	unsigned x;
+	unsigned y;
+	unsigned z;
+	unsigned w;
+} t_v4u;
+
 t_v3f*
 v3f_initialize(t_v3f *v3, float f);
 
@@ -46,5 +54,8 @@ v3f_sub_v3(t_v3f *v3, const t_v3f *a, const t_v3f *b);
 
 t_v3f*
 v3f_mul(t_v3f *v3, float f);
+
+t_v3f*
+v3f_negate(t_v3f *v3);
 
 #endif

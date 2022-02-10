@@ -20,19 +20,22 @@
 #include "trigonometric.h"
 #include "arraylist.h"
 #include "keyboard.h"
+#include "grid.h"
+
+int width = 1280;
+int height = 720;
 
 t_camera camera;
-
-//t_m4f model;
-//t_m4f view;
-//t_m4f projection;
-//t_m4f mvp;
 
 t_shader shader;
 
 GLuint VertexArrayID;
 GLuint vertexbuffer;
 GLuint colorbuffer;
+
+t_grid grid;
+
+void *mlx;
 void *win;
 
 t_v3f rot = { 0, 0, 0 };
@@ -60,7 +63,7 @@ loop(void *x)
 	camera_process_keyboard(&camera, 0.01);
 
 	t_m4f projection;
-	m4f_perspective(&projection, radiansf(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	m4f_perspective(&projection, radiansf(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
 	t_m4f view;
 	camera_view_matrix(&camera, &view);
@@ -68,8 +71,14 @@ loop(void *x)
 //	t_v3f cam_up = { 0, 1, 0 };
 //	m4f_look_at(&view, &cam_pos, &cam_origin, &cam_up);
 
+	t_v3f model_translate = { 0, 0, -1 };
+	m4f_translate_v3(&model, &model_translate);
+
 	t_v3f rot_axis2 = { 0, 1, 0 };
 	m4f_rotate_v3(&model, rot.y, &rot_axis2);
+
+	t_v3f model_translate_far = { 10, 0, 0 };
+	m4f_translate_v3(&model, &model_translate_far);
 
 	glUseProgram(shader.program);
 
@@ -83,19 +92,30 @@ loop(void *x)
 	id = glGetUniformLocation(shader.program, "p");
 	glUniformMatrix4fv(id, 1, GL_FALSE, &projection.m[0][0]);
 
+	glBindVertexArray(VertexArrayID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 //	glDrawArrays(GL_TRIANGLES, 0, 12 * 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 	glDrawArrays(GL_TRIANGLES, 0, vertex_buffer_data.size * 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
+
+	grid_draw(&grid);
+
+	v3f_negate(&model_translate);
+	m4f_translate_v3(&model, &model_translate);
+
+	v3f_negate(&model_translate_far);
+	m4f_translate_v3(&model, &model_translate_far);
+
 	return 0;
 }
 
 void
 load_mesh()
 {
-	FILE *ftobj = fopen("teapot.obj", "r");
+	FILE *ftobj = fopen("42.obj", "r");
+//	FILE *ftobj = fopen("teapot.obj", "r");
 //	FILE *ftobj = fopen("cube.obj", "r");
 	if (!ftobj)
 	{
@@ -207,17 +227,39 @@ on_key_released(int keycode, void *data)
 int
 main(void)
 {
-	int width = 400;
-	int height = 300;
+	mlx = mlx_init();
 
-	void *mlx = mlx_init();
+	if (!mlx)
+	{
+		perror("mlx_init");
+		return (1);
+	}
+
 	win = mlx_new_opengl_window(mlx, width, height, "hello");
+	if (!win)
+	{
+		perror("mlx_new_opengl_window");
+		return (1);
+	}
 
 	mlx_hook(win, X_EVENT_KEY_PRESS, 0, &on_key_press, NULL);
 	mlx_hook(win, X_EVENT_KEY_RELEASE, 0, &on_key_released, NULL);
 
 	mlx_opengl_window_set_context(win);
-	shader_load_at(&shader, "shaders/vertex.glsl", "shaders/fragment.glsl");
+
+	if (!shader_load_at(&shader, "shaders/vertex.glsl", "shaders/fragment.glsl"))
+	{
+		perror("shader_load_at");
+		return (1);
+	}
+
+	camera_initialize(&camera);
+
+	if (!grid_initialize(&grid, (t_grid_params ) { .slices = 10, .shader = &shader }))
+	{
+		perror("grid_initialize");
+		return (1);
+	}
 
 	arraylist_initialize(&vertex_buffer_data, 0, sizeof(t_v3f));
 
@@ -275,6 +317,8 @@ main(void)
 	glDepthFunc(GL_LESS);
 
 	m4f_identity(&model);
+
+	grid_initialize(&grid, (t_grid_params ) { .slices = 10, .shader = &shader });
 
 	mlx_loop_hook(mlx, loop, NULL);
 	mlx_loop(mlx);

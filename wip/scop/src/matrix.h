@@ -39,6 +39,9 @@ t_m4f*
 m4f_translate_v3(t_m4f *m4, const t_v3f *v3);
 
 t_m4f*
+m4f_scale_v3(t_m4f *m4, const t_v3f *v3);
+
+t_m4f*
 m4f_rotate_v3(t_m4f *m4, float angle, const t_v3f *v3);
 
 t_m4f*
