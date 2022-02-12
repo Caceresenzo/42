@@ -8,6 +8,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/unistd.h>
+#include <ctype.h>
 
 //#define SHT_NULL	  0
 //#define SHT_PROGBITS	  1
@@ -59,12 +60,58 @@ reverse(register unsigned int x)
 
 }
 
+// https://chromium.googlesource.com/chromiumos/third_party/binutils/+/refs/heads/stabilize-falco-4537.91.B/bfd/syms.c#568
+
+struct section_to_type
+{
+	const char *section;
+	char type;
+};
+/* Map section names to POSIX/BSD single-character symbol types.
+ This table is probably incomplete.  It is sorted for convenience of
+ adding entries.  Since it is so short, a linear search is used.  */
+static const struct section_to_type stt[] = { //
+{ ".bss", 'b' }, //
+{ "code", 't' }, /* MRI .text */
+{ ".data", 'd' }, //
+{ "*DEBUG*", 'N' }, //
+{ ".debug", 'N' }, /* MSVC's .debug (non-standard debug syms) */
+{ ".drectve", 'i' }, /* MSVC's .drective section */
+{ ".edata", 'e' }, /* MSVC's .edata (export) section */
+{ ".fini", 't' }, /* ELF fini section */
+{ ".idata", 'i' }, /* MSVC's .idata (import) section */
+{ ".init", 't' }, /* ELF init section */
+{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
+{ ".rdata", 'r' }, /* Read only data.  */
+{ ".rodata", 'r' }, /* Read only data.  */
+{ ".sbss", 's' }, /* Small BSS (uninitialized data).  */
+{ ".scommon", 'c' }, /* Small common.  */
+{ ".sdata", 'g' }, /* Small initialized data.  */
+{ ".text", 't' }, //
+{ "vars", 'd' }, /* MRI .data */
+{ "zerovars", 'b' }, /* MRI .bss */
+{ 0, 0 } //
+};
+
+static char
+coff_section_type(const char *s)
+{
+	const struct section_to_type *t;
+	for (t = &stt[0]; t->section; t++)
+		if (!strncmp(s, t->section, strlen(t->section)))
+			return t->type;
+	return '\0';
+}
+
+// https://refspecs.linuxbase.org/elf/gabi4+/ch4.sheader.html
+// https://refspecs.linuxbase.org/elf/gabi4+/ch4.symtab.html
+
 int
 main(int argc, char **argv)
 {
 	struct stat statbuf;
 
-	int fd = open("a.out", 0);
+	int fd = open(argv[1], 0);
 	fstat(fd, &statbuf);
 
 	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
@@ -85,7 +132,7 @@ main(int argc, char **argv)
 	Elf64_Ehdr *header = (void*)ptr;
 	Elf64_Shdr *section_headers = (void*)(ptr + header->e_shoff);
 
-	Elf64_Shdr *symtab, *dynsym;
+	Elf64_Shdr *symtab = NULL;
 
 	for (int i = 0; i < header->e_shnum; i++)
 	{
@@ -104,25 +151,9 @@ main(int argc, char **argv)
 
 		if (section_header->sh_type == SHT_SYMTAB)
 			symtab = section_header;
-		else if (section_header->sh_type == SHT_DYNSYM)
-			dynsym = section_header;
 	}
 
-//	{
-//		Elf64_Dyn *dyn = (void*)(ptr + dynsym->sh_offset);
-//		Elf64_Dyn *dyn_end = (void*)(ptr + dynsym->sh_offset + dynsym->sh_size);
-//
-//		Elf64_Shdr *sections = (void*)(ptr + header->e_shoff);
-//		Elf64_Shdr *shstr = &sections[dynsym->sh_info];
-//		char *strtab = (void*)(ptr + shstr->sh_offset);
-//
-//		while (dyn != dyn_end)
-//		{
-//			printf("%16p %c %s", dyn, '?', strtab + dyn->d_tag);
-//			dyn++;
-//		}
-//	}
-
+	if (symtab)
 	{
 		Elf64_Sym *sym = (void*)(ptr + symtab->sh_offset);
 		Elf64_Sym *sym_end = (void*)(ptr + symtab->sh_offset + symtab->sh_size);
@@ -135,8 +166,56 @@ main(int argc, char **argv)
 
 		while (sym != sym_end)
 		{
+			int bind = ELF64_ST_BIND(sym->st_info);
+			int type = ELF64_ST_TYPE(sym->st_info);
+
+			char letter = 0;
+			bool has_addr = true;
+
+			Elf64_Shdr *related = sym->st_shndx >= SHN_BEFORE ? NULL : &sections[sym->st_shndx];
+
+			if (sym->st_shndx == SHN_ABS)
+			{
+				letter = 'a';
+				sym++;
+				continue; // only with -a
+			}
+			else if (sym->st_shndx == SHN_COMMON)
+				letter = 'c';
+			else if (sym->st_shndx == SHN_UNDEF)
+			{
+				has_addr = false;
+				letter = 'u';
+			}
+			else if (related)
+			{
+				Elf64_Shdr *sections = (void*)(ptr + header->e_shoff);
+				Elf64_Shdr *shstr = &sections[header->e_shstrndx];
+				char *strtab = (void*)(ptr + shstr->sh_offset);
+
+				const char *name = strtab + related->sh_name;
+
+				letter = coff_section_type(name);
+			}
+
+			if (bind == STB_GLOBAL)
+				letter = toupper(letter);
+			else if (bind == STB_LOCAL)
+				letter = tolower(letter);
+			else if (bind == STB_WEAK)
+				letter = 'w';
+
+			if (letter == 0)
+				letter = '?';
+
 			if (sym->st_name)
-				printf("%016lx %c %s\n", (long)sym->st_value, '?', strtab + sym->st_name);
+			{
+				if (has_addr)
+					printf("%016lx %c %s    %x\n", (long)sym->st_value, letter, strtab + sym->st_name, type);
+				else
+					printf("%16s %c %s     %x\n", "", letter, strtab + sym->st_name, type);
+			}
+
 			sym++;
 		}
 	}
