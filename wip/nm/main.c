@@ -10,56 +10,6 @@
 #include <sys/unistd.h>
 #include <ctype.h>
 
-//#define SHT_NULL	  0
-//#define SHT_PROGBITS	  1
-//#define SHT_SYMTAB	  2
-//#define SHT_STRTAB	  3
-//#define SHT_RELA	  4
-//#define SHT_HASH	  5
-//#define SHT_DYNAMIC	  6
-//#define SHT_NOTE	  7
-//#define SHT_NOBITS	  8
-//#define SHT_REL		  9
-//#define SHT_SHLIB	  10
-//#define SHT_DYNSYM	  11
-//#define SHT_INIT_ARRAY	  14
-//#define SHT_FINI_ARRAY	  15
-//#define SHT_PREINIT_ARRAY 16
-//#define SHT_GROUP	  17
-//#define SHT_SYMTAB_SHNDX  18
-//#define	SHT_NUM		  19
-
-char const *section_header_names[] = { //
-[SHT_NULL] = "SHT_NULL", //
-[SHT_PROGBITS] = "SHT_PROGBITS", //
-[SHT_SYMTAB] = "SHT_SYMTAB", //
-[SHT_STRTAB] = "SHT_STRTAB", //
-[SHT_RELA] = "SHT_RELA", //
-[SHT_HASH] = "SHT_HASH", //
-[SHT_DYNAMIC] = "SHT_DYNAMIC", //
-[SHT_NOTE] = "SHT_NOTE", //
-[SHT_NOBITS] = "SHT_NOBITS", //
-[SHT_REL] = "SHT_REL", //
-[SHT_SHLIB] = "SHT_SHLIB", //
-[SHT_DYNSYM] = "SHT_DYNSYM", //
-[SHT_INIT_ARRAY] = "SHT_INIT_ARRAY", //
-[SHT_FINI_ARRAY] = "SHT_FINI_ARRAY", //
-[SHT_GROUP] = "SHT_GROUP", //
-[SHT_SYMTAB_SHNDX] = "SHT_SYMTAB_SHNDX", //
-[SHT_NUM] = "SHT_NUM", //
-};
-
-unsigned int
-reverse(register unsigned int x)
-{
-	x = (((x & 0xaaaaaaaa) >> 1) | ((x & 0x55555555) << 1));
-	x = (((x & 0xcccccccc) >> 2) | ((x & 0x33333333) << 2));
-	x = (((x & 0xf0f0f0f0) >> 4) | ((x & 0x0f0f0f0f) << 4));
-	x = (((x & 0xff00ff00) >> 8) | ((x & 0x00ff00ff) << 8));
-	return ((x >> 16) | (x << 16));
-
-}
-
 // https://chromium.googlesource.com/chromiumos/third_party/binutils/+/refs/heads/stabilize-falco-4537.91.B/bfd/syms.c#568
 
 struct section_to_type
@@ -90,6 +40,10 @@ static const struct section_to_type stt[] = { //
 { ".text", 't' }, //
 { "vars", 'd' }, /* MRI .data */
 { "zerovars", 'b' }, /* MRI .bss */
+{ ".eh_frame", 'r' }, //
+{ ".eh_frame_hdr", 'r' }, //
+{ ".dynamic", 'd' }, //
+{ ".got", 'd' }, //
 { 0, 0 } //
 };
 
@@ -106,6 +60,66 @@ coff_section_type(const char *s)
 // https://refspecs.linuxbase.org/elf/gabi4+/ch4.sheader.html
 // https://refspecs.linuxbase.org/elf/gabi4+/ch4.symtab.html
 
+#define UNKNOWN_LETTER '?'
+
+char *ptr;
+Elf64_Ehdr *header;
+
+char
+decode_symbol(Elf64_Sym *symbol, Elf64_Shdr *related)
+{
+	if (symbol == NULL)
+		return UNKNOWN_LETTER;
+
+	int bind = ELF64_ST_BIND(symbol->st_info);
+	int type = ELF64_ST_TYPE(symbol->st_info);
+
+	if (symbol->st_shndx == SHN_UNDEF)
+	{
+		if (bind == STB_WEAK)
+		{
+			if (type == STT_OBJECT)
+				return ('v');
+			else
+				return ('w');
+		}
+		else
+			return ('U');
+	}
+
+	if (bind == STB_WEAK)
+	{
+		if (type == STT_OBJECT)
+			return ('V');
+		else
+			return ('W');
+	}
+
+	if (bind != STB_LOCAL && bind != STB_GLOBAL)
+		return (UNKNOWN_LETTER);
+
+	char letter;
+	if (symbol->st_shndx == SHN_ABS)
+		letter = 'a';
+	else if (related)
+	{
+		Elf64_Shdr *sections = (void*)(ptr + header->e_shoff);
+		Elf64_Shdr *shstr = &sections[header->e_shstrndx];
+		char *strtab = (void*)(ptr + shstr->sh_offset);
+
+		const char *name = strtab + related->sh_name;
+
+		letter = coff_section_type(name);
+	}
+	else
+		return (UNKNOWN_LETTER);
+
+	if (bind == STB_GLOBAL)
+		letter = toupper(letter);
+
+	return (letter);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -114,7 +128,7 @@ main(int argc, char **argv)
 	int fd = open(argv[1], 0);
 	fstat(fd, &statbuf);
 
-	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 
 	assert(statbuf.st_size > 4);
 	assert(memcmp(ptr, ELFMAG, 4) == 0);
@@ -129,25 +143,13 @@ main(int argc, char **argv)
 
 	printf("x=%d endian=%s\n", is32 ? 32 : 64, isLsb ? "lsb" : "msb");
 
-	Elf64_Ehdr *header = (void*)ptr;
+	header = (void*)ptr;
 	Elf64_Shdr *section_headers = (void*)(ptr + header->e_shoff);
-
 	Elf64_Shdr *symtab = NULL;
 
 	for (int i = 0; i < header->e_shnum; i++)
 	{
 		Elf64_Shdr *section_header = &section_headers[i];
-
-		{
-			Elf64_Shdr *sections = (void*)(ptr + header->e_shoff);
-			Elf64_Shdr *shstr = &sections[header->e_shstrndx];
-			char *strtab = (void*)(ptr + shstr->sh_offset);
-
-			const char *type = section_header->sh_type <= SHT_LOOS ? section_header_names[section_header->sh_type] : "???";
-			const char *name = strtab + section_header->sh_name;
-
-			printf("%2d | %-20s | %-18s | link=%d\n", i, type, name, section_header->sh_link);
-		}
 
 		if (section_header->sh_type == SHT_SYMTAB)
 			symtab = section_header;
@@ -166,54 +168,22 @@ main(int argc, char **argv)
 
 		while (sym != sym_end)
 		{
-			int bind = ELF64_ST_BIND(sym->st_info);
-			int type = ELF64_ST_TYPE(sym->st_info);
-
-			char letter = 0;
-			bool has_addr = true;
-
 			Elf64_Shdr *related = sym->st_shndx >= SHN_BEFORE ? NULL : &sections[sym->st_shndx];
+
+			char letter = decode_symbol(sym, related);
 
 			if (sym->st_shndx == SHN_ABS)
 			{
-				letter = 'a';
 				sym++;
 				continue; // only with -a
 			}
-			else if (sym->st_shndx == SHN_COMMON)
-				letter = 'c';
-			else if (sym->st_shndx == SHN_UNDEF)
-			{
-				has_addr = false;
-				letter = 'u';
-			}
-			else if (related)
-			{
-				Elf64_Shdr *sections = (void*)(ptr + header->e_shoff);
-				Elf64_Shdr *shstr = &sections[header->e_shstrndx];
-				char *strtab = (void*)(ptr + shstr->sh_offset);
-
-				const char *name = strtab + related->sh_name;
-
-				letter = coff_section_type(name);
-			}
-
-			if (bind == STB_GLOBAL)
-				letter = toupper(letter);
-			else if (bind == STB_LOCAL)
-				letter = tolower(letter);
-			else if (bind == STB_WEAK)
-				letter = 'w';
-
-			if (letter == 0)
-				letter = '?';
 
 			if (sym->st_name)
 			{
-				if (has_addr)
-					printf("%016lx %c %s    %x\n", (long)sym->st_value, letter, strtab + sym->st_name, type);
+				if (sym->st_value)
+					printf("%016lx %c %s\n", (long)sym->st_value, letter, strtab + sym->st_name);
 				else
-					printf("%16s %c %s     %x\n", "", letter, strtab + sym->st_name, type);
+					printf("%16s %c %s\n", "", letter, strtab + sym->st_name);
 			}
 
 			sym++;
