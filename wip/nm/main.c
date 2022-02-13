@@ -13,58 +13,47 @@
 #include <errno.h>
 #include "nm.h"
 
-int
-main(int argc, char **argv)
+int main_nm(const char *file, char *ptr, struct stat *statbuf)
 {
-	struct stat statbuf;
-
-	int fd = open(argv[1], 0);
-	if (fd == -1)
+	if (statbuf->st_size < EI_NIDENT)
 	{
-		dprintf(STDERR_FILENO, "open: %s", strerror(errno));
+		dprintf(STDERR_FILENO, "ft_nm: %s: invalid header\n", file);
 		return (1);
 	}
 
-	int res = fstat(fd, &statbuf);
-	if (res == -1)
+	if (memcmp(ptr, ELFMAG, 4) != 0)
 	{
-		dprintf(STDERR_FILENO, "fstat: %s", strerror(errno));
+		dprintf(STDERR_FILENO, "ft_nm: %s: invalid magic\n", file);
 		return (1);
 	}
-
-	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
-	if (!ptr)
-	{
-		dprintf(STDERR_FILENO, "mmap: %s", strerror(errno));
-		return (1);
-	}
-
-	assert(statbuf.st_size > EI_NIDENT);
-	assert(memcmp(ptr, ELFMAG, 4) == 0);
 
 	bool is32 = ptr[EI_CLASS] == ELFCLASS32;
 	bool is64 = ptr[EI_CLASS] == ELFCLASS64;
 
-	assert(is32 ^ is64);
+	if (!is32 && !is64)
+	{
+		dprintf(STDERR_FILENO, "ft_nm: %s: invalid architecture\n", file);
+		return (1);
+	}
 
 	t_elf elf;
 	bzero(&elf, sizeof(t_elf));
 
 	elf.ptr = ptr;
-	elf.size = statbuf.st_size;
+	elf.size = statbuf->st_size;
 	elf.x32 = is32;
 	elf.x64 = is64;
 
-	if (statbuf.st_size < elf_header_sizeof(&elf))
+	if (elf.size < elf_header_sizeof(&elf))
 	{
-		dprintf(STDERR_FILENO, "invalid header size\n");
+		dprintf(STDERR_FILENO, "ft_nm: %s: invalid header size\n", file);
 		return (1);
 	}
 
 	t_elf_section_header *symbol_section = elf_sections_find_by_type(&elf, SHT_SYMTAB);
 	if (!symbol_section)
 	{
-		dprintf(STDERR_FILENO, "no symbols found\n");
+		dprintf(STDERR_FILENO, "ft_nm: %s: no symbols found\n", file);
 		return (1);
 	}
 
@@ -72,7 +61,7 @@ main(int argc, char **argv)
 	t_elf_word symbol_section_entity_size = elf_section_get_entity_size(&elf, symbol_section);
 	if (!symbol_section_size || !symbol_section_entity_size)
 	{
-		dprintf(STDERR_FILENO, "0 symbol\n");
+		dprintf(STDERR_FILENO, "ft_nm: %s: 0 symbol\n", file);
 		return (1);
 	}
 
@@ -81,7 +70,7 @@ main(int argc, char **argv)
 	t_elf_symbol *symbol = elf_symbol_from(&elf, symbol_section);
 	if (!symbol)
 	{
-		dprintf(STDERR_FILENO, "invalid symbol offset\n");
+		dprintf(STDERR_FILENO, "ft_nm: %s: invalid symbol offset\n", file);
 		return (1);
 	}
 
@@ -114,6 +103,61 @@ main(int argc, char **argv)
 		symbol = elf_symbol_next(&elf, symbol);
 	}
 
+	return (0);
+}
+
+int
+main_file(const char *file, bool multiple)
+{
+	struct stat statbuf;
+
+	int fd = open(file, 0);
+	if (fd == -1)
+	{
+		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, strerror(errno));
+		return (1);
+	}
+
+	int ret = fstat(fd, &statbuf);
+	if (ret == -1)
+	{
+		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, strerror(errno));
+		close(fd);
+		return (1);
+	}
+
+	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	if (!ptr)
+	{
+		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, strerror(errno));
+		close(fd);
+		return (1);
+	}
+
+	ret = main_nm(file, ptr, &statbuf);
+
 	munmap(ptr, statbuf.st_size);
 	close(fd);
+	return (ret);
+}
+
+int
+main(int argc, char **argv)
+{
+	int index;
+	int ret;
+
+	if (argc == 1)
+		return (main_file("a.out", false));
+	else
+	{
+		index = 1;
+		ret = 0;
+		while (index < argc)
+		{
+			ret |= main_file(argv[index], argc == 2);
+			index++;
+		}
+		return (ret);
+	}
 }
