@@ -49,6 +49,7 @@ typedef struct
 	off_t size;
 	bool x32 :1;
 	bool x64 :1;
+	t_nm *nm;
 } t_elf;
 
 typedef void t_elf_header;

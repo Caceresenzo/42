@@ -10,23 +10,66 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h>
-#include <unistd.h>
 #include <elf.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sys/fcntl.h>
+#include <sys/errno.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/unistd.h>
-#include <ctype.h>
-#include <stdio.h>
-#include <errno.h>
+
+#include "list.h"
 #include "nm.h"
 
+typedef struct
+{
+	t_elf_address address;
+	const char *name;
+	char letter;
+} t_symbol;
+
+void
+symbol_print(t_symbol *symbol)
+{
+	if (symbol->address)
+		printf("%016lx %c %s\n", (long)symbol->address, symbol->letter, symbol->name);
+	else
+		printf("%16s %c %s\n", "", symbol->letter, symbol->name);
+}
+
+void
+symbol_print_raw(void *ptr)
+{
+	symbol_print(ptr);
+}
+
 int
-main_nm(const char *file, char *ptr, struct stat *statbuf)
+symbol_compare(t_symbol *left, t_symbol *right)
+{
+	if (left->name == right->name)
+		return (0);
+
+	if (left->name && !right->name)
+		return (1);
+
+	if (!left->name && right->name)
+		return (-1);
+
+	return (strcmp(left->name, right->name));
+}
+
+int
+symbol_compare_raw(void *left, void *right)
+{
+	return (symbol_compare(left, right));
+}
+
+int
+main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
 {
 	if (statbuf->st_size < EI_NIDENT)
 	{
@@ -56,6 +99,7 @@ main_nm(const char *file, char *ptr, struct stat *statbuf)
 	elf.size = statbuf->st_size;
 	elf.x32 = is32;
 	elf.x64 = is64;
+	elf.nm = nm;
 
 	if (elf.size < elf_header_sizeof(&elf))
 	{
@@ -91,6 +135,9 @@ main_nm(const char *file, char *ptr, struct stat *statbuf)
 	if (symbol_strings_section && elf_section_get_type(&elf, symbol_strings_section) != SHT_STRTAB)
 		symbol_strings_section = NULL;
 
+	t_list list;
+	list_initialize(&list);
+
 	while (symbol_count--)
 	{
 		if (elf_symbol_get_section_index(&elf, symbol) == SHN_ABS)
@@ -107,20 +154,29 @@ main_nm(const char *file, char *ptr, struct stat *statbuf)
 			char letter = elf_symbol_decode(&elf, symbol);
 
 			t_elf_address value = elf_symbol_get_value(&elf, symbol);
-			if (value)
-				printf("%016lx %c %s\n", (long)value, letter, name);
-			else
-				printf("%16s %c %s\n", "", letter, name);
+
+			t_symbol *symbol_ = malloc(sizeof(t_symbol));
+			symbol_->address = value;
+			symbol_->letter = letter;
+			symbol_->name = name;
+			list_add(&list, symbol_);
 		}
 
 		symbol = elf_symbol_next(&elf, symbol);
 	}
 
+	t_sort sort = nm->flags.sort;
+	if (sort != SORT_NONE)
+		list_sort(&list, &symbol_compare_raw, sort == SORT_REVERSE);
+
+	list_for_each(&list, &symbol_print_raw);
+	list_delete(&list, &free);
+
 	return (0);
 }
 
 int
-main_file(const char *file, bool multiple)
+main_file(t_nm *nm, const char *file, bool multiple)
 {
 	struct stat statbuf;
 
@@ -147,7 +203,7 @@ main_file(const char *file, bool multiple)
 		return (1);
 	}
 
-	ret = main_nm(file, ptr, &statbuf);
+	ret = main_nm(nm, file, ptr, &statbuf);
 
 	munmap(ptr, statbuf.st_size);
 	close(fd);
@@ -178,12 +234,12 @@ main(int argc, char **argv)
 		return (main_version());
 
 	if (file_index == -1)
-		return (main_file("a.out", false));
+		return (main_file(&nm, "a.out", false));
 	else
 	{
 		int ret = 0;
 		for (int index = file_index; index < argc; index++)
-			ret |= main_file(argv[index], argc == 2);
+			ret |= main_file(&nm, argv[index], argc == 2);
 		return (ret);
 	}
 }
