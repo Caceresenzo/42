@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/13 18:17:59 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/13 18:17:59 by ecaceres         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <assert.h>
 #include <unistd.h>
 #include <elf.h>
@@ -13,7 +25,8 @@
 #include <errno.h>
 #include "nm.h"
 
-int main_nm(const char *file, char *ptr, struct stat *statbuf)
+int
+main_nm(const char *file, char *ptr, struct stat *statbuf)
 {
 	if (statbuf->st_size < EI_NIDENT)
 	{
@@ -144,20 +157,33 @@ main_file(const char *file, bool multiple)
 int
 main(int argc, char **argv)
 {
-	int index;
-	int ret;
+	t_nm nm;
+	bzero(&nm, sizeof(nm));
 
-	if (argc == 1)
+	int file_index = -1;
+	if (!flags_parse(&nm.flags, argc, argv, &file_index))
+	{
+		if (nm.flags.unknown_word)
+			dprintf(STDERR_FILENO, "ft_nm: unrecognized option '--%s'\n", nm.flags.unknown_word);
+		else
+			dprintf(STDERR_FILENO, "ft_nm: invalid option -- '%c'\n", nm.flags.unknown_letter);
+
+		return (main_help(true));
+	}
+
+	if (nm.flags.help)
+		return (main_help(false));
+
+	if (nm.flags.version)
+		return (main_version());
+
+	if (file_index == -1)
 		return (main_file("a.out", false));
 	else
 	{
-		index = 1;
-		ret = 0;
-		while (index < argc)
-		{
+		int ret = 0;
+		for (int index = file_index; index < argc; index++)
 			ret |= main_file(argv[index], argc == 2);
-			index++;
-		}
 		return (ret);
 	}
 }
