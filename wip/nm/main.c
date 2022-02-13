@@ -149,17 +149,19 @@ main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
 		t_elf_word name_offset = elf_symbol_get_name(&elf, symbol);
 		if (name_offset)
 		{
-			const char *name = elf_string_get(&elf, symbol_strings_section, name_offset);
-
 			char letter = elf_symbol_decode(&elf, symbol);
+			if (letter)
+			{
+				const char *name = elf_string_get(&elf, symbol_strings_section, name_offset);
 
-			t_elf_address value = elf_symbol_get_value(&elf, symbol);
+				t_elf_address value = elf_symbol_get_value(&elf, symbol);
 
-			t_symbol *symbol_ = malloc(sizeof(t_symbol));
-			symbol_->address = value;
-			symbol_->letter = letter;
-			symbol_->name = name;
-			list_add(&list, symbol_);
+				t_symbol *symbol_ = malloc(sizeof(t_symbol));
+				symbol_->address = value;
+				symbol_->letter = letter;
+				symbol_->name = name;
+				list_add(&list, symbol_);
+			}
 		}
 
 		symbol = elf_symbol_next(&elf, symbol);

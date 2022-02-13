@@ -107,6 +107,9 @@ elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol)
 			return ('U');
 	}
 
+	if (elf->nm->flags.only_undefined)
+		return ('\0');
+
 	if (bind == STB_WEAK)
 	{
 		if (type == STT_OBJECT)
