@@ -25,72 +25,57 @@
 #include "list.h"
 #include "nm.h"
 
-typedef struct
+t_symbol*
+main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *section_strtab, t_elf_section_header *symbol_strtab)
 {
-	t_elf_address address;
-	const char *name;
-	char letter;
-} t_symbol;
+	t_elf_address address = elf_symbol_get_value(elf, elf_symbol);
 
-void
-symbol_print(t_symbol *symbol)
-{
-	if (symbol->address)
-		printf("%016lx %c %s\n", (long)symbol->address, symbol->letter, symbol->name);
-	else
-		printf("%16s %c %s\n", "", symbol->letter, symbol->name);
+	if (elf->nm->flags.include_all && elf_symbol_get_section_info_type(elf, elf_symbol) == STT_SECTION)
+	{
+		char letter = elf_symbol_decode(elf, elf_symbol);
+		if (!letter)
+			return (NULL);
+
+		t_elf_section_header *header = elf_sections_at(elf, elf_symbol_get_section_index(elf, elf_symbol));
+
+		const char *name = NULL;
+		if (header)
+			name = elf_string_get(elf, section_strtab, elf_section_get_name(elf, header));
+
+		return (symbol_create(address, true, name, letter));
+	}
+
+	// TODO Include with -a.
+	if (elf_symbol_get_section_index(elf, elf_symbol) == SHN_ABS)
+		return (NULL);
+
+	t_elf_word name_offset = elf_symbol_get_name(elf, elf_symbol);
+	if (!name_offset)
+		return (NULL);
+
+	char letter = elf_symbol_decode(elf, elf_symbol);
+	if (!letter)
+		return (NULL);
+
+	const char *name = elf_string_get(elf, symbol_strtab, name_offset);
+
+	return (symbol_create(address, address != 0, name, letter));
 }
 
-void
-symbol_print_raw(void *ptr)
-{
-	symbol_print(ptr);
-}
-
-int
-symbol_compare(t_symbol *left, t_symbol *right)
-{
-	if (left->name == right->name)
-		return (0);
-
-	if (left->name && !right->name)
-		return (1);
-
-	if (!left->name && right->name)
-		return (-1);
-
-	return (strcmp(left->name, right->name));
-}
-
-int
-symbol_compare_raw(void *left, void *right)
-{
-	return (symbol_compare(left, right));
-}
-
-int
+const char*
 main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
 {
 	if (statbuf->st_size < EI_NIDENT)
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: invalid header\n", file);
-		return (1);
-	}
+		return ("invalid header");
 
 	if (memcmp(ptr, ELFMAG, 4) != 0)
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: invalid magic\n", file);
-		return (1);
-	}
+		return ("invalid magic");
 
 	bool is32 = ptr[EI_CLASS] == ELFCLASS32;
 	bool is64 = ptr[EI_CLASS] == ELFCLASS64;
 
 	if (!is32 && !is64)
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: invalid architecture\n", file);
-		return (1);
-	}
+		return ("invalid architecture");
 
 	t_elf elf;
 	bzero(&elf, sizeof(t_elf));
@@ -102,79 +87,51 @@ main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
 	elf.nm = nm;
 
 	if (elf.size < elf_header_sizeof(&elf))
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: invalid header size\n", file);
-		return (1);
-	}
+		return ("invalid header size");
 
 	t_elf_section_header *symbol_section = elf_sections_find_by_type(&elf, SHT_SYMTAB);
 	if (!symbol_section)
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: no symbols found\n", file);
-		return (1);
-	}
+		return ("no symbols found");
 
 	t_elf_word symbol_section_size = elf_section_get_size(&elf, symbol_section);
 	t_elf_word symbol_section_entity_size = elf_section_get_entity_size(&elf, symbol_section);
 	if (!symbol_section_size || !symbol_section_entity_size)
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: 0 symbol\n", file);
-		return (1);
-	}
+		return ("0 symbol");
 
 	t_elf_word symbol_count = symbol_section_size / symbol_section_entity_size;
 
-	t_elf_symbol *symbol = elf_symbol_from(&elf, symbol_section);
-	if (!symbol)
-	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: invalid symbol offset\n", file);
-		return (1);
-	}
+	t_elf_symbol *elf_symbol = elf_symbol_from(&elf, symbol_section);
+	if (!elf_symbol)
+		return ("invalid symbol offset");
 
-	t_elf_section_header *symbol_strings_section = elf_sections_at(&elf, elf_section_get_link(&elf, symbol_section));
-	if (symbol_strings_section && elf_section_get_type(&elf, symbol_strings_section) != SHT_STRTAB)
-		symbol_strings_section = NULL;
+	t_elf_section_header *symbol_strtab = elf_sections_at(&elf, elf_section_get_link(&elf, symbol_section));
+	if (elf_section_get_type(&elf, symbol_strtab) != SHT_STRTAB)
+		symbol_strtab = NULL;
+
+	t_elf_section_header *section_strtab = elf_sections_at(&elf, elf_header_get_section_string_index(&elf));
+	if (elf_section_get_type(&elf, section_strtab) != SHT_STRTAB)
+		section_strtab = NULL;
 
 	t_list list;
 	list_initialize(&list);
 
 	while (symbol_count--)
 	{
-		if (elf_symbol_get_section_index(&elf, symbol) == SHN_ABS)
-		{
-			symbol = elf_symbol_next(&elf, symbol);
-			continue;
-		}
+		t_symbol *symbol = main_nm_process(&elf, elf_symbol, section_strtab, symbol_strtab);
+		if (symbol)
+			list_add(&list, symbol);
 
-		t_elf_word name_offset = elf_symbol_get_name(&elf, symbol);
-		if (name_offset)
-		{
-			char letter = elf_symbol_decode(&elf, symbol);
-			if (letter)
-			{
-				const char *name = elf_string_get(&elf, symbol_strings_section, name_offset);
-
-				t_elf_address value = elf_symbol_get_value(&elf, symbol);
-
-				t_symbol *symbol_ = malloc(sizeof(t_symbol));
-				symbol_->address = value;
-				symbol_->letter = letter;
-				symbol_->name = name;
-				list_add(&list, symbol_);
-			}
-		}
-
-		symbol = elf_symbol_next(&elf, symbol);
+		elf_symbol = elf_symbol_next(&elf, elf_symbol);
 	}
 
 	t_sort sort = nm->flags.sort;
 	if (sort != SORT_NONE)
-		list_sort(&list, &symbol_compare_raw, sort == SORT_REVERSE);
+		list_sort(&list, (t_list_node_compare)&symbol_compare, sort == SORT_REVERSE);
 
-	list_for_each(&list, &symbol_print_raw);
+	list_for_each(&list, (t_list_node_consumer)&symbol_print);
 	list_delete(&list, &free);
 
-	return (0);
+	return (NULL);
 }
 
 int
@@ -205,11 +162,13 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
-	ret = main_nm(nm, file, ptr, &statbuf);
+	const char *err = main_nm(nm, file, ptr, &statbuf);
+	if (err)
+		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, err);
 
 	munmap(ptr, statbuf.st_size);
 	close(fd);
-	return (ret);
+	return (!err);
 }
 
 int

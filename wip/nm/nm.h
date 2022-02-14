@@ -61,6 +61,14 @@ typedef Elf64_Off t_elf_offset;
 typedef Elf64_Addr t_elf_address;
 typedef Elf64_Section t_elf_section;
 
+typedef struct
+{
+	t_elf_address address;
+	bool has_address;
+	const char *name;
+	char letter;
+} t_symbol;
+
 int
 main_version();
 
@@ -150,5 +158,11 @@ elf_string_get(t_elf *elf, t_elf_section_header *strtab, t_elf_offset offset);
 
 char
 elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol);
+
+void
+symbol_print(t_symbol *symbol);
+
+int
+symbol_compare(t_symbol *left, t_symbol *right);
 
 #endif
