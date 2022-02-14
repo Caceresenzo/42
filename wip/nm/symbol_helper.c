@@ -10,6 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "nm.h"
 
 t_symbol*
@@ -19,7 +23,7 @@ symbol_create(t_elf_address address, bool has_address, const char *name, char le
 	if (symbol)
 	{
 		symbol->address = address;
-		symbol->has_address = true;
+		symbol->has_address = has_address;
 		symbol->letter = letter;
 		symbol->name = name;
 	}
@@ -27,13 +31,26 @@ symbol_create(t_elf_address address, bool has_address, const char *name, char le
 	return (symbol);
 }
 
-void
-symbol_print(t_symbol *symbol)
+
+static void
+symbol_print(int size, t_symbol *symbol)
 {
 	if (symbol->has_address)
-		printf("%016lx %c %s\n", (long)symbol->address, symbol->letter, symbol->name);
+		printf("%0*lx %c %s\n", size, (long)symbol->address, symbol->letter, symbol->name);
 	else
-		printf("%16s %c %s\n", "", symbol->letter, symbol->name);
+		printf("%*s %c %s\n", size, "", symbol->letter, symbol->name);
+}
+
+void
+symbol_print_x64(t_symbol *symbol)
+{
+	return (symbol_print(16, symbol));
+}
+
+void
+symbol_print_x32(t_symbol *symbol)
+{
+	return (symbol_print(8, symbol));
 }
 
 int

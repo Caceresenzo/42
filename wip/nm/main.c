@@ -45,12 +45,17 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 		return (symbol_create(address, true, name, letter));
 	}
 
-	// TODO Include with -a.
+	bool has_address = address != 0;
 	if (elf_symbol_get_section_index(elf, elf_symbol) == SHN_ABS)
-		return (NULL);
+	{
+		has_address = true;
+
+		if (!elf->nm->flags.include_all)
+			return (NULL);
+	}
 
 	t_elf_word name_offset = elf_symbol_get_name(elf, elf_symbol);
-	if (!name_offset)
+	if (!name_offset && elf_symbol_get_section_index(elf, elf_symbol) != SHN_ABS)
 		return (NULL);
 
 	char letter = elf_symbol_decode(elf, elf_symbol);
@@ -59,7 +64,7 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 
 	const char *name = elf_string_get(elf, symbol_strtab, name_offset);
 
-	return (symbol_create(address, address != 0, name, letter));
+	return (symbol_create(address, has_address, name, letter));
 }
 
 const char*
@@ -128,7 +133,11 @@ main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
 	if (sort != SORT_NONE)
 		list_sort(&list, (t_list_node_compare)&symbol_compare, sort == SORT_REVERSE);
 
-	list_for_each(&list, (t_list_node_consumer)&symbol_print);
+	if (elf.x32)
+		list_for_each(&list, (t_list_node_consumer)&symbol_print_x32);
+	else if (elf.x64)
+		list_for_each(&list, (t_list_node_consumer)&symbol_print_x64);
+
 	list_delete(&list, &free);
 
 	return (NULL);

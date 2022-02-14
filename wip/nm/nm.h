@@ -159,8 +159,14 @@ elf_string_get(t_elf *elf, t_elf_section_header *strtab, t_elf_offset offset);
 char
 elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol);
 
+t_symbol*
+symbol_create(t_elf_address address, bool has_address, const char *name, char letter);
+
 void
-symbol_print(t_symbol *symbol);
+symbol_print_x64(t_symbol *symbol);
+
+void
+symbol_print_x32(t_symbol *symbol);
 
 int
 symbol_compare(t_symbol *left, t_symbol *right);
