@@ -18,54 +18,66 @@
 
 // https://chromium.googlesource.com/chromiumos/third_party/binutils/+/refs/heads/stabilize-falco-4537.91.B/bfd/syms.c#568
 
-struct section_to_type
+typedef struct
 {
 	const char *section;
 	char type;
-};
-/* Map section names to POSIX/BSD single-character symbol types.
- This table is probably incomplete.  It is sorted for convenience of
- adding entries.  Since it is so short, a linear search is used.  */
-static const struct section_to_type stt[] = { //
-{ ".drectve", 'i' }, /* MSVC's .drective section */
-{ ".edata", 'e' }, /* MSVC's .edata (export) section */
-{ ".idata", 'i' }, /* MSVC's .idata (import) section */
-{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
-{ ".bss", 'b' }, //
-{ "code", 't' }, /* MRI .text */
-{ ".data", 'd' }, //
-{ ".data1", 'd' }, //
-{ "*DEBUG*", 'N' }, //
-{ ".debug", 'N' }, /* MSVC's .debug (non-standard debug syms) */
-{ ".drectve", 'i' }, /* MSVC's .drective section */
-{ ".edata", 'e' }, /* MSVC's .edata (export) section */
-{ ".fini", 't' }, /* ELF fini section */
-{ ".idata", 'i' }, /* MSVC's .idata (import) section */
-{ ".init", 't' }, /* ELF init section */
-{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
-{ ".rdata", 'r' }, /* Read only data.  */
-{ ".rodata", 'r' }, /* Read only data.  */
-{ ".rodata1", 'r' }, /* Read only data.  */
-{ ".sbss", 's' }, /* Small BSS (uninitialized data).  */
-{ ".scommon", 'c' }, /* Small common.  */
-{ ".sdata", 'g' }, /* Small initialized data.  */
-{ ".text", 't' }, //
-{ "vars", 'd' }, /* MRI .data */
-{ "zerovars", 'b' }, /* MRI .bss */
-{ ".eh_frame", 'r' }, //
-{ ".eh_frame_hdr", 'r' }, //
-{ ".dynamic", 'd' }, //
-{ ".got", 'd' }, //
-{ 0, 0 } //
+} t_section_to_type;
+
+static const t_section_to_type g_section_types[] = { //
+/**/{ ".drectve", 'i' }, /* MSVC's .drective section */
+/**/{ ".edata", 'e' }, /* MSVC's .edata (export) section */
+/**/{ ".idata", 'i' }, /* MSVC's .idata (import) section */
+/**/{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
+/**/{ ".bss", 'b' }, //
+/**/{ "code", 't' }, /* MRI .text */
+/**/{ ".data", 'd' }, //
+/**/{ "*DEBUG*", 'N' }, //
+/**/{ ".debug", 'N' }, /* MSVC's .debug (non-standard debug syms) */
+/**/{ ".drectve", 'i' }, /* MSVC's .drective section */
+/**/{ ".edata", 'e' }, /* MSVC's .edata (export) section */
+/**/{ ".fini", 't' }, /* ELF fini section */
+/**/{ ".idata", 'i' }, /* MSVC's .idata (import) section */
+/**/{ ".init", 't' }, /* ELF init section */
+/**/{ ".init_array", 't' },
+/**/{ ".fini_array", 't' },
+/**/{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
+/**/{ ".rdata", 'r' }, /* Read only data.  */
+/**/{ ".rodata", 'r' }, /* Read only data.  */
+/**/{ ".sbss", 's' }, /* Small BSS (uninitialized data).  */
+/**/{ ".scommon", 'c' }, /* Small common.  */
+/**/{ ".sdata", 'g' }, /* Small initialized data.  */
+/**/{ ".text", 't' }, //
+/**/{ ".comment", 'n' }, //
+/**/{ ".dynstr", 'r' }, //
+/**/{ ".dynsym", 'r' }, //
+/**/{ ".gcc_except_table", 'r' }, //
+/**/{ ".gnu", 'r' }, //
+/**/{ ".interp", 'r' }, //
+/**/{ ".note", 'r' }, //
+/**/{ ".plt", 't' }, //
+/**/{ ".rel", 'r' }, //
+/**/{ ".rela", 'r' }, //
+/**/{ "vars", 'd' }, /* MRI .data */
+/**/{ "zerovars", 'b' }, /* MRI .bss */
+/**/{ ".eh_frame", 'r' }, //
+/**/{ ".eh_frame_hdr", 'r' }, //
+/**/{ ".dynamic", 'd' }, //
+/**/{ ".got", 'd' }, //
+/**/{ 0, 0 } //
 };
 
 static char
-coff_section_type(const char *s)
+coff_section_type(const char *name)
 {
-	const struct section_to_type *t;
-	for (t = &stt[0]; t->section; t++)
-		if (!strncmp(s, t->section, strlen(t->section)))
-			return t->type;
+	for (const t_section_to_type *type = &g_section_types[0]; type->section; type++)
+	{
+		size_t len = strlen(type->section);
+
+		if (!strncmp(name, type->section, len) && memchr(".$0123456789", name[len], 13) != 0)
+			return (type->type);
+	}
+
 	return (UNKNOWN_LETTER);
 }
 
@@ -106,9 +118,6 @@ elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol)
 		else
 			return ('U');
 	}
-
-	if (elf->nm->flags.only_undefined)
-		return ('\0');
 
 	if (bind == STB_WEAK)
 	{
