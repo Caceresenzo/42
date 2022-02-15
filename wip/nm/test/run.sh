@@ -30,7 +30,7 @@ function do_test() {
 for file in *; do
 	do_test $file
 	
-	for flag in "-a" "-u" "-r" "-p"; do
+	for flag in "-a" "-u" "-g" "-r" "-p" "-ap" "-ar" "-up" "-ur" "-gp" "-gr"; do
 		do_test $flag $file
 	done
 done
