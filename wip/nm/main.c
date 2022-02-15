@@ -207,7 +207,7 @@ main_file(t_nm *nm, const char *file, bool multiple)
 
 	munmap(ptr, statbuf.st_size);
 	close(fd);
-	return (!err);
+	return (!!err);
 }
 
 int
