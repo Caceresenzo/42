@@ -186,6 +186,13 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
+	if (!S_ISREG(statbuf.st_mode))
+	{
+		dprintf(STDERR_FILENO, "ft_nm: %s: not a regular file\n", file);
+		close(fd);
+		return (1);
+	}
+
 	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 	if (!ptr)
 	{
