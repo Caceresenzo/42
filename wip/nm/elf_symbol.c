@@ -48,6 +48,18 @@ elf_symbol_get_value(t_elf *elf, t_elf_symbol *symbol)
 	return (0);
 }
 
+t_elf_word
+elf_symbol_get_size(t_elf *elf, t_elf_symbol *symbol)
+{
+	if (!elf || !symbol)
+		return (0);
+	if (elf->x32)
+		return (((Elf32_Sym*)symbol)->st_size);
+	if (elf->x64)
+		return (((Elf64_Sym*)symbol)->st_size);
+	return (0);
+}
+
 unsigned char
 elf_symbol_get_section_info_bind(t_elf *elf, t_elf_symbol *symbol)
 {
@@ -69,6 +81,18 @@ elf_symbol_get_section_info_type(t_elf *elf, t_elf_symbol *symbol)
 		return (ELF32_ST_TYPE(((Elf32_Sym*)symbol)->st_info));
 	if (elf->x64)
 		return (ELF64_ST_TYPE(((Elf64_Sym*)symbol)->st_info));
+	return (0);
+}
+
+unsigned char
+elf_symbol_get_section_other_visibility(t_elf *elf, t_elf_symbol *symbol)
+{
+	if (!elf || !symbol)
+		return (0);
+	if (elf->x32)
+		return (ELF32_ST_VISIBILITY(((Elf32_Sym*)symbol)->st_other));
+	if (elf->x64)
+		return (ELF32_ST_VISIBILITY(((Elf64_Sym*)symbol)->st_other));
 	return (0);
 }
 

@@ -138,11 +138,17 @@ elf_symbol_get_name(t_elf *elf, t_elf_symbol *symbol);
 t_elf_address
 elf_symbol_get_value(t_elf *elf, t_elf_symbol *symbol);
 
+t_elf_word
+elf_symbol_get_size(t_elf *elf, t_elf_symbol *symbol);
+
 unsigned char
 elf_symbol_get_section_info_bind(t_elf *elf, t_elf_symbol *symbol);
 
 unsigned char
 elf_symbol_get_section_info_type(t_elf *elf, t_elf_symbol *symbol);
+
+unsigned char
+elf_symbol_get_section_other_visibility(t_elf *elf, t_elf_symbol *symbol);
 
 t_elf_section
 elf_symbol_get_section_index(t_elf *elf, t_elf_symbol *symbol);
@@ -158,6 +164,9 @@ elf_string_get(t_elf *elf, t_elf_section_header *strtab, t_elf_offset offset);
 
 char
 elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol);
+
+bool
+elf_symbol_is_external(t_elf *elf, t_elf_symbol *symbol);
 
 t_symbol*
 symbol_create(t_elf_address address, bool has_address, const char *name, char letter);

@@ -45,8 +45,16 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 		return (symbol_create(address, true, name, letter));
 	}
 
+	t_elf_section section_index = elf_symbol_get_section_index(elf, elf_symbol);
+
+	if (elf->nm->flags.only_undefined && section_index != SHN_UNDEF)
+		return (NULL);
+
+	if (elf->nm->flags.only_extern && !elf_symbol_is_external(elf, elf_symbol))
+		return (NULL);
+
 	bool has_address = address != 0;
-	if (elf_symbol_get_section_index(elf, elf_symbol) == SHN_ABS)
+	if (section_index == SHN_ABS)
 	{
 		has_address = true;
 
@@ -58,11 +66,26 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 	if (!name_offset && elf_symbol_get_section_index(elf, elf_symbol) != SHN_ABS)
 		return (NULL);
 
+	const char *name = elf_string_get(elf, symbol_strtab, name_offset);
+
 	char letter = elf_symbol_decode(elf, elf_symbol);
 	if (!letter)
 		return (NULL);
 
-	const char *name = elf_string_get(elf, symbol_strtab, name_offset);
+//
+
+//	if (strcmp("__init_array_end", name) && strcmp("__do_global_dtors_aux_fini_array_entry", name) && strcmp("main", name))
+//		return (NULL);
+//	printf("letter=%c\n", letter);
+//	printf("only_extern=%d\n", elf->nm->flags.only_extern);
+//	printf("info_bind=%d\n", elf_symbol_get_section_info_bind(elf, elf_symbol));
+//	printf("info_type=%d\n", elf_symbol_get_section_info_type(elf, elf_symbol));
+//	printf("visibility=%d\n", elf_symbol_get_section_other_visibility(elf, elf_symbol));
+//	printf("size=%d\n", elf_symbol_get_size(elf, elf_symbol));
+//	printf("section_index=%d\n", section_index);
+//	printf("name=%s\n", name);
+//	printf("\n");
+//
 
 	return (symbol_create(address, has_address, name, letter));
 }

@@ -148,3 +148,11 @@ elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol)
 
 	return (letter);
 }
+
+bool
+elf_symbol_is_external(t_elf *elf, t_elf_symbol *symbol)
+{
+	unsigned char bind = elf_symbol_get_section_info_bind(elf, symbol);
+
+	return (bind == STB_GLOBAL || bind == STB_WEAK);
+}
