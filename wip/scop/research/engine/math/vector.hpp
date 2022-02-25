@@ -17,6 +17,42 @@
 # include <cassert>
 
 template<typename T>
+	struct Vector2
+	{
+		public:
+			T x;
+			T y;
+
+		public:
+			Vector2(const T &initial = T()) :
+					x(initial),
+					y(initial)
+			{
+			}
+
+			Vector2(const T &x, const T &y) :
+					x(x),
+					y(y)
+			{
+			}
+
+			Vector2(const Vector2<T> &other) :
+					x(other.x),
+					y(other.y)
+			{
+			}
+
+			void
+			zero()
+			{
+				T value = T();
+
+				x = value;
+				y = value;
+			}
+	};
+
+template<typename T>
 	struct Vector3
 	{
 		public:

@@ -14,7 +14,7 @@
 # define UNIFORM_HPP_
 
 #include <GL/glew.h>
-#include <opengl.hpp>
+#include <engine/opengl.hpp>
 #include <string>
 
 class ShaderProgram;

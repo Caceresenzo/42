@@ -15,7 +15,7 @@
 
 #include <engine/shader/uniform/Uniform.hpp>
 #include <GL/glew.h>
-#include <opengl.hpp>
+#include <engine/opengl.hpp>
 #include <string>
 
 class ShaderProgram
