@@ -1,50 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ShaderProgram.hpp                                  :+:      :+:    :+:   */
+/*   Texture.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 13:59:49 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 13:59:49 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/26 19:24:02 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/26 19:24:02 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHADERPROGRAM_HPP_
-# define SHADERPROGRAM_HPP_
+#ifndef TEXTURE_HPP_
+# define TEXTURE_HPP_
 
 #include <engine/opengl.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
 #include <GL/glew.h>
-#include <string>
 
-class ShaderProgram
+class ImageData;
+
+class Texture
 {
-	public:
-		static const GLuint UNDEFINED_VALUE;
-
 	private:
 		GLuint m_id;
 
 	public:
-		ShaderProgram(const std::string &vertex_file, const std::string &fragment_file);
+		Texture();
 
 		virtual
-		~ShaderProgram();
-
-		void
-		use();
-
-		void
-		unuse();
-
-	protected:
-		void
-		locate(Uniform &uniform) const;
+		~Texture();
 
 	public:
-		GLuint
-		id() const;
+		void
+		set_active(int unit = 0);
+
+		void
+		bind();
+
+		void
+		unbind();
+
+	public:
+		static Texture*
+		from_image(ImageData *image_data);
 };
 
-#endif /* SHADERPROGRAM_HPP_ */
+#endif /* TEXTURE_HPP_ */

@@ -13,9 +13,10 @@
 #include <engine/text/TextShader.hpp>
 
 TextShader::TextShader() :
-		ShaderProgram(),
+		ShaderProgram("text-vertex.glsl", "text-fragment.glsl"),
 		sampler("myTextureSampler")
 {
+	locate(sampler);
 }
 
 TextShader::~TextShader()

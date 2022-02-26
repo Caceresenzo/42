@@ -209,7 +209,7 @@ template<typename T>
 			void
 			print()
 			{
-				std::printf("m4f { %8.4f, %8.4f, %8.4f, %8.4f,\n"
+				printf("m4f { %8.4f, %8.4f, %8.4f, %8.4f,\n"
 					"      %8.4f, %8.4f, %8.4f, %8.4f,\n"
 					"      %8.4f, %8.4f, %8.4f, %8.4f,\n"
 					"      %8.4f, %8.4f, %8.4f, %8.4f}\n", //

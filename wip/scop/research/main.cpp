@@ -7,6 +7,8 @@
 #include <engine/shader/uniform/MatrixUniform.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
 #include <engine/shader/uniform/Vector3Uniform.hpp>
+#include <engine/text/Text.hpp>
+#include <engine/text/TextRenderer.hpp>
 #include <engine/text/TextShader.hpp>
 #include <engine/utility/counter/FrameCounter.hpp>
 #include <engine/utility/counter/HighFrameCounter.hpp>
@@ -17,6 +19,8 @@
 #include <cstdio>
 #include <typeinfo>
 #include <vector>
+
+class TextRenderer;
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -62,7 +66,7 @@ class Shader :
 
 	public:
 		Shader() :
-				ShaderProgram() //,
+				ShaderProgram("vertex.glsl", "fragment.glsl") //,
 //				aColor("aColor") //,
 //				vertex_color("vertexColor"),
 //				model("model"),
@@ -75,155 +79,14 @@ class Shader :
 		~Shader()
 		{
 		}
-
-		virtual void
-		after_create()
-		{
-//			locate(aColor);
-//			locate(vertex_color);
-//			locate(model);
-//			locate(view);
-//			locate(projection);
-		}
 };
 
 FrameCounter frame_counter;
 HighFrameCounter high_frame_counter;
-Shader shader;
+Shader *shader;
+TextRenderer *text_renderer;
 
-GLuint
-loadBMP_custom(const char *imagepath)
-{
-	BMPImageLoader loader;
-	ImageData *imageData = loader.load(imagepath);
-
-	std::cout << imageData->width() << std::endl << std::flush;
-	std::cout << imageData->height() << std::endl << std::flush;
-
-	// Create one OpenGL texture
-	GLuint textureID;
-	glGenTextures(1, &textureID);
-
-	// "Bind" the newly created texture : all future texture functions will modify this texture
-	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	// Give the image to OpenGL
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, imageData->width(), imageData->height(), 0, GL_BGR, GL_UNSIGNED_BYTE, imageData->pixels().data());
-
-	// OpenGL has now copied the data. Free our own version
-	delete imageData;
-
-	// Poor filtering, or ...
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-	// ... nice trilinear filtering ...
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	// ... which requires mipmaps. Generate them automatically.
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	// Return the ID of the texture we just created
-	return textureID;
-}
-
-TextShader text_shader;
-
-unsigned int Text2DTextureID;
-unsigned int Text2DVertexBufferID;
-unsigned int Text2DUVBufferID;
-
-void
-initText2D(const char *texturePath)
-{
-	// Initialize texture
-	Text2DTextureID = loadBMP_custom(texturePath);
-
-	// Initialize VBO
-	glGenBuffers(1, &Text2DVertexBufferID);
-	glGenBuffers(1, &Text2DUVBufferID);
-
-	// Initialize Shader
-	text_shader.create("text-vertex.glsl", "text-fragment.glsl");
-}
-
-void
-printText2D(const char *text, int x, int y, int size)
-{
-	unsigned int length = strlen(text);
-
-	std::vector<Vector2<float>> vertices;
-	std::vector<Vector2<float>> UVs;
-
-	for (unsigned int i = 0; i < length; i++)
-	{
-		Vector2<float> vertex_up_left = Vector2<float>(x + i * size, y + size);
-		Vector2<float> vertex_up_right = Vector2<float>(x + i * size + size, y + size);
-		Vector2<float> vertex_down_right = Vector2<float>(x + i * size + size, y);
-		Vector2<float> vertex_down_left = Vector2<float>(x + i * size, y);
-
-		vertices.push_back(vertex_up_left);
-		vertices.push_back(vertex_down_left);
-		vertices.push_back(vertex_up_right);
-
-		vertices.push_back(vertex_down_right);
-		vertices.push_back(vertex_up_right);
-		vertices.push_back(vertex_down_left);
-
-		char character = text[i];
-		float uv_x = ((character % 16) / 16.0f);
-		float uv_y = ((character / 16) / 16.0f);
-
-		Vector2<float> uv_up_left = Vector2<float>(uv_x, -uv_y);
-		Vector2<float> uv_up_right = Vector2<float>((uv_x + 1.0f / 16.0f), -uv_y);
-		Vector2<float> uv_down_right = Vector2<float>((uv_x + 1.0f / 16.0f), -(uv_y + 1.0f / 16.0f));
-		Vector2<float> uv_down_left = Vector2<float>(uv_x, -(uv_y + 1.0f / 16.0f));
-		UVs.push_back(uv_up_left);
-		UVs.push_back(uv_down_left);
-		UVs.push_back(uv_up_right);
-
-		UVs.push_back(uv_down_right);
-		UVs.push_back(uv_up_right);
-		UVs.push_back(uv_down_left);
-	}
-	glBindBuffer(GL_ARRAY_BUFFER, Text2DVertexBufferID);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector2<float> ), &vertices[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, Text2DUVBufferID);
-	glBufferData(GL_ARRAY_BUFFER, UVs.size() * sizeof(Vector2<float> ), &UVs[0], GL_STATIC_DRAW);
-
-	// Bind shader
-	text_shader.use();
-
-	// Bind texture
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, Text2DTextureID);
-	// Set our "myTextureSampler" sampler to use Texture Unit 0
-	text_shader.sampler.set(0);
-
-	// 1rst attribute buffer : vertices
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, Text2DVertexBufferID);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	// 2nd attribute buffer : UVs
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, Text2DUVBufferID);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	// Draw call
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-	glDisable(GL_BLEND);
-
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-
-}
+std::vector<Text*> texts;
 
 int
 main(int argc, char *argv[])
@@ -232,11 +95,12 @@ main(int argc, char *argv[])
 
 	try
 	{
-		shader.create("vertex.glsl", "fragment.glsl");
+		shader = new Shader();
+		text_renderer = new TextRenderer();
 
-		initText2D("font.bmp");
-//		initText2D("HSVS255.bmp");
-//		initText2D("font1.bmp");
+		texts.push_back(new Text("Hello"));
+		texts.push_back(new Text("fps:", Vector2f(0, 24)));
+
 		fflush(stdout);
 	}
 	catch (Exception &e)
@@ -276,7 +140,7 @@ on_display(void)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	shader.use();
+	shader->use();
 
 	float vertices[] = {
 	// positions         // colors
@@ -296,12 +160,10 @@ on_display(void)
 //	shader.aColor.set(Vector3<float>(1, 1, 1));
 
 	char text[255] = { 0 };
-
-	sprintf(text, "hello world");
-	printText2D(text, 0, 600 - 24, 24);
-
 	sprintf(text, "frame: %d", high_frame_counter.frame());
-	printText2D(text, 0, 600 - 24 * 2, 24);
+
+	texts[1]->set(text);
+	text_renderer->render(texts);
 
 	frame_counter.count();
 	high_frame_counter.count();

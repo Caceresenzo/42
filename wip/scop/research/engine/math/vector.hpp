@@ -153,6 +153,7 @@ template<typename T>
 			}
 	};
 
+typedef Vector2<float> Vector2f;
 typedef Vector3<float> Vector3f;
 
 #endif /* VECTOR_HPP_ */
