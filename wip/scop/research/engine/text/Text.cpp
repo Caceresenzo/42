@@ -22,35 +22,19 @@ Text::Text(const std::string &initial, const Vector2f &position, float size) :
 		m_position(position),
 		m_size(size),
 		m_invalidated(true),
-		m_vertex_buffer_id(-1),
-		m_uv_buffer_id(-1)
+		m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW),
+		m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW)
 {
-	glGenBuffers(1, &m_vertex_buffer_id);
-	glGenBuffers(1, &m_uv_buffer_id);
 }
 
 Text::~Text()
 {
-	glDeleteBuffers(1, &m_vertex_buffer_id);
-	glDeleteBuffers(1, &m_uv_buffer_id);
 }
 
 void
 Text::invalidate()
 {
 	m_invalidated = true;
-}
-
-bool
-Text::is_invalidated() const
-{
-	return (m_invalidated);
-}
-
-const std::string&
-Text::get() const
-{
-	return (m_value);
 }
 
 void
@@ -96,10 +80,8 @@ Text::build()
 		uvs.push_back(uv_down_left);
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, m_vertex_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vector2<float> ), &vertices[0], GL_STATIC_DRAW);
-	glBindBuffer(GL_ARRAY_BUFFER, m_uv_buffer_id);
-	glBufferData(GL_ARRAY_BUFFER, uvs.size() * sizeof(Vector2<float> ), &uvs[0], GL_STATIC_DRAW);
+	m_vertex_buffer.store(vertices);
+	m_uv_buffer.store(uvs);
 
 	m_invalidated = false;
 }

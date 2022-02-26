@@ -14,34 +14,15 @@
 
 TextShader::TextShader() :
 		ShaderProgram("text-vertex.glsl", "text-fragment.glsl"),
-		sampler("myTextureSampler")
+		sampler("myTextureSampler"),
+		position("vertexPosition_screenspace"),
+		uv("vertexUV")
 {
 	locate(sampler);
+	locate(position);
+	locate(uv);
 }
 
 TextShader::~TextShader()
 {
-}
-
-TextShader::TextShader(const TextShader &other) :
-		ShaderProgram(other),
-		sampler(other.sampler)
-{
-}
-
-TextShader&
-TextShader::operator=(const TextShader &other)
-{
-	if (this != &other)
-	{
-		sampler = other.sampler;
-	}
-
-	return (*this);
-}
-
-void
-TextShader::after_create()
-{
-	locate(sampler);
 }

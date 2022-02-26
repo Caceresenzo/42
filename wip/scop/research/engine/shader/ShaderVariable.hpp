@@ -1,37 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Uniform.hpp                                        :+:      :+:    :+:   */
+/*   ShaderVariable.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 13:47:18 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 13:47:18 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/26 21:25:42 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/26 21:25:42 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UNIFORM_HPP_
-# define UNIFORM_HPP_
+#ifndef SHADERVARIABLE_HPP_
+# define SHADERVARIABLE_HPP_
 
 #include <engine/opengl.hpp>
-#include <engine/shader/ShaderVariable.hpp>
 #include <GL/glew.h>
 #include <string>
 
 class ShaderProgram;
 
-class Uniform :
-		public ShaderVariable
+class ShaderVariable
 {
+	private:
+		std::string m_name;
+		GLint m_location;
+
 	protected:
-		Uniform(const std::string &name);
+		ShaderVariable(const std::string &name);
 
 		virtual
-		~Uniform();
+		~ShaderVariable();
+
+	public:
+		void
+		locate(const ShaderProgram &program);
 
 	protected:
 		virtual GLint
-		find_location(GLuint program_id, const char *name) const;
+		find_location(GLuint program_id, const char *name) const = 0;
+
+	public:
+		inline const std::string&
+		name() const
+		{
+			return (m_name);
+		}
+
+		inline GLint
+		location() const
+		{
+			return (m_location);
+		}
 };
 
-#endif /* UNIFORM_HPP_ */
+#endif /* SHADERVARIABLE_HPP_ */

@@ -28,11 +28,6 @@ template<typename T>
 			{
 			}
 
-			MatrixUniform(const MatrixUniform &other) :
-					Uniform(other)
-			{
-			}
-
 		public:
 			void
 			set(const Matrix44<T> &matrix);

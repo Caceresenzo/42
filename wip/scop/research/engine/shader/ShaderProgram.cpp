@@ -13,6 +13,7 @@
 #include <engine/exception/IllegalStateException.hpp>
 #include <engine/exception/RuntimeException.hpp>
 #include <engine/shader/ShaderProgram.hpp>
+#include <engine/shader/ShaderVariable.hpp>
 #include <GL/glew.h>
 #include <sys/unistd.h>
 #include <unistd.h>
@@ -144,9 +145,9 @@ ShaderProgram::unuse()
 }
 
 void
-ShaderProgram::locate(Uniform &uniform) const
+ShaderProgram::locate(ShaderVariable &variable) const
 {
-	uniform.locate(*this);
+	variable.locate(*this);
 }
 
 GLuint

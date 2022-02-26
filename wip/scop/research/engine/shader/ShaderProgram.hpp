@@ -40,7 +40,7 @@ class ShaderProgram
 
 	protected:
 		void
-		locate(Uniform &uniform) const;
+		locate(ShaderVariable &variable) const;
 
 	public:
 		GLuint

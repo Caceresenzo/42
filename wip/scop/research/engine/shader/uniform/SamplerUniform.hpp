@@ -28,11 +28,6 @@ template<typename T>
 			{
 			}
 
-			SamplerUniform(const SamplerUniform &other) :
-					Uniform(other)
-			{
-			}
-
 		public:
 			void
 			set(const T &sampler);

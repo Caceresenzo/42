@@ -84,13 +84,13 @@ TextRenderer::render(Text &text) const
 	font_altas->bind();
 	shader->sampler.set(0);
 
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, text.vertex_buffer_id());
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	shader->position.enable();
+	text.vertex_buffer().bind();
+	shader->position.link();
 
-	glEnableVertexAttribArray(1);
-	glBindBuffer(GL_ARRAY_BUFFER, text.uv_buffer_id());
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	shader->uv.enable();
+	text.uv_buffer().bind();
+	shader->uv.link();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -99,6 +99,6 @@ TextRenderer::render(Text &text) const
 
 	glDisable(GL_BLEND);
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
+	shader->position.disable();
+	shader->uv.disable();
 }

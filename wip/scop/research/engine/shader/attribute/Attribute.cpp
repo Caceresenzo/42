@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Uniform.cpp                                        :+:      :+:    :+:   */
+/*   Attribute.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,19 +10,40 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/shader/uniform/Uniform.hpp>
+#include <engine/shader/attribute/Attribute.hpp>
 
-Uniform::Uniform(const std::string &name) :
-		ShaderVariable(name)
+Attribute::Attribute(const std::string &name, GLint size, GLenum data_type, GLenum normalized) :
+		ShaderVariable(name),
+		m_size(size),
+		m_data_type(data_type),
+		m_normalized(normalized)
 {
 }
 
-Uniform::~Uniform()
+Attribute::~Attribute()
 {
+}
+
+void
+Attribute::enable()
+{
+	glEnableVertexAttribArray(location());
+}
+
+void
+Attribute::disable()
+{
+	glDisableVertexAttribArray(location());
+}
+
+void
+Attribute::link(GLsizei stride, const void *pointer)
+{
+	glVertexAttribPointer(location(), m_size, m_data_type, m_normalized, stride, pointer);
 }
 
 GLint
-Uniform::find_location(GLuint program_id, const char *name) const
+Attribute::find_location(GLuint program_id, const char *name) const
 {
-	return (glGetUniformLocation(program_id, name));
+	return (glGetAttribLocation(program_id, name));
 }

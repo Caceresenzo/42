@@ -28,11 +28,6 @@ template<typename T>
 			{
 			}
 
-			Vector3Uniform(const Vector3Uniform &other) :
-					Uniform(other)
-			{
-			}
-
 		public:
 			void
 			set(const T &x, const T &y, const T &z);

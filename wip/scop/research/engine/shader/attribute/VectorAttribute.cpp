@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   TextShader.hpp                                     :+:      :+:    :+:   */
+/*   VectorAttribute.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/25 12:29:02 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/25 12:29:02 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/26 21:34:52 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/26 21:34:52 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEXTSHADER_HPP_
-# define TEXTSHADER_HPP_
-
+#include <engine/shader/attribute/Vector3Attribute.hpp>
 #include <engine/shader/attribute/Vector2Attribute.hpp>
-#include <engine/shader/ShaderProgram.hpp>
-#include <engine/shader/uniform/SamplerUniform.hpp>
 
-class TextShader :
-		public ShaderProgram
-{
-	public:
-		SamplerUniform<int> sampler;
-		Vector2Attribute<float> position;
-		Vector2Attribute<float> uv;
+template<>
+	const GLuint Vector3Attribute<float>::DATA_TYPE = GL_FLOAT;
 
-	public:
-		TextShader();
-
-		virtual
-		~TextShader();
-};
-
-#endif /* TEXTSHADER_HPP_ */
+template<>
+	const GLuint Vector2Attribute<float>::DATA_TYPE = GL_FLOAT;
