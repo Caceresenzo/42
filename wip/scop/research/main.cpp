@@ -3,6 +3,7 @@
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
 #include <engine/math/vector.hpp>
+#include <engine/shader/attribute/Vector3Attribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
@@ -12,6 +13,8 @@
 #include <engine/text/TextShader.hpp>
 #include <engine/utility/counter/FrameCounter.hpp>
 #include <engine/utility/counter/HighFrameCounter.hpp>
+#include <engine/vertex/VertexArrayObject.hpp>
+#include <engine/vertex/VertexBufferObject.hpp>
 #include <GL/freeglut_ext.h>
 #include <GL/freeglut_std.h>
 #include <stdlib.h>
@@ -19,8 +22,6 @@
 #include <cstdio>
 #include <typeinfo>
 #include <vector>
-
-class TextRenderer;
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -58,21 +59,17 @@ class Shader :
 		public ShaderProgram
 {
 	public:
-//		Vector3Uniform<float> aColor;
-//		Vector3Uniform<float> vertex_color;
-//		MatrixUniform<float> model;
-//		MatrixUniform<float> view;
-//		MatrixUniform<float> projection;
+		Vector3Attribute<float> position;
+		Vector3Attribute<float> color;
 
 	public:
 		Shader() :
-				ShaderProgram("vertex.glsl", "fragment.glsl") //,
-//				aColor("aColor") //,
-//				vertex_color("vertexColor"),
-//				model("model"),
-//				view("view"),
-//				projection("projection")
+				ShaderProgram("vertex.glsl", "fragment.glsl"),
+				position("aPos"),
+				color("aColor")
 		{
+			locate(position);
+			locate(color);
 		}
 
 		virtual
@@ -85,6 +82,8 @@ FrameCounter frame_counter;
 HighFrameCounter high_frame_counter;
 Shader *shader;
 TextRenderer *text_renderer;
+
+VertexArrayObject *vao;
 
 std::vector<Text*> texts;
 
@@ -111,21 +110,29 @@ main(int argc, char *argv[])
 	}
 	std::cout << "shader created!" << std::endl;
 
-	// ------------------------------------------------------------------
+	vao = new VertexArrayObject();
 
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	// bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
-	glBindVertexArray(VAO);
+	VertexBufferObject *positions = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
+	vao->add(*positions, true);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	VertexBufferObject *colors = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
+	vao->add(*colors, true);
 
-	// position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	// color attribute
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
+	shader->position.enable();
+	positions->bind();
+	shader->position.link();
+
+	shader->color.enable();
+	colors->bind();
+	shader->color.link();
+
+	float vertex_colors[] = { //
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f //
+	};
+
+	colors->store(sizeof(vertex_colors), vertex_colors);
 
 	on_timer(0);
 	glutMainLoop();
@@ -142,22 +149,17 @@ on_display(void)
 
 	shader->use();
 
-	float vertices[] = {
-	// positions         // colors
-	x, -x, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
-	-x, -x, 2.0f, 0.0f, 1.0f, 0.0f, // bottom left
-	0.0f, x, 0.0f, 0.0f, 0.0f, 1.0f // top
+	float vertices[] = { //
+	x, -x, 0.0f, //
+	-x, -x, 2.0f, //
+	0.0f, x, 0.0f, //
 	};
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	vao->get(0).store(sizeof(vertices), vertices);
+	vao->bind();
 
-	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-//	shader.aColor.set(Vector3<float>(1, 1, 1));
+	vao->unbind();
 
 	char text[255] = { 0 };
 	sprintf(text, "frame: %d", high_frame_counter.frame());
@@ -167,10 +169,6 @@ on_display(void)
 
 	frame_counter.count();
 	high_frame_counter.count();
-
-	x += 0.01 * direction;
-	if (x >= 1 || x <= -1)
-		direction *= -1;
 
 	glutSwapBuffers();
 }
@@ -237,4 +235,7 @@ on_timer(int)
 void
 on_idle()
 {
+	x += 0.01 * direction;
+	if (x >= 1 || x <= -1)
+		direction *= -1;
 }
