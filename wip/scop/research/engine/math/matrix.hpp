@@ -13,6 +13,7 @@
 #ifndef MATRIX_HPP_
 # define MATRIX_HPP_
 
+#include <engine/math/Math.hpp>
 #include <engine/math/vector.hpp>
 #include <cassert>
 #include <cmath>
@@ -76,49 +77,6 @@ template<int R, int C, typename T>
 
 				return (vector);
 			}
-//
-//			void
-//			look_at(Vector3<T> eye, Vector3<T> center, Vector3<T> up)
-//			{
-//				Vector3<T> f, s, u;
-//
-//				f = eye - center;
-//				f.normalize();
-//
-//				s = f.cross(up);
-//				f.normalize();
-//
-//				u = s.cross(f);
-//
-//				identity();
-//
-//				storage[0][0] = s.x;
-//				storage[1][0] = s.y;
-//				storage[2][0] = s.z;
-//				storage[0][1] = u.x;
-//				storage[1][1] = u.y;
-//				storage[2][1] = u.z;
-//				storage[0][2] = -f.x;
-//				storage[1][2] = -f.y;
-//				storage[2][2] = -f.z;
-//				storage[3][0] = -s.dot(eye);
-//				storage[3][1] = -u.dot(eye);
-//				storage[3][2] = f.dot(eye);
-//			}
-//
-//			void
-//			perspective(float fov, float aspect, float zNear, float zFar)
-//			{
-//				const float tanHalfFovy = tan(fov / 2.0f);
-//
-//				zero();
-//
-//				storage[0][0] = (1.0f) / (aspect * tanHalfFovy);
-//				storage[1][1] = (1.0f) / (tanHalfFovy);
-//				storage[2][2] = -(zFar + zNear) / (zFar - zNear);
-//				storage[2][3] = -(1.0f);
-//				storage[3][2] = -((2.0f) * zFar * zNear) / (zFar - zNear);
-//			}
 	};
 
 template<int R1, int C1, int C2, typename T>
@@ -188,6 +146,47 @@ template<typename T>
 		matrix[1] = source[0] * rotate[1][0] + source[1] * rotate[1][1] + source[2] * rotate[1][2];
 		matrix[2] = source[0] * rotate[2][0] + source[1] * rotate[2][1] + source[2] * rotate[2][2];
 		matrix[3] = source[3];
+
+		return (matrix);
+	}
+
+template<typename T>
+	inline Matrix<4, 4, T>
+	look_at(const Vector<3, T> &eye, const Vector<3, T> &center, const Vector<3, T> &up)
+	{
+		Vector<3, T> const f(::normalize(center - eye));
+		Vector<3, T> const s(::normalize(::cross(f, up)));
+		Vector<3, T> const u(::cross(s, f));
+
+		Matrix<4, 4, T> matrix(1);
+		matrix[0][0] = s.x;
+		matrix[1][0] = s.y;
+		matrix[2][0] = s.z;
+		matrix[0][1] = u.x;
+		matrix[1][1] = u.y;
+		matrix[2][1] = u.z;
+		matrix[0][2] = -f.x;
+		matrix[1][2] = -f.y;
+		matrix[2][2] = -f.z;
+		matrix[3][0] = -dot(s, eye);
+		matrix[3][1] = -dot(u, eye);
+		matrix[3][2] = dot(f, eye);
+
+		return (matrix);
+	}
+
+template<typename T>
+	inline Matrix<4, 4, T>
+	perspective(const T &fov, const T &aspect, const T &zNear, const T &zFar)
+	{
+		const float tanHalfFovy = Math::tan(fov / static_cast<T>(2));
+
+		Matrix<4, 4, T> matrix;
+		matrix[0][0] = static_cast<T>(1) / (aspect * tanHalfFovy);
+		matrix[1][1] = static_cast<T>(1) / (tanHalfFovy);
+		matrix[2][2] = -(zFar + zNear) / (zFar - zNear);
+		matrix[2][3] = -static_cast<T>(1);
+		matrix[3][2] = -(static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
 
 		return (matrix);
 	}

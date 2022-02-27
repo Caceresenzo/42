@@ -1,8 +1,11 @@
 #include <bits/exception.h>
+#include <engine/camera/ICamera.hpp>
+#include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/exception/Exception.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
 #include <engine/math/matrix.hpp>
+#include <engine/math/Math.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
@@ -20,6 +23,9 @@
 #include <GL/freeglut_std.h>
 #include <stdlib.h>
 #include <string.h>
+
+class ICamera;
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cstdio>
@@ -61,18 +67,24 @@ class Shader :
 		public ShaderProgram
 {
 	public:
-		MatrixUniform<4, 4, float> transform;
+		MatrixUniform<4, 4, float> model;
+		MatrixUniform<4, 4, float> view;
+		MatrixUniform<4, 4, float> projection;
 		VectorAttribute<3, float> position;
 		VectorAttribute<3, float> color;
 
 	public:
 		Shader() :
 				ShaderProgram("vertex.glsl", "fragment.glsl"),
-				transform("transform"),
+				model("model"),
+				view("view"),
+				projection("projection"),
 				position("aPos"),
 				color("aColor")
 		{
-			locate(transform);
+			locate(model);
+			locate(view);
+			locate(projection);
 			locate(position);
 			locate(color);
 		}
@@ -87,6 +99,7 @@ FrameCounter frame_counter;
 HighFrameCounter high_frame_counter;
 Shader *shader;
 TextRenderer *text_renderer;
+ICamera *camera;
 
 VertexArrayObject *vao;
 
@@ -101,6 +114,7 @@ main(int argc, char *argv[])
 	{
 		shader = new Shader();
 		text_renderer = new TextRenderer();
+		camera = new PerspectiveCamera();
 
 		texts.push_back(new Text("Hello"));
 		texts.push_back(new Text("fps:", Vector<2, float>(0, 24)));
@@ -135,12 +149,12 @@ main(int argc, char *argv[])
 	shader->color.link();
 
 	float vertex_colors[] = { //
-		1.0f, 0.0f, 0.0f, //
-		0.0f, 1.0f, 0.0f, //
-		0.0f, 0.0f, 1.0f, //
-		0.0f, 0.0f, 1.0f, //
-		1.0f, 1.0f, 0.0f, //
-		1.0f, 0.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f, //
+	0.0f, 0.0f, 1.0f, //
+	1.0f, 1.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
 	};
 
 	colors->store(sizeof(vertex_colors), vertex_colors);
@@ -167,25 +181,52 @@ on_display(void)
 
 //	trans = ::translate(trans, Vector<3, float>(0.5f, -0.5f, 0.0f));
 //	trans = ::rotate(trans, radian, Vector<3, float>(0.0, 0.0, 1.0));
-	shader->transform.set(trans);
+
+	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), 800 / 800, 0.1f, 100.0f);
+	shader->projection.set(projection);
+	shader->view.set(camera->get_view_matrix());
 
 //	float vertices[] = { //
 //	x, -x, 0.0f, //
 //	-x, -x, 2.0f, //
 //	0.0f, x, 0.0f, //
 //	};
-	float vertices[] = {
-	    -0.5f, 0.5f, 0.0f, // top left point
-	    0.5f, 0.5f, 0.0f, // top right point
-	    0.5f, -0.5f, 0.0f, // bottom right point
-	    0.5f, -0.5f, 0.0f, // bottom right point
-	    -0.5f, -0.5f, 0.0f, // bottom left point
-	    -0.5f, 0.5f, 0.0f, // top left point
+	float vertices[] = { -0.5f, 0.5f, 0.0f, // top left point
+	0.5f, 0.5f, 0.0f, // top right point
+	0.5f, -0.5f, 0.0f, // bottom right point
+	0.5f, -0.5f, 0.0f, // bottom right point
+	-0.5f, -0.5f, 0.0f, // bottom left point
+	-0.5f, 0.5f, 0.0f, // top left point
 	};
 
 	vao->get(0).store(sizeof(vertices), vertices);
 	vao->bind();
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	Vector<3, float> cubePositions[] = {
+	/**/Vector<3, float>(0.0f, 0.0f, 0.0f),
+	/**/Vector<3, float>(2.0f, 5.0f, -15.0f),
+	/**/Vector<3, float>(-1.5f, -2.2f, -2.5f),
+	/**/Vector<3, float>(-3.8f, -2.0f, -12.3f),
+	/**/Vector<3, float>(2.4f, -0.4f, -3.5f),
+	/**/Vector<3, float>(-1.7f, 3.0f, -7.5f),
+	/**/Vector<3, float>(1.3f, -2.0f, -2.5f),
+	/**/Vector<3, float>(1.5f, 2.0f, -2.5f),
+	/**/Vector<3, float>(1.5f, 0.2f, -1.5f),
+	/**/Vector<3, float>(-1.3f, 1.0f, -1.5f) //
+	};
+
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
+		model = ::translate(model, cubePositions[i]);
+		float angle = 20.0f * i;
+		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
+		shader->model.set(model);
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+	}
+
 	glDrawArrays(GL_TRIANGLES, 0, 120);
 	vao->unbind();
 
@@ -203,6 +244,8 @@ on_display(void)
 	x += 0.06 * direction;
 	if (x >= 1 || x <= 0)
 		direction *= -1;
+
+	camera->move(0.0);
 }
 
 void

@@ -288,9 +288,9 @@ template<typename T>
 	inline Vector<3, T>
 	cross(const Vector<3, T> &right, const Vector<3, T> &left)
 	{
-		T x = (right.y * right->z) - (right.z * right->y);
-		T y = (right.z * right->x) - (right.x * right->z);
-		T z = (right.x * right->y) - (right.y * right->x);
+		T x = (right.y * left.z) - (right.z * left.y);
+		T y = (right.z * left.x) - (right.x * left.z);
+		T z = (right.x * left.y) - (right.y * left.x);
 
 		return (Vector<3, T>(x, y, z));
 	}
