@@ -50,22 +50,22 @@ template<typename T>
 
 				Matrix44 result;
 
-				result.storage[0][0] = this->storage[0][0] * right->storage[0][0] + this->storage[0][1] * right->storage[1][0] + this->storage[0][2] * right->storage[2][0] + this->storage[0][3] * right->storage[3][0];
-				result.storage[0][1] = this->storage[0][0] * right->storage[0][1] + this->storage[0][1] * right->storage[1][1] + this->storage[0][2] * right->storage[2][1] + this->storage[0][3] * right->storage[3][1];
-				result.storage[0][2] = this->storage[0][0] * right->storage[0][2] + this->storage[0][1] * right->storage[1][2] + this->storage[0][2] * right->storage[2][2] + this->storage[0][3] * right->storage[3][2];
-				result.storage[0][3] = this->storage[0][0] * right->storage[0][3] + this->storage[0][1] * right->storage[1][3] + this->storage[0][2] * right->storage[2][3] + this->storage[0][3] * right->storage[3][3];
-				result.storage[1][0] = this->storage[1][0] * right->storage[0][0] + this->storage[1][1] * right->storage[1][0] + this->storage[1][2] * right->storage[2][0] + this->storage[1][3] * right->storage[3][0];
-				result.storage[1][1] = this->storage[1][0] * right->storage[0][1] + this->storage[1][1] * right->storage[1][1] + this->storage[1][2] * right->storage[2][1] + this->storage[1][3] * right->storage[3][1];
-				result.storage[1][2] = this->storage[1][0] * right->storage[0][2] + this->storage[1][1] * right->storage[1][2] + this->storage[1][2] * right->storage[2][2] + this->storage[1][3] * right->storage[3][2];
-				result.storage[1][3] = this->storage[1][0] * right->storage[0][3] + this->storage[1][1] * right->storage[1][3] + this->storage[1][2] * right->storage[2][3] + this->storage[1][3] * right->storage[3][3];
-				result.storage[2][0] = this->storage[2][0] * right->storage[0][0] + this->storage[2][1] * right->storage[1][0] + this->storage[2][2] * right->storage[2][0] + this->storage[2][3] * right->storage[3][0];
-				result.storage[2][1] = this->storage[2][0] * right->storage[0][1] + this->storage[2][1] * right->storage[1][1] + this->storage[2][2] * right->storage[2][1] + this->storage[2][3] * right->storage[3][1];
-				result.storage[2][2] = this->storage[2][0] * right->storage[0][2] + this->storage[2][1] * right->storage[1][2] + this->storage[2][2] * right->storage[2][2] + this->storage[2][3] * right->storage[3][2];
-				result.storage[2][3] = this->storage[2][0] * right->storage[0][3] + this->storage[2][1] * right->storage[1][3] + this->storage[2][2] * right->storage[2][3] + this->storage[2][3] * right->storage[3][3];
-				result.storage[3][0] = this->storage[3][0] * right->storage[0][0] + this->storage[3][1] * right->storage[1][0] + this->storage[3][2] * right->storage[2][0] + this->storage[3][3] * right->storage[3][0];
-				result.storage[3][1] = this->storage[3][0] * right->storage[0][1] + this->storage[3][1] * right->storage[1][1] + this->storage[3][2] * right->storage[2][1] + this->storage[3][3] * right->storage[3][1];
-				result.storage[3][2] = this->storage[3][0] * right->storage[0][2] + this->storage[3][1] * right->storage[1][2] + this->storage[3][2] * right->storage[2][2] + this->storage[3][3] * right->storage[3][2];
-				result.storage[3][3] = this->storage[3][0] * right->storage[0][3] + this->storage[3][1] * right->storage[1][3] + this->storage[3][2] * right->storage[2][3] + this->storage[3][3] * right->storage[3][3];
+				result.storage[0][0] = this->storage[0][0] * right.storage[0][0] + this->storage[0][1] * right.storage[1][0] + this->storage[0][2] * right.storage[2][0] + this->storage[0][3] * right.storage[3][0];
+				result.storage[0][1] = this->storage[0][0] * right.storage[0][1] + this->storage[0][1] * right.storage[1][1] + this->storage[0][2] * right.storage[2][1] + this->storage[0][3] * right.storage[3][1];
+				result.storage[0][2] = this->storage[0][0] * right.storage[0][2] + this->storage[0][1] * right.storage[1][2] + this->storage[0][2] * right.storage[2][2] + this->storage[0][3] * right.storage[3][2];
+				result.storage[0][3] = this->storage[0][0] * right.storage[0][3] + this->storage[0][1] * right.storage[1][3] + this->storage[0][2] * right.storage[2][3] + this->storage[0][3] * right.storage[3][3];
+				result.storage[1][0] = this->storage[1][0] * right.storage[0][0] + this->storage[1][1] * right.storage[1][0] + this->storage[1][2] * right.storage[2][0] + this->storage[1][3] * right.storage[3][0];
+				result.storage[1][1] = this->storage[1][0] * right.storage[0][1] + this->storage[1][1] * right.storage[1][1] + this->storage[1][2] * right.storage[2][1] + this->storage[1][3] * right.storage[3][1];
+				result.storage[1][2] = this->storage[1][0] * right.storage[0][2] + this->storage[1][1] * right.storage[1][2] + this->storage[1][2] * right.storage[2][2] + this->storage[1][3] * right.storage[3][2];
+				result.storage[1][3] = this->storage[1][0] * right.storage[0][3] + this->storage[1][1] * right.storage[1][3] + this->storage[1][2] * right.storage[2][3] + this->storage[1][3] * right.storage[3][3];
+				result.storage[2][0] = this->storage[2][0] * right.storage[0][0] + this->storage[2][1] * right.storage[1][0] + this->storage[2][2] * right.storage[2][0] + this->storage[2][3] * right.storage[3][0];
+				result.storage[2][1] = this->storage[2][0] * right.storage[0][1] + this->storage[2][1] * right.storage[1][1] + this->storage[2][2] * right.storage[2][1] + this->storage[2][3] * right.storage[3][1];
+				result.storage[2][2] = this->storage[2][0] * right.storage[0][2] + this->storage[2][1] * right.storage[1][2] + this->storage[2][2] * right.storage[2][2] + this->storage[2][3] * right.storage[3][2];
+				result.storage[2][3] = this->storage[2][0] * right.storage[0][3] + this->storage[2][1] * right.storage[1][3] + this->storage[2][2] * right.storage[2][3] + this->storage[2][3] * right.storage[3][3];
+				result.storage[3][0] = this->storage[3][0] * right.storage[0][0] + this->storage[3][1] * right.storage[1][0] + this->storage[3][2] * right.storage[2][0] + this->storage[3][3] * right.storage[3][0];
+				result.storage[3][1] = this->storage[3][0] * right.storage[0][1] + this->storage[3][1] * right.storage[1][1] + this->storage[3][2] * right.storage[2][1] + this->storage[3][3] * right.storage[3][1];
+				result.storage[3][2] = this->storage[3][0] * right.storage[0][2] + this->storage[3][1] * right.storage[1][2] + this->storage[3][2] * right.storage[2][2] + this->storage[3][3] * right.storage[3][2];
+				result.storage[3][3] = this->storage[3][0] * right.storage[0][3] + this->storage[3][1] * right.storage[1][3] + this->storage[3][2] * right.storage[2][3] + this->storage[3][3] * right.storage[3][3];
 
 				return (result);
 			}
@@ -111,7 +111,7 @@ template<typename T>
 				result.storage[3][2] = 0.0f;
 				result.storage[3][3] = 1.0f;
 
-				*this *= result;
+				*this = *this * result;
 			}
 
 			void

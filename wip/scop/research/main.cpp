@@ -2,6 +2,7 @@
 #include <engine/exception/Exception.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
+#include <engine/math/matrix.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/shader/attribute/Vector3Attribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
@@ -19,6 +20,7 @@
 #include <GL/freeglut_std.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cmath>
 #include <cstdio>
 #include <typeinfo>
 #include <vector>
@@ -28,7 +30,6 @@
 #include <GL/freeglut.h>
 #include <ctime>
 #include <iostream>
-#define WINDOW_TITLE_PREFIX "Chapter 1"
 
 int window = 0;
 
@@ -59,15 +60,18 @@ class Shader :
 		public ShaderProgram
 {
 	public:
+		MatrixUniform<float> transform;
 		Vector3Attribute<float> position;
 		Vector3Attribute<float> color;
 
 	public:
 		Shader() :
 				ShaderProgram("vertex.glsl", "fragment.glsl"),
+				transform("transform"),
 				position("aPos"),
 				color("aColor")
 		{
+			locate(transform);
 			locate(position);
 			locate(color);
 		}
@@ -112,7 +116,10 @@ main(int argc, char *argv[])
 
 	vao = new VertexArrayObject();
 
-	VertexBufferObject *positions = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
+//	VertexBufferObject *indexs = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW);
+//	vao->add(*indexs, true);
+
+	VertexBufferObject *positions = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW);
 	vao->add(*positions, true);
 
 	VertexBufferObject *colors = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
@@ -127,9 +134,12 @@ main(int argc, char *argv[])
 	shader->color.link();
 
 	float vertex_colors[] = { //
-	1.0f, 0.0f, 0.0f, //
-	0.0f, 1.0f, 0.0f, //
-	0.0f, 0.0f, 1.0f //
+		1.0f, 0.0f, 0.0f, //
+		0.0f, 1.0f, 0.0f, //
+		0.0f, 0.0f, 1.0f, //
+		0.0f, 0.0f, 1.0f, //
+		1.0f, 1.0f, 0.0f, //
+		1.0f, 0.0f, 0.0f, //
 	};
 
 	colors->store(sizeof(vertex_colors), vertex_colors);
@@ -149,16 +159,31 @@ on_display(void)
 
 	shader->use();
 
-	float vertices[] = { //
-	x, -x, 0.0f, //
-	-x, -x, 2.0f, //
-	0.0f, x, 0.0f, //
+	Matrix44<float> trans;
+	trans.identity();
+	trans.scale(Vector3<float>(0.5, 0.5, 0.5));
+	float radian = 45.0f * x * (M_PI / 180);
+	trans.rotate(radian, Vector3<float>(0.0, 0.0, 1.0));
+	shader->transform.set(trans);
+
+//	float vertices[] = { //
+//	x, -x, 0.0f, //
+//	-x, -x, 2.0f, //
+//	0.0f, x, 0.0f, //
+//	};
+	float vertices[] = {
+	    -x, x, 0.0f, // top left point
+	    x, x, 0.0f, // top right point
+	    x, -x, 0.0f, // bottom right point
+	    x, -x, 0.0f, // bottom right point
+	    -x, -x, 0.0f, // bottom left point
+	    -x, x, 0.0f, // top left point
 	};
 
 	vao->get(0).store(sizeof(vertices), vertices);
 	vao->bind();
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDrawArrays(GL_TRIANGLES, 0, 120);
 	vao->unbind();
 
 	char text[255] = { 0 };
@@ -171,6 +196,10 @@ on_display(void)
 	high_frame_counter.count();
 
 	glutSwapBuffers();
+
+	x += 0.01 * direction;
+	if (x >= 1 || x <= 0)
+		direction *= -1;
 }
 
 void
@@ -204,7 +233,7 @@ initialize_window(int argc, char *argv[])
 
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
 
-	glutInitWindowSize(800, 600);
+	glutInitWindowSize(800, 800);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
 	window = glutCreateWindow(argv[0]);
@@ -235,7 +264,4 @@ on_timer(int)
 void
 on_idle()
 {
-	x += 0.01 * direction;
-	if (x >= 1 || x <= -1)
-		direction *= -1;
 }

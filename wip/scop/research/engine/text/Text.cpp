@@ -22,8 +22,8 @@ Text::Text(const std::string &initial, const Vector2f &position, float size) :
 		m_position(position),
 		m_size(size),
 		m_invalidated(true),
-		m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW),
-		m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW)
+		m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW),
+		m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)
 {
 }
 

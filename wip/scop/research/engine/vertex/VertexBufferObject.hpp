@@ -28,6 +28,7 @@ class VertexBufferObject
 		enum UsageType
 		{
 			STATIC_DRAW = GL_STATIC_DRAW,
+			DYNAMIC_DRAW = GL_DYNAMIC_DRAW,
 		};
 
 	private:
