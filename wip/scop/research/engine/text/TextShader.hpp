@@ -13,7 +13,7 @@
 #ifndef TEXTSHADER_HPP_
 # define TEXTSHADER_HPP_
 
-#include <engine/shader/attribute/Vector2Attribute.hpp>
+#include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
 
@@ -22,8 +22,8 @@ class TextShader :
 {
 	public:
 		SamplerUniform<int> sampler;
-		Vector2Attribute<float> position;
-		Vector2Attribute<float> uv;
+		VectorAttribute<2, float> position;
+		VectorAttribute<2, float> uv;
 
 	public:
 		TextShader();

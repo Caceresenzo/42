@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <engine/utility/counter/FrameCounter.hpp>
-#include <sys/_timeval.h>
 #include <sys/time.h>
 #include <cstdio>
 #include <ctime>

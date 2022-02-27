@@ -27,7 +27,7 @@
 static void
 compile_shader(GLuint shader_id, const std::string &path)
 {
-	std::ifstream stream(path);
+	std::ifstream stream(path.c_str());
 	std::stringstream buffer;
 	buffer << stream.rdbuf();
 

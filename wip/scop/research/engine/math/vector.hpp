@@ -13,47 +13,47 @@
 #ifndef VECTOR_HPP_
 # define VECTOR_HPP_
 
-# include <cmath>
-# include <cassert>
+#include <engine/exception/IllegalArgumentException.hpp>
+#include <cassert>
+#include <cmath>
+#include <iostream>
+
+template<int N, typename T>
+	struct Vector
+	{
+		public:
+			T data[N];
+	};
 
 template<typename T>
-	struct Vector2
+	struct Vector<2, T>
 	{
 		public:
 			T x;
 			T y;
 
 		public:
-			Vector2(const T &initial = T()) :
+			Vector(const T &initial = T()) :
 					x(initial),
 					y(initial)
 			{
 			}
 
-			Vector2(const T &x, const T &y) :
+			Vector(const T &x, const T &y) :
 					x(x),
 					y(y)
 			{
 			}
 
-			Vector2(const Vector2<T> &other) :
+			Vector(const Vector &other) :
 					x(other.x),
 					y(other.y)
 			{
 			}
-
-			void
-			zero()
-			{
-				T value = T();
-
-				x = value;
-				y = value;
-			}
 	};
 
 template<typename T>
-	struct Vector3
+	struct Vector<3, T>
 	{
 		public:
 			T x;
@@ -61,99 +61,238 @@ template<typename T>
 			T z;
 
 		public:
-			Vector3(const T &initial = T()) :
+			Vector(const T &initial = T()) :
 					x(initial),
 					y(initial),
 					z(initial)
 			{
 			}
 
-			Vector3(const T &x, const T &y, const T &z) :
+			Vector(const T &x, const T &y, const T &z) :
 					x(x),
 					y(y),
 					z(z)
 			{
 			}
 
-			Vector3(const Vector3<T> &other) :
+			Vector(const Vector &other) :
 					x(other.x),
 					y(other.y),
 					z(other.z)
 			{
 			}
 
-			Vector3
-			operator-() const
+			inline T&
+			operator[](int index)
 			{
-				return (Vector3(-x, -y, -z));
+				if (index == 0)
+					return (x);
+
+				if (index == 1)
+					return (y);
+
+				if (index == 2)
+					return (z);
+
+				throw IllegalArgumentException("vector<3>: out of bound");
 			}
 
-			Vector3
-			operator-(const Vector3 &right) const
+			inline const T&
+			operator[](int index) const
 			{
-				return (Vector3(x - right->x, y - right->y, z - right->z));
-			}
+				if (index == 0)
+					return (x);
 
-			Vector3
-			operator*(const T &factor) const
-			{
-				return (Vector3(x * factor, y * factor, z * factor));
-			}
+				if (index == 1)
+					return (y);
 
-			Vector3
-			operator/(const T &factor) const
-			{
-				return (Vector3(x / factor, y / factor, z / factor));
-			}
+				if (index == 2)
+					return (z);
 
-			T
-			length_squared() const
-			{
-				return ((x * x) + (y * y) + (z * z));
-			}
-
-			T
-			dot(const Vector3 &right) const
-			{
-				return ((x * right->x) + (y * right->y) + (z * right->z));
-			}
-
-			void
-			normalize()
-			{
-				float square = this->length_squared();
-
-				if (square == 0)
-					return (zero());
-
-				T length = std::sqrt(square);
-				x /= length;
-				y /= length;
-				z /= length;
-			}
-
-			Vector3
-			cross(const Vector3 &right) const
-			{
-				T x = (this->y * right->z) - (this->z * right->y);
-				T y = (this->z * right->x) - (this->x * right->z);
-				T z = (this->x * right->y) - (this->y * right->x);
-
-				return (Vector3(x, y, z));
-			}
-
-			void
-			zero()
-			{
-				T value = T();
-
-				x = value;
-				y = value;
-				z = value;
+				throw IllegalArgumentException("vector<3>: out of bound");
 			}
 	};
 
-typedef Vector2<float> Vector2f;
-typedef Vector3<float> Vector3f;
+template<typename T>
+	struct Vector<4, T>
+	{
+		public:
+			T x;
+			T y;
+			T z;
+			T w;
+
+		public:
+			Vector(const T &initial = T()) :
+					x(initial),
+					y(initial),
+					z(initial),
+					w(initial)
+			{
+			}
+
+			Vector(const T &x, const T &y, const T &z, const T &w) :
+					x(x),
+					y(y),
+					z(z),
+					w(w)
+			{
+			}
+
+			Vector(const Vector &other) :
+					x(other.x),
+					y(other.y),
+					z(other.z),
+					w(other.w)
+			{
+			}
+
+			inline T&
+			operator[](int index)
+			{
+				if (index == 0)
+					return (x);
+
+				if (index == 1)
+					return (y);
+
+				if (index == 2)
+					return (z);
+
+				if (index == 3)
+					return (w);
+
+				std::cout << index << std::endl << std::flush;
+
+				throw IllegalArgumentException("vector<4>: out of bound");
+			}
+
+			inline const T&
+			operator[](int index) const
+			{
+				if (index == 0)
+					return (x);
+
+				if (index == 1)
+					return (y);
+
+				if (index == 2)
+					return (z);
+
+				if (index == 3)
+					return (w);
+
+				std::cout << index << std::endl << std::flush;
+
+				throw IllegalArgumentException("vector<4>: out of bound");
+			}
+	};
+
+template<int N, typename T>
+	inline Vector<N, T>
+	operator-(const Vector<N, T> &left)
+	{
+		Vector<N, T> vector;
+
+		for (int i = N; i != 0; --i)
+			vector[i] = -left[i];
+
+		return (vector);
+	}
+
+template<int N, typename T>
+	inline Vector<N, T>
+	operator-(const Vector<N, T> &left, const Vector<N, T> &right)
+	{
+		Vector<N, T> vector;
+
+		for (int i = N; i--;)
+			vector[i] = left[i] - right[i];
+
+		return (vector);
+	}
+
+template<int N, typename T>
+	inline Vector<N, T>
+	operator+(const Vector<N, T> &left, const Vector<N, T> &right)
+	{
+		Vector<N, T> vector;
+
+		for (int i = N; i--;)
+			vector[i] = left[i] + right[i];
+
+		return (vector);
+	}
+
+template<int N, typename T>
+	inline Vector<N, T>
+	operator*(const Vector<N, T> &left, const T &right)
+	{
+		Vector<N, T> vector;
+
+		for (int i = N; i--;)
+			vector[i] = left[i] * right;
+
+		return (vector);
+	}
+
+template<int N, typename T>
+	inline Vector<N, T>
+	operator/(const Vector<N, T> &left, const T &right)
+	{
+		Vector<N, T> vector;
+
+		for (int i = N; i--;)
+			vector[i] = left[i] / right;
+
+		return (vector);
+	}
+
+template<int N, typename T>
+	inline T
+	length(const Vector<N, T> &input)
+	{
+		T value;
+
+		for (int i = N; i--;)
+			value += input[i] * input[i];
+
+		return (value);
+	}
+
+template<int N, typename T>
+	inline T
+	dot(const Vector<N, T> &left, const Vector<N, T> &right)
+	{
+		T value;
+
+		for (int i = N; i--;)
+			value += left[i] * right[i];
+
+		return (value);
+	}
+
+template<int N, typename T>
+	inline Vector<N, T>
+	normalize(const Vector<N, T> &input)
+	{
+		float length = ::length(input);
+
+		if (length == 0)
+			return (Vector<N, T>(0));
+
+		return (input / length);
+	}
+
+template<typename T>
+	inline Vector<3, T>
+	cross(const Vector<3, T> &right, const Vector<3, T> &left)
+	{
+		T x = (right.y * right->z) - (right.z * right->y);
+		T y = (right.z * right->x) - (right.x * right->z);
+		T z = (right.x * right->y) - (right.y * right->x);
+
+		return (Vector<3, T>(x, y, z));
+	}
 
 #endif /* VECTOR_HPP_ */

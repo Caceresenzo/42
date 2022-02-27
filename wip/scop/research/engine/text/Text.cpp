@@ -10,14 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/math/vector.hpp>
 #include <engine/text/Text.hpp>
 #include <stddef.h>
-#include <cstring>
-#include <iostream>
 #include <vector>
 
-Text::Text(const std::string &initial, const Vector2f &position, float size) :
+Text::Text(const std::string &initial, const Vector<2, float> &position, float size) :
 		m_value(initial),
 		m_position(position),
 		m_size(size),
@@ -40,8 +37,8 @@ Text::invalidate()
 void
 Text::build()
 {
-	std::vector<Vector2<float>> vertices;
-	std::vector<Vector2<float>> uvs;
+	std::vector<Vector<2, float> > vertices;
+	std::vector<Vector<2, float> > uvs;
 
 	size_t estimated = m_value.length() * (3 + 3);
 	vertices.reserve(estimated);
@@ -49,10 +46,10 @@ Text::build()
 
 	for (size_t index = 0; index < m_value.length(); index++)
 	{
-		Vector2<float> vertex_up_left(m_position.x + index * m_size, m_position.y + m_size);
-		Vector2<float> vertex_up_right(m_position.x + index * m_size + m_size, m_position.y + m_size);
-		Vector2<float> vertex_down_right(m_position.x + index * m_size + m_size, m_position.y);
-		Vector2<float> vertex_down_left(m_position.x + index * m_size, m_position.y);
+		Vector<2, float> vertex_up_left(m_position.x + index * m_size, m_position.y + m_size);
+		Vector<2, float> vertex_up_right(m_position.x + index * m_size + m_size, m_position.y + m_size);
+		Vector<2, float> vertex_down_right(m_position.x + index * m_size + m_size, m_position.y);
+		Vector<2, float> vertex_down_left(m_position.x + index * m_size, m_position.y);
 
 		vertices.push_back(vertex_up_left);
 		vertices.push_back(vertex_down_left);
@@ -66,10 +63,10 @@ Text::build()
 		float uv_x = ((character % 16) / 16.0f);
 		float uv_y = ((character / 16) / 16.0f);
 
-		Vector2<float> uv_up_left(uv_x, -uv_y);
-		Vector2<float> uv_up_right((uv_x + 1.0f / 16.0f), -uv_y);
-		Vector2<float> uv_down_right((uv_x + 1.0f / 16.0f), -(uv_y + 1.0f / 16.0f));
-		Vector2<float> uv_down_left(uv_x, -(uv_y + 1.0f / 16.0f));
+		Vector<2, float> uv_up_left(uv_x, -uv_y);
+		Vector<2, float> uv_up_right((uv_x + 1.0f / 16.0f), -uv_y);
+		Vector<2, float> uv_down_right((uv_x + 1.0f / 16.0f), -(uv_y + 1.0f / 16.0f));
+		Vector<2, float> uv_down_left(uv_x, -(uv_y + 1.0f / 16.0f));
 
 		uvs.push_back(uv_up_left);
 		uvs.push_back(uv_down_left);

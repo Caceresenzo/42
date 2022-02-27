@@ -23,7 +23,7 @@ class VertexArrayObject
 {
 	private:
 		GLuint m_id;
-		std::vector<std::pair<VertexBufferObject*, bool>> m_attached;
+		std::vector<std::pair<VertexBufferObject*, bool> > m_attached;
 
 	public:
 		VertexArrayObject();

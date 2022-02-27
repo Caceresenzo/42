@@ -4,11 +4,11 @@
 #include <engine/image/ImageData.hpp>
 #include <engine/math/matrix.hpp>
 #include <engine/math/vector.hpp>
-#include <engine/shader/attribute/Vector3Attribute.hpp>
+#include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
-#include <engine/shader/uniform/Vector3Uniform.hpp>
+#include <engine/shader/uniform/VectorUniform.hpp>
 #include <engine/text/Text.hpp>
 #include <engine/text/TextRenderer.hpp>
 #include <engine/text/TextShader.hpp>
@@ -20,7 +20,8 @@
 #include <GL/freeglut_std.h>
 #include <stdlib.h>
 #include <string.h>
-#include <cmath>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <cstdio>
 #include <typeinfo>
 #include <vector>
@@ -60,9 +61,9 @@ class Shader :
 		public ShaderProgram
 {
 	public:
-		MatrixUniform<float> transform;
-		Vector3Attribute<float> position;
-		Vector3Attribute<float> color;
+		MatrixUniform<4, 4, float> transform;
+		VectorAttribute<3, float> position;
+		VectorAttribute<3, float> color;
 
 	public:
 		Shader() :
@@ -102,7 +103,7 @@ main(int argc, char *argv[])
 		text_renderer = new TextRenderer();
 
 		texts.push_back(new Text("Hello"));
-		texts.push_back(new Text("fps:", Vector2f(0, 24)));
+		texts.push_back(new Text("fps:", Vector<2, float>(0, 24)));
 
 		fflush(stdout);
 	}
@@ -159,11 +160,13 @@ on_display(void)
 
 	shader->use();
 
-	Matrix44<float> trans;
-	trans.identity();
-	trans.scale(Vector3<float>(0.5, 0.5, 0.5));
-	float radian = 45.0f * x * (M_PI / 180);
-	trans.rotate(radian, Vector3<float>(0.0, 0.0, 1.0));
+	Matrix<4, 4, float> trans(1.0f);
+	trans = ::scale(trans, Vector<3, float>(0.5, 0.5, 0.5));
+	float radian = 45.0f * x * (3.14 / 180);
+	trans = ::rotate(trans, radian, Vector<3, float>(0.0, 0.0, 1.0));
+
+//	trans = ::translate(trans, Vector<3, float>(0.5f, -0.5f, 0.0f));
+//	trans = ::rotate(trans, radian, Vector<3, float>(0.0, 0.0, 1.0));
 	shader->transform.set(trans);
 
 //	float vertices[] = { //
@@ -172,17 +175,17 @@ on_display(void)
 //	0.0f, x, 0.0f, //
 //	};
 	float vertices[] = {
-	    -x, x, 0.0f, // top left point
-	    x, x, 0.0f, // top right point
-	    x, -x, 0.0f, // bottom right point
-	    x, -x, 0.0f, // bottom right point
-	    -x, -x, 0.0f, // bottom left point
-	    -x, x, 0.0f, // top left point
+	    -0.5f, 0.5f, 0.0f, // top left point
+	    0.5f, 0.5f, 0.0f, // top right point
+	    0.5f, -0.5f, 0.0f, // bottom right point
+	    0.5f, -0.5f, 0.0f, // bottom right point
+	    -0.5f, -0.5f, 0.0f, // bottom left point
+	    -0.5f, 0.5f, 0.0f, // top left point
 	};
 
 	vao->get(0).store(sizeof(vertices), vertices);
 	vao->bind();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, 120);
 	vao->unbind();
 
@@ -197,7 +200,7 @@ on_display(void)
 
 	glutSwapBuffers();
 
-	x += 0.01 * direction;
+	x += 0.06 * direction;
 	if (x >= 1 || x <= 0)
 		direction *= -1;
 }
@@ -258,7 +261,7 @@ void
 on_timer(int)
 {
 	glutPostRedisplay();
-	glutTimerFunc(1000 / 300, on_timer, 0);
+	glutTimerFunc(1000 / 60, on_timer, 0);
 }
 
 void

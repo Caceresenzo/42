@@ -21,18 +21,8 @@ BMPImageLoader::BMPImageLoader()
 {
 }
 
-BMPImageLoader::BMPImageLoader(const BMPImageLoader&)
-{
-}
-
 BMPImageLoader::~BMPImageLoader()
 {
-}
-
-BMPImageLoader&
-BMPImageLoader::operator=(const BMPImageLoader&)
-{
-	return (*this);
 }
 
 ImageData*

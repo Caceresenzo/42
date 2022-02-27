@@ -21,13 +21,9 @@ class BMPImageLoader :
 {
 	public:
 		BMPImageLoader();
-		BMPImageLoader(const BMPImageLoader &other);
 
 		virtual
 		~BMPImageLoader();
-
-		BMPImageLoader&
-		operator=(const BMPImageLoader &other);
 
 		virtual ImageData*
 		load(const std::string &path);

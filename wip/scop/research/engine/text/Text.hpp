@@ -15,21 +15,20 @@
 
 #include <engine/math/vector.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
-#include <GL/glew.h>
 #include <string>
 
 class Text
 {
 	private:
 		std::string m_value;
-		Vector2f m_position;
+		Vector<2, float> m_position;
 		float m_size;
 		bool m_invalidated;
 		VertexBufferObject m_vertex_buffer;
 		VertexBufferObject m_uv_buffer;
 
 	public:
-		Text(const std::string &initial = "", const Vector2f &position = Vector2f(), float size = 28);
+		Text(const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);
 
 		virtual
 		~Text();

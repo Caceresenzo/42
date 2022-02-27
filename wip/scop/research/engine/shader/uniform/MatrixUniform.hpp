@@ -18,7 +18,7 @@
 #include <GL/glew.h>
 #include <string>
 
-template<typename T>
+template<int R, int C, typename T>
 	class MatrixUniform :
 			public Uniform
 	{
@@ -30,21 +30,14 @@ template<typename T>
 
 		public:
 			void
-			set(const Matrix44<T> &matrix);
+			set(const Matrix<R, C, T> &matrix);
 	};
 
 template<>
 	inline void
-	MatrixUniform<float>::set(const Matrix44<float> &matrix)
+	MatrixUniform<4, 4, float>::set(const Matrix<4, 4, float> &matrix)
 	{
-		glUniformMatrix4fv(location(), 1, GL_FALSE, reinterpret_cast<const GLfloat*>(matrix.storage));
-	}
-
-template<>
-	inline void
-	MatrixUniform<double>::set(const Matrix44<double> &matrix)
-	{
-		glUniformMatrix4dv(location(), 1, GL_FALSE, reinterpret_cast<const GLdouble*>(matrix.storage));
+		glUniformMatrix4fv(location(), 1, GL_FALSE, reinterpret_cast<const GLfloat*>(&matrix[0][0]));
 	}
 
 #endif /* MATRIXUNIFORM_HPP_ */

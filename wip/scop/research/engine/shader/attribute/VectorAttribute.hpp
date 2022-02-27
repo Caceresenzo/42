@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   VectorAttribute.cpp                                :+:      :+:    :+:   */
+/*   VectorAttribute.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,11 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/shader/attribute/Vector3Attribute.hpp>
-#include <engine/shader/attribute/Vector2Attribute.hpp>
+#ifndef VECTORATTRIBUTE_HPP_
+# define VECTORATTRIBUTE_HPP_
 
-template<>
-	const GLuint Vector3Attribute<float>::DATA_TYPE = GL_FLOAT;
+#include <engine/opengl.hpp>
+#include <engine/shader/attribute/Attribute.hpp>
+#include <string>
 
-template<>
-	const GLuint Vector2Attribute<float>::DATA_TYPE = GL_FLOAT;
+template<int N, typename T>
+	class VectorAttribute :
+			public Attribute
+	{
+		public:
+			VectorAttribute(const std::string &name) :
+					Attribute(name, N, GLType<T>::DATA_TYPE, false)
+			{
+			}
+
+			virtual
+			~VectorAttribute()
+			{
+			}
+	};
+
+#endif /* VECTORATTRIBUTE_HPP_ */
