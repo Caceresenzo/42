@@ -1,43 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ICamera.hpp                                       :+:      :+:    :+:   */
+/*   vector2_tests.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/27 21:36:41 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/27 21:36:41 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/28 19:39:34 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/28 19:39:34 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ICAMERA_HPP_
-# define ICAMERA_HPP_
+#include <engine/math/vector.hpp>
 
-#include <engine/math/matrix.hpp>
-
-class ICamera
+int
+main()
 {
-	public:
-		ICamera();
+	typedef Vector<2, float> Vector;
 
-		virtual
-		~ICamera();
+	{
+		assert(sizeof(Vector) == sizeof(float) * 2);
+	}
 
-	public:
-		virtual const Vector<3, float>&
-		position() const = 0;
+	{
+		Vector vector;
 
-		virtual float
-		yaw() const = 0;
+		assert(vector.x == 0);
+		assert(vector.y == 0);
+	}
 
-		virtual float
-		pitch() const = 0;
+	{
+		Vector vector(42, 24);
 
-		virtual const Matrix<4, 4, float>&
-		view_matrix() const = 0;
-
-		virtual void
-		move(double delta) = 0;
-};
-
-#endif /* ICAMERA_HPP_ */
+		assert(vector.x == 42);
+		assert(vector.y == 24);
+	}
+}

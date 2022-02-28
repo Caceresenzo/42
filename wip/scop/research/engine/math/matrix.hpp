@@ -77,19 +77,48 @@ template<int R, int C, typename T>
 
 				return (vector);
 			}
+
+			void
+			set_col(const int index, const Vector<R, T> &col)
+			{
+				assert(index >= 0 && index < C);
+
+				Vector<R, T> vector;
+
+				for (int i = R; i--;)
+					rows[i][index] = col[i];
+			}
 	};
 
-template<int R1, int C1, int C2, typename T>
-	Matrix<R1, C2, T>
-	operator*(const Matrix<R1, C1, T> &lhs, const Matrix<C1, C2, T> &rhs)
+template<typename T>
+	inline Matrix<4, 4, T>
+	operator*(const Matrix<4, 4, T> &left, const Matrix<4, 4, T> &right)
 	{
-		Matrix<R1, C2, T> result;
+		Matrix<4, 4, T> result;
 
-		for (int i = R1; i--;)
-			for (int j = C2; j--;)
-				result[i][j] = lhs[i] * rhs.col(j);
+		for (int k = 0; k < 4; ++k)
+			for (int j = 0; j < 4; ++j)
+				result[k][j] = left[0][j] * right[k][0] + left[1][j] * right[k][1] + left[2][j] * right[k][2] + left[3][j] * right[k][3];
 
-		return result;
+		return (result);
+	}
+
+template<int R, int C, typename T>
+	inline bool
+	operator==(const Matrix<R, C, T> &left, const Matrix<R, C, T> &right)
+	{
+		for (int i = R; i--;)
+			if (left[i] != right[i])
+				return (false);
+
+		return (true);
+	}
+
+template<int R, int C, typename T>
+	inline bool
+	operator!=(const Matrix<R, C, T> &left, const Matrix<R, C, T> &right)
+	{
+		return (!(left == right));
 	}
 
 template<typename T>
@@ -189,6 +218,27 @@ template<typename T>
 		matrix[3][2] = -(static_cast<T>(2) * zFar * zNear) / (zFar - zNear);
 
 		return (matrix);
+	}
+
+template<int R, int C, typename T>
+	inline std::ostream&
+	operator<<(std::ostream &stream, const Matrix<R, C, T> &matrix)
+	{
+		stream << "Matrix<" << R << ", " << C << ", " << typeid(T).name() << ">(\n ";
+
+		for (int i = 0; i < R; ++i)
+		{
+			for (int j = 0; j < C; ++j)
+			{
+				stream << matrix[j][i];
+				stream << ", ";
+
+				if (j == C - 1)
+					stream << "\n ";
+			}
+		}
+
+		return (stream << ");");
 	}
 
 #endif /* MATRIX_HPP_ */

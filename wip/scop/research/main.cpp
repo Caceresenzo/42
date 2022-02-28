@@ -1,6 +1,7 @@
 #include <bits/exception.h>
 #include <engine/camera/ICamera.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
+#include <engine/control/Keyboard.hpp>
 #include <engine/exception/Exception.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
@@ -58,6 +59,12 @@ on_timer(int);
 void
 on_idle();
 
+void
+on_keyboard_down(unsigned char key, int x, int y);
+
+void
+on_keyboard_up(unsigned char key, int x, int y);
+
 static float x = 0.5;
 static float direction = -1;
 
@@ -114,7 +121,7 @@ main(int argc, char *argv[])
 	{
 		shader = new Shader();
 		text_renderer = new TextRenderer();
-		camera = new PerspectiveCamera();
+		camera = new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
 
 		texts.push_back(new Text("Hello"));
 		texts.push_back(new Text("fps:", Vector<2, float>(0, 24)));
@@ -130,9 +137,6 @@ main(int argc, char *argv[])
 	std::cout << "shader created!" << std::endl;
 
 	vao = new VertexArrayObject();
-
-//	VertexBufferObject *indexs = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW);
-//	vao->add(*indexs, true);
 
 	VertexBufferObject *positions = new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW);
 	vao->add(*positions, true);
@@ -155,6 +159,41 @@ main(int argc, char *argv[])
 	0.0f, 0.0f, 1.0f, //
 	1.0f, 1.0f, 0.0f, //
 	1.0f, 0.0f, 0.0f, //
+	//
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f, //
+	0.0f, 0.0f, 1.0f, //
+	1.0f, 1.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
+	//
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f, //
+	0.0f, 0.0f, 1.0f, //
+	1.0f, 1.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
+	//
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f, //
+	0.0f, 0.0f, 1.0f, //
+	1.0f, 1.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
+	//
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f, //
+	0.0f, 0.0f, 1.0f, //
+	1.0f, 1.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
+	//
+	1.0f, 0.0f, 0.0f, //
+	0.0f, 1.0f, 0.0f, //
+	0.0f, 0.0f, 1.0f, //
+	0.0f, 0.0f, 1.0f, //
+	1.0f, 1.0f, 0.0f, //
+	1.0f, 0.0f, 0.0f, //
 	};
 
 	colors->store(sizeof(vertex_colors), vertex_colors);
@@ -171,32 +210,55 @@ on_display(void)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
 
 	shader->use();
 
-	Matrix<4, 4, float> trans(1.0f);
-	trans = ::scale(trans, Vector<3, float>(0.5, 0.5, 0.5));
-	float radian = 45.0f * x * (3.14 / 180);
-	trans = ::rotate(trans, radian, Vector<3, float>(0.0, 0.0, 1.0));
-
-//	trans = ::translate(trans, Vector<3, float>(0.5f, -0.5f, 0.0f));
-//	trans = ::rotate(trans, radian, Vector<3, float>(0.0, 0.0, 1.0));
-
 	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), 800 / 800, 0.1f, 100.0f);
 	shader->projection.set(projection);
-	shader->view.set(camera->get_view_matrix());
+	shader->view.set(camera->view_matrix());
 
-//	float vertices[] = { //
-//	x, -x, 0.0f, //
-//	-x, -x, 2.0f, //
-//	0.0f, x, 0.0f, //
-//	};
-	float vertices[] = { -0.5f, 0.5f, 0.0f, // top left point
-	0.5f, 0.5f, 0.0f, // top right point
-	0.5f, -0.5f, 0.0f, // bottom right point
-	0.5f, -0.5f, 0.0f, // bottom right point
-	-0.5f, -0.5f, 0.0f, // bottom left point
-	-0.5f, 0.5f, 0.0f, // top left point
+	float vertices[] = { -0.5f, -0.5f, -0.5f, //
+	0.5f, -0.5f, -0.5f, //
+	0.5f, 0.5f, -0.5f, //
+	0.5f, 0.5f, -0.5f, //
+	-0.5f, 0.5f, -0.5f, //
+	-0.5f, -0.5f, -0.5f, //
+						 //
+	-0.5f, -0.5f, 0.5f, //
+	0.5f, -0.5f, 0.5f, //
+	0.5f, 0.5f, 0.5f, //
+	0.5f, 0.5f, 0.5f, //
+	-0.5f, 0.5f, 0.5f, //
+	-0.5f, -0.5f, 0.5f, //
+						//
+	-0.5f, 0.5f, 0.5f, //
+	-0.5f, 0.5f, -0.5f, //
+	-0.5f, -0.5f, -0.5f, //
+	-0.5f, -0.5f, -0.5f, //
+	-0.5f, -0.5f, 0.5f, //
+	-0.5f, 0.5f, 0.5f, //
+					   //
+	0.5f, 0.5f, 0.5f, //
+	0.5f, 0.5f, -0.5f, //
+	0.5f, -0.5f, -0.5f, //
+	0.5f, -0.5f, -0.5f, //
+	0.5f, -0.5f, 0.5f, //
+	0.5f, 0.5f, 0.5f, //
+					  //
+	-0.5f, -0.5f, -0.5f, //
+	0.5f, -0.5f, -0.5f, //
+	0.5f, -0.5f, 0.5f, //
+	0.5f, -0.5f, 0.5f, //
+	-0.5f, -0.5f, 0.5f, //
+	-0.5f, -0.5f, -0.5f, //
+						 //
+	-0.5f, 0.5f, -0.5f, //
+	0.5f, 0.5f, -0.5f, //
+	0.5f, 0.5f, 0.5f, //
+	0.5f, 0.5f, 0.5f, //
+	-0.5f, 0.5f, 0.5f, //
+	-0.5f, 0.5f, -0.5f, //
 	};
 
 	vao->get(0).store(sizeof(vertices), vertices);
@@ -220,14 +282,13 @@ on_display(void)
 	{
 		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
 		model = ::translate(model, cubePositions[i]);
-		float angle = 20.0f * i;
+		float angle = 20.0f * i * x;
 		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
 		shader->model.set(model);
 
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 	}
 
-	glDrawArrays(GL_TRIANGLES, 0, 120);
 	vao->unbind();
 
 	char text[255] = { 0 };
@@ -235,6 +296,23 @@ on_display(void)
 
 	texts[1]->set(text);
 	text_renderer->render(texts);
+
+	float y = 500;
+	{
+		sprintf(text, "pos: %4.4f %4.4f %4.4f", camera->position().x, camera->position().y, camera->position().z);
+		Text debug_text(text, Vector<2, float>(0.0f, y -= 18.0f), 18.0f);
+		text_renderer->render(debug_text);
+	}
+	{
+		sprintf(text, "yaw: %4.4f", camera->yaw());
+		Text debug_text(text, Vector<2, float>(0.0f, y -= 18.0f), 18.0f);
+		text_renderer->render(debug_text);
+	}
+	{
+		sprintf(text, "pitch: %4.4f", camera->pitch());
+		Text debug_text(text, Vector<2, float>(0.0f, y -= 18.0f), 18.0f);
+		text_renderer->render(debug_text);
+	}
 
 	frame_counter.count();
 	high_frame_counter.count();
@@ -245,7 +323,7 @@ on_display(void)
 	if (x >= 1 || x <= 0)
 		direction *= -1;
 
-	camera->move(0.0);
+	camera->move(0.02);
 }
 
 void
@@ -291,6 +369,8 @@ initialize_window(int argc, char *argv[])
 
 	glutReshapeFunc(on_window_resize);
 	glutDisplayFunc(on_display);
+	glutKeyboardFunc(on_keyboard_down);
+	glutKeyboardUpFunc(on_keyboard_up);
 	glutIdleFunc(on_idle);
 }
 
@@ -310,4 +390,16 @@ on_timer(int)
 void
 on_idle()
 {
+}
+
+void
+on_keyboard_down(unsigned char key, int, int)
+{
+	Keyboard::set_pressed((Keyboard::Key)key, true);
+}
+
+void
+on_keyboard_up(unsigned char key, int, int)
+{
+	Keyboard::set_pressed((Keyboard::Key)key, false);
 }

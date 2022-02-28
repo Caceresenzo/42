@@ -43,6 +43,13 @@ class Math
 
 		template<typename T>
 			inline static T
+			sqrt(const T &x)
+			{
+				return (std::sqrt(x));
+			}
+
+		template<typename T>
+			inline static T
 			radians(const T &degrees)
 			{
 				return (degrees / 180.0 * PI);

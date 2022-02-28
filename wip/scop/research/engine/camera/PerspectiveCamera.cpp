@@ -11,9 +11,11 @@
 /* ************************************************************************** */
 
 #include <engine/camera/PerspectiveCamera.hpp>
+#include <engine/control/Keyboard.hpp>
 #include <engine/math/matrix.hpp>
 #include <engine/math/Math.hpp>
 #include <cmath>
+#include <iostream>
 
 PerspectiveCamera::PerspectiveCamera(const Vector<3, float> &position, float yaw, float pitch) :
 		m_position(position),
@@ -35,17 +37,106 @@ PerspectiveCamera::~PerspectiveCamera()
 {
 }
 
+void
+PerspectiveCamera::move(double delta)
+{
+	bool updated = false;
+	float velocity = m_speed * delta;
+
+	if (Keyboard::is_pressed(Keyboard::Z))
+	{
+		m_position += m_front * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::S))
+	{
+		m_position -= m_front * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::Q))
+	{
+		m_position -= m_right * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::D))
+	{
+		m_position += m_right * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::I))
+	{
+		m_pitch += 50 * velocity;
+
+		if (m_pitch > 89.0f)
+			m_pitch = 89.0f;
+
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::K))
+	{
+		m_pitch += -50 * velocity;
+
+		if (m_pitch < -89.0f)
+			m_pitch = -89.0f;
+
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::J))
+	{
+		m_yaw -= 50 * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::L))
+	{
+		m_yaw += 50 * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::A))
+	{
+		m_position -= m_up * velocity;
+		updated = true;
+	}
+
+	if (Keyboard::is_pressed(Keyboard::SPACE))
+	{
+		m_position += m_up * velocity;
+		updated = true;
+	}
+
+	if (updated)
+		compute_vectors();
+}
+
+const Vector<3, float>&
+PerspectiveCamera::position() const
+{
+	return (m_position);
+}
+
 const Matrix<4, 4, float>&
-PerspectiveCamera::get_view_matrix() const
+PerspectiveCamera::view_matrix() const
 {
 	return (m_view_matrix);
 }
 
-void
-PerspectiveCamera::move(double delta)
+float
+PerspectiveCamera::yaw() const
 {
-	m_yaw += 0.8;
-	compute_vectors();
+	return (m_yaw);
+}
+
+float
+PerspectiveCamera::pitch() const
+{
+	return (m_pitch);
 }
 
 void
@@ -60,4 +151,6 @@ PerspectiveCamera::compute_vectors()
 	m_up = ::normalize(::cross(m_right, m_front));
 
 	m_view_matrix = ::look_at(m_position, m_position + m_front, m_up);
+
+	std::cout << "up=" << m_up << "     right=" << m_right << std::endl << std::flush;
 }

@@ -39,8 +39,17 @@ class PerspectiveCamera :
 		~PerspectiveCamera();
 
 	public:
+		virtual const Vector<3, float>&
+		position() const;
+
+		virtual float
+		yaw() const;
+
+		virtual float
+		pitch() const;
+
 		virtual const Matrix<4, 4, float>&
-		get_view_matrix() const;
+		view_matrix() const;
 
 		virtual void
 		move(double delta);

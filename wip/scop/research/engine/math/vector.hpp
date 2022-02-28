@@ -14,9 +14,11 @@
 # define VECTOR_HPP_
 
 #include <engine/exception/IllegalArgumentException.hpp>
+#include <engine/math/Math.hpp>
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <typeinfo>
 
 template<int N, typename T>
 	struct Vector
@@ -80,6 +82,26 @@ template<typename T>
 					y(other.y),
 					z(other.z)
 			{
+			}
+
+			inline Vector<3, T>&
+			operator+=(const Vector<3, T> &right)
+			{
+				x += right.x;
+				y += right.y;
+				z += right.z;
+
+				return (*this);
+			}
+
+			inline Vector<3, T>&
+			operator-=(const Vector<3, T> &right)
+			{
+				x -= right.x;
+				y -= right.y;
+				z -= right.z;
+
+				return (*this);
 			}
 
 			inline T&
@@ -194,7 +216,7 @@ template<int N, typename T>
 	{
 		Vector<N, T> vector;
 
-		for (int i = N; i != 0; --i)
+		for (int i = 0; i < N; ++i)
 			vector[i] = -left[i];
 
 		return (vector);
@@ -206,7 +228,7 @@ template<int N, typename T>
 	{
 		Vector<N, T> vector;
 
-		for (int i = N; i--;)
+		for (int i = 0; i < N; ++i)
 			vector[i] = left[i] - right[i];
 
 		return (vector);
@@ -218,7 +240,7 @@ template<int N, typename T>
 	{
 		Vector<N, T> vector;
 
-		for (int i = N; i--;)
+		for (int i = 0; i < N; ++i)
 			vector[i] = left[i] + right[i];
 
 		return (vector);
@@ -230,7 +252,7 @@ template<int N, typename T>
 	{
 		Vector<N, T> vector;
 
-		for (int i = N; i--;)
+		for (int i = 0; i < N; ++i)
 			vector[i] = left[i] * right;
 
 		return (vector);
@@ -242,7 +264,7 @@ template<int N, typename T>
 	{
 		Vector<N, T> vector;
 
-		for (int i = N; i--;)
+		for (int i = 0; i < N; ++i)
 			vector[i] = left[i] / right;
 
 		return (vector);
@@ -250,23 +272,33 @@ template<int N, typename T>
 
 template<int N, typename T>
 	inline T
+	length_squared(const Vector<N, T> &input)
+	{
+		T squared = T();
+
+		for (int i = 0; i < N; ++i)
+		{
+			const T &value = input[i];
+			squared += value * value;
+		}
+
+		return (squared);
+	}
+
+template<int N, typename T>
+	inline T
 	length(const Vector<N, T> &input)
 	{
-		T value;
-
-		for (int i = N; i--;)
-			value += input[i] * input[i];
-
-		return (value);
+		return (Math::sqrt(length_squared(input)));
 	}
 
 template<int N, typename T>
 	inline T
 	dot(const Vector<N, T> &left, const Vector<N, T> &right)
 	{
-		T value;
+		T value = T();
 
-		for (int i = N; i--;)
+		for (int i = 0; i < N; ++i)
 			value += left[i] * right[i];
 
 		return (value);
@@ -293,6 +325,41 @@ template<typename T>
 		T z = (right.x * left.y) - (right.y * left.x);
 
 		return (Vector<3, T>(x, y, z));
+	}
+
+template<int N, typename T>
+	inline bool
+	operator==(const Vector<N, T> &left, const Vector<N, T> &right)
+	{
+		for (int i = N; i--;)
+			if (left[i] != right[i])
+				return (false);
+
+		return (true);
+	}
+
+template<int N, typename T>
+	inline bool
+	operator!=(const Vector<N, T> &left, const Vector<N, T> &right)
+	{
+		return (!(left == right));
+	}
+
+template<int N, typename T>
+	inline std::ostream&
+	operator<<(std::ostream &stream, const Vector<N, T> &vector)
+	{
+		stream << "Vector<" << N << ", " << typeid(T).name() << ">(";
+
+		for (int i = 0; i < N; ++i)
+		{
+			stream << vector[i];
+
+			if (i != N - 1)
+				stream << ", ";
+		}
+
+		return (stream << ");");
 	}
 
 #endif /* VECTOR_HPP_ */
