@@ -52,6 +52,30 @@ template<typename T>
 					y(other.y)
 			{
 			}
+
+			inline T&
+			operator[](int index)
+			{
+				if (index == 0)
+					return (x);
+
+				if (index == 1)
+					return (y);
+
+				throw IllegalArgumentException("vector<3>: out of bound");
+			}
+
+			inline const T&
+			operator[](int index) const
+			{
+				if (index == 0)
+					return (x);
+
+				if (index == 1)
+					return (y);
+
+				throw IllegalArgumentException("vector<3>: out of bound");
+			}
 	};
 
 template<typename T>

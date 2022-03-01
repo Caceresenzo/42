@@ -14,6 +14,7 @@
 # define MATH_HPP_
 
 #include <cmath>
+#include <algorithm>
 
 #define PI 3.14159265358979323846
 
@@ -53,6 +54,34 @@ class Math
 			radians(const T &degrees)
 			{
 				return (degrees / 180.0 * PI);
+			}
+
+		template<typename T>
+			inline static T
+			min(const T &a, const T &b)
+			{
+				return (std::min(a, b));
+			}
+
+		template<typename T>
+			inline static T
+			max(const T &a, const T &b)
+			{
+				return (std::max(a, b));
+			}
+
+		template<typename T>
+			inline static T
+			clamp(const T &value, const T &low, const T &high)
+			{
+				return (Math::max(low, Math::min(high, value)));
+			}
+
+		template<typename T>
+			inline static T
+			abs(const T &value)
+			{
+				return (std::abs(value));
 			}
 };
 

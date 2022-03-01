@@ -115,6 +115,17 @@ PerspectiveCamera::move(double delta)
 		compute_vectors();
 }
 
+void
+PerspectiveCamera::look(const Vector<2, int> &offset)
+{
+	m_yaw += m_sensitivity * offset.x;
+	m_pitch += m_sensitivity * offset.y;
+
+	m_pitch = Math::clamp(m_pitch, -89.0f, 89.0f);
+
+	compute_vectors();
+}
+
 const Vector<3, float>&
 PerspectiveCamera::position() const
 {
@@ -151,6 +162,4 @@ PerspectiveCamera::compute_vectors()
 	m_up = ::normalize(::cross(m_right, m_front));
 
 	m_view_matrix = ::look_at(m_position, m_position + m_front, m_up);
-
-	std::cout << "up=" << m_up << "     right=" << m_right << std::endl << std::flush;
 }

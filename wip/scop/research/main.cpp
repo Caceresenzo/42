@@ -27,8 +27,8 @@
 #include <GL/freeglut_std.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <map>
+#include <string>
 
 class MeshShader;
 
@@ -58,6 +58,9 @@ void
 on_window_resize(int, int);
 
 void
+on_mouse_move(int, int);
+
+void
 on_display(void);
 
 void
@@ -72,7 +75,14 @@ on_keyboard_down(unsigned char key, int x, int y);
 void
 on_keyboard_up(unsigned char key, int x, int y);
 
+void
+on_keyboard_special_down(int key, int x, int y);
+
+void
+on_keyboard_special_up(int key, int x, int y);
+
 static int g_width = 800, g_height = 800;
+static Vector<2, int> mouse_position;
 static float x = 0.5;
 static float rot = 0;
 static float direction = -1;
@@ -374,6 +384,9 @@ on_display(void)
 		direction *= -1;
 
 	camera->move(0.02);
+
+	if (Keyboard::is_pressed(Keyboard::ESCAPE))
+		glutLeaveMainLoop();
 }
 
 void GLAPIENTRY
@@ -403,7 +416,7 @@ MessageCallback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, co
 	if (GL_DEBUG_TYPE_OTHER == type)
 		return;
 
-	fprintf( stderr, "[%s] [%s] [%s] %s\n", (_debug_types[severity].c_str()), (_debug_types[source].c_str()), (_debug_types[type].c_str()), message);
+	fprintf(stderr, "[%s] [%s] [%s] %s\n", (_debug_types[severity].c_str()), (_debug_types[source].c_str()), (_debug_types[type].c_str()), message);
 }
 
 void
@@ -425,7 +438,7 @@ initialize(int argc, char *argv[])
 	}
 
 	// During init, enable debug output
-	glEnable( GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(MessageCallback, 0);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -455,8 +468,11 @@ initialize_window(int argc, char *argv[])
 	glutReshapeFunc(on_window_resize);
 	glutDisplayFunc(on_display);
 	glutKeyboardFunc(on_keyboard_down);
+	glutSpecialFunc(on_keyboard_special_down);
 	glutKeyboardUpFunc(on_keyboard_up);
+	glutSpecialUpFunc(on_keyboard_special_up);
 	glutIdleFunc(on_idle);
+	glutPassiveMotionFunc(on_mouse_move);
 }
 
 void
@@ -468,6 +484,38 @@ on_window_resize(int width, int height)
 	glViewport(0, 0, width, height);
 
 	std::cout << "resized " << width << "x" << height << std::endl;
+}
+
+void
+on_mouse_move(int x, int y)
+{
+	static bool warped = false;
+
+	if (x == mouse_position.x || y == mouse_position.y)
+		return;
+
+	Vector<2, int> old(mouse_position);
+
+	mouse_position.x = x;
+	mouse_position.y = y;
+
+	if (warped)
+	{
+		warped = false;
+		return;
+	}
+
+	Vector<2, int> offset = mouse_position - old;
+
+	if (offset.x || offset.y)
+	{
+		offset.y = -offset.y;
+
+		camera->look(offset);
+
+		warped = true;
+		glutWarpPointer(g_width / 2, g_height / 2);
+	}
 }
 
 void
@@ -485,11 +533,30 @@ on_idle()
 void
 on_keyboard_down(unsigned char key, int, int)
 {
+	if (key == 'f')
+		glutFullScreenToggle();
+
 	Keyboard::set_pressed((Keyboard::Key)key, true);
+//	std::cout << (int) key << std::endl;
 }
 
 void
 on_keyboard_up(unsigned char key, int, int)
 {
 	Keyboard::set_pressed((Keyboard::Key)key, false);
+//	std::cout << (int) key << std::endl;
+}
+
+void
+on_keyboard_special_down(int key, int, int)
+{
+//	Keyboard::set_pressed((Keyboard::Key)key, true);
+	std::cout << (int)key << std::endl;
+}
+
+void
+on_keyboard_special_up(int key, int, int)
+{
+//	Keyboard::set_pressed((Keyboard::Key)key, false);
+	std::cout << key << std::endl;
 }

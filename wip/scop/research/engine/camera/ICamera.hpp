@@ -38,6 +38,9 @@ class ICamera
 
 		virtual void
 		move(double delta) = 0;
+
+		virtual void
+		look(const Vector<2, int> &offset) = 0;
 };
 
 #endif /* ICAMERA_HPP_ */

@@ -54,6 +54,9 @@ class PerspectiveCamera :
 		virtual void
 		move(double delta);
 
+		virtual void
+		look(const Vector<2, int> &offset);
+
 	protected:
 		void
 		compute_vectors();
