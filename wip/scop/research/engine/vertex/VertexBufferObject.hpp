@@ -23,6 +23,7 @@ class VertexBufferObject
 		enum BufferType
 		{
 			ARRAY = GL_ARRAY_BUFFER,
+			ELEMENT_ARRAY = GL_ELEMENT_ARRAY_BUFFER,
 		};
 
 		enum UsageType

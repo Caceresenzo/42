@@ -8,6 +8,9 @@
 #include <engine/math/matrix.hpp>
 #include <engine/math/Math.hpp>
 #include <engine/math/vector.hpp>
+#include <engine/model/Mesh.hpp>
+#include <engine/model/MeshLoader.hpp>
+#include <engine/model/MeshShader.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
@@ -24,6 +27,10 @@
 #include <GL/freeglut_std.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
+#include <map>
+
+class MeshShader;
 
 class ICamera;
 
@@ -65,7 +72,9 @@ on_keyboard_down(unsigned char key, int x, int y);
 void
 on_keyboard_up(unsigned char key, int x, int y);
 
+static int g_width = 800, g_height = 800;
 static float x = 0.5;
+static float rot = 0;
 static float direction = -1;
 
 unsigned int VBO, VAO;
@@ -112,6 +121,9 @@ VertexArrayObject *vao;
 
 std::vector<Text*> texts;
 
+Mesh *ft;
+MeshShader *mesh_shader;
+
 int
 main(int argc, char *argv[])
 {
@@ -122,6 +134,10 @@ main(int argc, char *argv[])
 		shader = new Shader();
 		text_renderer = new TextRenderer();
 		camera = new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
+
+		MeshLoader loader;
+		ft = loader.load("42.obj");
+		mesh_shader = MeshShader::basic();
 
 		texts.push_back(new Text("Hello"));
 		texts.push_back(new Text("fps:", Vector<2, float>(0, 24)));
@@ -212,11 +228,11 @@ on_display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	shader->use();
-
-	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), 800 / 800, 0.1f, 100.0f);
-	shader->projection.set(projection);
-	shader->view.set(camera->view_matrix());
+//	shader->use();
+//
+	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), float(g_width) / float(g_height), 0.1f, 10000.0f);
+//	shader->projection.set(projection);
+//	shader->view.set(camera->view_matrix());
 
 	float vertices[] = { -0.5f, -0.5f, -0.5f, //
 	0.5f, -0.5f, -0.5f, //
@@ -261,8 +277,40 @@ on_display(void)
 	-0.5f, 0.5f, -0.5f, //
 	};
 
-	vao->get(0).store(sizeof(vertices), vertices);
-	vao->bind();
+//	vao->get(0).store(sizeof(vertices), vertices);
+//	vao->bind();
+////	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//
+//	Vector<3, float> cubePositions[] = {
+//	/**/Vector<3, float>(0.0f, 0.0f, 0.0f),
+//	/**/Vector<3, float>(2.0f, 5.0f, -15.0f),
+//	/**/Vector<3, float>(-1.5f, -2.2f, -2.5f),
+//	/**/Vector<3, float>(-3.8f, -2.0f, -12.3f),
+//	/**/Vector<3, float>(2.4f, -0.4f, -3.5f),
+//	/**/Vector<3, float>(-1.7f, 3.0f, -7.5f),
+//	/**/Vector<3, float>(1.3f, -2.0f, -2.5f),
+//	/**/Vector<3, float>(1.5f, 2.0f, -2.5f),
+//	/**/Vector<3, float>(1.5f, 0.2f, -1.5f),
+//	/**/Vector<3, float>(-1.3f, 1.0f, -1.5f) //
+//	};
+//
+//	for (unsigned int i = 0; i < 10; i++)
+//	{
+//		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
+//		model = ::translate(model, cubePositions[i]);
+//		float angle = 20.0f * i * x;
+//		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
+//		shader->model.set(model);
+//
+//		glDrawArrays(GL_TRIANGLES, 0, 36);
+//	}
+//
+//	vao->unbind();
+
+	mesh_shader->use();
+	mesh_shader->projection.set(projection);
+	mesh_shader->view.set(camera->view_matrix());
+
 //	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	Vector<3, float> cubePositions[] = {
@@ -281,15 +329,16 @@ on_display(void)
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
-		model = ::translate(model, cubePositions[i]);
 		float angle = 20.0f * i * x;
-		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
-		shader->model.set(model);
+//		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
+		model = ::translate(model, cubePositions[i] * 2.0f);
+		model = ::rotate(model, Math::radians(rot), Vector<3, float>(0, 1.0f, 0));
+		mesh_shader->model.set(model);
 
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+		ft->render(*mesh_shader);
 	}
 
-	vao->unbind();
+	glClear( GL_DEPTH_BUFFER_BIT);
 
 	char text[255] = { 0 };
 	sprintf(text, "frame: %d", high_frame_counter.frame());
@@ -320,10 +369,41 @@ on_display(void)
 	glutSwapBuffers();
 
 	x += 0.06 * direction;
+	rot += 0.8;
 	if (x >= 1 || x <= 0)
 		direction *= -1;
 
 	camera->move(0.02);
+}
+
+void GLAPIENTRY
+MessageCallback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar *message, const void*)
+{
+	static std::map<int, std::string> _debug_types;
+
+	if (_debug_types.empty())
+	{
+		_debug_types[GL_DEBUG_SOURCE_API] = "API";
+		_debug_types[GL_DEBUG_SOURCE_WINDOW_SYSTEM] = "WINDOW_SYSTEM";
+		_debug_types[GL_DEBUG_SOURCE_SHADER_COMPILER] = "SHADER_COMPILER";
+		_debug_types[GL_DEBUG_SOURCE_THIRD_PARTY] = "THIRD_PARTY";
+		_debug_types[GL_DEBUG_SOURCE_APPLICATION] = "APPLICATION";
+		_debug_types[GL_DEBUG_SOURCE_OTHER] = "OTHER";
+		_debug_types[GL_DEBUG_TYPE_ERROR] = "ERROR";
+		_debug_types[GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR] = "DEPRECATED_BEHAVIOR";
+		_debug_types[GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR] = "UNDEFINED_BEHAVIOR";
+		_debug_types[GL_DEBUG_TYPE_PORTABILITY] = "PORTABILITY";
+		_debug_types[GL_DEBUG_TYPE_PERFORMANCE] = "PERFORMANCE";
+		_debug_types[GL_DEBUG_TYPE_OTHER] = "OTHER";
+		_debug_types[GL_DEBUG_TYPE_MARKER] = "MARKER";
+		_debug_types[GL_DEBUG_TYPE_POP_GROUP] = "POP_GROUP";
+		_debug_types[GL_DEBUG_SEVERITY_NOTIFICATION] = "NOTIFICATION";
+	}
+
+	if (GL_DEBUG_TYPE_OTHER == type)
+		return;
+
+	fprintf( stderr, "[%s] [%s] [%s] %s\n", (_debug_types[severity].c_str()), (_debug_types[source].c_str()), (_debug_types[type].c_str()), message);
 }
 
 void
@@ -336,12 +416,17 @@ initialize(int argc, char *argv[])
 	fprintf(stdout, "INFO: OpenGL Vendor: %s\n", glGetString(GL_VENDOR));
 	fflush(stdout);
 
+	glewExperimental = GL_TRUE;
 	GLint GlewInitResult = glewInit();
 	if (GLEW_OK != GlewInitResult)
 	{
 		printf("ERROR: %s", glewGetErrorString(GlewInitResult));
 		exit(EXIT_FAILURE);
 	}
+
+	// During init, enable debug output
+	glEnable( GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(MessageCallback, 0);
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
@@ -357,7 +442,7 @@ initialize_window(int argc, char *argv[])
 
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
 
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(g_width, g_height);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 
 	window = glutCreateWindow(argv[0]);
@@ -377,7 +462,12 @@ initialize_window(int argc, char *argv[])
 void
 on_window_resize(int width, int height)
 {
+	g_width = width;
+	g_height = height;
+
 	glViewport(0, 0, width, height);
+
+	std::cout << "resized " << width << "x" << height << std::endl;
 }
 
 void
