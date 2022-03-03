@@ -27,6 +27,8 @@ class Keyboard
 			J = 'j',
 			K = 'k',
 			L = 'l',
+			O = 'o',
+			P = 'p',
 			Q = 'q',
 			S = 's',
 			Z = 'z',

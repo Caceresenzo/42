@@ -16,12 +16,14 @@
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
+#include <engine/shader/uniform/VectorUniform.hpp>
 
 class TextShader :
 		public ShaderProgram
 {
 	public:
-		SamplerUniform<int> sampler;
+		VectorUniform<2, int> window_size;
+		SamplerUniform<int> texture_sampler;
 		VectorAttribute<2, float> position;
 		VectorAttribute<2, float> uv;
 

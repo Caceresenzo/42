@@ -134,6 +134,8 @@ std::vector<Text*> texts;
 Mesh *ft;
 MeshShader *mesh_shader;
 
+float g_scale = 1.0f;
+
 int
 main(int argc, char *argv[])
 {
@@ -336,6 +338,12 @@ on_display(void)
 	/**/Vector<3, float>(-1.3f, 1.0f, -1.5f) //
 	};
 
+	if (Keyboard::is_pressed(Keyboard::O))
+		g_scale -= 0.02;
+
+	if (Keyboard::is_pressed(Keyboard::P))
+		g_scale += 0.02;
+
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
@@ -343,6 +351,7 @@ on_display(void)
 //		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
 		model = ::translate(model, cubePositions[i] * 2.0f);
 		model = ::rotate(model, Math::radians(rot), Vector<3, float>(0, 1.0f, 0));
+		model = ::scale(model, Vector<3, float>(g_scale, g_scale, g_scale));
 		mesh_shader->model.set(model);
 
 		ft->render(*mesh_shader);

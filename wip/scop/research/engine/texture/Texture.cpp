@@ -13,6 +13,7 @@
 #include <engine/exception/IllegalArgumentException.hpp>
 #include <engine/image/ImageData.hpp>
 #include <engine/texture/Texture.hpp>
+#include <map>
 #include <vector>
 
 Texture::Texture() :
@@ -56,7 +57,7 @@ Texture::from_image(ImageData *image_data)
 	Texture *texture = new Texture();
 	texture->bind();
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image_data->width(), image_data->height(), 0, GL_BGR, GL_UNSIGNED_BYTE, image_data->pixels().data());
+	glTexImage2D(GL_TEXTURE_2D, 0, to_internal_format(image_data->format()), image_data->width(), image_data->height(), 0, image_data->format(), GL_UNSIGNED_BYTE, image_data->pixels().data());
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -68,4 +69,20 @@ Texture::from_image(ImageData *image_data)
 	texture->unbind();
 
 	return (texture);
+}
+
+GLint
+Texture::to_internal_format(ImageData::Format format)
+{
+	switch (format)
+	{
+		case ImageData::RGB:
+		case ImageData::BGR:
+		default:
+			return (GL_RGB);
+
+		case ImageData::RGBA:
+		case ImageData::BGRA:
+			return (GL_RGBA);
+	}
 }

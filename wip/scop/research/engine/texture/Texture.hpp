@@ -13,6 +13,7 @@
 #ifndef TEXTURE_HPP_
 # define TEXTURE_HPP_
 
+#include <engine/image/ImageData.hpp>
 #include <engine/opengl.hpp>
 #include <GL/glew.h>
 
@@ -42,6 +43,10 @@ class Texture
 	public:
 		static Texture*
 		from_image(ImageData *image_data);
+
+	private:
+		static GLint
+		to_internal_format(ImageData::Format format);
 };
 
 #endif /* TEXTURE_HPP_ */

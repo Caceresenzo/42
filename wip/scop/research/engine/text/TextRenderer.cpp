@@ -10,11 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <engine/core/Display.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
+#include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
+#include <engine/shader/uniform/VectorUniform.hpp>
 #include <engine/text/TextRenderer.hpp>
 #include <engine/texture/Texture.hpp>
+#include <engine/vertex/VertexBufferObject.hpp>
 #include <GL/glew.h>
 #include <iterator>
 #include <string>
@@ -82,7 +86,9 @@ TextRenderer::render(Text &text) const
 	shader->use();
 	font_altas->set_active(0);
 	font_altas->bind();
-	shader->sampler.set(0);
+
+	shader->window_size.set(Display::size());
+	shader->texture_sampler.set(0);
 
 	shader->position.enable();
 	text.vertex_buffer().bind();

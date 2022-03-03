@@ -1,36 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SamplerUniform.hpp                                 :+:      :+:    :+:   */
+/*   Display.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/25 00:24:22 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/25 00:24:22 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/03 01:24:22 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/03 01:24:22 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SAMPLERUNIFORM_HPP_
-# define SAMPLERUNIFORM_HPP_
+#include <engine/core/Display.hpp>
+#include <engine/opengl.hpp>
 
-#include <engine/math/matrix.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
-#include <GL/glew.h>
-#include <string>
+Display::Display()
+{
+}
 
-template<typename T>
-	class SamplerUniform :
-			public Uniform
-	{
-		public:
-			SamplerUniform(const std::string &name) :
-					Uniform(name)
-			{
-			}
+int
+Display::x()
+{
+	return (glutGet(GLUT_WINDOW_X));
+}
 
-		public:
-			void
-			set(const T &sampler);
-	};
+int
+Display::y()
+{
+	return (glutGet(GLUT_WINDOW_Y));
+}
 
-#endif /* SAMPLERUNIFORM_HPP_ */
+int
+Display::width()
+{
+	return (glutGet(GLUT_WINDOW_WIDTH));
+}
+
+int
+Display::height()
+{
+	return (glutGet(GLUT_WINDOW_HEIGHT));
+}
+
+Vector<2, int>
+Display::size()
+{
+	return (Vector<2, int>(width(), height()));
+}

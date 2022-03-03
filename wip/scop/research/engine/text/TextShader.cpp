@@ -14,11 +14,13 @@
 
 TextShader::TextShader() :
 		ShaderProgram("text-vertex.glsl", "text-fragment.glsl"),
-		sampler("myTextureSampler"),
-		position("vertexPosition_screenspace"),
-		uv("vertexUV")
+		window_size("windowSize"),
+		texture_sampler("textureSampler"),
+		position("in_Positions"),
+		uv("in_UV")
 {
-	locate(sampler);
+	locate(window_size);
+	locate(texture_sampler);
 	locate(position);
 	locate(uv);
 }

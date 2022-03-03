@@ -13,34 +13,56 @@
 #ifndef IMAGEDATA_HPP_
 # define IMAGEDATA_HPP_
 
+#include <engine/opengl.hpp>
+#include <GL/glew.h>
 #include <vector>
 
 class ImageData
 {
+	public:
+		enum Format
+		{
+			RGB = GL_RGB,
+			BGR = GL_BGR,
+			RGBA = GL_RGBA,
+			BGRA = GL_BGRA
+		};
+
 	private:
+		Format m_format;
 		long m_width;
 		long m_height;
 		std::vector<unsigned char> m_pixels;
 
 	public:
-		ImageData();
-		ImageData(long width, long height, const std::vector<unsigned char> &pixels);
-		ImageData(const ImageData &other);
+		ImageData(Format format, long width, long height, const std::vector<unsigned char> &pixels);
 
 		virtual
 		~ImageData();
 
-		ImageData&
-		operator=(const ImageData &other);
+		inline Format
+		format() const
+		{
+			return (m_format);
+		}
 
-		long
-		width() const;
+		inline long
+		width() const
+		{
+			return (m_width);
+		}
 
-		long
-		height() const;
+		inline long
+		height() const
+		{
+			return (m_height);
+		}
 
-		const std::vector<unsigned char>&
-		pixels() const;
+		inline const std::vector<unsigned char>&
+		pixels() const
+		{
+			return (m_pixels);
+		}
 };
 
 #endif /* IMAGEDATA_HPP_ */

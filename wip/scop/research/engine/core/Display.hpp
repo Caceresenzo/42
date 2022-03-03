@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   VectorUniform.hpp                                  :+:      :+:    :+:   */
+/*   Display.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 13:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 13:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/03 01:24:22 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/03 01:24:22 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTORUNIFORM_HPP_
-# define VECTORUNIFORM_HPP_
+#ifndef DISPLAY_HPP_
+# define DISPLAY_HPP_
 
 #include <engine/math/vector.hpp>
-#include <engine/shader/ShaderVariable.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
-#include <GL/glew.h>
-#include <string>
 
-template<int N, typename T>
-	class VectorUniform :
-			public Uniform
-	{
-		public:
-			VectorUniform(const std::string &name) :
-					Uniform(name)
-			{
-			}
+class Display
+{
+	private:
+		Display();
 
-		public:
-			inline void
-			set(const Vector<N, T> &vector);
-	};
+	public:
+		static int
+		x();
 
-#endif /* VECTORUNIFORM_HPP_ */
+		static int
+		y();
+
+		static int
+		width();
+
+		static int
+		height();
+
+		static Vector<2, int>
+		size();
+};
+
+#endif /* DISPLAY_HPP_ */

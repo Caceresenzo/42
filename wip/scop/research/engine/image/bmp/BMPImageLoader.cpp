@@ -48,7 +48,7 @@ BMPImageLoader::load(const std::string &path)
 	if (*(int*)&(header[0x1E]) != 0)
 	{
 		fclose(file);
-		throw ImageException("not a 24bpp");
+		throw ImageException("unsupported compression");
 	}
 
 	if (*(int*)&(header[0x1C]) != 24)
@@ -77,5 +77,5 @@ BMPImageLoader::load(const std::string &path)
 
 	fclose(file);
 
-	return (new ImageData(width, height, pixels));
+	return (new ImageData(ImageData::BGR, width, height, pixels));
 }

@@ -33,11 +33,4 @@ template<int R, int C, typename T>
 			set(const Matrix<R, C, T> &matrix);
 	};
 
-template<>
-	inline void
-	MatrixUniform<4, 4, float>::set(const Matrix<4, 4, float> &matrix)
-	{
-		glUniformMatrix4fv(location(), 1, GL_FALSE, reinterpret_cast<const GLfloat*>(&matrix[0][0]));
-	}
-
 #endif /* MATRIXUNIFORM_HPP_ */

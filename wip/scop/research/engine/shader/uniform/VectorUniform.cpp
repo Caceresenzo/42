@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SamplerUniform.hpp                                 :+:      :+:    :+:   */
+/*   VectorUniform.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/25 00:24:22 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/25 00:24:22 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/03 01:33:30 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/03 01:33:30 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SAMPLERUNIFORM_HPP_
-# define SAMPLERUNIFORM_HPP_
+#include <engine/shader/uniform/VectorUniform.hpp>
 
-#include <engine/math/matrix.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
-#include <GL/glew.h>
-#include <string>
-
-template<typename T>
-	class SamplerUniform :
-			public Uniform
+template<>
+	void
+	VectorUniform<2, int>::set(const Vector<2, int> &vector)
 	{
-		public:
-			SamplerUniform(const std::string &name) :
-					Uniform(name)
-			{
-			}
+		glUniform2i(location(), vector.x, vector.y);
+	}
 
-		public:
-			void
-			set(const T &sampler);
-	};
-
-#endif /* SAMPLERUNIFORM_HPP_ */
+template<>
+	void
+	VectorUniform<3, float>::set(const Vector<3, float> &vector)
+	{
+		glUniform3f(location(), vector.x, vector.y, vector.z);
+	}
