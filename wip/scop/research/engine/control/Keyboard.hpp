@@ -34,6 +34,7 @@ class Keyboard
 			Z = 'z',
 			SPACE = ' ',
 			ESCAPE = 27,
+			SHIFT = 500,
 		};
 
 	private:

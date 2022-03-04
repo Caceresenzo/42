@@ -11,6 +11,7 @@
 #include <engine/model/Mesh.hpp>
 #include <engine/model/MeshLoader.hpp>
 #include <engine/model/MeshShader.hpp>
+#include <engine/model/prefab/Grid.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
@@ -131,6 +132,7 @@ VertexArrayObject *vao;
 
 std::vector<Text*> texts;
 
+Mesh *grid;
 Mesh *ft;
 MeshShader *mesh_shader;
 
@@ -146,6 +148,8 @@ main(int argc, char *argv[])
 		shader = new Shader();
 		text_renderer = new TextRenderer();
 		camera = new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
+
+		grid = Grid::of(100);
 
 		MeshLoader loader;
 		ft = loader.load("42.obj");
@@ -291,7 +295,7 @@ on_display(void)
 
 //	vao->get(0).store(sizeof(vertices), vertices);
 //	vao->bind();
-////	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 //
 //	Vector<3, float> cubePositions[] = {
 //	/**/Vector<3, float>(0.0f, 0.0f, 0.0f),
@@ -343,6 +347,14 @@ on_display(void)
 
 	if (Keyboard::is_pressed(Keyboard::P))
 		g_scale += 0.02;
+
+	{
+		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f);
+		model = ::translate(model, Vector<3, float>(-50.0, 0, -50.0));
+		model = ::scale(model, Vector<3, float>(100, 100, 100));
+		mesh_shader->model.set(model);
+		grid->render(*mesh_shader);
+	}
 
 	for (unsigned int i = 0; i < 10; i++)
 	{
@@ -559,13 +571,17 @@ on_keyboard_up(unsigned char key, int, int)
 void
 on_keyboard_special_down(int key, int, int)
 {
-//	Keyboard::set_pressed((Keyboard::Key)key, true);
+	if (key == GLUT_KEY_SHIFT_L || key == GLUT_KEY_SHIFT_R)
+		Keyboard::set_pressed(Keyboard::SHIFT, true);
+
 	std::cout << (int)key << std::endl;
 }
 
 void
 on_keyboard_special_up(int key, int, int)
 {
-//	Keyboard::set_pressed((Keyboard::Key)key, false);
+	if (key == GLUT_KEY_SHIFT_L || key == GLUT_KEY_SHIFT_R)
+		Keyboard::set_pressed(Keyboard::SHIFT, false);
+
 	std::cout << key << std::endl;
 }

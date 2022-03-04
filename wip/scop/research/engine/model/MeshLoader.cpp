@@ -85,28 +85,28 @@ MeshLoader::load(const std::string &path)
 			if ((stream >> std::ws).peek() != std::char_traits<char>::eof())
 				throw MeshException();
 
-			indices.push_back(indice.x);
-			indices.push_back(indice.y);
-			indices.push_back(indice.z);
+			indices.push_back(indice.x - 1);
+			indices.push_back(indice.y - 1);
+			indices.push_back(indice.z - 1);
 
 			if (square)
 			{
-				indices.push_back(indice.x);
-				indices.push_back(indice.z);
-				indices.push_back(indice.w);
+				indices.push_back(indice.x - 1);
+				indices.push_back(indice.z - 1);
+				indices.push_back(indice.w - 1);
 			}
 		}
 	}
 
-	std::vector<Vector<3, float> > vertices_buffer;
-
-	for (size_t i = 0; i < indices.size(); i++)
-	{
-		int index = indices[i];
-
-		vertices_buffer.push_back(vertices[index - 1]);
-	}
-
-	return (new Mesh(vertices_buffer, indices));
-//	return (new Mesh(vertices, indices));
+//	std::vector<Vector<3, float> > vertices_buffer;
+//
+//	for (size_t i = 0; i < indices.size(); i++)
+//	{
+//		int index = indices[i];
+//
+//		vertices_buffer.push_back(vertices[index - 1]);
+//	}
+//
+//	return (new Mesh(vertices_buffer, indices));
+	return (new Mesh(vertices, indices));
 }

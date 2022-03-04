@@ -22,6 +22,9 @@
 class VertexArrayObject
 {
 	private:
+		typedef typename std::vector<std::pair<VertexBufferObject*, bool> >::const_iterator const_iterator;
+
+	private:
 		GLuint m_id;
 		std::vector<std::pair<VertexBufferObject*, bool> > m_attached;
 
@@ -39,10 +42,10 @@ class VertexArrayObject
 		get(size_t index);
 
 		void
-		bind();
+		bind(bool with_attached = false);
 
 		void
-		unbind();
+		unbind(bool with_attached = false);
 };
 
 #endif /* VERTEXARRAYOBJECT_HPP_ */

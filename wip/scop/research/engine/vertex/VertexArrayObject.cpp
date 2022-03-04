@@ -23,7 +23,6 @@ VertexArrayObject::~VertexArrayObject()
 {
 	glDeleteVertexArrays(1, &m_id);
 
-	typedef typename std::vector<std::pair<VertexBufferObject*, bool> >::const_iterator const_iterator;
 	for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
 		if (iterator->second)
 			delete iterator->first;
@@ -33,7 +32,6 @@ bool
 VertexArrayObject::add(VertexBufferObject &object, bool auto_delete)
 {
 	/* vector lookup is bad :/ */
-	typedef typename std::vector<std::pair<VertexBufferObject*, bool> >::const_iterator const_iterator;
 	for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
 		if (iterator->first == &object)
 			return (false);
@@ -53,13 +51,21 @@ VertexArrayObject::get(size_t index)
 }
 
 void
-VertexArrayObject::bind()
+VertexArrayObject::bind(bool with_attached)
 {
 	glBindVertexArray(m_id);
+
+	if (with_attached)
+		for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
+			iterator->first->bind();
 }
 
 void
-VertexArrayObject::unbind()
+VertexArrayObject::unbind(bool with_attached)
 {
 	glBindVertexArray(0);
+
+	if (with_attached)
+		for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
+			iterator->first->unbind();
 }

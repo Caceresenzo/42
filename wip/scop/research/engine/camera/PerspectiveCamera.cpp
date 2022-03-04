@@ -43,6 +43,9 @@ PerspectiveCamera::move(double delta)
 	bool updated = false;
 	float velocity = m_speed * delta;
 
+	if (Keyboard::is_pressed(Keyboard::SHIFT))
+		velocity *= 5;
+
 	if (Keyboard::is_pressed(Keyboard::Z))
 	{
 		m_position += m_front * velocity;

@@ -15,9 +15,10 @@
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <stddef.h>
 
-Mesh::Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<unsigned int> &indices) :
+Mesh::Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<unsigned int> &indices, Mode mode) :
 		m_vertices(vertices),
 		m_indices(indices),
+		m_mode(mode),
 		m_vertex_buffer_array(NULL)
 {
 	try
@@ -25,11 +26,11 @@ Mesh::Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<uns
 		m_vertex_buffer_array = new VertexArrayObject();
 		m_vertex_buffer_array->bind();
 
-//		VertexBufferObject &element_buffer = *new VertexBufferObject(VertexBufferObject::ELEMENT_ARRAY, VertexBufferObject::STATIC_DRAW);
-//		m_vertex_buffer_array->add(element_buffer, true);
-//
-//		element_buffer.bind();
-//		element_buffer.store(indices, false);
+		VertexBufferObject &element_buffer = *new VertexBufferObject(VertexBufferObject::ELEMENT_ARRAY, VertexBufferObject::STATIC_DRAW);
+		m_vertex_buffer_array->add(element_buffer, true);
+
+		element_buffer.bind();
+		element_buffer.store(indices, false);
 
 		VertexBufferObject &buffer_object = *new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
 		m_vertex_buffer_array->add(buffer_object, true);
@@ -54,21 +55,14 @@ Mesh::~Mesh()
 void
 Mesh::render(MeshShader &shader)
 {
-//	std::cout << "bind" << std::endl << std::flush;
-	m_vertex_buffer_array->bind();
-	m_vertex_buffer_array->get(0).bind();
-//	std::cout << "enable" << std::endl << std::flush;
+	m_vertex_buffer_array->bind(true);
+
 	shader.positions.enable();
-//	std::cout << "link" << std::endl << std::flush;
 	shader.positions.link();
 
-//	std::cout << "glDrawElements" << std::endl << std::flush;
-//	std::cout << m_indices.size() << std::endl << std::flush;
-	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size() * 3);
-//	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_FLOAT, 0);
-//	std::cout << "unbind" << std::endl << std::flush;
-	m_vertex_buffer_array->unbind();
+	glDrawElements(m_mode, m_indices.size(), GL_UNSIGNED_INT, NULL);
 
-//	std::cout << "disable" << std::endl << std::flush;
+	m_vertex_buffer_array->unbind(true);
+
 	shader.positions.disable();
 }

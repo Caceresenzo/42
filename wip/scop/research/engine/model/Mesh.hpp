@@ -22,13 +22,21 @@ class VertexArrayObject;
 
 class Mesh
 {
+	public:
+		enum Mode
+		{
+			LINE = GL_LINES,
+			TRIANGLE = GL_TRIANGLES
+		};
+
 	private:
 		std::vector<Vector<3, float> > m_vertices;
 		std::vector<unsigned int> m_indices;
+		Mode m_mode;
 		VertexArrayObject *m_vertex_buffer_array;
 
 	public:
-		Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<unsigned int> &indices);
+		Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<unsigned int> &indices, Mode mode = TRIANGLE);
 
 		virtual
 		~Mesh();
