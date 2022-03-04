@@ -2,6 +2,7 @@
 #include <engine/camera/ICamera.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/control/Keyboard.hpp>
+#include <engine/core/Display.hpp>
 #include <engine/exception/Exception.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
@@ -130,8 +131,6 @@ ICamera *camera;
 
 VertexArrayObject *vao;
 
-std::vector<Text*> texts;
-
 Mesh *grid;
 Mesh *ft;
 MeshShader *mesh_shader;
@@ -154,9 +153,6 @@ main(int argc, char *argv[])
 		MeshLoader loader;
 		ft = loader.load("42.obj");
 		mesh_shader = MeshShader::basic();
-
-		texts.push_back(new Text("Hello"));
-		texts.push_back(new Text("fps:", Vector<2, float>(0, 24)));
 
 		fflush(stdout);
 	}
@@ -371,31 +367,22 @@ on_display(void)
 
 	glClear( GL_DEPTH_BUFFER_BIT);
 
-	char text[255] = { 0 };
-	sprintf(text, "frame: %d", high_frame_counter.frame());
-
-	texts[1]->set(text);
-	text_renderer->render(texts);
-
-	float y = 500;
-	{
-		sprintf(text, "pos: %4.4f %4.4f %4.4f", camera->position().x, camera->position().y, camera->position().z);
-		Text debug_text(text, Vector<2, float>(0.0f, y -= 18.0f), 18.0f);
-		text_renderer->render(debug_text);
-	}
-	{
-		sprintf(text, "yaw: %4.4f", camera->yaw());
-		Text debug_text(text, Vector<2, float>(0.0f, y -= 18.0f), 18.0f);
-		text_renderer->render(debug_text);
-	}
-	{
-		sprintf(text, "pitch: %4.4f", camera->pitch());
-		Text debug_text(text, Vector<2, float>(0.0f, y -= 18.0f), 18.0f);
-		text_renderer->render(debug_text);
-	}
-
 	frame_counter.count();
 	high_frame_counter.count();
+
+	{
+		char text[255] = { 0 };
+
+		const char *format = ""
+				"frame %d\n"
+				"  pos %4.4f %4.4f %4.4f\n"
+				"  yaw %4.4f\n"
+				"pitch %4.4f"
+				"";
+		sprintf(text, format, high_frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
+		Text debug_text(text, Vector<2, float>(0.0f, 0.0f), 32.0f);
+		text_renderer->render(debug_text);
+	}
 
 	glutSwapBuffers();
 

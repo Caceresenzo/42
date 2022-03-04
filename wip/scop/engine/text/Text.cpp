@@ -44,12 +44,30 @@ Text::build()
 	vertices.reserve(estimated);
 	uvs.reserve(estimated);
 
+	Vector<2, int> screen(0, 0);
+
+	for (size_t index = 0; index < m_value.length(); index++)
+		if (m_value[index] == '\n')
+			screen.y += 1;
+
 	for (size_t index = 0; index < m_value.length(); index++)
 	{
-		Vector<2, float> vertex_up_left(m_position.x + index * m_size, m_position.y + m_size);
-		Vector<2, float> vertex_up_right(m_position.x + index * m_size + m_size, m_position.y + m_size);
-		Vector<2, float> vertex_down_right(m_position.x + index * m_size + m_size, m_position.y);
-		Vector<2, float> vertex_down_left(m_position.x + index * m_size, m_position.y);
+		char character = m_value[index];
+
+		if (character == '\n')
+		{
+			screen.x = 0;
+			screen.y -= 1;
+			continue;
+		}
+
+		int start_x = m_position.x + (screen.x * m_size);
+		int start_y = m_position.y + (screen.y * m_size);
+
+		Vector<2, float> vertex_up_left(start_x, start_y + m_size);
+		Vector<2, float> vertex_up_right(start_x + m_size, start_y + m_size);
+		Vector<2, float> vertex_down_right(start_x + m_size, start_y);
+		Vector<2, float> vertex_down_left(start_x, start_y);
 
 		vertices.push_back(vertex_up_left);
 		vertices.push_back(vertex_down_left);
@@ -59,7 +77,6 @@ Text::build()
 		vertices.push_back(vertex_up_right);
 		vertices.push_back(vertex_down_left);
 
-		char character = m_value[index];
 		float uv_x = ((character % 16) / 16.0f);
 		float uv_y = ((character / 16) / 16.0f);
 
@@ -75,6 +92,8 @@ Text::build()
 		uvs.push_back(uv_down_right);
 		uvs.push_back(uv_up_right);
 		uvs.push_back(uv_down_left);
+
+		screen.x += 1;
 	}
 
 	m_vertex_buffer.store(vertices);

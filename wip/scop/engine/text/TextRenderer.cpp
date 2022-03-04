@@ -98,12 +98,7 @@ TextRenderer::render(Text &text) const
 	text.uv_buffer().bind();
 	shader->uv.link();
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 	glDrawArrays(GL_TRIANGLES, 0, text.get().size() * 6);
-
-	glDisable(GL_BLEND);
 
 	shader->position.disable();
 	shader->uv.disable();
