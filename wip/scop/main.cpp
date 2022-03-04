@@ -12,6 +12,7 @@
 #include <engine/model/Mesh.hpp>
 #include <engine/model/MeshLoader.hpp>
 #include <engine/model/MeshShader.hpp>
+#include <engine/model/prefab/Arrow.hpp>
 #include <engine/model/prefab/Grid.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
@@ -132,6 +133,7 @@ ICamera *camera;
 VertexArrayObject *vao;
 
 Mesh *grid;
+Mesh *arrow;
 Mesh *ft;
 MeshShader *mesh_shader;
 
@@ -149,6 +151,7 @@ main(int argc, char *argv[])
 		camera = new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
 
 		grid = Grid::of(100);
+		arrow = Arrow::of(2);
 
 		MeshLoader loader;
 		ft = loader.load("42.obj");
@@ -350,6 +353,15 @@ on_display(void)
 		model = ::scale(model, Vector<3, float>(100, 100, 100));
 		mesh_shader->model.set(model);
 		grid->render(*mesh_shader);
+	}
+
+	{
+		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f);
+		model = ::translate(model, Vector<3, float>(camera->position()));
+		model = ::translate(model, Vector<3, float>(camera->front()));
+		model = ::scale(model, Vector<3, float>(0.05));
+		mesh_shader->model.set(model);
+		arrow->render(*mesh_shader);
 	}
 
 	for (unsigned int i = 0; i < 10; i++)

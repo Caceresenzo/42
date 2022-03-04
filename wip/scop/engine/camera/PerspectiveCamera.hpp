@@ -39,23 +39,41 @@ class PerspectiveCamera :
 		~PerspectiveCamera();
 
 	public:
-		virtual const Vector<3, float>&
-		position() const;
-
-		virtual float
-		yaw() const;
-
-		virtual float
-		pitch() const;
-
-		virtual const Matrix<4, 4, float>&
-		view_matrix() const;
-
 		virtual void
 		move(double delta);
 
 		virtual void
 		look(const Vector<2, int> &offset);
+
+		inline virtual const Vector<3, float>&
+		position() const
+		{
+			return (m_position);
+		}
+
+		inline virtual float
+		yaw() const
+		{
+			return (m_yaw);
+		}
+
+		inline virtual float
+		pitch() const
+		{
+			return (m_pitch);
+		}
+
+		inline virtual const Matrix<4, 4, float>&
+		view_matrix() const
+		{
+			return (m_view_matrix);
+		}
+
+		inline virtual const Vector<3, float>&
+		front() const
+		{
+			return (m_front);
+		}
 
 	protected:
 		void

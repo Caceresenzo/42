@@ -14,6 +14,7 @@
 # define ICAMERA_HPP_
 
 #include <engine/math/matrix.hpp>
+#include <engine/math/vector.hpp>
 
 class ICamera
 {
@@ -35,6 +36,9 @@ class ICamera
 
 		virtual const Matrix<4, 4, float>&
 		view_matrix() const = 0;
+
+		virtual const Vector<3, float>&
+		front() const = 0;
 
 		virtual void
 		move(double delta) = 0;

@@ -42,5 +42,4 @@ Grid::of(int slices)
 	}
 
 	return (new Mesh(vertices, indices, Mesh::LINE));
-
 }

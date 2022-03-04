@@ -129,30 +129,6 @@ PerspectiveCamera::look(const Vector<2, int> &offset)
 	compute_vectors();
 }
 
-const Vector<3, float>&
-PerspectiveCamera::position() const
-{
-	return (m_position);
-}
-
-const Matrix<4, 4, float>&
-PerspectiveCamera::view_matrix() const
-{
-	return (m_view_matrix);
-}
-
-float
-PerspectiveCamera::yaw() const
-{
-	return (m_yaw);
-}
-
-float
-PerspectiveCamera::pitch() const
-{
-	return (m_pitch);
-}
-
 void
 PerspectiveCamera::compute_vectors()
 {
