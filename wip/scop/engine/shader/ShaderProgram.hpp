@@ -38,7 +38,6 @@ class ShaderProgram
 		void
 		unuse();
 
-	protected:
 		void
 		locate(ShaderVariable &variable) const;
 

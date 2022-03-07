@@ -41,5 +41,5 @@ Grid::of(int slices)
 		indices.push_back(vertex_count - rows + j);
 	}
 
-	return (new Mesh(vertices, indices, Mesh::LINE));
+	return (new Mesh(vertices, std::vector<Vector<2, float> >(), indices, Mesh::LINE));
 }

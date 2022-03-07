@@ -153,8 +153,10 @@ main(int argc, char *argv[])
 		grid = Grid::of(100);
 		arrow = Arrow::of(2);
 
-		MeshLoader loader;
-		ft = loader.load("42.obj");
+		ft = MeshLoader().load("models/capsule.obj");
+//		ft = MeshLoader().load("42.obj");
+		ft->set_texture(*Texture::from_image(BMPImageLoader().load("models/capsule.bmp")), true);
+
 		mesh_shader = MeshShader::basic();
 
 		fflush(stdout);

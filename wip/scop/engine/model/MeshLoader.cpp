@@ -38,8 +38,10 @@ MeshLoader::load(const std::string &path)
 		throw IOException(path);
 
 	std::vector<Vector<3, float> > vertices;
+	std::vector<Vector<2, float> > textures;
 	std::vector<unsigned int> indices;
 
+	int line_number = 1;
 	std::string line;
 	while (std::getline(file, line))
 	{
@@ -54,36 +56,77 @@ MeshLoader::load(const std::string &path)
 			Vector<3, float> vertice;
 
 			if (!(stream >> vertice.x))
-				throw MeshException();
+				throw MeshException("vertex: x: invalid");
 
 			if (!(stream >> vertice.y))
-				throw MeshException();
+				throw MeshException("vertex: y: invalid");
 
 			if (!(stream >> vertice.z))
-				throw MeshException();
+				throw MeshException("vertex: z: invalid");
 
 			if ((stream >> std::ws).peek() != std::char_traits<char>::eof())
-				throw MeshException();
+				throw MeshException("vertex: content remain in line");
 
 			vertices.push_back(vertice);
 		}
+		else if (identifier == "vt")
+		{
+			Vector<2, float> vertice;
+
+			if (!(stream >> vertice.x))
+				throw MeshException("texture vertex: x: invalid");
+
+			if (!(stream >> vertice.y))
+				throw MeshException("texture vertex: y: invalid");
+
+			if ((stream >> std::ws).peek() != std::char_traits<char>::eof())
+				throw MeshException("texture vertex: content remain in line");
+
+			textures.push_back(vertice);
+		}
 		else if (identifier == "f")
 		{
+			std::cout << line_number << std::endl;
+
 			Vector<4, float> indice;
 
 			if (!(stream >> indice.x))
-				throw MeshException();
+				throw MeshException("face: x: invalid");
+
+			while (stream.peek() == '/')
+			{
+				char c;
+				stream >> c;
+				float x = 0.0f;
+				stream >> x;
+			}
 
 			if (!(stream >> indice.y))
-				throw MeshException();
+				throw MeshException("face: y: invalid");
+
+			while (stream.peek() == '/')
+			{
+				char c;
+				stream >> c;
+				float x = 0.0f;
+				stream >> x;
+			}
 
 			if (!(stream >> indice.z))
-				throw MeshException();
+				throw MeshException("face: z: invalid");
+
+			while (stream.peek() == '/')
+			{
+				char c;
+				stream >> c;
+				float x = 0.0f;
+				stream >> x;
+			}
 
 			bool square = stream >> indice.w;
 
 			if ((stream >> std::ws).peek() != std::char_traits<char>::eof())
-				throw MeshException();
+				throw MeshException("face: content remain in line");
 
 			indices.push_back(indice.x - 1);
 			indices.push_back(indice.y - 1);
@@ -96,17 +139,14 @@ MeshLoader::load(const std::string &path)
 				indices.push_back(indice.w - 1);
 			}
 		}
+
+		++line_number;
 	}
 
-//	std::vector<Vector<3, float> > vertices_buffer;
-//
-//	for (size_t i = 0; i < indices.size(); i++)
-//	{
-//		int index = indices[i];
-//
-//		vertices_buffer.push_back(vertices[index - 1]);
-//	}
-//
-//	return (new Mesh(vertices_buffer, indices));
-	return (new Mesh(vertices, indices));
+	std::cout << "----" << std::endl;
+	std::cout << vertices.size() << std::endl;
+	std::cout << textures.size() << std::endl;
+	std::cout << indices.size() << std::endl;
+
+	return (new Mesh(vertices, textures, indices));
 }

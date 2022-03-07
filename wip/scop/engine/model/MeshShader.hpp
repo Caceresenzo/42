@@ -15,7 +15,9 @@
 
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
+#include <engine/shader/uniform/BooleanUniform.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
+#include <engine/shader/uniform/SamplerUniform.hpp>
 #include <string>
 
 class MeshShader :
@@ -25,6 +27,9 @@ class MeshShader :
 		MatrixUniform<4, 4, float> model;
 		MatrixUniform<4, 4, float> view;
 		MatrixUniform<4, 4, float> projection;
+		BooleanUniform use_texture;
+		SamplerUniform<int> texture_sampler;
+		VectorAttribute<2, float> texture_positions;
 		VectorAttribute<3, float> positions;
 
 	public:
