@@ -1,36 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opengl.hpp                                         :+:      :+:    :+:   */
+/*   GlfwWindow.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 14:54:12 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 14:54:12 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/08 00:32:24 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/08 00:32:24 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENGL_HPP_
-# define OPENGL_HPP_
+#ifndef GLFWWINDOW_HPP_
+# define GLFWWINDOW_HPP_
 
-#define GLEW_STATIC
-# include <GL/glew.h>
-# include <GL/freeglut.h>
-# include <GL/gl.h>
-# include <GLFW/glfw3.h>
+#include <engine/core/Window.hpp>
+#include <engine/math/vector.hpp>
 
-template<typename T>
-	struct GLType
-	{
-			static const GLenum DATA_TYPE;
-	};
+struct GLFWwindow;
 
-class OpenGL
+class GlfwWindow :
+		public Window
 {
+	private:
+		GLFWwindow *m_window;
+
 	public:
-		static
-		void
-		message_callback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar *message, const void*);
+		virtual bool
+		is_fullscreen() const;
+
+		virtual void
+		set_fullscreen(bool fullscreen);
+
+		virtual void
+		toggle_fullscreen();
+
+		virtual Vector<2, int>
+		size() const;
 };
 
-#endif /* OPENGL_HPP_ */
+#endif /* GLFWWINDOW_HPP_ */

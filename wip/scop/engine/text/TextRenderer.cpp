@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/core/Display.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
@@ -87,7 +86,8 @@ TextRenderer::render(Text &text) const
 	font_altas->set_active(0);
 	font_altas->bind();
 
-	shader->window_size.set(Display::size());
+//	shader->window_size.set(Display::size());
+	shader->window_size.set(Vector<2, int>(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)));
 	shader->texture_sampler.set(0);
 
 	shader->position.enable();

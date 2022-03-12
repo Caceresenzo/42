@@ -340,6 +340,18 @@ template<int N, typename T>
 		return (input / length);
 	}
 
+template<int N, typename T>
+	inline Vector<N, T>
+	abs(const Vector<N, T> &input)
+	{
+		Vector<N, T> vector;
+
+		for (int i = 0; i < N; ++i)
+			vector[i] = Math::abs(input[i]);
+
+		return (vector);
+	}
+
 template<typename T>
 	inline Vector<3, T>
 	cross(const Vector<3, T> &right, const Vector<3, T> &left)

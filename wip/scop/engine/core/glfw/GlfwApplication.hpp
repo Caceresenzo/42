@@ -1,36 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opengl.hpp                                         :+:      :+:    :+:   */
+/*   GlfwApplication.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 14:54:12 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 14:54:12 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/08 00:40:47 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/08 00:40:47 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENGL_HPP_
-# define OPENGL_HPP_
+#ifndef GLFWAPPLICATION_HPP_
+# define GLFWAPPLICATION_HPP_
 
-#define GLEW_STATIC
-# include <GL/glew.h>
-# include <GL/freeglut.h>
-# include <GL/gl.h>
-# include <GLFW/glfw3.h>
+#include <engine/core/Application.hpp>
 
-template<typename T>
-	struct GLType
-	{
-			static const GLenum DATA_TYPE;
-	};
-
-class OpenGL
+class GlfwApplication :
+		public Application
 {
 	public:
-		static
-		void
-		message_callback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar *message, const void*);
+		GlfwApplication();
+
+		virtual
+		~GlfwApplication();
 };
 
-#endif /* OPENGL_HPP_ */
+#endif /* GLFWAPPLICATION_HPP_ */

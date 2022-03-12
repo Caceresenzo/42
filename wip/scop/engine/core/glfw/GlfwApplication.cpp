@@ -1,40 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Display.hpp                                        :+:      :+:    :+:   */
+/*   GlfwApplication.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/03 01:24:22 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/03 01:24:22 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/08 00:40:47 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/08 00:40:47 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DISPLAY_HPP_
-# define DISPLAY_HPP_
+#include <engine/core/glfw/GlfwApplication.hpp>
+#include <engine/exception/RuntimeException.hpp>
+#include <engine/opengl.hpp>
+#include <GLFW/glfw3.h>
 
-#include <engine/math/vector.hpp>
-
-class Display
+GlfwApplication::GlfwApplication()
 {
-	private:
-		Display();
+	if (!glfwInit())
+		throw RuntimeException("could not initialize glfw");
+}
 
-	public:
-		static int
-		x();
-
-		static int
-		y();
-
-		static int
-		width();
-
-		static int
-		height();
-
-		static Vector<2, int>
-		size();
-};
-
-#endif /* DISPLAY_HPP_ */
+GlfwApplication::~GlfwApplication()
+{
+	glfwTerminate();
+}

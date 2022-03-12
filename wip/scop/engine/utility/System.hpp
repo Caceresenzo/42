@@ -1,36 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   opengl.hpp                                         :+:      :+:    :+:   */
+/*   System.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 14:54:12 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 14:54:12 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/08 01:22:28 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/08 01:22:28 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPENGL_HPP_
-# define OPENGL_HPP_
+#ifndef SYSTEM_HPP_
+# define SYSTEM_HPP_
 
-#define GLEW_STATIC
-# include <GL/glew.h>
-# include <GL/freeglut.h>
-# include <GL/gl.h>
-# include <GLFW/glfw3.h>
+#include <vector>
 
-template<typename T>
-	struct GLType
-	{
-			static const GLenum DATA_TYPE;
-	};
-
-class OpenGL
+class System
 {
 	public:
-		static
-		void
-		message_callback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar *message, const void*);
+		static std::vector<char*> arguments;
 };
 
-#endif /* OPENGL_HPP_ */
+#endif /* SYSTEM_HPP_ */
