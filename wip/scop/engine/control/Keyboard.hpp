@@ -23,6 +23,7 @@ class Keyboard
 		{
 			A = 'a',
 			D = 'd',
+			F = 'f',
 			I = 'i',
 			J = 'j',
 			K = 'k',
@@ -31,6 +32,7 @@ class Keyboard
 			P = 'p',
 			Q = 'q',
 			S = 's',
+			W = 'w',
 			Z = 'z',
 			SPACE = ' ',
 			ESCAPE = 27,

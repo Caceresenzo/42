@@ -24,7 +24,7 @@ Arrow::of(float length)
 	// X
 
 	indices.push_back(vertices.size());
-	vertices.push_back(Vector<3, float>(-length, 0.0f, 0.0f));
+	vertices.push_back(Vector<3, float>(0.0, 0.0f, 0.0f));
 	indices.push_back(vertices.size());
 	vertices.push_back(Vector<3, float>(length, 0.0f, 0.0f));
 
@@ -41,7 +41,7 @@ Arrow::of(float length)
 	// Y
 
 	indices.push_back(vertices.size());
-	vertices.push_back(Vector<3, float>(0.0, -length, 0.0f));
+	vertices.push_back(Vector<3, float>(0.0, 0.0, 0.0f));
 	indices.push_back(vertices.size());
 	vertices.push_back(Vector<3, float>(0.0, length, 0.0f));
 
@@ -56,8 +56,9 @@ Arrow::of(float length)
 	vertices.push_back(Vector<3, float>(-length * 0.25f, length * 0.75f, 0.0f));
 
 	// Z
+
 	indices.push_back(vertices.size());
-	vertices.push_back(Vector<3, float>(0.0, 0.0f, -length));
+	vertices.push_back(Vector<3, float>(0.0, 0.0f, 0.0));
 	indices.push_back(vertices.size());
 	vertices.push_back(Vector<3, float>(0.0, 0.0f, length));
 

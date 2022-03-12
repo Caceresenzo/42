@@ -89,8 +89,6 @@ MeshLoader::load(const std::string &path)
 		}
 		else if (identifier == "f")
 		{
-			std::cout << line_number << std::endl;
-
 			Vector<4, float> indice;
 
 			if (!(stream >> indice.x))

@@ -31,6 +31,9 @@ template<typename T>
 	struct Vector<2, T>
 	{
 		public:
+			static const Vector ZERO;
+
+		public:
 			T x;
 			T y;
 
@@ -81,6 +84,9 @@ template<typename T>
 template<typename T>
 	struct Vector<3, T>
 	{
+		public:
+			static const Vector ZERO;
+
 		public:
 			T x;
 			T y;
@@ -162,6 +168,9 @@ template<typename T>
 template<typename T>
 	struct Vector<4, T>
 	{
+		public:
+			static const Vector ZERO;
+
 		public:
 			T x;
 			T y;

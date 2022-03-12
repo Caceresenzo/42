@@ -2,8 +2,6 @@
 #include <engine/camera/ICamera.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/control/Keyboard.hpp>
-#include <engine/core/Application.hpp>
-#include <engine/core/glut/GlutApplication.hpp>
 #include <engine/exception/Exception.hpp>
 #include <engine/image/bmp/BMPImageLoader.hpp>
 #include <engine/image/ImageData.hpp>
@@ -15,6 +13,7 @@
 #include <engine/model/MeshShader.hpp>
 #include <engine/model/prefab/Arrow.hpp>
 #include <engine/model/prefab/Grid.hpp>
+#include <engine/opengl.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
@@ -37,14 +36,6 @@
 #include <map>
 #include <string>
 
-class Application;
-
-class Window;
-
-class MeshShader;
-
-class ICamera;
-
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <cstdio>
@@ -58,34 +49,11 @@ class ICamera;
 #include <iostream>
 
 void
-on_window_resize(int, int);
+on_display(GLFWwindow *window);
 
-void
-on_mouse_move(int, int);
+#define WIDTH 800
+#define HEIGHT 800
 
-void
-on_display(void);
-
-void
-on_timer(int);
-
-void
-on_idle();
-
-void
-on_keyboard_down(unsigned char key, int x, int y);
-
-void
-on_keyboard_up(unsigned char key, int x, int y);
-
-void
-on_keyboard_special_down(int key, int x, int y);
-
-void
-on_keyboard_special_up(int key, int x, int y);
-
-static int g_width = 800, g_height = 800;
-static Vector<2, int> mouse_position;
 static float x = 0.5;
 static float rot = 0;
 static float direction = -1;
@@ -95,52 +63,112 @@ HighFrameCounter high_frame_counter;
 TextRenderer *text_renderer;
 ICamera *camera;
 
-VertexArrayObject *vao;
-
 Mesh *grid;
 Mesh *arrow;
 Mesh *ft;
 MeshShader *mesh_shader;
 
-Application *application;
-Window *window;
-
 float g_scale = 1.0f;
+
+static void
+error_callback(int error, const char *description)
+{
+	fprintf(stderr, "Error: %s\n", description);
+}
+
+static void
+key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+	typedef std::map<int, Keyboard::Key> mapping_map;
+	static mapping_map mapping;
+
+	if (mapping.empty())
+	{
+		mapping[GLFW_KEY_A] = Keyboard::A;
+		mapping[GLFW_KEY_D] = Keyboard::D;
+		mapping[GLFW_KEY_F] = Keyboard::F;
+		mapping[GLFW_KEY_I] = Keyboard::I;
+		mapping[GLFW_KEY_J] = Keyboard::J;
+		mapping[GLFW_KEY_K] = Keyboard::K;
+		mapping[GLFW_KEY_L] = Keyboard::L;
+		mapping[GLFW_KEY_O] = Keyboard::O;
+		mapping[GLFW_KEY_P] = Keyboard::P;
+		mapping[GLFW_KEY_Q] = Keyboard::Q;
+		mapping[GLFW_KEY_S] = Keyboard::S;
+		mapping[GLFW_KEY_W] = Keyboard::W;
+		mapping[GLFW_KEY_Z] = Keyboard::Z;
+		mapping[GLFW_KEY_ESCAPE] = Keyboard::ESCAPE;
+		mapping[GLFW_KEY_RIGHT_SHIFT] = Keyboard::SHIFT;
+		mapping[GLFW_KEY_LEFT_SHIFT] = Keyboard::SHIFT;
+		mapping[GLFW_KEY_SPACE] = Keyboard::SPACE;
+	}
+
+	mapping_map::iterator found = mapping.find(key);
+	if (found != mapping.end())
+	{
+		if (action == GLFW_PRESS)
+			Keyboard::set_pressed(found->second, true);
+		else if (action == GLFW_RELEASE)
+			Keyboard::set_pressed(found->second, false);
+	}
+
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void
+window_size_callback(GLFWwindow *window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
+static void
+cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
+{
+	int width = 0, height = 0;
+	glfwGetWindowSize(window, &width, &height);
+
+	Vector<2, int> offset = Vector<2, int>(int(xpos), int(ypos)) - Vector<2, int>(width / 2, height / 2);
+
+	if (offset != Vector<2, int>::ZERO)
+	{
+		offset.y = -offset.y;
+
+		camera->look(offset);
+
+		glfwSetCursorPos(window, width / 2, height / 2);
+	}
+}
 
 int
 main(int argc, char *argv[])
 {
 //	System::arguments = std::vector<char*>();
 
+	GLFWwindow *window;
+
 	{ /* initialize */
-		{ /* initialize_window */
-			glutInit(&argc, argv);
+		glfwSetErrorCallback(error_callback);
 
-			glutInitContextVersion(4, 0);
-			glutInitContextFlags(GLUT_FORWARD_COMPATIBLE);
-			glutInitContextProfile(GLUT_COMPATIBILITY_PROFILE);
+		if (!glfwInit())
+			exit(EXIT_FAILURE);
 
-			glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_EXIT);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-			glutInitWindowSize(g_width, g_height);
-			glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
-
-			int window = glutCreateWindow(argv[0]);
-			if (window < 1)
-			{
-				fprintf(stderr, "ERROR: Could not create a new rendering window.\n");
-				exit(EXIT_FAILURE);
-			}
-
-			glutReshapeFunc(on_window_resize);
-			glutDisplayFunc(on_display);
-			glutKeyboardFunc(on_keyboard_down);
-			glutSpecialFunc(on_keyboard_special_down);
-			glutKeyboardUpFunc(on_keyboard_up);
-			glutSpecialUpFunc(on_keyboard_special_up);
-			glutIdleFunc(on_idle);
-			glutPassiveMotionFunc(on_mouse_move);
+		window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+		if (!window)
+		{
+			glfwTerminate();
+			exit(EXIT_FAILURE);
 		}
+
+		glfwSetKeyCallback(window, key_callback);
+		glfwSetCursorPosCallback(window, cursor_position_callback);
+		glfwSetWindowSizeCallback(window, window_size_callback);
+
+		glfwMakeContextCurrent(window);
+		glfwSwapInterval(1);
 
 		fprintf(stdout, "INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
 		fprintf(stdout, "INFO: OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
@@ -160,6 +188,8 @@ main(int argc, char *argv[])
 		glDebugMessageCallback(OpenGL::message_callback, 0);
 
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+		glViewport(0, 0, WIDTH, HEIGHT);
 	}
 
 	try
@@ -170,8 +200,8 @@ main(int argc, char *argv[])
 		grid = Grid::of(10);
 		arrow = Arrow::of(2);
 
-//		ft = MeshLoader().load("models/capsule.obj");
-		ft = MeshLoader().load("42.obj");
+		ft = MeshLoader().load("models/capsule.obj");
+//		ft = MeshLoader().load("42.obj");
 //		ft = MeshLoader().load("rem.obj");
 		ft->set_texture(*Texture::from_image(BMPImageLoader().load("models/capsule.bmp")), true);
 
@@ -186,11 +216,27 @@ main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	on_timer(0);
-	glutMainLoop();
+	while (!glfwWindowShouldClose(window))
+	{
+		float ratio;
+		int width, height;
 
-	exit(EXIT_SUCCESS);
-	return (0);
+		glfwGetFramebufferSize(window, &width, &height);
+		ratio = width / (float)height;
+
+		glViewport(0, 0, width, height);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		on_display(window);
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+
+	glfwDestroyWindow(window);
+
+	glfwTerminate();
+	return (EXIT_SUCCESS);
 }
 
 Vector<3, float> cubePositions[] = {
@@ -207,19 +253,22 @@ Vector<3, float> cubePositions[] = {
 };
 
 void
-on_display(void)
+on_display(GLFWwindow *window)
 {
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), float(g_width) / float(g_height), 0.1f, 10000.0f);
+	int width = 0, height = 0;
+	glfwGetWindowSize(window, &width, &height);
+
+	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), float(width) / float(height), 0.1f, 10000.0f);
 
 	mesh_shader->use();
 	mesh_shader->projection.set(projection);
 	mesh_shader->view.set(camera->view_matrix());
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	if (Keyboard::is_pressed(Keyboard::O))
 		g_scale -= 0.02;
@@ -235,15 +284,6 @@ on_display(void)
 		grid->render(*mesh_shader);
 	}
 
-	{
-		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f);
-		model = ::translate(model, Vector<3, float>(camera->position()));
-		model = ::translate(model, Vector<3, float>(camera->front()));
-		model = ::scale(model, Vector<3, float>(0.05));
-		mesh_shader->model.set(model);
-		arrow->render(*mesh_shader);
-	}
-
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
@@ -257,7 +297,18 @@ on_display(void)
 		ft->render(*mesh_shader);
 	}
 
-	glClear( GL_DEPTH_BUFFER_BIT);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	{
+		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f);
+		model = ::translate(model, Vector<3, float>(camera->position()));
+		model = ::translate(model, Vector<3, float>(camera->front()));
+		model = ::scale(model, Vector<3, float>(0.02));
+		mesh_shader->model.set(model);
+		arrow->render(*mesh_shader);
+	}
+
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	frame_counter.count();
 	high_frame_counter.count();
@@ -276,8 +327,6 @@ on_display(void)
 		text_renderer->render(debug_text);
 	}
 
-	glutSwapBuffers();
-
 	x += 0.06 * direction;
 	rot += 0.8;
 	if (x >= 1 || x <= 0)
@@ -285,96 +334,32 @@ on_display(void)
 
 	camera->move(0.02);
 
-	if (Keyboard::is_pressed(Keyboard::ESCAPE))
-		glutLeaveMainLoop();
-}
-
-void
-on_window_resize(int width, int height)
-{
-	g_width = width;
-	g_height = height;
-
-	glViewport(0, 0, width, height);
-
-	std::cout << "resized " << width << "x" << height << std::endl;
-}
-
-void
-on_mouse_move(int x, int y)
-{
-	static bool warped = false;
-
-	if (x == mouse_position.x || y == mouse_position.y)
-		return;
-
-	Vector<2, int> old(mouse_position);
-
-	mouse_position.x = x;
-	mouse_position.y = y;
-
-	if (warped)
 	{
-		warped = false;
-		return;
+		static bool lock = false;
+		static Vector<2, int> old_pos;
+		static Vector<2, int> old_size;
+
+		if (Keyboard::is_pressed(Keyboard::F))
+		{
+			if (!lock)
+			{
+				if (glfwGetWindowMonitor(window))
+					glfwSetWindowMonitor(window, NULL, old_pos.x, old_pos.y, old_size.x, old_size.y, 0);
+				else
+				{
+					GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+					const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+
+					glfwGetWindowSize(window, &old_size.x, &old_size.y);
+					glfwGetWindowPos(window, &old_pos.x, &old_pos.y);
+
+					glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+				}
+			}
+
+			lock = true;
+		}
+		else
+			lock = false;
 	}
-
-	Vector<2, int> offset = mouse_position - old;
-
-	if (offset.x || offset.y)
-	{
-		offset.y = -offset.y;
-
-		camera->look(offset);
-
-		warped = true;
-		glutWarpPointer(g_width / 2, g_height / 2);
-	}
-}
-
-void
-on_timer(int)
-{
-	glutPostRedisplay();
-	glutTimerFunc(1000 / 60, on_timer, 0);
-}
-
-void
-on_idle()
-{
-}
-
-void
-on_keyboard_down(unsigned char key, int, int)
-{
-	if (key == 'f')
-		glutFullScreenToggle();
-
-	Keyboard::set_pressed((Keyboard::Key)key, true);
-//	std::cout << (int) key << std::endl;
-}
-
-void
-on_keyboard_up(unsigned char key, int, int)
-{
-	Keyboard::set_pressed((Keyboard::Key)key, false);
-//	std::cout << (int) key << std::endl;
-}
-
-void
-on_keyboard_special_down(int key, int, int)
-{
-	if (key == GLUT_KEY_SHIFT_L || key == GLUT_KEY_SHIFT_R)
-		Keyboard::set_pressed(Keyboard::SHIFT, true);
-
-	std::cout << (int)key << std::endl;
-}
-
-void
-on_keyboard_special_up(int key, int, int)
-{
-	if (key == GLUT_KEY_SHIFT_L || key == GLUT_KEY_SHIFT_R)
-		Keyboard::set_pressed(Keyboard::SHIFT, false);
-
-	std::cout << key << std::endl;
 }

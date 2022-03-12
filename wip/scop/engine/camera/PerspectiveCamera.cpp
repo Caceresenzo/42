@@ -46,7 +46,7 @@ PerspectiveCamera::move(double delta)
 	if (Keyboard::is_pressed(Keyboard::SHIFT))
 		velocity *= 5;
 
-	if (Keyboard::is_pressed(Keyboard::Z))
+	if (Keyboard::is_pressed(Keyboard::W))
 	{
 		m_position += m_front * velocity;
 		updated = true;
@@ -58,7 +58,7 @@ PerspectiveCamera::move(double delta)
 		updated = true;
 	}
 
-	if (Keyboard::is_pressed(Keyboard::Q))
+	if (Keyboard::is_pressed(Keyboard::A))
 	{
 		m_position -= m_right * velocity;
 		updated = true;
@@ -102,7 +102,7 @@ PerspectiveCamera::move(double delta)
 		updated = true;
 	}
 
-	if (Keyboard::is_pressed(Keyboard::A))
+	if (Keyboard::is_pressed(Keyboard::Q))
 	{
 		m_position -= m_up * velocity;
 		updated = true;

@@ -86,8 +86,9 @@ TextRenderer::render(Text &text) const
 	font_altas->set_active(0);
 	font_altas->bind();
 
-//	shader->window_size.set(Display::size());
-	shader->window_size.set(Vector<2, int>(glutGet(GLUT_WINDOW_WIDTH), glutGet(GLUT_WINDOW_HEIGHT)));
+	int width = 0, height = 0;
+	glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
+	shader->window_size.set(Vector<2, int>(width, height));
 	shader->texture_sampler.set(0);
 
 	shader->position.enable();
