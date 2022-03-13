@@ -23,7 +23,7 @@ Component::~Component()
 }
 
 void
-Component::update()
+Component::update(double)
 {
 }
 

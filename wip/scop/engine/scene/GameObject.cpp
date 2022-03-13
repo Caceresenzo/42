@@ -21,6 +21,15 @@ GameObject::~GameObject()
 }
 
 void
+GameObject::update(double delta_time)
+{
+	Node::render();
+
+	for (component_map::iterator iterator = components.begin(); iterator != components.end(); ++iterator)
+		iterator->second->update(delta_time);
+}
+
+void
 GameObject::render()
 {
 	Node::render();

@@ -39,6 +39,9 @@ class GameObject :
 
 	public:
 		virtual void
+		update(double delta_time);
+
+		virtual void
 		render();
 
 		SharedReference<Component>

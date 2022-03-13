@@ -10,9 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/model/Mesh.hpp>
-#include <engine/model/MeshShader.hpp>
+#include <engine/model/mesh/Mesh.hpp>
+#include <engine/model/mesh/MeshShader.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
+#include <engine/shader/uniform/BooleanUniform.hpp>
+#include <engine/shader/uniform/SamplerUniform.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <stddef.h>
 #include <queue>

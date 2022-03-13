@@ -10,12 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/model/MeshRenderer.hpp>
+#include <engine/math/matrix.hpp>
+#include <engine/math/Math.hpp>
+#include <engine/math/Transform.hpp>
+#include <engine/model/mesh/MeshRenderer.hpp>
+#include <engine/model/mesh/MeshShader.hpp>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 std::string MeshRenderer::NAME = "mesh-renderer";
 
 MeshRenderer::MeshRenderer(GameObject &parent) :
-		Component(parent, NAME)
+		Component(parent, NAME),
+		no_depth(false)
 {
 }
 
@@ -39,7 +46,13 @@ MeshRenderer::render()
 	shader->view.set(camera->view_matrix());
 	shader->model.set(transform().model());
 
+	if (no_depth)
+		glDepthRange(0, 0.01);
+
 	model->mesh->render(*shader);
+
+	if (no_depth)
+		glDepthRange(0, 1.0);
 
 	shader->unuse();
 }

@@ -13,8 +13,8 @@
 #ifndef MODEL_HPP_
 # define MODEL_HPP_
 
+#include <engine/model/mesh/Mesh.hpp>
 #include <engine/model/Material.hpp>
-#include <engine/model/Mesh.hpp>
 #include <lang/reference/SharedReference.hpp>
 
 class Model

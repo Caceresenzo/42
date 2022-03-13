@@ -13,16 +13,16 @@
 #include <engine/exception/IOException.hpp>
 #include <engine/math/Math.hpp>
 #include <engine/math/vector.hpp>
-#include <engine/model/Mesh.hpp>
-#include <engine/model/MeshException.hpp>
-#include <engine/model/MeshLoader.hpp>
+#include <engine/model/mesh/Mesh.hpp>
+#include <engine/model/mesh/MeshException.hpp>
+#include <engine/model/mesh/MeshLoader.hpp>
 #include <stddef.h>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <sstream>
 #include <limits>
+#include <sstream>
 #include <vector>
 
 MeshLoader::MeshLoader()

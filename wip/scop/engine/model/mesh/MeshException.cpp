@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/model/MeshException.hpp>
+#include <engine/model/mesh/MeshException.hpp>
 
 MeshException::MeshException(void) :
 		RuntimeException()

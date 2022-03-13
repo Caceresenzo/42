@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include <engine/math/vector.hpp>
-#include <engine/model/prefab/Grid.hpp>
+#include <engine/model/mesh/Mesh.hpp>
+#include <engine/model/mesh/simple/Grid.hpp>
 #include <vector>
 
 Mesh*

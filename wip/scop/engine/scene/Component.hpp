@@ -34,7 +34,7 @@ class Component
 
 	public:
 		virtual void
-		update();
+		update(double delta_time);
 
 		virtual void
 		render();

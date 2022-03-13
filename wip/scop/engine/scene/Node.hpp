@@ -52,6 +52,9 @@ class Node
 		remove_child(Node &node);
 
 		virtual void
+		update(double delta_time);
+
+		virtual void
 		render();
 
 	public:

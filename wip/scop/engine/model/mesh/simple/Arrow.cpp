@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include <engine/math/vector.hpp>
-#include <engine/model/Mesh.hpp>
-#include <engine/model/prefab/Arrow.hpp>
+#include <engine/model/mesh/Mesh.hpp>
+#include <engine/model/mesh/simple/Arrow.hpp>
 #include <vector>
 
 Mesh*

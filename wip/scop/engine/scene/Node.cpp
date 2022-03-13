@@ -66,6 +66,13 @@ Node::remove_child(Node &node)
 }
 
 void
+Node::update(double delta_time)
+{
+	for (node_vector::iterator iterator = children.begin(); iterator != children.end(); ++iterator)
+		(**iterator).update(delta_time);
+}
+
+void
 Node::render()
 {
 	for (node_vector::iterator iterator = children.begin(); iterator != children.end(); ++iterator)

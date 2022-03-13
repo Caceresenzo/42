@@ -9,13 +9,13 @@
 #include <engine/math/Math.hpp>
 #include <engine/math/Transform.hpp>
 #include <engine/math/vector.hpp>
-#include <engine/model/Mesh.hpp>
-#include <engine/model/MeshLoader.hpp>
-#include <engine/model/MeshRenderer.hpp>
-#include <engine/model/MeshShader.hpp>
+#include <engine/model/mesh/Mesh.hpp>
+#include <engine/model/mesh/MeshLoader.hpp>
+#include <engine/model/mesh/MeshRenderer.hpp>
+#include <engine/model/mesh/MeshShader.hpp>
+#include <engine/model/mesh/simple/Arrow.hpp>
+#include <engine/model/mesh/simple/Grid.hpp>
 #include <engine/model/Model.hpp>
-#include <engine/model/prefab/Arrow.hpp>
-#include <engine/model/prefab/Grid.hpp>
 #include <engine/opengl.hpp>
 #include <engine/scene/GameObject.hpp>
 #include <engine/scene/Node.hpp>
@@ -65,10 +65,35 @@ static float x = 0.5;
 static float rot = 0;
 static float direction = -1;
 
+class StickToCameraFront :
+		public Component
+{
+	public:
+		SharedReference<ICamera> camera;
+
+	public:
+		StickToCameraFront(GameObject &parent) :
+				Component(parent, "stick-to-camera-front")
+		{
+		}
+
+		virtual
+		~StickToCameraFront()
+		{
+		}
+
+	public:
+		virtual void
+		update(double)
+		{
+			transform().translation = camera->position() + camera->front();
+		}
+};
+
 FrameCounter frame_counter;
 HighFrameCounter high_frame_counter;
 TextRenderer *text_renderer;
-ICamera *camera;
+SharedReference<ICamera> camera;
 
 Scene scene;
 
@@ -201,12 +226,10 @@ main()
 	try
 	{
 		text_renderer = new TextRenderer();
-		camera = new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
+		camera = *new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
 
-		arrow = Arrow::of(2);
-
-		ft = MeshLoader().load("models/capsule.obj");
-//		ft = MeshLoader().load("42.obj");
+//		ft = MeshLoader().load("models/capsule.obj");
+		ft = MeshLoader().load("42.obj");
 //		ft = MeshLoader().load("rem.obj");
 		ft->set_texture(*Texture::from_image(BMPImageLoader().load("models/capsule.bmp")), true);
 
@@ -215,12 +238,26 @@ main()
 		{
 			GameObject &object = scene.add_child_as(*new GameObject());
 			object.transform.translation = Vector<3, float>(-25.0, 0, -25.0);
-			object.transform.scaling = Vector<3, float>(100, 100, 100);
+			object.transform.scaling = Vector<3, float>(100, 0, 100);
 
 			MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
 			renderer.shader = *MeshShader::basic();
 			renderer.model = *new Model(*Grid::of(10));
-			renderer.camera = *camera;
+			renderer.camera = camera;
+		}
+
+		{
+			GameObject &object = scene.add_child_as(*new GameObject());
+			object.transform.scaling = Vector<3, float>(0.02);
+
+			StickToCameraFront &sticky = object.add_component_as(*new StickToCameraFront(object));
+			sticky.camera = camera;
+
+			MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
+			renderer.shader = *MeshShader::basic();
+			renderer.model = *new Model(*Arrow::of(2));
+			renderer.camera = camera;
+			renderer.no_depth = true;
 		}
 
 		fflush(stdout);
@@ -268,6 +305,7 @@ on_display(GLFWwindow *window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
+	scene.update(1000 / 144);
 	scene.render();
 
 	int width = 0, height = 0;
@@ -298,17 +336,6 @@ on_display(GLFWwindow *window)
 		mesh_shader->model.set(model);
 
 		ft->render(*mesh_shader);
-	}
-
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	{
-		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f);
-		model = ::translate(model, Vector<3, float>(camera->position()));
-		model = ::translate(model, Vector<3, float>(camera->front()));
-		model = ::scale(model, Vector<3, float>(0.02));
-		mesh_shader->model.set(model);
-		arrow->render(*mesh_shader);
 	}
 
 	glClear(GL_DEPTH_BUFFER_BIT);

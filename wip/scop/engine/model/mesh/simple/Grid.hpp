@@ -13,7 +13,7 @@
 #ifndef GRID_HPP_
 # define GRID_HPP_
 
-#include <engine/model/Mesh.hpp>
+#include <engine/model/mesh/Mesh.hpp>
 
 class Mesh;
 

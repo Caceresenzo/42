@@ -14,7 +14,7 @@
 # define MESHRENDERER_HPP_
 
 #include <engine/camera/ICamera.hpp>
-#include <engine/model/MeshShader.hpp>
+#include <engine/model/mesh/MeshShader.hpp>
 #include <engine/model/Model.hpp>
 #include <engine/scene/Component.hpp>
 #include <lang/reference/SharedReference.hpp>
@@ -30,6 +30,7 @@ class MeshRenderer :
 		SharedReference<ICamera> camera;
 		SharedReference<MeshShader> shader;
 		SharedReference<Model> model;
+		bool no_depth;
 
 	public:
 		MeshRenderer(GameObject &parent);
