@@ -279,9 +279,9 @@ template<int N, typename T>
 		return (vector);
 	}
 
-template<int N, typename T>
+template<int N, typename T, typename U>
 	inline Vector<N, T>
-	operator*(const Vector<N, T> &left, const T &right)
+	operator*(const Vector<N, T> &left, const U &right)
 	{
 		Vector<N, T> vector;
 

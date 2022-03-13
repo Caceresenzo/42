@@ -1,37 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   VectorUniform.hpp                                  :+:      :+:    :+:   */
+/*   Transform.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 13:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 13:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/13 00:19:28 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/13 00:19:28 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTORUNIFORM_HPP_
-# define VECTORUNIFORM_HPP_
+#ifndef TRANSFORM_HPP_
+# define TRANSFORM_HPP_
 
+#include <engine/math/matrix.hpp>
 #include <engine/math/vector.hpp>
-#include <engine/shader/ShaderVariable.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
-#include <GL/glew.h>
-#include <string>
 
-template<int N, typename T>
-	class VectorUniform :
-			public Uniform
+template<typename T = float>
+	class Transform
 	{
 		public:
-			VectorUniform(const std::string &name) :
-					Uniform(name)
+			Vector<3, T> translation;
+			Vector<3, T> rotation;
+			Vector<3, T> scaling;
+
+		public:
+			Transform() :
+					translation(0),
+					rotation(0),
+					scaling(1)
 			{
 			}
 
 		public:
-			void
-			set(const Vector<N, T> &vector);
+			Matrix<4, 4, T>
+			model()
+			{
+				return (::scale(::rotate(::translate(Matrix<4, 4, T>(1), translation), rotation), scaling));
+			}
 	};
 
-#endif /* VECTORUNIFORM_HPP_ */
+#endif /* TRANSFORM_HPP_ */

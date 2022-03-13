@@ -7,13 +7,19 @@
 #include <engine/image/ImageData.hpp>
 #include <engine/math/matrix.hpp>
 #include <engine/math/Math.hpp>
+#include <engine/math/Transform.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/model/Mesh.hpp>
 #include <engine/model/MeshLoader.hpp>
+#include <engine/model/MeshRenderer.hpp>
 #include <engine/model/MeshShader.hpp>
+#include <engine/model/Model.hpp>
 #include <engine/model/prefab/Arrow.hpp>
 #include <engine/model/prefab/Grid.hpp>
 #include <engine/opengl.hpp>
+#include <engine/scene/GameObject.hpp>
+#include <engine/scene/Node.hpp>
+#include <engine/scene/Scene.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/ShaderProgram.hpp>
 #include <engine/shader/uniform/MatrixUniform.hpp>
@@ -31,6 +37,7 @@
 #include <GL/freeglut_ext.h>
 #include <GL/freeglut_std.h>
 #include <GLFW/glfw3.h>
+#include <lang/reference/SharedReference.hpp>
 #include <stdlib.h>
 #include <string.h>
 #include <map>
@@ -63,7 +70,8 @@ HighFrameCounter high_frame_counter;
 TextRenderer *text_renderer;
 ICamera *camera;
 
-Mesh *grid;
+Scene scene;
+
 Mesh *arrow;
 Mesh *ft;
 MeshShader *mesh_shader;
@@ -71,13 +79,13 @@ MeshShader *mesh_shader;
 float g_scale = 1.0f;
 
 static void
-error_callback(int error, const char *description)
+error_callback(int, const char *description)
 {
 	fprintf(stderr, "Error: %s\n", description);
 }
 
 static void
-key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+key_callback(GLFWwindow *window, int key, int, int action, int)
 {
 	typedef std::map<int, Keyboard::Key> mapping_map;
 	static mapping_map mapping;
@@ -117,7 +125,7 @@ key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 }
 
 void
-window_size_callback(GLFWwindow *window, int width, int height)
+window_size_callback(GLFWwindow*, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
@@ -141,8 +149,30 @@ cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
 }
 
 int
-main(int argc, char *argv[])
+main()
 {
+//	{
+//		Node root;
+//
+//		Node &a = *root.add_child(*new Node());
+//		Node &b = *root.add_child(*new Node());
+//		Node &c = *root.add_child(*new Node());
+//
+//		Node &aa = *a.add_child(*new Node());
+//		Node &ab = *a.add_child(*new Node());
+//
+//		Node &ca = *c.add_child(*new Node());
+//		Node &cb = *c.add_child(*new Node());
+//		Node &cc = *c.add_child(*new Node());
+//
+//		Node::dump(root);
+//
+//		c.remove_child(ca);
+//
+//		Node::dump(root);
+//	}
+
+//	return 0;
 //	System::arguments = std::vector<char*>();
 
 	GLFWwindow *window;
@@ -197,7 +227,6 @@ main(int argc, char *argv[])
 		text_renderer = new TextRenderer();
 		camera = new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
 
-		grid = Grid::of(10);
 		arrow = Arrow::of(2);
 
 		ft = MeshLoader().load("models/capsule.obj");
@@ -206,6 +235,17 @@ main(int argc, char *argv[])
 		ft->set_texture(*Texture::from_image(BMPImageLoader().load("models/capsule.bmp")), true);
 
 		mesh_shader = MeshShader::basic();
+
+		{
+			GameObject &object = scene.add_child_as(*new GameObject());
+			object.transform.translation = Vector<3, float>(-25.0, 0, -25.0);
+			object.transform.scaling = Vector<3, float>(100, 100, 100);
+
+			MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
+			renderer.shader = *MeshShader::basic();
+			renderer.model = *new Model(*Grid::of(10));
+			renderer.camera = *camera;
+		}
 
 		fflush(stdout);
 	}
@@ -218,12 +258,8 @@ main(int argc, char *argv[])
 
 	while (!glfwWindowShouldClose(window))
 	{
-		float ratio;
 		int width, height;
-
 		glfwGetFramebufferSize(window, &width, &height);
-		ratio = width / (float)height;
-
 		glViewport(0, 0, width, height);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -259,6 +295,9 @@ on_display(GLFWwindow *window)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
+
+	scene.render();
+
 	int width = 0, height = 0;
 	glfwGetWindowSize(window, &width, &height);
 
@@ -276,21 +315,13 @@ on_display(GLFWwindow *window)
 	if (Keyboard::is_pressed(Keyboard::P))
 		g_scale += 0.02;
 
-	{
-		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f);
-		model = ::translate(model, Vector<3, float>(-50.0, 0, -50.0));
-		model = ::scale(model, Vector<3, float>(100, 100, 100));
-		mesh_shader->model.set(model);
-		grid->render(*mesh_shader);
-	}
-
 	for (unsigned int i = 0; i < 10; i++)
 	{
 		Matrix<4, 4, float> model = Matrix<4, 4, float>(1.0f); // make sure to initialize matrix to identity matrix first
 //		float angle = 20.0f * i * x;
 //		model = ::rotate(model, Math::radians(angle), Vector<3, float>(1.0f, 0.3f, 0.5f));
 		model = ::translate(model, cubePositions[i] * 2.0f);
-		model = ::rotate(model, Math::radians(rot), Vector<3, float>(0, 1.0f, 0));
+		model = ::rotate(model, Math::radians(rot), Vector<3, float>(0, 1, 0));
 		model = ::scale(model, Vector<3, float>(g_scale, g_scale, g_scale));
 		mesh_shader->model.set(model);
 

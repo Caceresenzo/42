@@ -13,8 +13,8 @@
 #ifndef WEAKREFERENCE_HPP_
 # define WEAKREFERENCE_HPP_
 
-#include <ref/ReferenceCounter.hpp>
-#include <ref/SharedReference.hpp>
+#include <lang/reference/ReferenceCounter.hpp>
+#include <lang/reference/SharedReference.hpp>
 #include <cassert>
 #include <string>
 
@@ -82,6 +82,22 @@ template<typename T>
 			}
 
 			WeakReference&
+			operator=(T &other)
+			{
+				if (m_value != &other)
+				{
+					release();
+					m_counter = new ReferenceCounter();
+
+					m_value = &other;
+
+					add();
+				}
+
+				return (*this);
+			}
+
+			WeakReference&
 			operator=(const SharedReference<T> &other)
 			{
 				release();
@@ -106,7 +122,21 @@ template<typename T>
 				return (m_value);
 			}
 
+			operator bool()
+			{
+				return (!is_expired());
+			}
+
 		public:
+			T*
+			value()
+			{
+				if (is_expired())
+					return (NULL);
+
+				return (m_value);
+			}
+
 			long
 			count()
 			{

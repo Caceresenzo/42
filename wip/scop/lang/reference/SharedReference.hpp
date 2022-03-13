@@ -13,8 +13,8 @@
 #ifndef SHAREDREFERENCE_HPP_
 # define SHAREDREFERENCE_HPP_
 
-#include <ref/ReferenceCounter.hpp>
-#include <ref/WeakReference.hpp>
+#include <lang/reference/ReferenceCounter.hpp>
+#include <lang/reference/WeakReference.hpp>
 #include <cassert>
 #include <string>
 
@@ -89,7 +89,18 @@ template<typename T>
 				return (m_value);
 			}
 
+			operator bool()
+			{
+				return (!!m_value);
+			}
+
 		public:
+			T*
+			value()
+			{
+				return (m_value);
+			}
+
 			long
 			count()
 			{
