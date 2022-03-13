@@ -151,30 +151,6 @@ cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
 int
 main()
 {
-//	{
-//		Node root;
-//
-//		Node &a = *root.add_child(*new Node());
-//		Node &b = *root.add_child(*new Node());
-//		Node &c = *root.add_child(*new Node());
-//
-//		Node &aa = *a.add_child(*new Node());
-//		Node &ab = *a.add_child(*new Node());
-//
-//		Node &ca = *c.add_child(*new Node());
-//		Node &cb = *c.add_child(*new Node());
-//		Node &cc = *c.add_child(*new Node());
-//
-//		Node::dump(root);
-//
-//		c.remove_child(ca);
-//
-//		Node::dump(root);
-//	}
-
-//	return 0;
-//	System::arguments = std::vector<char*>();
-
 	GLFWwindow *window;
 
 	{ /* initialize */
@@ -186,7 +162,7 @@ main()
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-		window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+		window = glfwCreateWindow(WIDTH, HEIGHT, "Simple example", NULL, NULL);
 		if (!window)
 		{
 			glfwTerminate();
@@ -258,10 +234,7 @@ main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		int width, height;
-		glfwGetFramebufferSize(window, &width, &height);
-		glViewport(0, 0, width, height);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		on_display(window);
 
@@ -294,7 +267,6 @@ on_display(GLFWwindow *window)
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-
 
 	scene.render();
 
@@ -348,12 +320,12 @@ on_display(GLFWwindow *window)
 		char text[255] = { 0 };
 
 		const char *format = ""
-				"frame %d\n"
+				"frame %d (%d)\n"
 				"  pos %4.4f %4.4f %4.4f\n"
 				"  yaw %4.4f\n"
 				"pitch %4.4f"
 				"";
-		sprintf(text, format, high_frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
+		sprintf(text, format, high_frame_counter.frame(), frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
 		Text debug_text(text, Vector<2, float>(0.0f, 0.0f), 32.0f);
 		text_renderer->render(debug_text);
 	}

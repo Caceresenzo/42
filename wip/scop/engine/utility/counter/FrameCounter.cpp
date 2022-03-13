@@ -59,6 +59,8 @@ FrameCounter::count()
 			long long took = now - m_last_time;
 			float average = float(took) / float(m_frame);
 
+			m_last_per_seconds = m_frame;
+
 			std::cout << m_frame << " frame(s) in " << took << " s (or ~" << average << "s/frame)" << std::endl << std::flush;
 		}
 

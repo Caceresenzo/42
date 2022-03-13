@@ -46,27 +46,31 @@ PerspectiveCamera::move(double delta)
 	if (Keyboard::is_pressed(Keyboard::SHIFT))
 		velocity *= 5;
 
+	Vector<3, float> up(0, 1, 0);
+	Vector<3, float> right = ::normalize(::cross(m_front, up));
+	Vector<3, float> forward(Math::cos(Math::radians(m_yaw)), 0, Math::sin(Math::radians(m_yaw)));
+
 	if (Keyboard::is_pressed(Keyboard::W))
 	{
-		m_position += m_front * velocity;
+		m_position += forward * velocity;
 		updated = true;
 	}
 
 	if (Keyboard::is_pressed(Keyboard::S))
 	{
-		m_position -= m_front * velocity;
+		m_position -= forward * velocity;
 		updated = true;
 	}
 
 	if (Keyboard::is_pressed(Keyboard::A))
 	{
-		m_position -= m_right * velocity;
+		m_position -= right * velocity;
 		updated = true;
 	}
 
 	if (Keyboard::is_pressed(Keyboard::D))
 	{
-		m_position += m_right * velocity;
+		m_position += right * velocity;
 		updated = true;
 	}
 
@@ -104,13 +108,13 @@ PerspectiveCamera::move(double delta)
 
 	if (Keyboard::is_pressed(Keyboard::Q))
 	{
-		m_position -= m_up * velocity;
+		m_position -= up * velocity;
 		updated = true;
 	}
 
 	if (Keyboard::is_pressed(Keyboard::SPACE))
 	{
-		m_position += m_up * velocity;
+		m_position += up * velocity;
 		updated = true;
 	}
 
@@ -125,6 +129,10 @@ PerspectiveCamera::look(const Vector<2, int> &offset)
 	m_pitch += m_sensitivity * offset.y;
 
 	m_pitch = Math::clamp(m_pitch, -89.0f, 89.0f);
+	if (m_yaw < 0)
+		m_yaw = 360 - Math::floating_modulo(-m_yaw, 360.0f);
+	if (m_yaw > 360)
+		m_yaw = 0 + Math::floating_modulo(m_yaw, 360.0f);
 
 	compute_vectors();
 }

@@ -13,8 +13,10 @@
 #ifndef MATH_HPP_
 # define MATH_HPP_
 
+#include <engine/exception/ArithmeticException.hpp>
 #include <cmath>
 #include <algorithm>
+#include <cerrno>
 
 #define PI 3.14159265358979323846
 
@@ -82,6 +84,18 @@ class Math
 			abs(const T &value)
 			{
 				return (std::abs(value));
+			}
+
+		template<typename T>
+			inline static T
+			floating_modulo(const T &number, const T &denom)
+			{
+				T answer = std::fmod(number, denom);
+
+				if (errno == EDOM)
+					throw ArithmeticException("argument out of domain");
+
+				return (answer);
 			}
 };
 
