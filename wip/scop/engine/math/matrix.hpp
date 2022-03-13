@@ -18,6 +18,8 @@
 #include <cassert>
 #include <cmath>
 #include <cstdio>
+#include <iostream>
+#include <typeinfo>
 
 template<int R, int C, typename T>
 	struct Matrix
@@ -148,9 +150,9 @@ template<typename T>
 
 template<typename T>
 	inline Matrix<4, 4, T>
-	rotate(const Matrix<4, 4, T> &source, const Vector<3, T> &vector)
+	rotate(const Matrix<4, 4, T> &source, const T &angle, const Vector<3, float> &vector)
 	{
-		T const a = 1;
+		T const a = angle;
 		T const c = cos(a);
 		T const s = sin(a);
 
@@ -181,33 +183,18 @@ template<typename T>
 
 template<typename T>
 	inline Matrix<4, 4, T>
-	rotate(const Matrix<4, 4, T> &source, const T &angle, const Vector<3, float> &vector)
+	rotate(const Matrix<4, 4, T> &source, const Vector<3, T> &vector)
 	{
-		T const a = angle;
-		T const c = cos(a);
-		T const s = sin(a);
-
-		Vector<3, float> axis = ::normalize(vector);
-		Vector<3, T> temp = axis * (T(1) - c);
-
-		Matrix<4, 4, T> rotate;
-		rotate[0][0] = c + temp[0] * axis[0];
-		rotate[0][1] = temp[0] * axis[1] + s * axis[2];
-		rotate[0][2] = temp[0] * axis[2] - s * axis[1];
-
-		rotate[1][0] = temp[1] * axis[0] - s * axis[2];
-		rotate[1][1] = c + temp[1] * axis[1];
-		rotate[1][2] = temp[1] * axis[2] + s * axis[0];
-
-		rotate[2][0] = temp[2] * axis[0] + s * axis[1];
-		rotate[2][1] = temp[2] * axis[1] - s * axis[0];
-		rotate[2][2] = c + temp[2] * axis[2];
-
 		Matrix<4, 4, T> matrix(source);
-		matrix[0] = source[0] * rotate[0][0] + source[1] * rotate[0][1] + source[2] * rotate[0][2];
-		matrix[1] = source[0] * rotate[1][0] + source[1] * rotate[1][1] + source[2] * rotate[1][2];
-		matrix[2] = source[0] * rotate[2][0] + source[1] * rotate[2][1] + source[2] * rotate[2][2];
-		matrix[3] = source[3];
+
+		if (vector.x)
+			matrix = ::rotate(matrix, vector.x, Vector<3, float>(1, 0, 0));
+
+		if (vector.y)
+			matrix = ::rotate(matrix, vector.y, Vector<3, float>(0, 1, 0));
+
+		if (vector.z)
+			matrix = ::rotate(matrix, vector.z, Vector<3, float>(0, 0, 1));
 
 		return (matrix);
 	}

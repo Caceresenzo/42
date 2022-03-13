@@ -1,45 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Window.hpp                                         :+:      :+:    :+:   */
+/*   WindowKeyboardListener.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/08 00:17:46 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/08 00:17:46 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/13 19:40:41 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/13 19:40:41 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WINDOW_HPP_
-# define WINDOW_HPP_
+#ifndef WINDOWKEYBOARDLISTENER_HPP_
+# define WINDOWKEYBOARDLISTENER_HPP_
 
-#include <engine/math/vector.hpp>
-#include <string>
+#include <engine/control/Keyboard.hpp>
 
-class Window
+class Window;
+
+class WindowKeyboardListener
 {
 	public:
 		virtual
-		~Window();
+		~WindowKeyboardListener();
 
 	public:
 		virtual void
-		set_title(const std::string &title) = 0;
-
-		virtual bool
-		is_fullscreen() const = 0;
+		on_key_press(Window &window, Keyboard::Key key);
 
 		virtual void
-		set_fullscreen(bool fullscreen) = 0;
-
-		virtual void
-		toggle_fullscreen();
-
-		virtual Vector<2, int>
-		position() const = 0;
-
-		virtual Vector<2, int>
-		size() const = 0;
+		on_key_release(Window &window, Keyboard::Key key);
 };
 
-#endif /* WINDOW_HPP_ */
+#endif /* WINDOWKEYBOARDLISTENER_HPP_ */

@@ -1,41 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GlutApplication.hpp                                :+:      :+:    :+:   */
+/*   WindowSizeListener.hpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/08 00:40:34 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/08 00:40:34 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/13 20:17:35 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/13 20:17:35 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GLUTAPPLICATION_HPP_
-# define GLUTAPPLICATION_HPP_
+#ifndef WINDOWSIZELISTENER_HPP_
+# define WINDOWSIZELISTENER_HPP_
 
-#include <engine/core/Application.hpp>
-#include <string>
+#include <engine/math/vector.hpp>
 
-class GlutWindow;
+class Window;
 
-class GlutApplication :
-		public Application
+class WindowSizeListener
 {
-	private:
-		GlutWindow *m_main_window;
-
 	public:
-		GlutApplication(const std::string &name);
-
 		virtual
-		~GlutApplication();
+		~WindowSizeListener();
 
 	public:
-		virtual Window*
-		create_window(int width, int height, const std::string &name);
-
-		virtual Window&
-		main_window();
+		virtual void
+		on_size_change(Window &window, const Vector<2, int> &size);
 };
 
-#endif /* GLUTAPPLICATION_HPP_ */
+#endif /* WINDOWSIZELISTENER_HPP_ */

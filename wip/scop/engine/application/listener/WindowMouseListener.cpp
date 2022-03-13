@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GlfwApplication.hpp                                :+:      :+:    :+:   */
+/*   WindowMouseListener.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/08 00:40:47 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/08 00:40:47 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/13 19:39:03 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/13 19:39:03 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GLFWAPPLICATION_HPP_
-# define GLFWAPPLICATION_HPP_
+#include <engine/application/listener/WindowMouseListener.hpp>
+#include <engine/application/Window.hpp>
 
-#include <engine/core/Application.hpp>
-
-class GlfwApplication :
-		public Application
+WindowMouseListener::~WindowMouseListener()
 {
-	public:
-		GlfwApplication();
+}
 
-		virtual
-		~GlfwApplication();
-};
-
-#endif /* GLFWAPPLICATION_HPP_ */
+void
+WindowMouseListener::on_mouse_move(Window&, const Vector<2, int>&)
+{
+}

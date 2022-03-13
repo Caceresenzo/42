@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Application.cpp                                    :+:      :+:    :+:   */
+/*   Application.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,30 +10,33 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/core/Application.hpp>
-#include <engine/exception/IllegalStateException.hpp>
+#ifndef APPLICATION_HPP_
+# define APPLICATION_HPP_
 
-Application *Application::m_instance = NULL;
+#include <string>
 
-Application::Application(const std::string &name) :
-		m_name(name)
+class Window;
+
+class Application
 {
-	if (m_instance)
-		throw IllegalStateException("already created");
+	private:
+		static Application *m_instance;
 
-	m_instance = this;
-}
+	private:
+		std::string m_name;
 
-Application::~Application()
-{
-	m_instance = NULL;
-}
+	public:
+		Application(const std::string &name);
 
-Application&
-Application::instance()
-{
-	if (!m_instance)
-		throw IllegalStateException("not yet available");
+		~Application();
 
-	return (*m_instance);
-}
+	public:
+		void
+		poll_events();
+
+	public:
+		static Application&
+		instance();
+};
+
+#endif /* APPLICATION_HPP_ */

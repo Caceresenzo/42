@@ -124,7 +124,7 @@ MeshLoader::load(const std::string &path)
 				stream >> x;
 			}
 
-			bool square = stream >> indice.w;
+			bool square = !!(stream >> indice.w);
 
 			if ((stream >> std::ws).peek() != std::char_traits<char>::eof())
 				throw MeshException("face: content remain in line");

@@ -40,7 +40,6 @@ TextRenderer::TextRenderer() :
 
 		delete image_data;
 		image_data = NULL;
-
 	}
 	catch (...)
 	{
@@ -60,6 +59,7 @@ TextRenderer::TextRenderer() :
 TextRenderer::~TextRenderer()
 {
 	delete shader;
+	delete font_altas;
 }
 
 void

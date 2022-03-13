@@ -7,10 +7,12 @@ out vec2 pass_UV;
 
 uniform ivec2 windowSize;
 
-void main(){
-	vec2 half = windowSize / 2;
-	vec2 homoneneous = (in_Positions - half) / half;
-	
+void
+main()
+{
+	vec2 halfWindow = windowSize / 2;
+	vec2 homoneneous = (in_Positions - halfWindow) / halfWindow;
+
 	gl_Position = vec4(homoneneous, 0, 1);
 
 	pass_UV = in_UV;
