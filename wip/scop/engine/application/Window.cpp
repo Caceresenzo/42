@@ -78,9 +78,10 @@ size_callback(GLFWwindow *raw_window, int width, int height)
 Window::Window(int width, int height) :
 		m_window(NULL)
 {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-//	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
 	m_window = glfwCreateWindow(width, height, "window", NULL, NULL);
 	if (!m_window)
@@ -97,10 +98,8 @@ Window::Window(int width, int height) :
 	glfwSwapInterval(1);
 	try
 	{
-		std::cout << "glew init..." << std::endl << std::flush;
 		glewExperimental = GL_TRUE;
 		GLint result = glewInit();
-		std::cout << result << std::endl << std::flush;
 		if (GLEW_OK != result)
 			throw RuntimeException(reinterpret_cast<const char*>(glewGetErrorString(result)));
 	}
@@ -111,7 +110,10 @@ Window::Window(int width, int height) :
 	}
 
 	glEnable(GL_DEBUG_OUTPUT);
-	glDebugMessageCallback(OpenGL::message_callback, 0);
+	if (glDebugMessageCallback)
+		glDebugMessageCallback(OpenGL::message_callback, 0);
+	else
+		std::cout << "could not attach message callback" << std::endl;
 
 	glViewport(0, 0, width, height);
 }
