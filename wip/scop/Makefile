@@ -13,14 +13,14 @@
 PROJECT_ROOT			= $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 TARGET					= scop
-SOURCES					= $(shell find . -name "*.cpp" -a -not -name "*test*")
+SOURCES					= $(shell find source/ -name "*.cpp")
 
 OBJECTS					= $(SOURCES:.cpp=.o)
 
 COMPILER				= g++
 
 FRAMEWORKS				= 
-FLAGS					= -Wall -Wextra -Werror -g3 -O0 -I. # -fsanitize=address
+FLAGS					= -Wall -Wextra -Werror -g3 -O0 -Isource/ # -fsanitize=address
 LIBRARIES				= -lGL -lGLU -lglfw -lX11 -lXxf86vm -lXrandr -lpthread -lGLEW
 
 .cpp.o:

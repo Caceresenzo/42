@@ -1,0 +1,216 @@
+#include <engine/application/Application.hpp>
+#include <engine/application/Window.hpp>
+#include <engine/camera/PerspectiveCamera.hpp>
+#include <engine/math/Transform.hpp>
+#include <engine/math/vector.hpp>
+#include <engine/model/mesh/Mesh.hpp>
+#include <engine/model/mesh/MeshLoader.hpp>
+#include <engine/model/mesh/MeshRenderer.hpp>
+#include <engine/model/mesh/MeshShader.hpp>
+#include <engine/model/mesh/simple/Arrow.hpp>
+#include <engine/model/mesh/simple/Grid.hpp>
+#include <engine/model/Model.hpp>
+#include <engine/scene/GameObject.hpp>
+#include <engine/scene/Node.hpp>
+#include <engine/scene/Scene.hpp>
+#include <engine/text/Text.hpp>
+#include <engine/text/TextRenderer.hpp>
+#include <engine/texture/Texture.hpp>
+#include <engine/utility/counter/FrameCounter.hpp>
+#include <engine/utility/counter/HighFrameCounter.hpp>
+#include <game/component/AlwaysRotateComponent.hpp>
+#include <game/component/StickToCameraFrontComponent.hpp>
+#include <game/listener/KeyboardListener.hpp>
+#include <game/listener/MouseListener.hpp>
+#include <GL/glew.h>
+#include <lang/Exception.hpp>
+#include <lang/image/bmp/BMPImageLoader.hpp>
+#include <lang/image/ImageData.hpp>
+#include <lang/reference/SharedReference.hpp>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+
+#define WIDTH 800
+#define HEIGHT 800
+
+static Vector<3, float> positions[] = {
+/**/Vector<3, float>(0.0f, 0.0f, 0.0f),
+/**/Vector<3, float>(2.0f, 5.0f, -15.0f),
+/**/Vector<3, float>(-1.5f, -2.2f, -2.5f),
+/**/Vector<3, float>(-3.8f, -2.0f, -12.3f),
+/**/Vector<3, float>(2.4f, -0.4f, -3.5f),
+/**/Vector<3, float>(-1.7f, 3.0f, -7.5f),
+/**/Vector<3, float>(1.3f, -2.0f, -2.5f),
+/**/Vector<3, float>(1.5f, 2.0f, -2.5f),
+/**/Vector<3, float>(1.5f, 0.2f, -1.5f),
+/**/Vector<3, float>(-1.3f, 1.0f, -1.5f) //
+};
+
+int
+main(int, char **argv)
+{
+	SharedReference<Application> application;
+	SharedReference<Window> window;
+
+	try
+	{
+		application = *new Application(argv[0]);
+	}
+	catch (Exception &exception)
+	{
+		std::cout << "Could not start application: " << exception.what() << std::endl;
+		return (EXIT_FAILURE);
+	}
+
+	SharedReference<ICamera> camera(*new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f)));
+
+	try
+	{
+		window = *new Window(WIDTH, HEIGHT);
+		window->set_title("scop");
+
+		window->keyboard_listeners.push_back(*new KeyboardListener());
+		window->mouse_listeners.push_back(*new MouseListener(camera));
+	}
+	catch (Exception &exception)
+	{
+		std::cout << "Could not create window: " << exception.what() << std::endl;
+		return (EXIT_FAILURE);
+	}
+
+	fprintf(stdout, "INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
+	fprintf(stdout, "INFO: OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
+	fprintf(stdout, "INFO: OpenGL Vendor: %s\n", glGetString(GL_VENDOR));
+	fflush(stdout);
+
+	SharedReference<TextRenderer> text_renderer(*new TextRenderer());
+	SharedReference<Scene> scene(*new Scene());
+	SharedReference<MeshShader> mesh_render = *MeshShader::basic();
+
+	{
+		GameObject &object = scene->add_child_as(*new GameObject());
+		object.transform.translation = Vector<3, float>(-25.0, 0, -25.0);
+		object.transform.scaling = Vector<3, float>(100, 0, 100);
+
+		MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
+		renderer.shader = mesh_render;
+		renderer.model = *new Model(*Grid::of(10));
+		renderer.camera = camera;
+	}
+
+	{
+		GameObject &object = scene->add_child_as(*new GameObject());
+		object.transform.scaling = Vector<3, float>(0.02);
+
+		StickToCameraFrontComponent &sticky = object.add_component_as(*new StickToCameraFrontComponent(object));
+		sticky.camera = camera;
+
+		MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
+		renderer.shader = mesh_render;
+		renderer.model = *new Model(*Arrow::of(2));
+		renderer.camera = camera;
+		renderer.no_depth = true;
+	}
+
+	{
+		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		std::string file = "assets/models/capsule.obj";
+//		std::string file = "42.obj";
+//		std::string file = "rem.obj";
+
+		SharedReference<Mesh> mesh;
+		try
+		{
+			mesh = *MeshLoader().load(file);
+		}
+		catch (Exception &exception)
+		{
+			std::cout << "Could not load mesh: " << exception.what() << std::endl;
+			return (EXIT_FAILURE);
+		}
+
+		SharedReference<Model> model = *new Model(mesh);
+
+		try
+		{
+			ImageData *image = BMPImageLoader().load("assets/models/capsule.bmp");
+			mesh->set_texture(*Texture::from_image(image), true);
+			delete image;
+		}
+		catch (Exception &exception)
+		{
+			std::cout << "Could not load texture: " << exception.what() << std::endl;
+			return (EXIT_FAILURE);
+		}
+
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			GameObject &object = scene->add_child_as(*new GameObject());
+			object.transform.translation = positions[i];
+
+			AlwaysRotateComponent &always_rotate = object.add_component_as(*new AlwaysRotateComponent(object));
+			always_rotate.speed = Vector<3, float>(1);
+
+			MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
+			renderer.shader = mesh_render;
+			renderer.model = model;
+			renderer.camera = camera;
+		}
+	}
+
+	FrameCounter frame_counter;
+	HighFrameCounter high_frame_counter;
+
+	high_frame_counter.reset();
+
+	while (!window->is_should_be_closed())
+	{
+		high_frame_counter.start();
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+
+		double delta_time = high_frame_counter.delta_time();
+
+		scene->update(delta_time);
+		scene->render();
+
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		frame_counter.count();
+		high_frame_counter.count();
+
+		{
+			char text[255] = { 0 };
+
+			const char *format = ""
+					"frame %d (%d)\n"
+					"  pos %4.4f %4.4f %4.4f\n"
+					"  yaw %4.4f\n"
+					"pitch %4.4f"
+					"";
+			sprintf(text, format, high_frame_counter.frame(), frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
+			Text debug_text(text, Vector<2, float>(0.0f, 0.0f), 32.0f);
+			text_renderer->render(debug_text);
+		}
+
+		camera->move(delta_time);
+
+		window->swap_buffers();
+		application->poll_events();
+
+		high_frame_counter.end();
+	}
+//}
+//	catch (Exception &exception)
+//	{
+//		std::cout << typeid(exception).name() << ": " << exception.what() << std::endl;
+//	}
+
+	return (EXIT_SUCCESS);
+}
