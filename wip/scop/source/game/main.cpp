@@ -143,9 +143,24 @@ main(int argc, char **argv)
 	fprintf(stdout, "INFO: OpenGL Vendor: %s\n", glGetString(GL_VENDOR));
 	fflush(stdout);
 
-	SharedReference<TextRenderer> text_renderer(*new TextRenderer());
+	SharedReference<Font> consolas;
+
+	try
+	{
+		consolas = Font::consolas();
+	}
+	catch (Exception &exception)
+	{
+		std::cout << "Could not load font: " << exception.what() << std::endl;
+		return (EXIT_FAILURE);
+	}
+
 	SharedReference<Scene> scene(*new Scene());
-	SharedReference<MeshShader> mesh_render = *MeshShader::basic();
+	SharedReference<MeshShader> mesh_render(*MeshShader::basic());
+	SharedReference<TextShader> text_shader(*TextShader::basic());
+
+	SharedReference<FrameCounter> frame_counter(*new FrameCounter());
+	SharedReference<HighFrameCounter> high_frame_counter(*new HighFrameCounter());
 
 	if (!no_grid)
 	{
@@ -172,6 +187,57 @@ main(int argc, char **argv)
 		renderer.model = *new Model(*Arrow::of(2));
 		renderer.camera = camera;
 		renderer.no_depth = true;
+	}
+
+	{
+		GameObject &object = scene->add_child_as(*new GameObject());
+
+		TextRenderer &renderer = object.add_component_as(*new TextRenderer(object));
+		renderer.shader = text_shader;
+		renderer.font = consolas;
+		renderer.text = *new Text();
+
+		class FPS :
+				public Supplier<std::string>
+		{
+			public:
+				WeakReference<FrameCounter> frame_counter;
+				WeakReference<HighFrameCounter> high_frame_counter;
+				WeakReference<ICamera> camera;
+
+			public:
+				FPS(WeakReference<FrameCounter> frame_counter, WeakReference<HighFrameCounter> high_frame_counter, WeakReference<ICamera> camera) :
+						Supplier(),
+						frame_counter(frame_counter),
+						high_frame_counter(high_frame_counter),
+						camera(camera)
+				{
+				}
+
+				virtual
+				~FPS()
+				{
+				}
+
+			public:
+				virtual std::string
+				get()
+				{
+					char text[255] = { 0 };
+
+					const char *format = ""
+							"frame %d (%d)\n"
+							"  pos %4.4f %4.4f %4.4f\n"
+							"  yaw %4.4f\n"
+							"pitch %4.4f"
+							"";
+					sprintf(text, format, high_frame_counter->frame(), frame_counter->frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
+
+					return (text);
+				}
+		};
+
+		renderer.updater = *new FPS(frame_counter, high_frame_counter, camera);
 	}
 
 	{
@@ -221,55 +287,33 @@ main(int argc, char **argv)
 		}
 	}
 
-	FrameCounter frame_counter;
-	HighFrameCounter high_frame_counter;
-
-	high_frame_counter.reset();
+	high_frame_counter->reset();
 
 	while (!window->is_should_be_closed())
 	{
-		high_frame_counter.start();
+		high_frame_counter->start();
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		double delta_time = high_frame_counter.delta_time();
+		double delta_time = high_frame_counter->delta_time();
 
 		scene->update(delta_time);
 		scene->render();
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		frame_counter.count();
-		high_frame_counter.count();
-
-		{
-			char text[255] = { 0 };
-
-			const char *format = ""
-					"frame %d (%d)\n"
-					"  pos %4.4f %4.4f %4.4f\n"
-					"  yaw %4.4f\n"
-					"pitch %4.4f"
-					"";
-			sprintf(text, format, high_frame_counter.frame(), frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
-			Text debug_text(text, Vector<2, float>(0.0f, 0.0f), 32.0f);
-			text_renderer->render(debug_text);
-		}
-
 		camera->move(delta_time);
+
+		frame_counter->count();
+		high_frame_counter->count();
 
 		window->swap_buffers();
 		application->poll_events();
 
-		high_frame_counter.end();
+		high_frame_counter->end();
 	}
-//}
-//	catch (Exception &exception)
-//	{
-//		std::cout << typeid(exception).name() << ": " << exception.what() << std::endl;
-//	}
 
 	return (EXIT_SUCCESS);
 }

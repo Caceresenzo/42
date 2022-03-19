@@ -13,31 +13,36 @@
 #ifndef TEXTRENDERER_HPP_
 # define TEXTRENDERER_HPP_
 
+#include <engine/scene/Component.hpp>
+#include <engine/text/Font.hpp>
 #include <engine/text/Text.hpp>
 #include <engine/text/TextShader.hpp>
+#include <lang/reference/SharedReference.hpp>
+#include <util/function/Supplier.hpp>
+#include <string>
 #include <vector>
 
-class Texture;
-
-class TextShader;
-
-class TextRenderer
+class TextRenderer :
+		public Component
 {
 	public:
-		TextShader *shader;
-		Texture *font_altas;
+		static std::string NAME;
 
 	public:
-		TextRenderer(const std::string &font_atlas_file = "assets/fonts/consolas.bmp");
+		SharedReference<TextShader> shader;
+		SharedReference<Font> font;
+		SharedReference<Text> text;
+		SharedReference<Supplier<std::string> > updater;
+
+	public:
+		TextRenderer(GameObject &parent);
 
 		virtual
 		~TextRenderer();
 
-		void
-		render(const std::vector<Text*> texts) const;
-
-		void
-		render(Text &text) const;
+	public:
+		virtual void
+		render();
 };
 
 #endif /* TEXTRENDERER_HPP_ */

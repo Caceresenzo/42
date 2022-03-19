@@ -12,8 +12,8 @@
 
 #include <engine/text/TextShader.hpp>
 
-TextShader::TextShader() :
-		ShaderProgram("assets/shaders/text/vertex.glsl", "assets/shaders/text/fragment.glsl"),
+TextShader::TextShader(const std::string &vertex_file, const std::string &fragment_file) :
+		ShaderProgram(vertex_file, fragment_file),
 		window_size("windowSize"),
 		texture_sampler("textureSampler"),
 		position("in_Positions"),
@@ -27,4 +27,10 @@ TextShader::TextShader() :
 
 TextShader::~TextShader()
 {
+}
+
+TextShader*
+TextShader::basic()
+{
+	return (new TextShader("assets/shaders/text/vertex.glsl", "assets/shaders/text/fragment.glsl"));
 }

@@ -28,10 +28,14 @@ class TextShader :
 		VectorAttribute<2, float> uv;
 
 	public:
-		TextShader();
+		TextShader(const std::string &vertex_file, const std::string &fragment_file);
 
 		virtual
 		~TextShader();
+
+	public:
+		static TextShader*
+		basic();
 };
 
 #endif /* TEXTSHADER_HPP_ */

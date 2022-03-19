@@ -10,13 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <engine/application/Window.hpp>
 #include <engine/math/matrix.hpp>
-#include <lang/Math.hpp>
 #include <engine/math/Transform.hpp>
+#include <engine/model/mesh/Mesh.hpp>
 #include <engine/model/mesh/MeshRenderer.hpp>
 #include <engine/model/mesh/MeshShader.hpp>
+#include <engine/shader/uniform/MatrixUniform.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <lang/Math.hpp>
 
 std::string MeshRenderer::NAME = "mesh-renderer";
 
@@ -36,9 +39,8 @@ MeshRenderer::render()
 	if (!shader || !model || !camera)
 		return;
 
-	int width = 0, height = 0;
-	glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), float(width) / float(height), 0.1f, 10000.0f);
+	Vector<2, int> size = Window::current().size();
+	Matrix<4, 4, float> projection = ::perspective<float>(Math::radians(45.0f), float(size.x) / float(size.y), 0.1f, 10000.0f);
 
 	shader->use();
 

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <engine/shader/attribute/Attribute.hpp>
+#include <iostream>
 
 Attribute::Attribute(const std::string &name, GLint size, GLenum data_type, GLenum normalized) :
 		ShaderVariable(name),

@@ -28,8 +28,8 @@ void
 ShaderVariable::locate(const ShaderProgram &program)
 {
 	GLint location = find_location(program.id(), m_name.c_str());
-//	if (location == -1)
-//		throw RuntimeException(m_name + " not found");
+	if (location == -1)
+		throw RuntimeException(m_name + " not found");
 
 	this->m_location = location;
 }

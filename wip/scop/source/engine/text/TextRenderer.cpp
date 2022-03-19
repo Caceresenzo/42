@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lang/image/bmp/BMPImageLoader.hpp>
-#include <lang/image/ImageData.hpp>
+#include <engine/application/Window.hpp>
+#include <engine/math/vector.hpp>
+#include <engine/opengl.hpp>
 #include <engine/shader/attribute/VectorAttribute.hpp>
 #include <engine/shader/uniform/SamplerUniform.hpp>
 #include <engine/shader/uniform/VectorUniform.hpp>
@@ -19,88 +20,53 @@
 #include <engine/texture/Texture.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <GL/glew.h>
-#include <iterator>
-#include <string>
-#include <vector>
+#include <GLFW/glfw3.h>
 
-TextRenderer::TextRenderer(const std::string &font_atlas_file) :
-		shader(NULL),
-		font_altas(NULL)
+std::string TextRenderer::NAME = "text-renderer";
+
+TextRenderer::TextRenderer(GameObject &parent) :
+		Component(parent, NAME),
+		shader(),
+		font()
 {
-	ImageData *image_data = NULL;
-
-	try
-	{
-		shader = new TextShader();
-
-		BMPImageLoader loader;
-		image_data = loader.load(font_atlas_file);
-
-		font_altas = Texture::from_image(image_data);
-
-		delete image_data;
-		image_data = NULL;
-	}
-	catch (...)
-	{
-		if (shader)
-			delete shader;
-
-		if (image_data)
-			delete image_data;
-
-		if (font_altas)
-			delete font_altas;
-
-		throw;
-	}
 }
 
 TextRenderer::~TextRenderer()
 {
-	delete shader;
-	delete font_altas;
 }
 
 void
-TextRenderer::render(std::vector<Text*> texts) const
+TextRenderer::render()
 {
-	typedef typename std::vector<Text*>::const_iterator const_iterator;
+	if (!text || !shader || !font)
+		return;
 
-	for (const_iterator iterator = texts.begin(); iterator < texts.end(); ++iterator)
-	{
-		Text *text = *iterator;
+	if (updater)
+		text->set(updater->get());
 
-		if (text)
-			this->render(*text);
-	}
-}
-
-void
-TextRenderer::render(Text &text) const
-{
-	if (text.is_invalidated())
-		text.build();
+	if (text->is_invalidated())
+		text->build();
 
 	shader->use();
-	font_altas->set_active(0);
-	font_altas->bind();
+	font->atlas().set_active(0);
+	font->atlas().bind();
 
-	int width = 0, height = 0;
-	glfwGetWindowSize(glfwGetCurrentContext(), &width, &height);
-	shader->window_size.set(Vector<2, int>(width, height));
+	Vector<2, int> size = Window::current().size();
+	shader->window_size.set(Vector<2, int>(size.x, size.y));
 	shader->texture_sampler.set(0);
 
 	shader->position.enable();
-	text.vertex_buffer().bind();
+	text->vertex_buffer().bind();
 	shader->position.link();
 
 	shader->uv.enable();
-	text.uv_buffer().bind();
+	text->uv_buffer().bind();
 	shader->uv.link();
 
-	glDrawArrays(GL_TRIANGLES, 0, text.get().size() * 6);
+	glDrawArrays(GL_TRIANGLES, 0, text->get().size() * 6);
 
 	shader->position.disable();
 	shader->uv.disable();
+
+	font->atlas().unbind();
 }
