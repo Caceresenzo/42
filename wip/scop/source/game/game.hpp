@@ -1,24 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   System.cpp                                         :+:      :+:    :+:   */
+/*   game.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/19 19:36:12 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/19 19:36:12 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/19 20:19:08 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/19 20:19:08 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lang/System.hpp>
-#include <sys/time.h>
-#include <string>
+#ifndef GAME_HPP_
+# define GAME_HPP_
 
-long long
-System::current_time_millis()
-{
-	struct timeval val = { 0, 0 };
-	gettimeofday(&val, NULL);
+# define APPLICATION_NAME_AND_VERSION "scop v1.0"
 
-	return (val.tv_sec * 1000LL + val.tv_usec / 1000);
-}
+#endif /* GAME_HPP_ */

@@ -20,6 +20,7 @@
 #include <engine/utility/counter/HighFrameCounter.hpp>
 #include <game/component/AlwaysRotateComponent.hpp>
 #include <game/component/StickToCameraFrontComponent.hpp>
+#include <game/game.hpp>
 #include <game/listener/KeyboardListener.hpp>
 #include <game/listener/MouseListener.hpp>
 #include <GL/glew.h>
@@ -27,9 +28,13 @@
 #include <lang/image/bmp/BMPImageLoader.hpp>
 #include <lang/image/ImageData.hpp>
 #include <lang/reference/SharedReference.hpp>
+#include <util/option/CommandLine.hpp>
+#include <util/option/Option.hpp>
+#include <util/option/OptionParser.hpp>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <list>
 #include <string>
 #include <vector>
 
@@ -49,9 +54,61 @@ static Vector<3, float> positions[] = {
 /**/Vector<3, float>(-1.3f, 1.0f, -1.5f) //
 };
 
+const Option OPT_HELP('h', "help", "display this help message");
+const Option OPT_VERSION('v', "version", "display application's version");
+const Option OPT_LOG_LEVEL('l', "log-level", "change the log-level", "level");
+const Option OPT_NO_GRID('g', "no-grid", "disable world grid");
+const Option OPT_NO_ARROWS('a', "no-arrows", "disable axis arrows");
+
 int
-main(int, char **argv)
+main(int argc, char **argv)
 {
+	const char *program = argv[0];
+
+	bool no_grid = false;
+	bool no_arrows = false;
+
+	std::list<const Option*> lst;
+	lst.push_back(&OPT_HELP);
+	lst.push_back(&OPT_VERSION);
+	lst.push_back(&OPT_LOG_LEVEL);
+	lst.push_back(&OPT_NO_GRID);
+	lst.push_back(&OPT_NO_ARROWS);
+
+	OptionParser parser(lst);
+
+	try
+	{
+		CommandLine commandLine = parser.parse(argc, argv);
+
+		if (commandLine.has(OPT_HELP))
+		{
+			std::vector<std::string> authors;
+			authors.push_back("Enzo CACERES <ecaceres@student.42.fr>");
+
+			std::cout << parser.help(program, "A simple model viewer", authors) << std::endl;
+			return (0);
+		}
+
+		if (commandLine.has(OPT_VERSION))
+		{
+			std::cout << APPLICATION_NAME_AND_VERSION << std::endl;
+			return (0);
+		}
+
+		if (commandLine.has(OPT_NO_GRID))
+			no_grid = true;
+
+		if (commandLine.has(OPT_NO_ARROWS))
+			no_arrows = true;
+	}
+	catch (Exception &exception)
+	{
+		std::cerr << argv[0] << ": " << exception.what() << std::endl;
+		std::cerr << "Try '" << argv[0] << " --help' for more informations." << std::endl;
+		return (1);
+	}
+
 	SharedReference<Application> application;
 	SharedReference<Window> window;
 
@@ -90,6 +147,7 @@ main(int, char **argv)
 	SharedReference<Scene> scene(*new Scene());
 	SharedReference<MeshShader> mesh_render = *MeshShader::basic();
 
+	if (!no_grid)
 	{
 		GameObject &object = scene->add_child_as(*new GameObject());
 		object.transform.translation = Vector<3, float>(-25.0, 0, -25.0);
@@ -101,6 +159,7 @@ main(int, char **argv)
 		renderer.camera = camera;
 	}
 
+	if (!no_arrows)
 	{
 		GameObject &object = scene->add_child_as(*new GameObject());
 		object.transform.scaling = Vector<3, float>(0.02);

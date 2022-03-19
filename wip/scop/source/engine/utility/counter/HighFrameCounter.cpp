@@ -12,8 +12,6 @@
 
 #include <engine/utility/counter/HighFrameCounter.hpp>
 #include <lang/System.hpp>
-#include <sys/_timeval.h>
-#include <sys/time.h>
 #include <cstdio>
 #include <ctime>
 #include <iostream>
@@ -21,14 +19,18 @@
 HighFrameCounter::HighFrameCounter() :
 		m_frame(0),
 		m_last_time(0),
-		m_last_per_seconds(0)
+		m_last_per_seconds(0),
+		m_last(0),
+		m_current(0)
 {
 }
 
 HighFrameCounter::HighFrameCounter(const HighFrameCounter &other) :
 		m_frame(other.m_frame),
 		m_last_time(other.m_last_time),
-		m_last_per_seconds(other.m_last_per_seconds)
+		m_last_per_seconds(other.m_last_per_seconds),
+		m_last(0),
+		m_current(0)
 {
 }
 
@@ -77,9 +79,7 @@ HighFrameCounter::delta_time() const
 void
 HighFrameCounter::count()
 {
-	struct timeval te;
-	gettimeofday(&te, NULL);
-	long long milliseconds = te.tv_sec * 1000LL + te.tv_usec / 1000;
+	long long milliseconds = System::current_time_millis();
 
 	if (m_last_time != milliseconds)
 	{
