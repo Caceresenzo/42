@@ -13,8 +13,10 @@
 #include <engine/scene/GameObject.hpp>
 #include <engine/scene/Node.hpp>
 #include <engine/scene/Scene.hpp>
+#include <engine/text/Font.hpp>
 #include <engine/text/Text.hpp>
 #include <engine/text/TextRenderer.hpp>
+#include <engine/text/TextShader.hpp>
 #include <engine/texture/Texture.hpp>
 #include <engine/utility/counter/FrameCounter.hpp>
 #include <engine/utility/counter/HighFrameCounter.hpp>
@@ -27,7 +29,10 @@
 #include <lang/Exception.hpp>
 #include <lang/image/bmp/BMPImageLoader.hpp>
 #include <lang/image/ImageData.hpp>
+#include <lang/Number.hpp>
 #include <lang/reference/SharedReference.hpp>
+#include <lang/reference/WeakReference.hpp>
+#include <util/function/Supplier.hpp>
 #include <util/option/CommandLine.hpp>
 #include <util/option/Option.hpp>
 #include <util/option/OptionParser.hpp>
@@ -59,6 +64,11 @@ const Option OPT_VERSION('v', "version", "display application's version");
 const Option OPT_LOG_LEVEL('l', "log-level", "change the log-level", "level");
 const Option OPT_NO_GRID('g', "no-grid", "disable world grid");
 const Option OPT_NO_ARROWS('a', "no-arrows", "disable axis arrows");
+const Option OPT_FULLSCREEN('f', "fullscreen", "enable fullscreen on opening");
+const Option OPT_WIDTH('w', "width", "set window's width", "width");
+const Option OPT_HEIGHT('h', "height", "set window's height", "height");
+const Option OPT_OBJECT('o', "object", "specify object", "file");
+const Option OPT_TEXTURE('t', "texture", "specify texture", "file");
 
 int
 main(int argc, char **argv)
@@ -67,6 +77,11 @@ main(int argc, char **argv)
 
 	bool no_grid = false;
 	bool no_arrows = false;
+	bool fullscreen = false;
+	int width = 800;
+	int height = 800;
+	std::string object_file = "";
+	std::string texture_file = "";
 
 	std::list<const Option*> lst;
 	lst.push_back(&OPT_HELP);
@@ -74,6 +89,11 @@ main(int argc, char **argv)
 	lst.push_back(&OPT_LOG_LEVEL);
 	lst.push_back(&OPT_NO_GRID);
 	lst.push_back(&OPT_NO_ARROWS);
+	lst.push_back(&OPT_FULLSCREEN);
+	lst.push_back(&OPT_WIDTH);
+	lst.push_back(&OPT_HEIGHT);
+	lst.push_back(&OPT_OBJECT);
+	lst.push_back(&OPT_TEXTURE);
 
 	OptionParser parser(lst);
 
@@ -101,6 +121,21 @@ main(int argc, char **argv)
 
 		if (commandLine.has(OPT_NO_ARROWS))
 			no_arrows = true;
+
+		if (commandLine.has(OPT_FULLSCREEN))
+			fullscreen = true;
+
+		if (commandLine.has(OPT_WIDTH))
+			width = Number::parse<int>(commandLine.first(OPT_WIDTH));
+
+		if (commandLine.has(OPT_HEIGHT))
+			height = Number::parse<int>(commandLine.first(OPT_HEIGHT));
+
+		if (commandLine.has(OPT_OBJECT))
+			object_file = commandLine.first(OPT_OBJECT);
+
+		if (commandLine.has(OPT_TEXTURE))
+			texture_file = commandLine.first(OPT_TEXTURE);
 	}
 	catch (Exception &exception)
 	{
@@ -108,6 +143,15 @@ main(int argc, char **argv)
 		std::cerr << "Try '" << argv[0] << " --help' for more informations." << std::endl;
 		return (1);
 	}
+
+	if (object_file.empty())
+	{
+		std::cerr << "no object file specified" << std::endl;
+		return (EXIT_FAILURE);
+	}
+
+	if (texture_file.empty())
+		std::cerr << "no texture file specified" << std::endl;
 
 	SharedReference<Application> application;
 	SharedReference<Window> window;
@@ -126,11 +170,13 @@ main(int argc, char **argv)
 
 	try
 	{
-		window = *new Window(WIDTH, HEIGHT);
+		window = *new Window(width, height);
 		window->set_title("scop");
 
 		window->keyboard_listeners.push_back(*new KeyboardListener());
 		window->mouse_listeners.push_back(*new MouseListener(camera));
+
+		window->set_fullscreen(fullscreen);
 	}
 	catch (Exception &exception)
 	{
@@ -243,14 +289,10 @@ main(int argc, char **argv)
 	{
 		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-		std::string file = "assets/models/capsule.obj";
-//		std::string file = "42.obj";
-//		std::string file = "rem.obj";
-
 		SharedReference<Mesh> mesh;
 		try
 		{
-			mesh = *MeshLoader().load(file);
+			mesh = *MeshLoader().load(object_file);
 		}
 		catch (Exception &exception)
 		{
@@ -260,16 +302,19 @@ main(int argc, char **argv)
 
 		SharedReference<Model> model = *new Model(mesh);
 
-		try
+		if (!texture_file.empty())
 		{
-			ImageData *image = BMPImageLoader().load("assets/models/capsule.bmp");
-			mesh->set_texture(*Texture::from_image(image), true);
-			delete image;
-		}
-		catch (Exception &exception)
-		{
-			std::cout << "Could not load texture: " << exception.what() << std::endl;
-			return (EXIT_FAILURE);
+			try
+			{
+				ImageData *image = BMPImageLoader().load(texture_file);
+				mesh->set_texture(*Texture::from_image(image), true);
+				delete image;
+			}
+			catch (Exception &exception)
+			{
+				std::cout << "Could not load texture: " << exception.what() << std::endl;
+				return (EXIT_FAILURE);
+			}
 		}
 
 		for (unsigned int i = 0; i < 10; i++)
