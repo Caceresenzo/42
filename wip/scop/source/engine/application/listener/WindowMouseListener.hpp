@@ -26,6 +26,9 @@ class WindowMouseListener
 	public:
 		virtual void
 		on_mouse_move(Window &window, const Vector<2, int> &position);
+
+		virtual void
+		on_mouse_scroll(Window &window, const Vector<2, int> &offset);
 };
 
 #endif /* WINDOWMOUSELISTENER_HPP_ */

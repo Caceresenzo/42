@@ -14,6 +14,7 @@
 # define PERSPECTIVECAMERA_HPP_
 
 #include <engine/camera/ICamera.hpp>
+#include <engine/math/matrix.hpp>
 #include <engine/math/vector.hpp>
 
 class PerspectiveCamera :
@@ -61,6 +62,18 @@ class PerspectiveCamera :
 		pitch() const
 		{
 			return (m_pitch);
+		}
+
+		inline virtual float
+		speed() const
+		{
+			return (m_speed);
+		}
+
+		inline virtual void
+		set_speed(float value)
+		{
+			m_speed = value;
 		}
 
 		inline virtual const Matrix<4, 4, float>&

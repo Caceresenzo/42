@@ -72,12 +72,14 @@ class FPSTextUpdater :
 			char text[255] = { 0 };
 
 			const char *format = ""
-					"frame %d (%d)\n"
-					"  pos %4.4f %4.4f %4.4f\n"
-					"  yaw %4.4f\n"
-					"pitch %4.4f"
+					"   frame %d (%d)\n"
+					"position %4.4f %4.4f %4.4f\n"
+					"     yaw %4.4f\n"
+					"   pitch %4.4f\n"
+					"   speed %4.4f"
 					"";
-			sprintf(text, format, high_frame_counter->frame(), frame_counter->frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
+
+			sprintf(text, format, high_frame_counter->frame(), frame_counter->frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch(), camera->speed());
 
 			return (text);
 		}
@@ -275,11 +277,27 @@ main(int argc, char **argv)
 	{
 		GameObject &object = scene->add_child_as(*new GameObject());
 
-		TextRenderer &renderer = object.add_component_as(*new TextRenderer(object));
-		renderer.shader = text_shader;
-		renderer.font = consolas;
-		renderer.text = *new Text();
-		renderer.updater = *new FPSTextUpdater(frame_counter, high_frame_counter, camera);
+		{
+			TextRenderer &renderer = object.add_component_as(*new TextRenderer(object));
+			renderer.shader = text_shader;
+			renderer.font = consolas;
+			renderer.text = *new Text("", Vector<2, float>(0, 0), 20);
+			renderer.updater = *new FPSTextUpdater(frame_counter, high_frame_counter, camera);
+		}
+
+		{
+			const char *message = ""
+					" move ZQSD\n"
+					"   up SPACE\n"
+					" down A\n"
+					"speed scroll\n"
+					" size O/P";
+
+			TextRenderer &renderer = object.add_component_as(*new TextRenderer(object));
+			renderer.shader = text_shader;
+			renderer.font = consolas;
+			renderer.text = *new Text(message, Vector<2, float>(0, 180));
+		}
 	}
 
 	{

@@ -39,3 +39,9 @@ MouseListener::on_mouse_move(Window &window, const Vector<2, int> &position)
 		window.set_cursor_position(center);
 	}
 }
+
+void
+MouseListener::on_mouse_scroll(Window&, const Vector<2, int> &offset)
+{
+	m_camera->set_speed(m_camera->speed() + offset.y * 0.2);
+}

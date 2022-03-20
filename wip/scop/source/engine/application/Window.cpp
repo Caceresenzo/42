@@ -67,6 +67,14 @@ cursor_position_callback(GLFWwindow *raw_window, double xpos, double ypos)
 	window.fire_mouse_move(Vector<2, int>(xpos, ypos));
 }
 
+static void
+scroll_callback(GLFWwindow *raw_window, double xoffset, double yoffset)
+{
+	Window &window = Window::ensure_resolve(raw_window);
+
+	window.fire_mouse_scroll(Vector<2, int>(xoffset, yoffset));
+}
+
 void
 size_callback(GLFWwindow*, int width, int height)
 {
@@ -87,6 +95,7 @@ Window::Window(int width, int height) :
 
 	glfwSetKeyCallback(m_window, key_callback);
 	glfwSetCursorPosCallback(m_window, cursor_position_callback);
+	glfwSetScrollCallback(m_window, scroll_callback);
 	glfwSetWindowSizeCallback(m_window, size_callback);
 
 	g_windows[m_window] = this;
@@ -216,6 +225,15 @@ Window::fire_mouse_move(const Vector<2, int> &position)
 
 	for (iterator_type iterator = mouse_listeners.begin(); iterator != mouse_listeners.end(); ++iterator)
 		(*iterator)->on_mouse_move(*this, position);
+}
+
+void
+Window::fire_mouse_scroll(const Vector<2, int> &offset)
+{
+	typedef std::vector<SharedReference<WindowMouseListener> >::iterator iterator_type;
+
+	for (iterator_type iterator = mouse_listeners.begin(); iterator != mouse_listeners.end(); ++iterator)
+		(*iterator)->on_mouse_scroll(*this, offset);
 }
 
 void

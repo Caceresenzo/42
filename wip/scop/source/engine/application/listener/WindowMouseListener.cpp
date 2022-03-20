@@ -21,3 +21,8 @@ void
 WindowMouseListener::on_mouse_move(Window&, const Vector<2, int>&)
 {
 }
+
+void
+WindowMouseListener::on_mouse_scroll(Window&, const Vector<2, int>&)
+{
+}

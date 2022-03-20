@@ -34,6 +34,12 @@ class ICamera
 		virtual float
 		pitch() const = 0;
 
+		virtual float
+		speed() const = 0;
+
+		virtual void
+		set_speed(float value) = 0;
+
 		virtual const Matrix<4, 4, float>&
 		view_matrix() const = 0;
 

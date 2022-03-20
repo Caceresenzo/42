@@ -28,6 +28,11 @@ class TextRenderer :
 	public:
 		static std::string NAME;
 
+		enum Location
+		{
+
+		};
+
 	public:
 		SharedReference<TextShader> shader;
 		SharedReference<Font> font;

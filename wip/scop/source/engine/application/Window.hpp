@@ -78,6 +78,9 @@ class Window
 		fire_mouse_move(const Vector<2, int> &position);
 
 		void
+		fire_mouse_scroll(const Vector<2, int> &offset);
+
+		void
 		fire_mouse_key_press(Keyboard::Key key);
 
 		void

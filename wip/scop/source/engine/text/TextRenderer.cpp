@@ -52,7 +52,7 @@ TextRenderer::render()
 	font->atlas().bind();
 
 	Vector<2, int> size = Window::current().size();
-	shader->window_size.set(Vector<2, int>(size.x, size.y));
+	shader->window_size.set(size);
 	shader->texture_sampler.set(0);
 
 	text->vertex_array().bind(false);
