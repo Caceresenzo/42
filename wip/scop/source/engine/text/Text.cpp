@@ -19,9 +19,12 @@ Text::Text(const std::string &initial, const Vector<2, float> &position, float s
 		m_position(position),
 		m_size(size),
 		m_invalidated(true),
+		m_vertex_array(),
 		m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW),
 		m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)
 {
+	m_vertex_array.add(m_vertex_buffer, false);
+	m_vertex_array.add(m_uv_buffer, false);
 }
 
 Text::~Text()

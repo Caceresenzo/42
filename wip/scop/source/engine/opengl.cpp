@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <engine/opengl.hpp>
+#include <lang/RuntimeException.hpp>
 #include <cstdio>
 #include <map>
 #include <string>
@@ -46,4 +47,25 @@ OpenGL::message_callback(GLenum source, GLenum type, GLuint, GLenum severity, GL
 		return;
 
 	fprintf(stderr, "[%s] [%s] [%s] %s\n", (_debug_types[severity].c_str()), (_debug_types[source].c_str()), (_debug_types[type].c_str()), message);
+}
+
+void
+OpenGL::check_error()
+{
+	static std::map<int, std::string> _debug_types;
+
+	if (_debug_types.empty())
+	{
+		_debug_types[GL_INVALID_ENUM] = "GL_INVALID_ENUM";
+		_debug_types[GL_INVALID_VALUE] = "GL_INVALID_VALUE";
+		_debug_types[GL_INVALID_OPERATION] = "GL_INVALID_OPERATION";
+		_debug_types[GL_INVALID_FRAMEBUFFER_OPERATION] = "GL_INVALID_FRAMEBUFFER_OPERATION";
+		_debug_types[GL_OUT_OF_MEMORY] = "GL_OUT_OF_MEMORY";
+		_debug_types[GL_STACK_UNDERFLOW] = "GL_STACK_UNDERFLOW";
+		_debug_types[GL_STACK_OVERFLOW] = "GL_STACK_OVERFLOW";
+	}
+
+	GLenum error = glGetError();
+	if (error != GL_NO_ERROR)
+		throw RuntimeException(_debug_types[error]);
 }

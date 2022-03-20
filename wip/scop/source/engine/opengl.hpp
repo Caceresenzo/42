@@ -28,9 +28,11 @@ template<typename T>
 class OpenGL
 {
 	public:
-		static
-		void
+		static void
 		message_callback(GLenum source, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar *message, const void*);
+
+		static void
+		check_error();
 };
 
 #endif /* OPENGL_HPP_ */

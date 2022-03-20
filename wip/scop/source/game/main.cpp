@@ -43,8 +43,45 @@
 #include <string>
 #include <vector>
 
-#define WIDTH 800
-#define HEIGHT 800
+class FPSTextUpdater :
+		public Supplier<std::string>
+{
+	public:
+		WeakReference<FrameCounter> frame_counter;
+		WeakReference<HighFrameCounter> high_frame_counter;
+		WeakReference<ICamera> camera;
+
+	public:
+		FPSTextUpdater(WeakReference<FrameCounter> frame_counter, WeakReference<HighFrameCounter> high_frame_counter, WeakReference<ICamera> camera) :
+				Supplier(),
+				frame_counter(frame_counter),
+				high_frame_counter(high_frame_counter),
+				camera(camera)
+		{
+		}
+
+		virtual
+		~FPSTextUpdater()
+		{
+		}
+
+	public:
+		virtual std::string
+		get()
+		{
+			char text[255] = { 0 };
+
+			const char *format = ""
+					"frame %d (%d)\n"
+					"  pos %4.4f %4.4f %4.4f\n"
+					"  yaw %4.4f\n"
+					"pitch %4.4f"
+					"";
+			sprintf(text, format, high_frame_counter->frame(), frame_counter->frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
+
+			return (text);
+		}
+};
 
 static Vector<3, float> positions[] = {
 /**/Vector<3, float>(0.0f, 0.0f, 0.0f),
@@ -99,9 +136,9 @@ main(int argc, char **argv)
 
 	try
 	{
-		CommandLine commandLine = parser.parse(argc, argv);
+		CommandLine command_line = parser.parse(argc, argv);
 
-		if (commandLine.has(OPT_HELP))
+		if (command_line.has(OPT_HELP))
 		{
 			std::vector<std::string> authors;
 			authors.push_back("Enzo CACERES <ecaceres@student.42.fr>");
@@ -110,32 +147,32 @@ main(int argc, char **argv)
 			return (0);
 		}
 
-		if (commandLine.has(OPT_VERSION))
+		if (command_line.has(OPT_VERSION))
 		{
 			std::cout << APPLICATION_NAME_AND_VERSION << std::endl;
 			return (0);
 		}
 
-		if (commandLine.has(OPT_NO_GRID))
+		if (command_line.has(OPT_NO_GRID))
 			no_grid = true;
 
-		if (commandLine.has(OPT_NO_ARROWS))
+		if (command_line.has(OPT_NO_ARROWS))
 			no_arrows = true;
 
-		if (commandLine.has(OPT_FULLSCREEN))
+		if (command_line.has(OPT_FULLSCREEN))
 			fullscreen = true;
 
-		if (commandLine.has(OPT_WIDTH))
-			width = Number::parse<int>(commandLine.first(OPT_WIDTH));
+		if (command_line.has(OPT_WIDTH))
+			width = Number::parse<int>(command_line.first(OPT_WIDTH));
 
-		if (commandLine.has(OPT_HEIGHT))
-			height = Number::parse<int>(commandLine.first(OPT_HEIGHT));
+		if (command_line.has(OPT_HEIGHT))
+			height = Number::parse<int>(command_line.first(OPT_HEIGHT));
 
-		if (commandLine.has(OPT_OBJECT))
-			object_file = commandLine.first(OPT_OBJECT);
+		if (command_line.has(OPT_OBJECT))
+			object_file = command_line.first(OPT_OBJECT);
 
-		if (commandLine.has(OPT_TEXTURE))
-			texture_file = commandLine.first(OPT_TEXTURE);
+		if (command_line.has(OPT_TEXTURE))
+			texture_file = command_line.first(OPT_TEXTURE);
 	}
 	catch (Exception &exception)
 	{
@@ -242,48 +279,7 @@ main(int argc, char **argv)
 		renderer.shader = text_shader;
 		renderer.font = consolas;
 		renderer.text = *new Text();
-
-		class FPS :
-				public Supplier<std::string>
-		{
-			public:
-				WeakReference<FrameCounter> frame_counter;
-				WeakReference<HighFrameCounter> high_frame_counter;
-				WeakReference<ICamera> camera;
-
-			public:
-				FPS(WeakReference<FrameCounter> frame_counter, WeakReference<HighFrameCounter> high_frame_counter, WeakReference<ICamera> camera) :
-						Supplier(),
-						frame_counter(frame_counter),
-						high_frame_counter(high_frame_counter),
-						camera(camera)
-				{
-				}
-
-				virtual
-				~FPS()
-				{
-				}
-
-			public:
-				virtual std::string
-				get()
-				{
-					char text[255] = { 0 };
-
-					const char *format = ""
-							"frame %d (%d)\n"
-							"  pos %4.4f %4.4f %4.4f\n"
-							"  yaw %4.4f\n"
-							"pitch %4.4f"
-							"";
-					sprintf(text, format, high_frame_counter->frame(), frame_counter->frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch());
-
-					return (text);
-				}
-		};
-
-		renderer.updater = *new FPS(frame_counter, high_frame_counter, camera);
+		renderer.updater = *new FPSTextUpdater(frame_counter, high_frame_counter, camera);
 	}
 
 	{
@@ -338,6 +334,7 @@ main(int argc, char **argv)
 	{
 		high_frame_counter->start();
 
+		glGetError();
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);

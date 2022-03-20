@@ -14,6 +14,7 @@
 # define TEXT_HPP_
 
 #include <engine/math/vector.hpp>
+#include <engine/vertex/VertexArrayObject.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <string>
 
@@ -24,6 +25,7 @@ class Text
 		Vector<2, float> m_position;
 		float m_size;
 		bool m_invalidated;
+		VertexArrayObject m_vertex_array;
 		VertexBufferObject m_vertex_buffer;
 		VertexBufferObject m_uv_buffer;
 
@@ -53,6 +55,12 @@ class Text
 		get() const
 		{
 			return (m_value);
+		}
+
+		inline VertexArrayObject&
+		vertex_array()
+		{
+			return (m_vertex_array);
 		}
 
 		inline VertexBufferObject&

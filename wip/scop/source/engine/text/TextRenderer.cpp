@@ -55,6 +55,8 @@ TextRenderer::render()
 	shader->window_size.set(Vector<2, int>(size.x, size.y));
 	shader->texture_sampler.set(0);
 
+	text->vertex_array().bind(false);
+
 	shader->position.enable();
 	text->vertex_buffer().bind();
 	shader->position.link();
@@ -67,6 +69,10 @@ TextRenderer::render()
 
 	shader->position.disable();
 	shader->uv.disable();
+
+	text->vertex_array().unbind();
+	text->vertex_buffer().unbind();
+	text->uv_buffer().unbind();
 
 	font->atlas().unbind();
 }
