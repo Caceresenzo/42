@@ -65,7 +65,9 @@ TextRenderer::render()
 	text->uv_buffer().bind();
 	shader->uv.link();
 
+	glDepthRange(0, 0.01);
 	glDrawArrays(GL_TRIANGLES, 0, text->get().size() * 6);
+	glDepthRange(0, 1.0);
 
 	shader->position.disable();
 	shader->uv.disable();
