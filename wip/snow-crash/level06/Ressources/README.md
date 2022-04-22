@@ -74,7 +74,7 @@ And if match is found, it will be replaced with:
 
 ```
 .------ calling `y` function
-|  .--- placing 2d capture group
+|  .--- placing 2nd capture group
 |  | 
 y("\2")
 ```
