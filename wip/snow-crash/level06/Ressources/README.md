@@ -6,7 +6,7 @@
 
 ## Solving the Challenge
 
-### Analizing
+### Analyzing
 
 ```bash
 $ ls -l
