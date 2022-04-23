@@ -129,3 +129,15 @@ Check flag.Here is your token : ...
 Success!
 
 Since its supposed to be `level15`'s password and there is no `level15`, should it be considered as the flag?
+
+Logging as `flag14` with this as the password:
+
+```bash
+$ su flag14
+Password:
+Congratulation. Type getflag to get the key and send it to me the owner of this livecd :)
+flag14@SnowCrash:~$ getflag
+Check flag.Here is your token : ....
+```
+
+Yes, it was the flag.
