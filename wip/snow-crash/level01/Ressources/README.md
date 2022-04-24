@@ -14,7 +14,7 @@ Where are passwords stored?
 We don't have access to `/etc/shadow` but doing a `grep` on `/etc/passwd` can reveal us something:
 
 ```bash
-$ cat /etc/passwd | grep flag01
+$ grep flag01 /etc/passwd
 flag01:42hDRfypTqqnw:3001:3001::/home/flag/flag01:/bin/bash
 ```
 
