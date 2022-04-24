@@ -97,9 +97,3 @@ done
 After waiting a bit, the flag will appear on the netcat's terminal.
 
 Now we can log into `flag10` and do `getflag`.
-
-```
-$ su flag10
-$ getflag
-Check flag.Here is your token : ....
-```
