@@ -24,7 +24,7 @@ $ find / -user flag00 2>/dev/null
 The file content is:
 
 ```bash
-$ /usr/sbin/john
+$ cat /usr/sbin/john
 cdiiddwpgswtgt
 ```
 
