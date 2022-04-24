@@ -104,7 +104,7 @@ And let re-run everything.
 Starting program: /bin/getflag
 
 Breakpoint 1, 0x0804898e in main ()
-(gdb) # redoing the first part
+(gdb) # re-doing the first part
 (gdb) set $eax=0
 (gdb) continue
 Continuing.
