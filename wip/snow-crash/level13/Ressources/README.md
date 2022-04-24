@@ -61,7 +61,6 @@ Dump of assembler code for function main:
    0x080485e8 <+92>:    leave
    0x080485e9 <+93>:    ret
 End of assembler dump.
-(gdb)
 ```
 
 So the code would look like:
