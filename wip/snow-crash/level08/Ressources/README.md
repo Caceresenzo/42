@@ -57,9 +57,3 @@ $ ./level08 /tmp/level08_file
 ```
 
 Perfect, now we can log to `flag08` and do `getflag`.
-
-```bash
-$ su flag08
-$ getflag
-Check flag.Here is your token : ....
-```
