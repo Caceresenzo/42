@@ -81,9 +81,3 @@ $ ./level09 ~/token
 ```
 
 Now we can log into `flag09` and do `getflag`.
-
-```
-$ su flag09
-$ getflag
-Check flag.Here is your token : ....
-```
