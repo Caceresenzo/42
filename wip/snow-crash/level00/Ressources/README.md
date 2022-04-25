@@ -3,7 +3,7 @@
 ## Initial Context
 
 - Empty home directory.
-- Hint: find the first file that can only be run by user `flag00`.
+- [Hint: find the first file that can only be run by user `flag00`.](https://elearning.intra.42.fr/notions/snow-crash/subnotions/snow-crash/videos/snow-crash)
 
 ## Solving the Challenge
 
