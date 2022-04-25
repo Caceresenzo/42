@@ -85,7 +85,7 @@ $ chmod a+rx /tmp/LEVEL12.SH
 But since we cannot uppercase `/tmp/` we will have to use bash's expender `*`. That means that `/*/LEVEL12.SH` will resolve to `/tmp/LEVEL12.SH` since no other directory in `/` have a file named `LEVEL12.SH`.
 
 ```bash
-$ ls /tmp/LEVEL12.SH
+$ ls /*/LEVEL12.SH
 /tmp/LEVEL12.SH
 ```
 
