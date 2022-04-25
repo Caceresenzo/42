@@ -27,6 +27,7 @@
 |    ft_hangouts   | 100% |   1   |  3d   |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-plain.svg" alt="java" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/android/android-plain.svg" alt="android" width="40" height="40"/> |
 |   avaj-launcher  | 114% |   4   |  2w   |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-plain.svg" alt="java" width="40" height="40"/> |
 |   Internship I   |  96% |   1   |  6M   |            |                 | n/a |
+|    snow-crash    | 125% |   1   |  3d   |    cool    |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-plain.svg" alt="bash" width="40" height="40"/> |
 |     fract-ol     |  WIP |       |       |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
 |      pipex       |  WIP |       |       |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
 |    push_swap     |  WIP |       |       |            |                 | <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-plain.svg" alt="c" width="40" height="40"/> |
