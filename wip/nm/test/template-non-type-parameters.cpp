@@ -1,7 +1,6 @@
 /// from https://www.cplusplus.com/doc/oldtutorial/templates/
 
 #include <iostream>
-using namespace std;
 
 template<class T, int N>
 	class mysequence
@@ -35,7 +34,7 @@ main()
 	mysequence<double, 5> myfloats;
 	myints.setmember(0, 100);
 	myfloats.setmember(3, 3.1416);
-	cout << myints.getmember(0) << '\n';
-	cout << myfloats.getmember(3) << '\n';
+	std::cout << myints.getmember(0) << '\n';
+	std::cout << myfloats.getmember(3) << '\n';
 	return 0;
 }

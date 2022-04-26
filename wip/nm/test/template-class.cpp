@@ -1,7 +1,6 @@
 /// from https://www.cplusplus.com/doc/oldtutorial/templates/
 
 #include <iostream>
-using namespace std;
 
 template<class T>
 	class mypair
@@ -30,6 +29,6 @@ int
 main()
 {
 	mypair<int> myobject(100, 75);
-	cout << myobject.getmax();
+	std::cout << myobject.getmax();
 	return 0;
 }

@@ -1,7 +1,6 @@
 /// from https://www.cplusplus.com/doc/oldtutorial/templates/
 
 #include <iostream>
-using namespace std;
 
 template<class T>
 	T
@@ -19,7 +18,7 @@ main()
 	long l = 10, m = 5, n;
 	k = GetMax<int>(i, j);
 	n = GetMax<long>(l, m);
-	cout << k << endl;
-	cout << n << endl;
+	std::cout << k << std::endl;
+	std::cout << n << std::endl;
 	return 0;
 }

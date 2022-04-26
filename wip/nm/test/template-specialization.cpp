@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 // class template:
 template<class T>
 	class mycontainer
@@ -45,7 +43,7 @@ main()
 {
 	mycontainer<int> myint(7);
 	mycontainer<char> mychar('j');
-	cout << myint.increase() << endl;
-	cout << mychar.uppercase() << endl;
+	std::cout << myint.increase() << std::endl;
+	std::cout << mychar.uppercase() << std::endl;
 	return 0;
 }

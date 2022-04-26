@@ -2,10 +2,9 @@
 
 #include <iostream>
 #include <exception>
-using namespace std;
 
 class newException :
-		public exception
+		public std::exception
 {
 		virtual const char*
 		what() const throw ()
@@ -22,9 +21,9 @@ main()
 	{
 		throw newex;
 	}
-	catch (exception &ex)
+	catch (std::exception &ex)
 	{
-		cout << ex.what() << '\n';
+		std::cout << ex.what() << '\n';
 	}
 	return 0;
 }

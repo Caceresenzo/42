@@ -1,7 +1,6 @@
 /// from https://www.guru99.com/cpp-exceptions-handling.html
 
 #include <iostream>
-using namespace std;
 
 double
 zeroDivision(int x, int y)
@@ -24,11 +23,11 @@ main()
 	try
 	{
 		c = zeroDivision(a, b);
-		cout << c << endl;
+		std::cout << c << std::endl;
 	}
 	catch (const char *message)
 	{
-		cerr << message << endl;
+		std::cerr << message << std::endl;
 	}
 	return 0;
 }

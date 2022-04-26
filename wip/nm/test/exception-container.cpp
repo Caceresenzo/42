@@ -2,12 +2,11 @@
 
 #include <iostream>
 #include <vector>
-using namespace std;
 
 int
 main()
 {
-	vector<int> vec;
+	std::vector<int> vec;
 	vec.push_back(0);
 	vec.push_back(1);
 	// access the third element, which doesn't exist
@@ -15,9 +14,9 @@ main()
 	{
 		vec.at(2);
 	}
-	catch (exception &ex)
+	catch (std::exception &ex)
 	{
-		cout << "Exception occurred!" << endl;
+		std::cout << "Exception occurred!" << std::endl;
 	}
 	return 0;
 }

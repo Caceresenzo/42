@@ -2,10 +2,7 @@
 
 #include <iostream>
 
-using std::cout;
-using std::endl;
-
-constexpr int COUNT = 100;
+const int COUNT = 100;
 
 int
 main()
@@ -15,15 +12,15 @@ main()
 	{
 
 		if (i % 3 == 0)
-			cout << "Fizz, ";
+			std::cout << "Fizz, ";
 		else if (i % 5 == 0)
-			cout << "Buzz, ";
+			std::cout << "Buzz, ";
 		else if (i % 15 == 0)
-			cout << "FizzBuzz, ";
+			std::cout << "FizzBuzz, ";
 		else
-			cout << i << ", ";
+			std::cout << i << ", ";
 
 	}
 
-	return EXIT_SUCCESS;
+	return 0;
 }

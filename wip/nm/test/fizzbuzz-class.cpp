@@ -1,24 +1,19 @@
 /// from https://www.delftstack.com/howto/cpp/fizzbuzz-in-cpp/
 
 #include <iostream>
-#include <string>
 #include <map>
+#include <string>
+#include <utility>
 
-using std::cout;
-using std::endl;
-using std::string;
-using std::cin;
-using std::map;
-
-constexpr int COUNT = 100;
+const int COUNT = 100;
 
 class FizzBuzz
 {
-		map<int, string> table;
+		std::map<int, std::string> table;
 	public:
 		explicit
-		FizzBuzz(map<int, string> &init) :
-				table(std::move(init))
+		FizzBuzz(std::map<int, std::string> &init) :
+				table(init)
 		{
 		}
 
@@ -27,9 +22,9 @@ class FizzBuzz
 		{
 			for (int i = 1; i <= COUNT; ++i)
 			{
-				for (const auto &item : table)
+				for (std::map<int, std::string>::iterator item = table.begin(); item != table.end(); ++item)
 				{
-					i % item.first == 0 ? cout << item.second << ", " : cout << i << ", ";
+					i % item->first == 0 ? std::cout << item->second << ", " : std::cout << i << ", ";
 					break;
 				}
 			}
@@ -39,10 +34,13 @@ class FizzBuzz
 int
 main()
 {
-	map<int, string> init = { { 3, "Fizz" }, { 5, "Buzz" }, { 15, "FizzBuzz" } };
+	std::map<int, std::string> init;
+	init[3] = "Fizz";
+	init[5] = "Buzz";
+	init[15] = "FizzBuzz";
 
 	FizzBuzz fii(init);
 	fii.checkFizzBuzz();
 
-	return EXIT_SUCCESS;
+	return 0;
 }
