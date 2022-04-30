@@ -91,7 +91,7 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 }
 
 const char*
-main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
+main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statbuf)
 {
 	if (statbuf->st_size < EI_NIDENT)
 		return ("invalid header");
@@ -156,6 +156,9 @@ main_nm(t_nm *nm, const char *file, char *ptr, struct stat *statbuf)
 	if (sort != SORT_NONE)
 		list_sort(&list, (t_list_node_compare)&symbol_compare, sort == SORT_REVERSE);
 
+	if (multiple && list_size(&list))
+		printf("\n%s:\n", file);
+
 	if (elf.x32)
 		list_for_each(&list, (t_list_node_consumer)&symbol_print_x32);
 	else if (elf.x64)
@@ -201,7 +204,7 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
-	const char *err = main_nm(nm, file, ptr, &statbuf);
+	const char *err = main_nm(nm, file, multiple, ptr, &statbuf);
 	if (err)
 		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, err);
 
@@ -237,9 +240,12 @@ main(int argc, char **argv)
 		return (main_file(&nm, "a.out", false));
 	else
 	{
+		bool multiple = argc > file_index + 1;
+
 		int ret = 0;
 		for (int index = file_index; index < argc; index++)
-			ret |= main_file(&nm, argv[index], argc == 2);
+			ret |= main_file(&nm, argv[index], multiple);
+
 		return (ret);
 	}
 }
