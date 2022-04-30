@@ -31,7 +31,6 @@ symbol_create(t_elf_address address, bool has_address, const char *name, char le
 	return (symbol);
 }
 
-
 static void
 symbol_print(int size, t_symbol *symbol)
 {
@@ -56,6 +55,16 @@ symbol_print_x32(t_symbol *symbol)
 int
 symbol_compare(t_symbol *left, t_symbol *right)
 {
+	int diff = symbol_compare_by_name(left, right);
+	if (diff)
+		return (diff);
+
+	return (symbol_compare_by_address(left, right));
+}
+
+int
+symbol_compare_by_name(t_symbol *left, t_symbol *right)
+{
 	if (left->name == right->name)
 		return (0);
 
@@ -67,3 +76,16 @@ symbol_compare(t_symbol *left, t_symbol *right)
 
 	return (strcmp(left->name, right->name));
 }
+
+int
+symbol_compare_by_address(t_symbol *left, t_symbol *right)
+{
+	if (left->address > right->address)
+		return (1);
+
+	if (left->address < right->address)
+		return (-1);
+
+	return (0);
+}
+

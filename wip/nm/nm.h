@@ -180,4 +180,10 @@ symbol_print_x32(t_symbol *symbol);
 int
 symbol_compare(t_symbol *left, t_symbol *right);
 
+int
+symbol_compare_by_name(t_symbol *left, t_symbol *right);
+
+int
+symbol_compare_by_address(t_symbol *left, t_symbol *right);
+
 #endif
