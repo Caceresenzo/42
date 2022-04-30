@@ -6,8 +6,6 @@ rm -rf $COMPILED_DIRECTORY
 mkdir $COMPILED_DIRECTORY
 
 for file in *.cpp; do
-	target=$(basename $file .cpp)
-	
 	echo Compiling $file
 	
 	g++ $file -o $COMPILED_DIRECTORY/$file-x64.out -std=c++98
@@ -20,8 +18,6 @@ done
 
 
 for file in *.c; do
-	target=$(basename $file .c)
-	
 	echo Compiling $file
 	
 	gcc $file -o $COMPILED_DIRECTORY/$file-x64.out
