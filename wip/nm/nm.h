@@ -43,15 +43,6 @@ typedef struct
 	t_flags flags;
 } t_nm;
 
-typedef struct
-{
-	char *ptr;
-	off_t size;
-	bool x32 :1;
-	bool x64 :1;
-	t_nm *nm;
-} t_elf;
-
 typedef void t_elf_header;
 typedef void t_elf_section_header;
 typedef void t_elf_symbol;
@@ -60,6 +51,15 @@ typedef Elf64_Half t_elf_half;
 typedef Elf64_Off t_elf_offset;
 typedef Elf64_Addr t_elf_address;
 typedef Elf64_Section t_elf_section;
+
+typedef struct
+{
+	char *ptr;
+	t_elf_offset size;
+	bool x32 :1;
+	bool x64 :1;
+	t_nm *nm;
+} t_elf;
 
 typedef struct
 {
