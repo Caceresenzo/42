@@ -96,6 +96,18 @@ elf_section_get_link(t_elf *elf, t_elf_section_header *section)
 	return (0);
 }
 
+t_elf_word
+elf_section_get_flags(t_elf *elf, t_elf_section_header *section)
+{
+	if (!elf || !section)
+		return (0);
+	if (elf->x32)
+		return (((Elf32_Shdr*)section)->sh_flags);
+	if (elf->x64)
+		return (((Elf64_Shdr*)section)->sh_flags);
+	return (0);
+}
+
 t_elf_section_header*
 elf_section_next(t_elf *elf, t_elf_section_header *section, t_elf_word n)
 {

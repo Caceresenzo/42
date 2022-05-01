@@ -117,6 +117,9 @@ elf_section_get_entity_size(t_elf *elf, t_elf_section_header *section);
 t_elf_word
 elf_section_get_link(t_elf *elf, t_elf_section_header *section);
 
+t_elf_word
+elf_section_get_flags(t_elf *elf, t_elf_section_header *section);
+
 t_elf_section_header*
 elf_section_next(t_elf *elf, t_elf_section_header *section, t_elf_word n);
 
@@ -185,5 +188,8 @@ symbol_compare_by_name(t_symbol *left, t_symbol *right);
 
 int
 symbol_compare_by_address(t_symbol *left, t_symbol *right);
+
+void
+debug_print(t_elf *elf, t_elf_symbol *elf_symbol);
 
 #endif
