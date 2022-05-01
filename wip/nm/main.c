@@ -28,7 +28,7 @@
 t_symbol*
 main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *section_strtab, t_elf_section_header *symbol_strtab)
 {
-	t_elf_address address = elf_symbol_get_value(elf, elf_symbol);
+	t_elf_address value = elf_symbol_get_value(elf, elf_symbol);
 
 	if (elf->nm->flags.include_all && elf_symbol_get_section_info_type(elf, elf_symbol) == STT_SECTION)
 	{
@@ -42,7 +42,7 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 		if (header)
 			name = elf_string_get(elf, section_strtab, elf_section_get_name(elf, header));
 
-		return (symbol_create(address, true, name, letter));
+		return (symbol_create(value, true, name, letter));
 	}
 
 	t_elf_section section_index = elf_symbol_get_section_index(elf, elf_symbol);
@@ -67,6 +67,9 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 	char letter = elf_symbol_decode(elf, elf_symbol);
 	if (!letter)
 		return (NULL);
+
+	if (letter == 'c' || letter == 'C')
+		value = elf_symbol_get_size(elf, elf_symbol);
 
 	if (!elf->nm->flags.include_all && letter == 'a')
 		return (NULL);
@@ -183,7 +186,7 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 //	}
 
 	bool has_address = section_index != SHN_UNDEF;
-	return (symbol_create(address, has_address, name, letter));
+	return (symbol_create(value, has_address, name, letter));
 }
 
 const char*

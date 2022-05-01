@@ -17,13 +17,13 @@
 #include "nm.h"
 
 t_symbol*
-symbol_create(t_elf_address address, bool has_address, const char *name, char letter)
+symbol_create(t_elf_address value, bool has_value, const char *name, char letter)
 {
 	t_symbol *symbol = malloc(sizeof(t_symbol));
 	if (symbol)
 	{
-		symbol->address = address;
-		symbol->has_address = has_address;
+		symbol->value = value;
+		symbol->has_value = has_value;
 		symbol->letter = letter;
 		symbol->name = name;
 	}
@@ -34,8 +34,8 @@ symbol_create(t_elf_address address, bool has_address, const char *name, char le
 static void
 symbol_print(int size, t_symbol *symbol)
 {
-	if (symbol->has_address)
-		printf("%0*lx %c %s\n", size, (long)symbol->address, symbol->letter, symbol->name);
+	if (symbol->has_value)
+		printf("%0*lx %c %s\n", size, (long)symbol->value, symbol->letter, symbol->name);
 	else
 		printf("%*s %c %s\n", size, "", symbol->letter, symbol->name);
 }
@@ -80,10 +80,10 @@ symbol_compare_by_name(t_symbol *left, t_symbol *right)
 int
 symbol_compare_by_address(t_symbol *left, t_symbol *right)
 {
-	if (left->address > right->address)
+	if (left->value > right->value)
 		return (1);
 
-	if (left->address < right->address)
+	if (left->value < right->value)
 		return (-1);
 
 	return (0);

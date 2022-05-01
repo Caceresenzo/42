@@ -63,8 +63,8 @@ typedef struct
 
 typedef struct
 {
-	t_elf_address address;
-	bool has_address;
+	t_elf_address value;
+	bool has_value;
 	const char *name;
 	char letter;
 } t_symbol;
@@ -172,7 +172,7 @@ bool
 elf_symbol_is_external(t_elf *elf, t_elf_symbol *symbol);
 
 t_symbol*
-symbol_create(t_elf_address address, bool has_address, const char *name, char letter);
+symbol_create(t_elf_address value, bool has_value, const char *name, char letter);
 
 void
 symbol_print_x64(t_symbol *symbol);
