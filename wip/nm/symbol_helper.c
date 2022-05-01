@@ -59,6 +59,10 @@ symbol_compare(t_symbol *left, t_symbol *right)
 	if (diff)
 		return (diff);
 
+	diff = symbol_compare_by_letter(left, right);
+	if (diff)
+		return (diff);
+
 	return (symbol_compare_by_address(left, right));
 }
 
@@ -75,6 +79,12 @@ symbol_compare_by_name(t_symbol *left, t_symbol *right)
 		return (-1);
 
 	return (strcmp(left->name, right->name));
+}
+
+int
+symbol_compare_by_letter(t_symbol *left, t_symbol *right)
+{
+	return (right->letter - left->letter);
 }
 
 int
