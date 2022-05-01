@@ -108,6 +108,16 @@ elf_section_get_flags(t_elf *elf, t_elf_section_header *section)
 	return (0);
 }
 
+const char*
+elf_section_find_name(t_elf *elf, t_elf_section_header *section)
+{
+	t_elf_section_header *strings_section = elf_sections_at(elf, elf_header_get_section_string_index(elf));
+	if (elf_section_get_type(elf, strings_section) != SHT_STRTAB)
+		strings_section = NULL;
+
+	return (elf_string_get(elf, strings_section, elf_section_get_name(elf, section)));
+}
+
 t_elf_section_header*
 elf_section_next(t_elf *elf, t_elf_section_header *section, t_elf_word n)
 {

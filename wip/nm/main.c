@@ -59,131 +59,16 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 
 	const char *name = elf_string_get(elf, symbol_strtab, name_offset);
 
-//	{
-//		if (strcmp("_end", name))
-//			return (NULL);
-//	}
-
 	char letter = elf_symbol_decode(elf, elf_symbol);
 	if (!letter)
 		return (NULL);
 
+	/* from: https://stackoverflow.com/a/55127171/7292958 */
 	if (letter == 'c' || letter == 'C')
 		value = elf_symbol_get_size(elf, elf_symbol);
 
 	if (!elf->nm->flags.include_all && letter == 'a')
 		return (NULL);
-//		{
-//			printf("letter=%c\n", letter);
-//			printf("size=%d\n", elf_symbol_get_size(elf, elf_symbol));
-//			printf("name=%s\n", name);
-//
-//			{
-//				unsigned char bind = elf_symbol_get_section_info_bind(elf, elf_symbol);
-//				const char *decoded = ((const char*[16] ) { //
-//						[STB_LOCAL] = "STB_LOCAL", //
-//						[STB_GLOBAL] = "STB_GLOBAL", //
-//						[STB_WEAK] = "STB_WEAK", //
-//						[STB_NUM] = "STB_NUM", //
-//						[4 ... 9] = "(unknown 4-9)", //
-//						[STB_LOOS] = "STB_LOOS", //
-//						[11] = "(unknown 11)", //
-//						[STB_HIOS] = "STB_HIOS", //
-//						[STB_LOPROC] = "STB_LOPROC", //
-//						[14] = "(unknown 11)", //
-//						[STB_HIPROC] = "STB_HIPROC", //
-//						} )[bind];
-//
-//				printf("info_bind=%s (%d)\n", decoded, bind);
-//			}
-//
-//			{
-//				unsigned char type = elf_symbol_get_section_info_type(elf, elf_symbol);
-//				const char *decoded = ((const char*[16] ) { //
-//						[STT_NOTYPE] = "STT_NOTYPE", //
-//						[STT_OBJECT] = "STT_OBJECT", //
-//						[STT_FUNC] = "STT_FUNC", //
-//						[STT_SECTION] = "STT_SECTION", //
-//						[STT_FILE] = "STT_FILE", //
-//						[STT_COMMON] = "STT_COMMON", //
-//						[STT_TLS] = "STT_TLS", //
-//						[STT_NUM] = "STT_NUM", //
-//						[8 ... 9] = "(unknown 8-9)", //
-//						[STT_LOOS] = "STT_LOOS", //
-//						[11] = "(unknown 11)", //
-//						[STT_HIOS] = "STT_HIOS", //
-//						[STT_LOPROC] = "STT_LOPROC", //
-//						[14] = "(unknown 14)", //
-//						[STT_HIPROC] = "STT_HIPROC", //
-//						} )[type];
-//
-//				printf("info_type=%s (%d)\n", decoded, type);
-//			}
-//
-//			{
-//				unsigned char visibility = elf_symbol_get_section_other_visibility(elf, elf_symbol);
-//				const char *decoded = ((const char*[16] ) { //
-//						[STV_DEFAULT] = "STV_DEFAULT", //
-//						[STV_INTERNAL] = "STV_INTERNAL", //
-//						[STV_HIDDEN] = "STV_HIDDEN", //
-//						[STV_PROTECTED] = "STV_PROTECTED", //
-//						[4 ... 15] = "(unknown 4-15)", //
-//						} )[visibility];
-//
-//				printf("visibility=%s (%d)\n", decoded, visibility);
-//			}
-//
-//			{
-//				t_elf_section section_index = elf_symbol_get_section_index(elf, elf_symbol);
-//				t_elf_section_header *section = NULL;
-//
-//				const char *decoded = "(unknown)";
-//				if (section_index == SHN_UNDEF)
-//					decoded = "SHN_UNDEF";
-//				else if (section_index == SHN_LORESERVE)
-//					decoded = "SHN_LORESERVE";
-//				else if (section_index == SHN_LOPROC)
-//					decoded = "SHN_LOPROC";
-//				else if (section_index == SHN_BEFORE)
-//					decoded = "SHN_BEFORE";
-//				else if (section_index == SHN_AFTER)
-//					decoded = "SHN_AFTER";
-//				else if (section_index == SHN_HIPROC)
-//					decoded = "SHN_HIPROC";
-//				else if (section_index == SHN_HIPROC)
-//					decoded = "SHN_HIPROC";
-//				else if (section_index == SHN_LOOS)
-//					decoded = "SHN_LOOS";
-//				else if (section_index == SHN_HIOS)
-//					decoded = "SHN_HIOS";
-//				else if (section_index == SHN_ABS)
-//					decoded = "SHN_ABS";
-//				else if (section_index == SHN_COMMON)
-//					decoded = "SHN_COMMON";
-//				else if (section_index == SHN_XINDEX)
-//					decoded = "SHN_XINDEX";
-//				else if (section_index == SHN_HIRESERVE)
-//					decoded = "SHN_HIRESERVE";
-//				else
-//				{
-//					section = elf_sections_at(elf, section_index);
-//					const char *section_name = elf_string_get(elf, section_strtab, elf_section_get_name(elf, section));
-//
-//					if (section_name)
-//						decoded = section_name;
-//				}
-//
-//				printf("section_index=%s (%d)\n", decoded, section_index);
-//
-//				if (section)
-//				{
-//					printf("\t section.type=%d\n", elf_section_get_type(elf, section));
-//				}
-//			}
-//
-//			printf("\n");
-//		}
-//	}
 
 	bool has_address = section_index != SHN_UNDEF;
 	return (symbol_create(value, has_address, name, letter));

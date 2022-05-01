@@ -18,58 +18,38 @@
 
 #define UNKNOWN_LETTER '?'
 
-struct section_to_type
-{
-	const char *section;
-	char type;
-};
-
-/* Map special section names to POSIX/BSD single-character symbol types.
- This table is probably incomplete.  It is sorted for convenience of
- adding entries.  Since it is so short, a linear search is used.  */
-static const struct section_to_type stt[] = { //
-{ ".drectve", 'i' }, /* MSVC's .drective section */
-{ ".edata", 'e' }, /* MSVC's .edata (export) section */
-{ ".idata", 'i' }, /* MSVC's .idata (import) section */
-{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
-{ 0, 0 } };
-
-/* Return the single-character symbol type corresponding to
- section S, or '?' for an unknown COFF section.
-
- Check for leading strings which match, followed by a number, '.',
- or '$' so .idata5 matches the .idata entry.  */
-
+/* from: https://github.com/bminor/binutils-gdb/blob/e9c5fe2f40e7da0f104624ee81c9720a7956e64c/bfd/syms.c#L589 */
 static char
-coff_section_type(const char *s)
+coff_section_type(const char *name)
 {
-	const struct section_to_type *t;
-
-	for (t = &stt[0]; t->section; t++)
-	{
-		size_t len = strlen(t->section);
-		if (strncmp(s, t->section, len) == 0 && memchr(".$0123456789", s[len], 13) != 0)
-			return t->type;
-	}
-
-	return UNKNOWN_LETTER;
-}
-
-char
-elf_symbol_decode_section(t_elf *elf, t_elf_section_header *section)
-{
-	t_elf_section_header *strings_section = elf_sections_at(elf, elf_header_get_section_string_index(elf));
-	if (elf_section_get_type(elf, strings_section) != SHT_STRTAB)
-		strings_section = NULL;
-
-	const char *name = elf_string_get(elf, strings_section, elf_section_get_name(elf, section));
 	if (!name)
 		return (UNKNOWN_LETTER);
 
-	return (coff_section_type(name));
+	struct s_entry
+	{
+		const char *section;
+		char type;
+	};
+
+	static const struct s_entry entries[] = { //
+	{ ".drectve", 'i' }, /* MSVC's .drective section */
+	{ ".edata", 'e' }, /* MSVC's .edata (export) section */
+	{ ".idata", 'i' }, /* MSVC's .idata (import) section */
+	{ ".pdata", 'p' }, /* MSVC's .pdata (stack unwind) section */
+	{ 0, 0 } };
+
+	const struct s_entry *entry;
+	for (entry = &entries[0]; entry->section; ++entry)
+	{
+		size_t len = strlen(entry->section);
+		if (strncmp(name, entry->section, len) == 0 && memchr(".$0123456789", name[len], 13) != 0)
+			return (entry->type);
+	}
+
+	return (UNKNOWN_LETTER);
 }
 
-bool
+static bool
 startswith(const char *str, const char *prefix)
 {
 	if (!str)
@@ -78,16 +58,34 @@ startswith(const char *str, const char *prefix)
 	return (strncmp(str, prefix, strlen(prefix)) == 0);
 }
 
+/* from: https://github.com/bminor/binutils-gdb/blob/e9c5fe2f40e7da0f104624ee81c9720a7956e64c/bfd/elf.c#L1087-L1102 */
+static bool
+is_debugging(const char *name)
+{
+	static const char *prefixes[] = {
+	/**/".debug",
+	/**/".gnu.debuglto_.debug_",
+	/**/".gnu.linkonce.wi.",
+	/**/".zdebug",
+	/**/".line",
+	/**/".stab" //
+	};
+
+	for (unsigned index = 0; index < sizeof(prefixes) / sizeof(prefixes[0]); ++index)
+		if (startswith(name, prefixes[index]))
+			return (true);
+
+	return (strcmp(name, ".gdb_index") == 0);
+}
+
+/* from: https://github.com/bminor/binutils-gdb/blob/e9c5fe2f40e7da0f104624ee81c9720a7956e64c/bfd/syms.c#L612 */
 static char
 decode_section_type(t_elf *elf, t_elf_section_header *section)
 {
 	t_elf_word type = elf_section_get_type(elf, section);
 	t_elf_word flags = elf_section_get_flags(elf, section);
 
-	t_elf_section_header *strings_section = elf_sections_at(elf, elf_header_get_section_string_index(elf));
-	if (elf_section_get_type(elf, strings_section) != SHT_STRTAB)
-		strings_section = NULL;
-	const char *name = elf_string_get(elf, strings_section, elf_section_get_name(elf, section));
+	const char *name = elf_section_find_name(elf, section);
 
 	bool has_content = type != SHT_NOBITS;
 	bool alloc = (flags & SHF_ALLOC) != 0;
@@ -96,22 +94,6 @@ decode_section_type(t_elf *elf, t_elf_section_header *section)
 	bool code = (flags & SHF_EXECINSTR) != 0 || type == SHT_INIT_ARRAY || type == SHT_FINI_ARRAY;
 	bool data = !code && load;
 	bool small_data = (flags & SHF_MIPS_GPREL) != 0 || startswith(name, ".sbss") || startswith(name, ".sdata");
-
-//	printf("name=%s\n", name);
-//	printf("type=%d (%x)\n", type, type);
-//
-//	printf("flags=");
-//	for (unsigned int i = 0; i < sizeof(flags) * 8; ++i)
-//		printf("%d", flags & (1 << i));
-//	printf("\n");
-//
-//	printf("has_content=%d\n", has_content);
-//	printf("alloc=%d\n", alloc);
-//	printf("load=%d\n", load);
-//	printf("read_only=%d\n", read_only);
-//	printf("code=%d\n", code);
-//	printf("data=%d\n", data);
-//	printf("small_data=%d\n", small_data);
 
 	if (code)
 		return ('t');
@@ -135,7 +117,7 @@ decode_section_type(t_elf *elf, t_elf_section_header *section)
 		return ('b');
 	}
 
-	bool debugging = startswith(name, ".debug") || startswith(name, ".gnu.debuglto_.debug_") || startswith(name, ".gnu.linkonce.wi.") || startswith(name, ".zdebug") || startswith(name, ".line") || startswith(name, ".stab") || strcmp(name, ".gdb_index") == 0; // TODO
+	bool debugging = is_debugging(name);
 	if (debugging)
 		return ('N');
 
@@ -145,14 +127,18 @@ decode_section_type(t_elf *elf, t_elf_section_header *section)
 	return (UNKNOWN_LETTER);
 }
 
-static char
-do_decode(t_elf *elf, t_elf_symbol *symbol)
+/* from: https://github.com/bminor/binutils-gdb/blob/e9c5fe2f40e7da0f104624ee81c9720a7956e64c/bfd/elf.c#L1006 */
+char
+elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol)
 {
+	if (!elf || !symbol)
+		return (UNKNOWN_LETTER);
+
 	t_elf_section section_index = elf_symbol_get_section_index(elf, symbol);
 	t_elf_section_header *section = elf_sections_at(elf, section_index);
+
 	unsigned char bind = elf_symbol_get_section_info_bind(elf, symbol);
 	unsigned char type = elf_symbol_get_section_info_type(elf, symbol);
-//	printf("section_index=%d\n", section_index);
 
 	if (section_index == SHN_MIPS_SCOMMON)
 		return ('c');
@@ -173,7 +159,7 @@ do_decode(t_elf *elf, t_elf_symbol *symbol)
 		return ('U');
 	}
 
-	// TODO indirect
+	// TODO Indirect
 	if (type == STT_GNU_IFUNC)
 		return ('i');
 
@@ -196,7 +182,7 @@ do_decode(t_elf *elf, t_elf_symbol *symbol)
 		letter = 'a';
 	else if (section)
 	{
-		letter = elf_symbol_decode_section(elf, section);
+		letter = coff_section_type(elf_section_find_name(elf, section));
 		if (letter == UNKNOWN_LETTER)
 			letter = decode_section_type(elf, section);
 	}
@@ -205,25 +191,6 @@ do_decode(t_elf *elf, t_elf_symbol *symbol)
 
 	if (bind == STB_GLOBAL)
 		letter = toupper(letter);
-
-	return (letter);
-}
-
-char
-elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol)
-{
-	if (!elf || !symbol)
-		return (UNKNOWN_LETTER);
-
-	char letter = do_decode(elf, symbol);
-
-//	unsigned char bind = elf_symbol_get_section_info_bind(elf, symbol);
-//
-//	if (bind == STB_GLOBAL)
-//		return (toupper(letter));
-//
-//	if (bind == STB_LOCAL)
-//		return (tolower(letter));
 
 	return (letter);
 }

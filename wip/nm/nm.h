@@ -120,6 +120,9 @@ elf_section_get_link(t_elf *elf, t_elf_section_header *section);
 t_elf_word
 elf_section_get_flags(t_elf *elf, t_elf_section_header *section);
 
+const char*
+elf_section_find_name(t_elf *elf, t_elf_section_header *section);
+
 t_elf_section_header*
 elf_section_next(t_elf *elf, t_elf_section_header *section, t_elf_word n);
 
