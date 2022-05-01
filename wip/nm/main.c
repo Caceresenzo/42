@@ -218,7 +218,7 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 
 	t_elf_section_header *symbol_section = elf_sections_find_by_type(&elf, SHT_SYMTAB);
 	if (!symbol_section)
-		return ("no symbols found");
+		return ("no symbols");
 
 	t_elf_word symbol_section_size = elf_section_get_size(&elf, symbol_section);
 	t_elf_word symbol_section_entity_size = elf_section_get_entity_size(&elf, symbol_section);
