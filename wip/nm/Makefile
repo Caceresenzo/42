@@ -19,12 +19,7 @@ clean:
 
 re: fclean all
 
-simple-test: all
-	bash test/compile-and-run.sh
+test: all
+	sh tests/run.sh
 
-advanced-test: all
-	bash test/test.sh /lib32/libpthread.so.0
-
-all-test: simple-test advanced-test
-
-.PHONY: all bonus clean fclean re .c.o simple-test advanced-test all-test
+.PHONY: all bonus clean fclean re .c.o test

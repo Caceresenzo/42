@@ -9,6 +9,7 @@ ft_nm_exit=$?
 cat /tmp/nm.output | sed 's/nm:/PROGRAM:/g' > /tmp/nm.anonimized.output
 cat /tmp/ft_nm.output | sed 's/ft_nm:/PROGRAM:/g' > /tmp/ft_nm.anonimized.output
 
+#if ! diff --color --side-by-side /tmp/nm.anonimized.output /tmp/ft_nm.anonimized.output; then
 if ! diff --color --side-by-side --suppress-common-lines /tmp/nm.anonimized.output /tmp/ft_nm.anonimized.output; then
 	echo DIFF
 	exit 1
