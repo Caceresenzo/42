@@ -26,7 +26,7 @@ typedef void
 (*t_list_node_consumer)(void*);
 
 typedef int
-(*t_list_node_compare)(void*, void*);
+(*t_list_node_compare)(const void*, const void*);
 
 typedef struct
 {
@@ -59,7 +59,7 @@ list_node_delete(t_list_node *node, t_list_node_consumer del);
 t_list_node*
 list_node_next(t_list_node *node);
 
-void
-list_sort(t_list *list, t_list_node_compare comparator, bool reverse);
+bool
+list_sort(t_list *list, t_list_node_compare comparator);
 
 #endif

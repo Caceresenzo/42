@@ -12,6 +12,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 #include <stdlib.h>
 
 #include "nm.h"
@@ -53,49 +54,26 @@ symbol_print_x32(t_symbol *symbol)
 }
 
 int
-symbol_compare(t_symbol *left, t_symbol *right)
+symbol_compare(const t_symbol *left, const t_symbol *right)
 {
-	int diff = symbol_compare_by_name(left, right);
-	if (diff)
-		return (diff);
-
-	diff = symbol_compare_by_letter(left, right);
-	if (diff)
-		return (diff);
-
-	return (symbol_compare_by_address(left, right));
-}
-
-int
-symbol_compare_by_name(t_symbol *left, t_symbol *right)
-{
-	if (left->name == right->name)
-		return (0);
-
-	if (left->name && !right->name)
-		return (1);
-
-	if (!left->name && right->name)
+	if (right->name == NULL)
+		return (left->name != NULL);
+	if (left->name == NULL)
 		return (-1);
-
 	return (strcmp(left->name, right->name));
 }
 
 int
-symbol_compare_by_letter(t_symbol *left, t_symbol *right)
+symbol_list_compare(const void *a, const void *b)
 {
-	return (right->letter - left->letter);
+	const t_symbol *left = *(const t_symbol**)a;
+	const t_symbol *right = *(const t_symbol**)b;
+
+	return (symbol_compare(left, right));
 }
 
 int
-symbol_compare_by_address(t_symbol *left, t_symbol *right)
+symbol_list_compare_reverse(const void *a, const void *b)
 {
-	if (left->value > right->value)
-		return (1);
-
-	if (left->value < right->value)
-		return (-1);
-
-	return (0);
+	return (-symbol_list_compare(a, b));
 }
-

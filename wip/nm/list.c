@@ -115,36 +115,59 @@ list_node_delete(t_list_node *node, t_list_node_consumer del)
 	free(node);
 }
 
-static void
-swap_void(void **a, void **b)
+static void**
+list_to_array(t_list *list, long int size)
 {
-	void *c = *a;
-	*a = *b;
-	*b = c;
+	int index;
+	t_list_node *node;
+	void **array;
+
+	array = calloc(size, sizeof(void*));
+	if (!array)
+		return (NULL);
+	index = 0;
+	node = list->first;
+	while (node)
+	{
+		array[index] = node->data;
+		node = node->next;
+		index++;
+	}
+	return (array);
 }
 
-void
-list_sort(t_list *list, t_list_node_compare comparator, bool reverse)
+static void
+list_set_from_array(t_list *list, void **array)
 {
-	if (!list || !comparator)
-		return;
+	int index;
+	t_list_node *node;
 
-	t_list_node *current = list->first;
-
-	while (current && current->next)
+	node = list->first;
+	index = 0;
+	while (node != NULL)
 	{
-		t_list_node *next = current->next;
-
-		while (next)
-		{
-			int diff = comparator(current->data, next->data);
-
-			if ((reverse && diff < 0) || (!reverse && diff > 0))
-				swap_void(&current->data, &next->data);
-
-			next = next->next;
-		}
-
-		current = current->next;
+		node->data = array[index];
+		node = node->next;
+		index++;
 	}
+}
+
+bool
+list_sort(t_list *list, t_list_node_compare comparator)
+{
+	long int size;
+	void **array;
+
+	if (!list || !comparator)
+		return (false);
+	size = list_size(list);
+	if (size < 2)
+		return (true);
+	array = list_to_array(list, size);
+	if (!array)
+		return (false);
+	qsort(array, size, sizeof(void*), comparator);
+	list_set_from_array(list, array);
+	free(array);
+	return (true);
 }

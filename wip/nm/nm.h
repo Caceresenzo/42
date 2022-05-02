@@ -184,16 +184,13 @@ void
 symbol_print_x32(t_symbol *symbol);
 
 int
-symbol_compare(t_symbol *left, t_symbol *right);
+symbol_compare(const t_symbol *left, const t_symbol *right);
 
 int
-symbol_compare_by_name(t_symbol *left, t_symbol *right);
+symbol_list_compare(const void *a, const void *b);
 
 int
-symbol_compare_by_letter(t_symbol *left, t_symbol *right);
-
-int
-symbol_compare_by_address(t_symbol *left, t_symbol *right);
+symbol_list_compare_reverse(const void *a, const void *b);
 
 void
 debug_print(t_elf *elf, t_elf_symbol *elf_symbol);

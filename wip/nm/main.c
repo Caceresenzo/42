@@ -137,8 +137,10 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 	}
 
 	t_sort sort = nm->flags.sort;
-	if (sort != SORT_NONE)
-		list_sort(&list, (t_list_node_compare)&symbol_compare, sort == SORT_REVERSE);
+	if (sort == SORT_REVERSE)
+		list_sort(&list, &symbol_list_compare_reverse);
+	else if (sort == SORT_NORMAL)
+		list_sort(&list, &symbol_list_compare);
 
 	if (multiple && list_size(&list))
 		printf("\n%s:\n", file);
