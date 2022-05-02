@@ -1,5 +1,5 @@
 NAME = ft_nm
-SRCS = elf_header.c elf_string.c elf_symbol_decode.c list.c main_help.c elf_section.c elf_symbol.c flags.c main.c symbol_helper.c
+SRCS = elf_header.c elf_string.c elf_symbol_decode.c list.c main_help.c elf_section.c elf_symbol.c flags.c main.c symbol_helper.c message.c
 OBJS = $(SRCS:.c=.o)
 FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 

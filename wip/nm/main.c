@@ -74,20 +74,20 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 	return (symbol_create(value, has_address, name, letter));
 }
 
-const char*
+t_message
 main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statbuf)
 {
 	if (statbuf->st_size < EI_NIDENT)
-		return ("invalid header");
+		return (message_error("invalid header"));
 
 	if (memcmp(ptr, ELFMAG, 4) != 0)
-		return ("invalid magic");
+		return (message_error("invalid magic"));
 
 	bool is32 = ptr[EI_CLASS] == ELFCLASS32;
 	bool is64 = ptr[EI_CLASS] == ELFCLASS64;
 
 	if (!is32 && !is64)
-		return ("invalid architecture");
+		return (message_error("invalid architecture"));
 
 	t_elf elf;
 	bzero(&elf, sizeof(t_elf));
@@ -99,22 +99,25 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 	elf.nm = nm;
 
 	if (elf.size < elf_header_sizeof(&elf))
-		return ("invalid header size");
+		return (message_error("invalid header size"));
+
+	if (multiple)
+		printf("\n%s:\n", file);
 
 	t_elf_section_header *symbol_section = elf_sections_find_by_type(&elf, SHT_SYMTAB);
 	if (!symbol_section)
-		return ("no symbols");
+		return (message_simple("no symbols"));
 
 	t_elf_word symbol_section_size = elf_section_get_size(&elf, symbol_section);
 	t_elf_word symbol_section_entity_size = elf_section_get_entity_size(&elf, symbol_section);
 	if (!symbol_section_size || !symbol_section_entity_size)
-		return ("0 symbol");
+		return (message_simple("0 symbol"));
 
 	t_elf_word symbol_count = symbol_section_size / symbol_section_entity_size;
 
 	t_elf_symbol *elf_symbol = elf_symbol_from(&elf, symbol_section);
 	if (!elf_symbol)
-		return ("invalid symbol offset");
+		return (message_error("invalid symbol offset"));
 
 	t_elf_section_header *symbol_strtab = elf_sections_at(&elf, elf_section_get_link(&elf, symbol_section));
 	if (elf_section_get_type(&elf, symbol_strtab) != SHT_STRTAB)
@@ -142,9 +145,6 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 	else if (sort == SORT_NORMAL)
 		list_sort(&list, &symbol_list_compare);
 
-	if (multiple && list_size(&list))
-		printf("\n%s:\n", file);
-
 	if (elf.x32)
 		list_for_each(&list, (t_list_node_consumer)&symbol_print_x32);
 	else if (elf.x64)
@@ -152,7 +152,7 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 
 	list_delete(&list, &free);
 
-	return (NULL);
+	return (message_none());
 }
 
 int
@@ -190,13 +190,18 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
-	const char *err = main_nm(nm, file, multiple, ptr, &statbuf);
-	if (err)
-		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, err);
+	t_message message = main_nm(nm, file, multiple, ptr, &statbuf);
+	if (message.text)
+	{
+		if (message.error)
+			dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, message.text);
+		else
+			dprintf(STDOUT_FILENO, "ft_nm: %s: %s\n", file, message.text);
+	}
 
 	munmap(ptr, statbuf.st_size);
 	close(fd);
-	return (!!err);
+	return (message.error);
 }
 
 int

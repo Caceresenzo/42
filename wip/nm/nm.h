@@ -40,6 +40,12 @@ typedef struct
 
 typedef struct
 {
+	bool error;
+	const char *text;
+} t_message;
+
+typedef struct
+{
 	t_flags flags;
 } t_nm;
 
@@ -191,6 +197,15 @@ symbol_list_compare(const void *a, const void *b);
 
 int
 symbol_list_compare_reverse(const void *a, const void *b);
+
+t_message
+message_simple(const char *text);
+
+t_message
+message_error(const char *text);
+
+t_message
+message_none(void);
 
 void
 debug_print(t_elf *elf, t_elf_symbol *elf_symbol);
