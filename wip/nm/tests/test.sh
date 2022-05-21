@@ -1,4 +1,4 @@
-echo "Running: $@"
+echo "Running: $@" 1>&2
 
 nm $@ >/tmp/nm.output 2>&1
 nm_exit=$?
