@@ -91,7 +91,7 @@ decode_section_type(t_elf *elf, t_elf_section_header *section)
 	bool alloc = (flags & SHF_ALLOC) != 0;
 	bool load = alloc && type != SHT_NOBITS;
 	bool read_only = (flags & SHF_WRITE) == 0;
-	bool code = (flags & SHF_EXECINSTR) != 0 || type == SHT_INIT_ARRAY || type == SHT_FINI_ARRAY;
+	bool code = (flags & SHF_EXECINSTR) != 0;
 	bool data = !code && load;
 	bool small_data = (flags & SHF_MIPS_GPREL) != 0 || startswith(name, ".sbss") || startswith(name, ".sdata");
 
