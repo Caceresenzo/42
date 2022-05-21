@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <stdbool.h>
+# include "ft.h"
 
 typedef struct s_list_node
 {

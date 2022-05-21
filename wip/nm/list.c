@@ -122,7 +122,7 @@ list_to_array(t_list *list, long int size)
 	t_list_node *node;
 	void **array;
 
-	array = calloc(size, sizeof(void*));
+	array = ft_calloc(size, sizeof(void*));
 	if (!array)
 		return (NULL);
 	index = 0;

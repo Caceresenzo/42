@@ -25,6 +25,38 @@
 #include "list.h"
 #include "nm.h"
 
+static void
+print_message(int fd, const char *file, const char *text)
+{
+	ft_putstr_fd("ft_nm: ", fd);
+	ft_putstr_fd(file, fd);
+	ft_putstr_fd(": ", fd);
+	ft_putstr_fd(text, fd);
+	ft_putstr_fd("\n", fd);
+}
+
+static void
+print_message_errno(int fd, const char *file)
+{
+	print_message(fd, file, strerror(errno));
+}
+
+static void
+print_invalid_option_word(const char *word)
+{
+	ft_putstr_fd("ft_nm: unrecognized option '--", STDERR_FILENO);
+	ft_putstr_fd(word, STDERR_FILENO);
+	ft_putstr_fd("'\n", STDERR_FILENO);
+}
+
+static void
+print_invalid_option_letter(char letter)
+{
+	ft_putstr_fd("ft_nm: invalid option -- '", STDERR_FILENO);
+	ft_putchar_fd(letter, STDERR_FILENO);
+	ft_putstr_fd("'\n", STDERR_FILENO);
+}
+
 t_symbol*
 main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *section_strtab, t_elf_section_header *symbol_strtab)
 {
@@ -80,7 +112,7 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 	if (statbuf->st_size < EI_NIDENT)
 		return (message_error("invalid header"));
 
-	if (memcmp(ptr, ELFMAG, 4) != 0)
+	if (ft_memcmp(ptr, ELFMAG, 4) != 0)
 		return (message_error("invalid magic"));
 
 	bool is32 = ptr[EI_CLASS] == ELFCLASS32;
@@ -90,7 +122,7 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 		return (message_error("invalid architecture"));
 
 	t_elf elf;
-	bzero(&elf, sizeof(t_elf));
+	ft_bzero(&elf, sizeof(t_elf));
 
 	elf.ptr = ptr;
 	elf.size = statbuf->st_size;
@@ -102,7 +134,11 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 		return (message_error("invalid header size"));
 
 	if (multiple)
-		printf("\n%s:\n", file);
+	{
+		ft_putstr_fd("\n", STDOUT_FILENO);
+		ft_putstr_fd(file, STDOUT_FILENO);
+		ft_putstr_fd(":\n", STDOUT_FILENO);
+	}
 
 	t_elf_section_header *symbol_section = elf_sections_find_by_type(&elf, SHT_SYMTAB);
 	if (!symbol_section)
@@ -163,21 +199,21 @@ main_file(t_nm *nm, const char *file, bool multiple)
 	int fd = open(file, 0);
 	if (fd == -1)
 	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, strerror(errno));
+		print_message_errno(STDERR_FILENO, file);
 		return (1);
 	}
 
 	int ret = fstat(fd, &statbuf);
 	if (ret == -1)
 	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, strerror(errno));
+		print_message_errno(STDERR_FILENO, file);
 		close(fd);
 		return (1);
 	}
 
 	if (!S_ISREG(statbuf.st_mode))
 	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: not a regular file\n", file);
+		print_message(STDERR_FILENO, file, "not a regular file");
 		close(fd);
 		return (1);
 	}
@@ -185,7 +221,7 @@ main_file(t_nm *nm, const char *file, bool multiple)
 	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 	if (!ptr)
 	{
-		dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, strerror(errno));
+		print_message_errno(STDERR_FILENO, file);
 		close(fd);
 		return (1);
 	}
@@ -194,9 +230,9 @@ main_file(t_nm *nm, const char *file, bool multiple)
 	if (message.text)
 	{
 		if (message.error)
-			dprintf(STDERR_FILENO, "ft_nm: %s: %s\n", file, message.text);
+			print_message(STDERR_FILENO, file, message.text);
 		else
-			dprintf(STDOUT_FILENO, "ft_nm: %s: %s\n", file, message.text);
+			print_message(STDOUT_FILENO, file, message.text);
 	}
 
 	munmap(ptr, statbuf.st_size);
@@ -208,15 +244,15 @@ int
 main(int argc, char **argv)
 {
 	t_nm nm;
-	bzero(&nm, sizeof(nm));
+	ft_bzero(&nm, sizeof(nm));
 
 	int file_index = -1;
 	if (!flags_parse(&nm.flags, argc, argv, &file_index))
 	{
 		if (nm.flags.unknown_word)
-			dprintf(STDERR_FILENO, "ft_nm: unrecognized option '--%s'\n", nm.flags.unknown_word);
+			print_invalid_option_word(nm.flags.unknown_word);
 		else
-			dprintf(STDERR_FILENO, "ft_nm: invalid option -- '%c'\n", nm.flags.unknown_letter);
+			print_invalid_option_letter(nm.flags.unknown_letter);
 
 		return (main_help(true));
 	}

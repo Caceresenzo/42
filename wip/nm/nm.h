@@ -16,6 +16,7 @@
 # include <elf.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include "ft.h"
 
 # define NM_VERSION "v1.0"
 

@@ -36,9 +36,33 @@ static void
 symbol_print(int size, t_symbol *symbol)
 {
 	if (symbol->has_value)
-		printf("%0*lx %c %s\n", size, (long)symbol->value, symbol->letter, symbol->name);
+	{
+		char buffer[16 + 1];
+		ft_itoa((long)symbol->value, buffer, 16);
+
+		int len = ft_strlen(buffer);
+		if (len != size)
+		{
+			char zeros[16 + 1] = "0000000000000000";
+			zeros[size - len] = '\0';
+			ft_putstr_fd(zeros, STDOUT_FILENO);
+		}
+
+		ft_putstr_fd(buffer, STDOUT_FILENO);
+	}
 	else
-		printf("%*s %c %s\n", size, "", symbol->letter, symbol->name);
+	{
+		char spaces[16 + 1] = "                ";
+		spaces[size] = '\0';
+
+		ft_putstr_fd(spaces, STDOUT_FILENO);
+	}
+
+	ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putchar_fd(symbol->letter, STDOUT_FILENO);
+	ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putstr_fd(symbol->name, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
 void
@@ -60,7 +84,7 @@ symbol_compare(const t_symbol *left, const t_symbol *right)
 		return (left->name != NULL);
 	if (left->name == NULL)
 		return (-1);
-	return (strcmp(left->name, right->name));
+	return (ft_strcmp(left->name, right->name));
 }
 
 int

@@ -123,25 +123,25 @@ flags_parse_letter(t_flags *flags, char letter)
 bool
 flags_parse_word(t_flags *flags, const char *word)
 {
-	if (strcmp("help", word) == 0)
+	if (ft_strcmp("help", word) == 0)
 		return (flags_parse_letter(flags, 'h'));
 
-	if (strcmp("version", word) == 0)
+	if (ft_strcmp("version", word) == 0)
 		return (flags_parse_letter(flags, 'V'));
 
-	if (strcmp("debug-syms", word) == 0)
+	if (ft_strcmp("debug-syms", word) == 0)
 		return (flags_parse_letter(flags, 'a'));
 
-	if (strcmp("extern-only", word) == 0)
+	if (ft_strcmp("extern-only", word) == 0)
 		return (flags_parse_letter(flags, 'g'));
 
-	if (strcmp("undefined-only", word) == 0)
+	if (ft_strcmp("undefined-only", word) == 0)
 		return (flags_parse_letter(flags, 'u'));
 
-	if (strcmp("reverse-sort", word) == 0)
+	if (ft_strcmp("reverse-sort", word) == 0)
 		return (flags_parse_letter(flags, 'r'));
 
-	if (strcmp("no-sort", word) == 0)
+	if (ft_strcmp("no-sort", word) == 0)
 		return (flags_parse_letter(flags, 'p'));
 
 	flags->unknown_word = word;

@@ -41,21 +41,12 @@ coff_section_type(const char *name)
 	const struct s_entry *entry;
 	for (entry = &entries[0]; entry->section; ++entry)
 	{
-		size_t len = strlen(entry->section);
-		if (strncmp(name, entry->section, len) == 0 && memchr(".$0123456789", name[len], 13) != 0)
+		size_t len = ft_strlen(entry->section);
+		if (ft_strncmp(name, entry->section, len) == 0 && ft_memchr(".$0123456789", name[len], 13) != 0)
 			return (entry->type);
 	}
 
 	return (UNKNOWN_LETTER);
-}
-
-static bool
-startswith(const char *str, const char *prefix)
-{
-	if (!str)
-		return (false);
-
-	return (strncmp(str, prefix, strlen(prefix)) == 0);
 }
 
 /* from: https://github.com/bminor/binutils-gdb/blob/e9c5fe2f40e7da0f104624ee81c9720a7956e64c/bfd/elf.c#L1087-L1102 */
@@ -72,10 +63,10 @@ is_debugging(const char *name)
 	};
 
 	for (unsigned index = 0; index < sizeof(prefixes) / sizeof(prefixes[0]); ++index)
-		if (startswith(name, prefixes[index]))
+		if (ft_strstartswith(name, prefixes[index]))
 			return (true);
 
-	return (strcmp(name, ".gdb_index") == 0);
+	return (ft_strcmp(name, ".gdb_index") == 0);
 }
 
 /* from: https://github.com/bminor/binutils-gdb/blob/e9c5fe2f40e7da0f104624ee81c9720a7956e64c/bfd/syms.c#L612 */
@@ -93,7 +84,7 @@ decode_section_type(t_elf *elf, t_elf_section_header *section)
 	bool read_only = (flags & SHF_WRITE) == 0;
 	bool code = (flags & SHF_EXECINSTR) != 0;
 	bool data = !code && load;
-	bool small_data = (flags & SHF_MIPS_GPREL) != 0 || startswith(name, ".sbss") || startswith(name, ".sdata");
+	bool small_data = (flags & SHF_MIPS_GPREL) != 0 || ft_strstartswith(name, ".sbss") || ft_strstartswith(name, ".sdata");
 
 	if (code)
 		return ('t');
@@ -190,7 +181,7 @@ elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol)
 		return ('?');
 
 	if (bind == STB_GLOBAL)
-		letter = toupper(letter);
+		letter = ft_toupper(letter);
 
 	return (letter);
 }
