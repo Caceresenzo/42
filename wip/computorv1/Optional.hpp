@@ -46,6 +46,15 @@ template<typename T>
 				return (m_value);
 			}
 
+			T
+			or_else(const T &default_value) const
+			{
+				if (!m_has_value)
+					return (default_value);
+
+				return (m_value);
+			}
+
 			bool
 			is_present() const
 			{

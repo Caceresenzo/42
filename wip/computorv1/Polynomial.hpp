@@ -138,7 +138,9 @@ template<typename V = long double, typename E = int>
 			constant(const V &a)
 			{
 				map values;
-				values[0] = a;
+
+				if (a)
+					values[0] = a;
 
 				return (Polynomial(values));
 			}
@@ -147,8 +149,12 @@ template<typename V = long double, typename E = int>
 			linear(const V &a, const V &b)
 			{
 				map values;
-				values[1] = a;
-				values[0] = b;
+
+				if (a)
+					values[1] = a;
+
+				if (b)
+					values[0] = b;
 
 				return (Polynomial(values));
 			}
@@ -157,9 +163,15 @@ template<typename V = long double, typename E = int>
 			quadratic(const V &a, const V &b, const V &c)
 			{
 				map values;
-				values[2] = a;
-				values[1] = b;
-				values[0] = c;
+
+				if (a)
+					values[2] = a;
+
+				if (b)
+					values[1] = b;
+
+				if (c)
+					values[0] = c;
 
 				return (Polynomial(values));
 			}
@@ -168,10 +180,18 @@ template<typename V = long double, typename E = int>
 			cubic(const V &a, const V &b, const V &c, const V &d)
 			{
 				map values;
-				values[3] = a;
-				values[2] = b;
-				values[1] = c;
-				values[0] = d;
+
+				if (a)
+					values[3] = a;
+
+				if (b)
+					values[2] = b;
+
+				if (c)
+					values[1] = c;
+
+				if (d)
+					values[0] = d;
 
 				return (Polynomial(values));
 			}
