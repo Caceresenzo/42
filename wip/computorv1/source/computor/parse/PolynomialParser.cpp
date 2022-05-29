@@ -80,7 +80,7 @@ PolynomialParser::do_consume(char chr, std::string::size_type index)
 				return (true);
 			}
 
-			if (Character::is_digit(chr))
+			if (Character::is_digit(chr) || is_dot(chr))
 			{
 				m_state = NUMBER;
 				m_number += chr;
@@ -110,7 +110,7 @@ PolynomialParser::do_consume(char chr, std::string::size_type index)
 
 		case NUMBER:
 		{
-			if (Character::is_digit(chr))
+			if (Character::is_digit(chr) || is_dot(chr))
 			{
 				m_number += chr;
 				return (true);
@@ -175,7 +175,7 @@ PolynomialParser::do_consume(char chr, std::string::size_type index)
 
 		case POWER:
 		{
-			if (Character::is_digit(chr))
+			if (Character::is_digit(chr) || is_dot(chr))
 			{
 				m_number += chr;
 				return (true);
@@ -246,6 +246,12 @@ bool
 PolynomialParser::is_circumflex(char chr)
 {
 	return (chr == '^');
+}
+
+bool
+PolynomialParser::is_dot(char chr)
+{
+	return (chr == '.');
 }
 
 bool

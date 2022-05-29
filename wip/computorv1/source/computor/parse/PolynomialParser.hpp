@@ -86,6 +86,9 @@ class PolynomialParser
 		is_circumflex(char chr);
 
 		static bool
+		is_dot(char chr);
+
+		static bool
 		is_sign(char chr);
 
 		static bool
