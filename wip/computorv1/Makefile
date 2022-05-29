@@ -22,4 +22,8 @@ clean:
 
 re: fclean all
 
-.PHONY: all bonus clean fclean re .cpp.o
+test: all
+	@bash test/run.sh test/cases/valid 0
+	@bash test/run.sh test/cases/invalid 1
+
+.PHONY: all bonus clean fclean re .cpp.o test

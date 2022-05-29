@@ -1,0 +1,3 @@
+expected: minus, number, variable
+a = a
+^
