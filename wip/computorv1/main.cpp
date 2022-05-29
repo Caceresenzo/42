@@ -18,8 +18,12 @@
 int
 main(int argc, char **argv)
 {
-	Polynomial<> left = Polynomial<>::quadratic(-9.3, 4, 5);
-	Polynomial<> right = Polynomial<>::constant(1);
+//	Polynomial<> left = Polynomial<>::quadratic(-9.3, 4, 5);
+//	Polynomial<> right = Polynomial<>::constant(1);
+
+//	// 42 * X^0 = 42 * X^0
+	Polynomial<> left = Polynomial<>::constant(42);
+	Polynomial<> right = Polynomial<>::constant(42);
 
 //	// 5 * X^0 + 4 * X^1 = 4 * X^0
 //	Polynomial<> left = Polynomial<>::linear(4, 5);
@@ -36,6 +40,12 @@ main(int argc, char **argv)
 //	// 0 = 0
 //	Polynomial<> left = Polynomial<>::zero();
 //	Polynomial<> right = Polynomial<>::zero();
+
+	if (left == right)
+	{
+		std::cout << "The polynomial is identical, all numbers can be used as solution." << std::endl;
+		return (0);
+	}
 
 	Polynomial<> reduced = Polynomial<>::reduce(left, right);
 	std::cout << "Reduced form: " << reduced << std::endl;

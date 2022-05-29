@@ -195,11 +195,23 @@ template<typename V = long double, typename E = int>
 
 				return (Polynomial(values));
 			}
+
+		public:
+			template<typename VV, typename EE>
+				friend bool
+				operator==(const Polynomial<VV, EE> &left, const Polynomial<VV, EE> &right);
 	};
 
 template<typename V, typename E>
+	bool
+	operator==(const Polynomial<V, E> &left, const Polynomial<V, E> &right)
+	{
+		return (left.m_values == right.m_values);
+	}
+
+template<typename V, typename E>
 	std::ostream&
-	operator <<(std::ostream &stream, const Polynomial<V, E> polynomial)
+	operator <<(std::ostream &stream, const Polynomial<V, E> &polynomial)
 	{
 		typedef typename Polynomial<V, E>::const_iterator const_iterator;
 
