@@ -1,8 +1,8 @@
 NAME = computorv1
-SRCS = $(shell find -name "*.cpp")
+SRCS = $(shell find source/ -name "*.cpp")
 OBJS = $(SRCS:.cpp=.o)
 CC   = g++
-FLAGS = -I. -Wall -Wextra -Werror -g3 #-fsanitize=address
+FLAGS = -Isource -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 DEBUG = false
 

@@ -36,6 +36,7 @@ PolynomialParser::PolynomialParser(void) :
 bool
 PolynomialParser::consume(char chr, std::string::size_type index)
 {
+#if defined(DEBUG) && DEBUG
 	try
 	{
 		std::string chr_string = "\\0";
@@ -55,6 +56,9 @@ PolynomialParser::consume(char chr, std::string::size_type index)
 		std::cout << "consume=error   state=" << std::left << std::setw(10) << to_string(m_state) << std::setw(0) << std::endl;
 		throw;
 	}
+#else
+	return (do_consume(chr, index));
+#endif
 }
 
 bool
@@ -277,7 +281,9 @@ PolynomialParser::commit(std::string::size_type next_index)
 	int exponent = m_exponent_value.or_else(0);
 	long double number = m_number_value.or_else(0);
 
+#if defined(DEBUG) && DEBUG
 	std::cout << "exponent=" << exponent << " " << "number=" << number << std::endl;
+#endif
 
 	if (number == 0)
 		return;

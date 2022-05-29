@@ -28,9 +28,14 @@ ExpressionParser::parse(const std::string &input)
 		throw ParseException("multiple equal found", next_equal_index);
 
 	polynomial_type left = parse(input, 0, equal_index);
+#if defined(DEBUG) && DEBUG
 	std::cout << "left=" << left << std::endl;
+#endif
+
 	polynomial_type right = parse(input, equal_index + 1, input.size());
+#if defined(DEBUG) && DEBUG
 	std::cout << "right=" << right << std::endl;
+#endif
 
 	return (std::make_pair(left, right));
 }
@@ -38,7 +43,10 @@ ExpressionParser::parse(const std::string &input)
 ExpressionParser::polynomial_type
 ExpressionParser::parse(const std::string &input, std::string::size_type start, std::string::size_type end)
 {
+#if defined(DEBUG) && DEBUG
 	std::cout << "input=`" << input << "` " << "start=" << start << " " << "end=" << end << std::endl;
+#endif
+
 	if (start == end)
 		throw ParseException("nothing to work with", start);
 
