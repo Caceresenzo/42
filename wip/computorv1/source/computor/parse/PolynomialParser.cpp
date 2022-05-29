@@ -285,9 +285,6 @@ PolynomialParser::commit(std::string::size_type next_index)
 	std::cout << "exponent=" << exponent << " " << "number=" << number << std::endl;
 #endif
 
-	if (number == 0)
-		return;
-
 	m_values[exponent] = number;
 }
 
