@@ -10,6 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <computor/parse/ExpressionParser.hpp>
+#include <computor/parse/ParseException.hpp>
+#include <computor/Polynomial.hpp>
+#include <core/util/Optional.hpp>
 #include <cassert>
 #include <cmath>
 #include <iomanip>
@@ -17,11 +21,6 @@
 #include <set>
 #include <string>
 #include <utility>
-
-#include "computor/parse/ExpressionParser.hpp"
-#include "computor/parse/ParseException.hpp"
-#include "computor/Polynomial.hpp"
-#include "core/util/Optional.hpp"
 
 int
 main(int argc, char **argv)
