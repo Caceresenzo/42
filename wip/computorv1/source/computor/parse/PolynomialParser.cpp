@@ -313,6 +313,9 @@ PolynomialParser::commit_number(std::string::size_type next_index)
 	if (extra && extra[0])
 		throw ParseException("character in number", next_index - 1);
 
+	if (m_negate)
+		value *= -1;
+
 	m_number_value.set(value);
 	m_number.clear();
 }
@@ -335,9 +338,6 @@ PolynomialParser::commit_power(std::string::size_type next_index)
 
 	if (extra && extra[0])
 		throw ParseException("character in exponent", next_index - 1);
-
-	if (m_negate)
-		value *= -1;
 
 	m_exponent_value.set(value);
 	m_number.clear();
