@@ -1,4 +1,4 @@
-NAME = computorv1
+NAME = computor
 SRCS = $(shell find source/ -name "*.cpp")
 OBJS = $(SRCS:.cpp=.o)
 CC   = g++
