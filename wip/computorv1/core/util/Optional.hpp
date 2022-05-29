@@ -40,6 +40,20 @@ template<typename T>
 			}
 
 		public:
+			void
+			clear()
+			{
+				m_value = T();
+				m_has_value = false;
+			}
+
+			void
+			set(const T &value)
+			{
+				m_value = value;
+				m_has_value = true;
+			}
+
 			T
 			get() const
 			{

@@ -12,18 +12,55 @@
 
 #include <cassert>
 #include <cmath>
-#include "Polynomial.hpp"
+#include <iomanip>
+#include <iostream>
 #include <set>
+#include <string>
+#include <utility>
+
+#include "computor/parse/ExpressionParser.hpp"
+#include "computor/parse/ParseException.hpp"
+#include "computor/Polynomial.hpp"
+#include "core/util/Optional.hpp"
 
 int
 main(int argc, char **argv)
 {
+	if (argc != 2)
+	{
+		std::cout << "usage: " << argv[0] << " <expression>" << std::endl;
+		return (1);
+	}
+
+	std::string input = argv[1];
+
+	std::pair<Polynomial<>, Polynomial<> > equation;
+	try
+	{
+		equation = ExpressionParser::parse(input);
+	}
+	catch (ParseException &exception)
+	{
+		std::cerr << exception.message() << std::endl;
+
+		if (exception.at() != std::string::npos)
+		{
+			std::cerr << input << std::endl;
+			std::cerr << std::setw(exception.at() + 1) << std::right << "^" << std::endl;
+		}
+
+		return (1);
+	}
+
+	Polynomial<> &left = equation.first;
+	Polynomial<> &right = equation.second;
+
 //	Polynomial<> left = Polynomial<>::quadratic(-9.3, 4, 5);
 //	Polynomial<> right = Polynomial<>::constant(1);
 
-//	// 42 * X^0 = 42 * X^0
-	Polynomial<> left = Polynomial<>::constant(42);
-	Polynomial<> right = Polynomial<>::constant(42);
+////	// 42 * X^0 = 42 * X^0
+//	Polynomial<> left = Polynomial<>::constant(42);
+//	Polynomial<> right = Polynomial<>::constant(42);
 
 //	// 5 * X^0 + 4 * X^1 = 4 * X^0
 //	Polynomial<> left = Polynomial<>::linear(4, 5);

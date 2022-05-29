@@ -13,16 +13,19 @@
 #ifndef POLYNOMIAL_HPP_
 # define POLYNOMIAL_HPP_
 
+#include <core/lang/Number.hpp>
+#include <core/util/Iterator.hpp>
+#include <core/util/Optional.hpp>
 #include <iostream>
 #include <map>
 #include <set>
-
-#include "Optional.hpp"
 
 template<typename V = long double, typename E = int>
 	class Polynomial
 	{
 		public:
+			typedef V value_type;
+			typedef E exponent_type;
 			typedef std::map<E, V> map;
 			typedef typename map::const_iterator const_iterator;
 
@@ -98,9 +101,12 @@ template<typename V = long double, typename E = int>
 			{
 				map values;
 
-				std::set<E> keys;
-				keys.merge(right.exponents());
-				keys.merge(left.exponents());
+				std::set<E> right_keys = right.exponents();
+				std::set<E> left_keys = left.exponents();
+
+				std::set<E> keys = right.exponents();
+				keys.insert(right_keys.begin(), right_keys.end());
+				keys.insert(left_keys.begin(), left_keys.end());
 
 				typedef typename std::set<E>::const_iterator const_iterator;
 				for (const_iterator iterator = keys.begin(); iterator != keys.end(); ++iterator)
@@ -227,11 +233,11 @@ template<typename V, typename E>
 			V value = iterator->second;
 
 			if (first)
-				value = std::abs(value);
+				value = Number::abs(value);
 
 			stream << value << " * X^" << iterator->first;
 
-			const_iterator next = std::next(iterator, 1);
+			const_iterator next = Iterator::next(iterator);
 			if (next == polynomial.end())
 				stream << " = 0";
 			else
