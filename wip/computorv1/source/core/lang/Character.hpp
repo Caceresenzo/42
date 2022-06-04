@@ -19,6 +19,9 @@ class Character
 		static bool
 		is_digit(char chr);
 
+		static bool
+		is_whitespace(char chr);
+
 		static char
 		to_uppercase(char chr);
 };

@@ -14,6 +14,7 @@
 # define POLYNOMIALPARSER_HPP_
 
 #include <computor/Polynomial.hpp>
+#include <core/io/StringReader.hpp>
 #include <core/util/Optional.hpp>
 #include <string>
 
@@ -26,7 +27,6 @@ class PolynomialParser
 		typedef enum
 		{
 			START,
-			NEGATE,
 			NUMBER,
 			MULTIPLY,
 			VARIABLE,
@@ -36,44 +36,46 @@ class PolynomialParser
 		} State;
 
 	private:
+		StringReader m_reader;
 		polynomial_type::map m_values;
 		State m_state;
-		bool m_negate;
-		std::string m_number;
 
 		Optional<polynomial_type::value_type> m_number_value;
 		Optional<polynomial_type::exponent_type> m_exponent_value;
 
 	public:
-		PolynomialParser(void);
+		PolynomialParser(const StringReader &reader);
 
 	public:
-		bool
-		consume(char character, std::string::size_type index);
+		polynomial_type::map
+		parse(void);
 
 		bool
-		do_consume(char character, std::string::size_type index);
+		consume();
+
+		bool
+		do_consume();
 
 		void
-		commit(std::string::size_type next_index);
+		consume_number(bool is_floating, void *out);
 
 		void
-		commit_number(std::string::size_type next_index);
+		commit(void);
 
 		void
-		commit_power(std::string::size_type next_index);
+		commit_number(void);
+
+		void
+		commit_power(void);
 
 		void
 		reset(void);
 
 		bool
-		expected(const std::string &expectations, std::string::size_type index);
+		expected(const std::string &expectations);
 
 		bool
-		unexpected(std::string::size_type index);
-
-		void
-		ensure_number_not_empty(std::string::size_type index);
+		unexpected();
 
 	public:
 		static bool

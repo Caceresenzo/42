@@ -30,6 +30,12 @@ ParseException::ParseException(const std::string &message, std::string::size_typ
 {
 }
 
+ParseException::ParseException(const std::string &message, const StringReader &reader) :
+		Exception(message),
+		m_at(reader.get_index())
+{
+}
+
 ParseException::ParseException(const ParseException &other) :
 		Exception(other),
 		m_at(other.m_at)

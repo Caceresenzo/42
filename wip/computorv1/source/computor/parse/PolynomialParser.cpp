@@ -23,49 +23,58 @@
 #include <string>
 #include <vector>
 
-PolynomialParser::PolynomialParser(void) :
+PolynomialParser::PolynomialParser(const StringReader &reader) :
+		m_reader(reader),
 		m_values(),
 		m_state(START),
-		m_negate(false),
-		m_number(),
 		m_number_value(),
 		m_exponent_value()
 {
 }
 
+PolynomialParser::polynomial_type::map
+PolynomialParser::parse(void)
+{
+	while (!m_reader.is_end_of_content())
+	{
+		consume();
+	}
+
+	while (!consume())
+		;
+
+	return (m_values);
+}
+
 bool
-PolynomialParser::consume(char chr, std::string::size_type index)
+PolynomialParser::consume()
 {
 #if defined(DEBUG) && DEBUG
 	try
 	{
+		char chr = m_reader.peek();
 		std::string chr_string = "\\0";
 		if (chr)
 			chr_string = chr;
 
-		std::cout << "consume=before  state=" << std::left << std::setw(10) << to_string(m_state) << std::setw(0) << "  chr=" << chr_string << std::endl;
+		std::cout << "state=" << std::left << std::setw(10) << to_string(m_state) << std::setw(0) << "  chr=" << chr_string << std::endl;
 
-		bool consumed = do_consume(chr, index);
-
-		std::cout << "consume=after   state=" << std::left << std::setw(10) << to_string(m_state) << std::setw(0) << "  consumed=" << consumed << std::endl;
-
-		return (consumed);
+		return (do_consume());
 	}
 	catch (...)
 	{
-		std::cout << "consume=error   state=" << std::left << std::setw(10) << to_string(m_state) << std::setw(0) << std::endl;
+		std::cout << "error=" << std::left << std::setw(10) << to_string(m_state) << std::setw(0) << std::endl;
 		throw;
 	}
 #else
-	return (do_consume(chr, index));
+	return (do_consume());
 #endif
 }
 
 bool
-PolynomialParser::do_consume(char chr, std::string::size_type index)
+PolynomialParser::do_consume()
 {
-	if (std::isspace(chr))
-		return (true);
+	m_reader.skip_whitespaces();
 
 	switch (m_state)
 	{
@@ -73,161 +82,147 @@ PolynomialParser::do_consume(char chr, std::string::size_type index)
 		{
 			reset();
 
-			if (is_minus(chr))
-			{
-				m_state = NEGATE;
-				m_negate = true;
-				return (true);
-			}
+			char chr = m_reader.peek();
 
-			if (Character::is_digit(chr) || is_dot(chr))
+			if (is_minus(chr) || Character::is_digit(chr))
 			{
 				m_state = NUMBER;
-				m_number += chr;
-				return (true);
-			}
-
-			if (is_variable(chr))
-			{
-				m_state = CIRCUMFLEX;
-				return (true);
-			}
-
-			return (expected("minus, number, variable", index));
-		}
-
-		case NEGATE:
-		{
-			if (Character::is_digit(chr))
-			{
-				m_state = NUMBER;
-				m_number += chr;
-				return (true);
-			}
-
-			return (expected("number", index));
-		}
-
-		case NUMBER:
-		{
-			if (Character::is_digit(chr) || is_dot(chr))
-			{
-				m_number += chr;
-				return (true);
-			}
-
-			commit_number(index);
-
-			if (is_multiply(chr))
-			{
-				m_state = MULTIPLY;
-				return (true);
-			}
-
-			if (is_variable(chr))
-			{
-				m_state = VARIABLE;
-				return (true);
-			}
-
-			if (is_end(chr))
-			{
-				m_state = END;
 				return (false);
 			}
 
-			return (expected("number, multiply, variable, end", index));
-		}
-
-		case MULTIPLY:
-		{
 			if (is_variable(chr))
 			{
 				m_state = VARIABLE;
-				return (true);
-			}
-
-			return (expected("variable", index));
-		}
-
-		case VARIABLE:
-		{
-			if (is_circumflex(chr))
-			{
-				m_state = CIRCUMFLEX;
-				return (true);
-			}
-
-			return (expected("circumflex", index));
-		}
-
-		case CIRCUMFLEX:
-		{
-			if (Character::is_digit(chr))
-			{
-				m_number += chr;
-				m_state = POWER;
-				return (true);
-			}
-
-			return (expected("number", index));
-		}
-
-		case POWER:
-		{
-			if (Character::is_digit(chr) || is_dot(chr))
-			{
-				m_number += chr;
-				return (true);
+				return (false);
 			}
 
 			if (is_sign(chr))
 			{
-				commit_power(index);
-				commit(index);
+				m_state = NUMBER;
+				return (false);
+			}
+
+			return (expected("minus, number, variable"));
+		}
+
+		case NUMBER:
+		{
+			commit_number();
+
+			char chr = m_reader.skip_whitespaces().peek();
+
+			if (is_multiply(chr))
+			{
+				m_state = MULTIPLY;
+				return (false);
+			}
+
+			if (is_variable(chr))
+			{
+				m_state = VARIABLE;
+				return (false);
+			}
+
+			if (is_sign(chr))
+			{
+				commit();
 				m_state = START;
-				return (is_plus(chr));
+				return (false);
 			}
 
 			if (is_end(chr))
 			{
-				commit_power(index);
 				m_state = END;
 				return (false);
 			}
 
-			return (expected("number, sign, end", index));
+			return (expected("multiply, variable, sign, end"));
+		}
+
+		case MULTIPLY:
+		{
+			char chr = m_reader.read();
+
+			if (is_multiply(chr) || is_variable(chr))
+			{
+				m_state = VARIABLE;
+				return (false);
+			}
+
+			return (expected("multiply, variable"));
+		}
+
+		case VARIABLE:
+		{
+			char chr = m_reader.read();
+
+			if (is_variable(chr))
+			{
+				m_state = CIRCUMFLEX;
+				return (false);
+			}
+
+			return (expected("variable"));
+		}
+
+		case CIRCUMFLEX:
+		{
+			char chr = m_reader.read();
+
+			if (is_circumflex(chr))
+			{
+				m_state = POWER;
+				return (false);
+			}
+
+			return (expected("circumflex"));
+		}
+
+			/* chr = "0123456789" */
+		case POWER:
+		{
+			commit_power();
+
+			char chr = m_reader.skip_whitespaces().peek();
+
+			if (is_sign(chr))
+			{
+				commit();
+				m_state = START;
+				return (false);
+			}
+
+			if (is_end(chr))
+			{
+				m_state = END;
+				return (false);
+			}
+
+			return (expected("number, sign, end"));
 		}
 
 		case END:
 		{
-			commit(index);
+			commit();
 			return (true);
 		}
 	}
 
-	throw ParseException("unhandled state", index);
+	throw ParseException("unhandled state", m_reader);
 }
 
 bool
-PolynomialParser::expected(const std::string &expectations, std::string::size_type index)
+PolynomialParser::expected(const std::string &expectations)
 {
-	throw ParseException("expected: " + expectations, index);
+	throw ParseException("expected: " + expectations, m_reader);
 	return (false);
 }
 
 bool
-PolynomialParser::unexpected(std::string::size_type index)
+PolynomialParser::unexpected()
 {
-	throw ParseException("unexpected", index);
+	throw ParseException("unexpected", m_reader);
 	return (false);
-}
-
-void
-PolynomialParser::ensure_number_not_empty(std::string::size_type index)
-{
-	if (m_number.empty())
-		throw ParseException("number is empty", index);
 }
 
 bool
@@ -275,79 +270,125 @@ PolynomialParser::is_plus(char chr)
 bool
 PolynomialParser::is_end(char chr)
 {
-	return (chr == '\0');
+	return (chr == StringReader::END_OF_CONTENT);
 }
 
 void
-PolynomialParser::commit(std::string::size_type next_index)
+PolynomialParser::consume_number(bool is_floating, void *out)
+{
+	bool negative = false;
+
+	m_reader.skip_whitespaces();
+
+	char chr = m_reader.peek();
+	if (is_sign(chr))
+	{
+		m_reader.skip().skip_whitespaces();
+
+		negative = is_minus(chr);
+	}
+
+	std::string accumulator;
+	bool dot = false;
+
+	do
+	{
+		chr = m_reader.peek();
+		if (Character::is_digit(chr))
+		{
+			accumulator += chr;
+		}
+		else if (is_dot(chr) && !dot)
+		{
+			accumulator += chr;
+			dot = true;
+		}
+		else
+			break;
+
+		m_reader.skip();
+	}
+	while (!m_reader.is_end_of_content());
+
+	if (accumulator.empty())
+		throw ParseException("number is empty", m_reader);
+
+	if (negative)
+		accumulator.insert(accumulator.begin(), '-');
+
+	char *extra = NULL;
+
+	errno = 0;
+
+	if (is_floating)
+	{
+		long double value = std::strtold(accumulator.c_str(), &extra);
+		*(long double*)out = value;
+	}
+	else
+	{
+		int value = std::strtol(accumulator.c_str(), &extra, 10);
+		*(int*)out = value;
+	}
+
+	if (errno)
+		throw ParseException("cannot parse number: " + std::string(std::strerror(errno)), m_reader);
+
+	if (extra && extra[0])
+		throw ParseException("character in number", m_reader);
+}
+
+void
+PolynomialParser::commit(void)
 {
 	if (m_number_value.is_absent() && m_exponent_value.is_absent())
-		throw ParseException("no number or exponent", next_index - 1);
+		throw ParseException("no number or exponent", m_reader);
 
 	int exponent = m_exponent_value.or_else(0);
 	long double number = m_number_value.or_else(0);
 
 #if defined(DEBUG) && DEBUG
-	std::cout << "exponent=" << exponent << " " << "number=" << number << std::endl;
+	std::cout << "commit exponent=" << exponent << " " << "number=" << number << std::endl;
 #endif
 
-	m_values[exponent] = number;
+	m_values[exponent] += number;
 }
 
 void
-PolynomialParser::commit_number(std::string::size_type next_index)
+PolynomialParser::commit_number(void)
 {
 	if (m_number_value.is_present())
-		throw ParseException("double number commit", next_index - 1);
+		throw ParseException("double number commit", m_reader);
 
-	ensure_number_not_empty(next_index);
-
-	char *extra = NULL;
-
-	errno = 0;
-	long double value = std::strtold(m_number.c_str(), &extra);
-
-	if (errno)
-		throw ParseException("cannot parse number: " + std::string(std::strerror(errno)), next_index - 1);
-
-	if (extra && extra[0])
-		throw ParseException("character in number", next_index - 1);
-
-	if (m_negate)
-		value *= -1;
+	long double value = 0;
+	consume_number(true, &value);
 
 	m_number_value.set(value);
-	m_number.clear();
+
+#if defined(DEBUG) && DEBUG
+	std::cout << "commit=number" << std::endl;
+#endif
 }
 
 void
-PolynomialParser::commit_power(std::string::size_type next_index)
+PolynomialParser::commit_power(void)
 {
 	if (m_exponent_value.is_present())
-		throw ParseException("double exponent commit", next_index - 1);
+		throw ParseException("double exponent commit", m_reader);
 
-	ensure_number_not_empty(next_index);
-
-	char *extra = NULL;
-
-	errno = 0;
-	int value = std::strtol(m_number.c_str(), &extra, 10);
-
-	if (errno)
-		throw ParseException("cannot parse exponent: " + std::string(std::strerror(errno)), next_index - 1);
-
-	if (extra && extra[0])
-		throw ParseException("character in exponent", next_index - 1);
+	int value = 0;
+	consume_number(false, &value);
 
 	m_exponent_value.set(value);
-	m_number.clear();
+
+#if defined(DEBUG) && DEBUG
+	std::cout << "commit=power" << std::endl;
+#endif
 }
 
 void
 PolynomialParser::reset(void)
 {
-	m_number.clear();
-	m_negate = false;
 	m_number_value.clear();
 	m_exponent_value.clear();
 }
@@ -359,9 +400,6 @@ PolynomialParser::to_string(State state)
 	{
 		case START:
 			return ("START");
-
-		case NEGATE:
-			return ("NEGATE");
 
 		case NUMBER:
 			return ("NUMBER");
@@ -388,24 +426,10 @@ PolynomialParser::to_string(State state)
 PolynomialParser::polynomial_type
 PolynomialParser::parse(const std::string &input, std::string::size_type start, std::string::size_type end)
 {
-	PolynomialParser parser;
+	StringReader reader(input, start, end);
+	PolynomialParser parser(reader);
 
-	std::string::size_type index = start;
-	while (index < end)
-	{
-		char chr = input[index];
-
-		bool consumed = parser.consume(chr, index);
-		if (consumed)
-			++index;
-	}
-
-	bool consumed;
-	do
-	{
-		consumed = parser.consume('\0', index);
-	}
-	while (!consumed);
+	parser.parse();
 
 	return (polynomial_type(parser.m_values));
 }

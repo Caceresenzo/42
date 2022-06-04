@@ -13,6 +13,7 @@
 #ifndef PARSEEXCEPTION_HPP_
 # define PARSEEXCEPTION_HPP_
 
+#include <core/io/StringReader.hpp>
 #include <core/lang/Exception.hpp>
 #include <string>
 
@@ -26,6 +27,7 @@ class ParseException :
 		ParseException(void);
 		ParseException(const std::string &message);
 		ParseException(const std::string &message, std::string::size_type at);
+		ParseException(const std::string &message, const StringReader &reader);
 		ParseException(const ParseException &other);
 
 		virtual

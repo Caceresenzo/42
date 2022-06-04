@@ -13,6 +13,7 @@
 #include <computor/parse/ExpressionParser.hpp>
 #include <computor/parse/ParseException.hpp>
 #include <computor/Polynomial.hpp>
+#include <core/io/StringReader.hpp>
 #include <core/util/Optional.hpp>
 #include <cassert>
 #include <cmath>

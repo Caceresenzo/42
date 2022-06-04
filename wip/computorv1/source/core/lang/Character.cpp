@@ -25,3 +25,9 @@ Character::to_uppercase(char chr)
 {
 	return (std::toupper(chr));
 }
+
+bool
+Character::is_whitespace(char chr)
+{
+	return (std::isspace(chr));
+}
