@@ -32,7 +32,12 @@ do
 	else
 		if diff --color=always --side-by-side --suppress-common-lines /tmp/computor_output "$file" > /tmp/computor_diff;
 		then
-			print_outcome "$COLOR_GREEN" "PASS ($exit_code)"
+			if [ "$EXPECTED_EXIT_CODE" = "0" ];
+			then
+				print_outcome "$COLOR_GREEN" "PASS"
+			else
+				print_outcome "$COLOR_GREEN" "XPASS"
+			fi
 		else
 			print_outcome "$COLOR_RED" "DIFF FAIL"
 			cat /tmp/computor_diff
