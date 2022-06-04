@@ -119,7 +119,7 @@ main(int argc, char **argv)
 		long double soluce = -b / a;
 
 		std::cout << "The solution is:" << std::endl;
-		std::cout << soluce << std::endl;
+		std::cout << Number::to_string(soluce) << std::endl;
 
 		return (0);
 	}
@@ -147,8 +147,8 @@ main(int argc, char **argv)
 			long double x1 = (-b - delta_sqrt) / (2 * a);
 			long double x2 = (-b + delta_sqrt) / (2 * a);
 
-			std::cout << x1 << std::endl;
-			std::cout << x2 << std::endl;
+			std::cout << Number::to_string(x1) << std::endl;
+			std::cout << Number::to_string(x2) << std::endl;
 
 			return (0);
 		}
@@ -159,7 +159,7 @@ main(int argc, char **argv)
 
 			long double x = -b / (2 * a);
 
-			std::cout << x << std::endl;
+			std::cout << Number::to_string(x) << std::endl;
 
 			return (0);
 		}
@@ -172,12 +172,12 @@ main(int argc, char **argv)
 			long double delta_sqrt = std::sqrt(-delta);
 			long double a_x2 = 2 * a;
 
-			std::cout << "(" << b_negated << " - i - " << delta_sqrt << ") / " << a_x2 << std::endl;
+			std::cout << "(" << Number::to_string(b_negated) << " - i - " << Number::to_string(delta_sqrt) << ") / " << Number::to_string(a_x2) << std::endl;
 
 			return (0);
 		}
 
-		std::cerr << "ERR: no condition matched??" << delta << std::endl;
+		std::cerr << "ERR: no condition matched??" << Number::to_string(delta) << std::endl;
 		return (1);
 	}
 

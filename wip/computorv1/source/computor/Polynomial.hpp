@@ -218,7 +218,7 @@ template<typename V, typename E>
 			if (first)
 				value = Number::abs(value);
 
-			stream << value << " * X^" << iterator->first;
+			stream << Number::to_string(value) << " * X^" << Number::to_string(iterator->first);
 
 			const_iterator next = Iterator::next(iterator);
 			if (next == polynomial.end())

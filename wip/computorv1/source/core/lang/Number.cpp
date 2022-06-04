@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Number.hpp                                         :+:      :+:    :+:   */
+/*   Number.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,35 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NUMBER_HPP_
-# define NUMBER_HPP_
+#include "Number.hpp"
 
-#include <iostream>
-#include <sstream>
-#include <string>
+template<>
+	std::string
+	Number::to_string<long double>(long double value)
+	{
+		std::stringstream stream;
 
-class Number
-{
-	public:
-		template<typename T>
-			static T
-			abs(T value)
-			{
-				if (value < 0)
-					return (-value);
+		if (value == 0.0 || value == -0.0)
+			stream << 0.0;
+		else
+			stream << value;
 
-				return (value);
-			}
+		return (stream.str());
+	}
 
-		template<typename T>
-			static std::string
-			to_string(T value)
-			{
-				std::stringstream stream;
-				stream << value;
-
-				return (stream.str());
-			}
-};
-
-#endif /* NUMBER_HPP_ */
