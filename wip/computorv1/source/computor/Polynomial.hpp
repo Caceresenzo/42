@@ -45,7 +45,7 @@ template<typename V = long double, typename E = int>
 
 		public:
 			Optional<V>
-			find(const E &exponent)
+			find(const E &exponent) const
 			{
 				const_iterator iterator = m_values.find(exponent);
 
