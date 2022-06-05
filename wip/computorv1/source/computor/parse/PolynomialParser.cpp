@@ -433,8 +433,10 @@ PolynomialParser::consume_number(bool is_floating, void *out)
 void
 PolynomialParser::commit(void)
 {
+	long double default_number = m_negate.or_else(false) ? -1 : 1;
+
 	int exponent = m_exponent_value.or_else(0);
-	long double number = m_number_value.or_else(1);
+	long double number = m_number_value.or_else(default_number);
 
 #if defined(DEBUG) && DEBUG
 	std::cout << "commit exponent=" << exponent << " " << "number=" << number << std::endl;

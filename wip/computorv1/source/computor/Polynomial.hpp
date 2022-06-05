@@ -109,8 +109,8 @@ template<typename V = long double, typename E = int>
 				keys.insert(right_keys.begin(), right_keys.end());
 				keys.insert(left_keys.begin(), left_keys.end());
 
-				typedef typename std::set<E>::const_iterator const_iterator;
-				for (const_iterator iterator = keys.begin(); iterator != keys.end(); ++iterator)
+				typedef typename std::set<E>::const_iterator set_const_iterator;
+				for (set_const_iterator iterator = keys.begin(); iterator != keys.end(); ++iterator)
 				{
 					const E &exponent = *iterator;
 
@@ -130,6 +130,12 @@ template<typename V = long double, typename E = int>
 
 					values[exponent] = value;
 				}
+
+//				for (const_iterator iterator = values.begin(); iterator != values.end(); ++iterator)
+//				{
+//					if (iterator->second == 0)
+//						values.erase(iterator->first);
+//				}
 
 				return (Polynomial(values));
 			}

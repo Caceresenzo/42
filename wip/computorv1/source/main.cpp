@@ -14,17 +14,11 @@
 #include <computor/parse/ParseException.hpp>
 #include <computor/Polynomial.hpp>
 #include <computor/resolve/PolynomialResolver.hpp>
-#include <core/io/StringReader.hpp>
-#include <core/lang/Math.hpp>
-#include <core/lang/Number.hpp>
-#include <core/util/Optional.hpp>
-#include <cassert>
-#include <cmath>
 #include <iomanip>
 #include <iostream>
-#include <set>
 #include <string>
 #include <utility>
+
 
 int
 main(int argc, char **argv)
