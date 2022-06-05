@@ -1,28 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ConstantPolynomialResolver.cpp                     :+:      :+:    :+:   */
+/*   Math.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/05 21:03:10 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/06/05 21:03:10 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/06/05 21:22:05 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/06/05 21:22:05 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <computor/resolve/impl/ConstantPolynomialResolver.hpp>
-#include <iostream>
+#ifndef MATH_HPP_
+# define MATH_HPP_
 
-ConstantPolynomialResolver::~ConstantPolynomialResolver()
+class Math
 {
-}
+	public:
+		template<typename T>
+			static T
+			sqrt(const T &n)
+			{
+				if (n <= 0)
+					return (0);
 
-bool
-ConstantPolynomialResolver::resolve(const polynomial_type &polynomial) const
-{
-	(void)polynomial;
+				T tmp = 0;
+				T sqrt = n / 2;
 
-	std::cout << "There is no solution" << std::endl;
+				while (sqrt != tmp)
+				{
+					tmp = sqrt;
+					sqrt = (n / sqrt + sqrt) / 2;
+				}
 
-	return (true);
-}
+				return (sqrt);
+			}
+};
+
+#endif /* MATH_HPP_ */

@@ -15,6 +15,7 @@
 #include <computor/Polynomial.hpp>
 #include <computor/resolve/PolynomialResolver.hpp>
 #include <core/io/StringReader.hpp>
+#include <core/lang/Math.hpp>
 #include <core/lang/Number.hpp>
 #include <core/util/Optional.hpp>
 #include <cassert>
