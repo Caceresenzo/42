@@ -14,6 +14,7 @@
 #include <computor/parse/ParseException.hpp>
 #include <computor/Polynomial.hpp>
 #include <core/io/StringReader.hpp>
+#include <core/lang/Number.hpp>
 #include <core/util/Optional.hpp>
 #include <cassert>
 #include <cmath>
@@ -137,6 +138,8 @@ main(int argc, char **argv)
 		}
 
 		long double delta = (b * b) - (4 * a * c);
+
+//		std::cout << "delta=" << delta << std::endl;
 
 		if (delta > 0)
 		{

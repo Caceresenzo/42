@@ -44,7 +44,7 @@ ExpressionParser::polynomial_type
 ExpressionParser::parse(const std::string &input, std::string::size_type start, std::string::size_type end)
 {
 #if defined(DEBUG) && DEBUG
-	std::cout << "input=`" << input << "` " << "start=" << start << " " << "end=" << end << std::endl;
+	std::cout << "input=`" << input << "` " << "start=" << start << " " << "end=" << end << " " << "view=`" << input.substr(start, end) << "`" << std::endl;
 #endif
 
 	if (start == end)

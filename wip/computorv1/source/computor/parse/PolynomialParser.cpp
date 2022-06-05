@@ -27,6 +27,7 @@ PolynomialParser::PolynomialParser(const StringReader &reader) :
 		m_reader(reader),
 		m_values(),
 		m_state(START),
+		m_negate(),
 		m_number_value(),
 		m_exponent_value()
 {
@@ -49,6 +50,8 @@ PolynomialParser::parse(void)
 bool
 PolynomialParser::consume()
 {
+	m_reader.skip_whitespaces();
+
 #if defined(DEBUG) && DEBUG
 	try
 	{
@@ -74,20 +77,31 @@ PolynomialParser::consume()
 bool
 PolynomialParser::do_consume()
 {
-	m_reader.skip_whitespaces();
-
 	switch (m_state)
 	{
 		case START:
 		{
+			/// Possible states are:
+			//    D
+			//    - D
+			//    + D (not on first pass)
+			//    X
+			//    + X
+			//    - X
+
 			reset();
 
 			char chr = m_reader.peek();
 
-			if (is_minus(chr) || Character::is_digit(chr))
+			if (is_minus(chr))
 			{
-				m_state = NUMBER;
-				return (false);
+				m_negate.set(true);
+				chr = m_reader.skip().skip_whitespaces().peek();
+			}
+			else if (is_plus(chr) && !m_values.empty())
+			{
+				m_negate.set(false);
+				chr = m_reader.skip().skip_whitespaces().peek();
 			}
 
 			if (is_variable(chr))
@@ -96,20 +110,43 @@ PolynomialParser::do_consume()
 				return (false);
 			}
 
-			if (is_sign(chr))
+			if (Character::is_digit(chr))
 			{
 				m_state = NUMBER;
 				return (false);
 			}
 
-			return (expected("minus, number, variable"));
+			std::string expectations = "digit, variable";
+
+			if (m_negate.is_absent())
+			{
+				expectations += ", minus";
+
+				if (!m_values.empty())
+					expectations += ", plus";
+			}
+
+			return (expected(expectations));
 		}
 
 		case NUMBER:
 		{
+			/// Possible states are:
+			//    D
+			//    D *
+			//    D X
+			//    D +   (must commit)
+			//    D -   (must commit)
+			//    D \0
+
+			char chr = m_reader.peek();
+
+			if (!Character::is_digit(chr))
+				return (expected("digit"));
+
 			commit_number();
 
-			char chr = m_reader.skip_whitespaces().peek();
+			chr = m_reader.skip_whitespaces().peek();
 
 			if (is_multiply(chr))
 			{
@@ -141,49 +178,50 @@ PolynomialParser::do_consume()
 
 		case MULTIPLY:
 		{
-			char chr = m_reader.read();
+			/// Possible states are:
+			//    * X
 
-			if (is_multiply(chr) || is_variable(chr))
-			{
-				m_state = VARIABLE;
-				return (false);
-			}
+			char chr = m_reader.peek();
 
-			return (expected("multiply, variable"));
-		}
+			if (!is_multiply(chr))
+				return (expected("multiply"));
 
-		case VARIABLE:
-		{
-			char chr = m_reader.read();
+			chr = m_reader.skip().skip_whitespaces().peek();
 
 			if (is_variable(chr))
 			{
-				m_state = CIRCUMFLEX;
+				m_state = VARIABLE;
 				return (false);
 			}
 
 			return (expected("variable"));
 		}
 
-		case CIRCUMFLEX:
+		case VARIABLE:
 		{
-			char chr = m_reader.read();
+			/// Possible states are:
+			//    X ^
+			//    X +   (must commit)
+			//    X -   (must commit)
+			//    X \0
+
+			char chr = m_reader.peek();
+
+			if (!is_variable(chr))
+				return (expected("variable"));
+
+			chr = m_reader.skip().skip_whitespaces().peek();
 
 			if (is_circumflex(chr))
 			{
-				m_state = POWER;
+				m_state = CIRCUMFLEX;
 				return (false);
 			}
 
-			return (expected("circumflex"));
-		}
+			if (m_exponent_value.is_present())
+				throw ParseException("exponent value already provided");
 
-			/* chr = "0123456789" */
-		case POWER:
-		{
-			commit_power();
-
-			char chr = m_reader.skip_whitespaces().peek();
+			m_exponent_value.set(1);
 
 			if (is_sign(chr))
 			{
@@ -198,11 +236,73 @@ PolynomialParser::do_consume()
 				return (false);
 			}
 
-			return (expected("number, sign, end"));
+			return (expected("circumflex, sign, end"));
+		}
+
+		case CIRCUMFLEX:
+		{
+			/// Possible states are:
+			//    ^ D
+
+			char chr = m_reader.peek();
+
+			if (!is_circumflex(chr))
+				return (expected("circumflex"));
+
+			chr = m_reader.skip().skip_whitespaces().peek();
+
+			if (Character::is_digit(chr))
+			{
+				m_state = POWER;
+				return (false);
+			}
+
+			return (expected("digit"));
+		}
+
+		case POWER:
+		{
+			/// Possible states are:
+			//    D
+			//    D +   (must commit)
+			//    D -   (must commit)
+			//    D \0
+
+			char chr = m_reader.peek();
+
+			if (!Character::is_digit(chr))
+				return (expected("digit"));
+
+			commit_power();
+
+			chr = m_reader.skip_whitespaces().peek();
+
+			if (is_sign(chr))
+			{
+				commit();
+				m_state = START;
+				return (false);
+			}
+
+			if (is_end(chr))
+			{
+				m_state = END;
+				return (false);
+			}
+
+			return (expected("sign, end"));
 		}
 
 		case END:
 		{
+			/// Possible states are:
+			//    \0  (must commit)
+
+			char chr = m_reader.peek();
+
+			if (!is_end(chr))
+				return (expected("end"));
+
 			commit();
 			return (true);
 		}
@@ -276,17 +376,7 @@ PolynomialParser::is_end(char chr)
 void
 PolynomialParser::consume_number(bool is_floating, void *out)
 {
-	bool negative = false;
-
-	m_reader.skip_whitespaces();
-
-	char chr = m_reader.peek();
-	if (is_sign(chr))
-	{
-		m_reader.skip().skip_whitespaces();
-
-		negative = is_minus(chr);
-	}
+	char chr = m_reader.skip_whitespaces().peek();
 
 	std::string accumulator;
 	bool dot = false;
@@ -313,8 +403,10 @@ PolynomialParser::consume_number(bool is_floating, void *out)
 	if (accumulator.empty())
 		throw ParseException("number is empty", m_reader);
 
-	if (negative)
+	if (m_negate.or_else(false))
 		accumulator.insert(accumulator.begin(), '-');
+
+	m_negate.clear();
 
 	char *extra = NULL;
 
@@ -341,11 +433,8 @@ PolynomialParser::consume_number(bool is_floating, void *out)
 void
 PolynomialParser::commit(void)
 {
-	if (m_number_value.is_absent() && m_exponent_value.is_absent())
-		throw ParseException("no number or exponent", m_reader);
-
 	int exponent = m_exponent_value.or_else(0);
-	long double number = m_number_value.or_else(0);
+	long double number = m_number_value.or_else(1);
 
 #if defined(DEBUG) && DEBUG
 	std::cout << "commit exponent=" << exponent << " " << "number=" << number << std::endl;
@@ -389,6 +478,7 @@ PolynomialParser::commit_power(void)
 void
 PolynomialParser::reset(void)
 {
+	m_negate.clear();
 	m_number_value.clear();
 	m_exponent_value.clear();
 }

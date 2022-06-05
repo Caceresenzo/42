@@ -1,3 +1,3 @@
-expected: minus, number, variable
+expected: digit, variable, minus
 a = a
 ^

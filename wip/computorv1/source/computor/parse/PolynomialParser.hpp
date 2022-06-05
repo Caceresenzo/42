@@ -39,7 +39,7 @@ class PolynomialParser
 		StringReader m_reader;
 		polynomial_type::map m_values;
 		State m_state;
-
+		Optional<bool> m_negate;
 		Optional<polynomial_type::value_type> m_number_value;
 		Optional<polynomial_type::exponent_type> m_exponent_value;
 
