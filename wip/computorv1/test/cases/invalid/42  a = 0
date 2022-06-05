@@ -1,0 +1,3 @@
+expected: variable
+42 * a = 0
+     ^

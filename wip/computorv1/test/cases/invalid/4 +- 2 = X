@@ -1,0 +1,3 @@
+expected: digit, variable
+4 +- 2 = X
+   ^

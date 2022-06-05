@@ -1,0 +1,3 @@
+expected: circumflex, sign, end
+42 * Xa = 0
+      ^
