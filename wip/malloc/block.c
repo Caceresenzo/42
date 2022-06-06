@@ -17,6 +17,7 @@
 #include <sys/unistd.h>
 
 #include "malloc.h"
+#include "ft.h"
 
 void*
 block_get_start(block_t *block)
@@ -80,4 +81,53 @@ block_find_or_create(region_t *region, size_t size)
 	}
 
 	return (NULL);
+}
+
+block_t*
+block_search(region_t *region, void *ptr)
+{
+	block_t *block = region_get_first_block(region);
+
+	while (block)
+	{
+		if (block_get_start(block) == ptr)
+			return (block);
+
+		block = block->next;
+	}
+
+	return (NULL);
+}
+
+void
+block_destroy(region_t *region, block_t *block)
+{
+	block->free = true;
+	region->free_size += block->size;
+
+	block_t *previous = block->previous;
+	block_t *next = block->next;
+
+	if (previous && previous->free)
+	{
+		region->free_size += sizeof(block_t);
+		previous->size += block->size + sizeof(block_t);
+
+		block = previous;
+		block->next = next;
+	}
+
+	if (next && next->free)
+	{
+		region->free_size += sizeof(block_t);
+		block->size += next->size + sizeof(block_t);
+
+		block->next = next->next;
+	}
+
+	if (block->previous)
+		block->previous->next = block;
+
+	if (block->next)
+		block->next->previous = block;
 }

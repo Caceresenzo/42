@@ -32,15 +32,59 @@ xmalloc(size_t size)
 	return (ptr);
 }
 
+void
+xfree(void *ptr)
+{
+	ft_printf(COLOR_RED "free(ptr=%p)" COLOR_RESET "\n", ptr);
+
+	if (!ptr)
+		return;
+
+	region_t *region = region_search(ptr);
+	if (!region)
+	{
+		ft_putstr_fd("free: invalid pointer: region not found", 2);
+		abort();
+	}
+
+	if (region->type == RT_LARGE)
+	{
+		region_destroy(region);
+		return;
+	}
+
+	block_t *block = block_search(region, ptr);
+	if (!block)
+	{
+		ft_putstr_fd("free: invalid pointer: block not found", 2);
+		abort();
+	}
+
+	block_destroy(region, block);
+}
+
 int
 main(int argc, char **argv)
 {
-	char *hello = xmalloc(32352000);
-	hello = xmalloc(3265);
-	hello = xmalloc(13015);
-	hello = xmalloc(1);
+
 
 	show_alloc_mem();
 
-//	free(hello);
+	char *a = xmalloc(400);
+//	hello = xmalloc(32352000);
+	char *b = xmalloc(500);
+//	hello = xmalloc(1);
+
+	show_alloc_mem();
+
+	xfree(a);
+
+	show_alloc_mem();
+
+	xfree(b);
+
+	show_alloc_mem();
+
+	ft_printf("sizeof(region_t)=%l\n", sizeof(region_t));
+	ft_printf("sizeof(block_t)=%l\n", sizeof(block_t));
 }

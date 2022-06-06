@@ -27,6 +27,12 @@ region_get_start(region_t *region)
 	return ((char*)region + sizeof(region_t));
 }
 
+void*
+region_get_end(region_t *region)
+{
+	return ((char*)region_get_start(region) + region->size);
+}
+
 block_t*
 region_get_first_block(region_t *region)
 {
@@ -113,6 +119,49 @@ region_find_or_create(size_t size)
 	g_region = region;
 
 	return (region);
+}
+
+region_t*
+region_search(void *ptr)
+{
+	if (!ptr)
+		return (NULL);
+
+	region_t *region = g_region;
+
+	while (region)
+	{
+		void *start = region_get_start(region);
+
+		if (region->type == RT_LARGE)
+		{
+			if (start == ptr)
+				return (region);
+		}
+		else
+		{
+			if (start <= ptr && ptr <= region_get_end(region))
+				return (region);
+		}
+
+		region = region->next;
+	}
+
+	return (NULL);
+}
+
+void
+region_destroy(region_t *region)
+{
+	if (region->previous)
+		region->previous->next = region->next;
+	else
+		g_region = region->next;
+
+	if (region->next)
+		region->next->previous = region->previous;
+
+	munmap(region, region->size + sizeof(region_t));
 }
 
 const char*

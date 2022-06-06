@@ -64,6 +64,9 @@ region_t *g_region;
 void*
 region_get_start(region_t *region);
 
+void*
+region_get_end(region_t *region);
+
 block_t*
 region_get_first_block(region_t *region);
 
@@ -72,6 +75,12 @@ region_create(size_t size);
 
 region_t*
 region_find_or_create(size_t size);
+
+region_t*
+region_search(void *ptr);
+
+void
+region_destroy(region_t *region);
 
 const char*
 region_type_to_string(region_type_t type);
@@ -87,6 +96,12 @@ block_split(region_t *region, block_t *block, size_t size);
 
 block_t*
 block_find_or_create(region_t *region, size_t size);
+
+block_t*
+block_search(region_t *region, void *ptr);
+
+void
+block_destroy(region_t *region, block_t *block);
 
 sized_region_type_t
 region_estimate_length(size_t size);
