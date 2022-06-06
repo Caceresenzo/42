@@ -1,5 +1,5 @@
 NAME = libft_malloc.so
-SRCS = library.c ft.c ft_printf.c
+SRCS = library.c ft.c ft_printf.c block.c region.c
 OBJS = $(SRCS:.c=.o)
 CC   = gcc
 FLAGS = -Wall -Wextra -g3 -fPIC -fno-gnu-unique
@@ -21,8 +21,12 @@ clean:
 re: fclean all
 
 test: $(NAME)
-	@gcc test.c
+	@gcc *.c
 	@LD_PRELOAD=./libft_malloc.so ./a.out
+
+test-no-preload: $(NAME)
+	@gcc *.c -g3
+	@valgrind ./a.out
 
 test-ls: $(NAME)
 	LD_PRELOAD=./libft_malloc.so $(shell which ls)

@@ -87,6 +87,15 @@ ft_vdprintf(int fd, const char *format, va_list args)
 				break;
 			}
 
+			case 'b':
+			{
+				bool b = va_arg(args, int);
+
+				wrote += ft_putstr_fd(b ? "true" : "false", fd);
+
+				break;
+			}
+
 			case 'd':
 			{
 				long n = va_arg(args, int);

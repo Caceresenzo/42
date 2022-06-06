@@ -1,0 +1,131 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   region.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/06 22:13:15 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/06/06 22:13:15 by ecaceres         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <errno.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <string.h>
+#include <sys/errno.h>
+#include <sys/mman.h>
+#include <sys/unistd.h>
+
+#include "ft.h"
+#include "malloc.h"
+
+void*
+region_get_start(region_t *region)
+{
+	return ((char*)region + sizeof(region_t));
+}
+
+block_t*
+region_get_first_block(region_t *region)
+{
+	return (region_get_start(region));
+}
+
+sized_region_type_t
+region_estimate_length(size_t size)
+{
+	sized_region_type_t sized;
+	size_t page_size = getpagesize();
+
+	if (size < page_size * 4)
+	{
+		sized.type = RT_TINY;
+		sized.length = page_size * 4;
+	}
+	else if (size < page_size * 32)
+	{
+		sized.type = RT_SMALL;
+		sized.length = page_size * 32;
+	}
+	else
+	{
+		sized.type = RT_LARGE;
+		sized.length = size;
+	}
+
+	return (sized);
+}
+
+region_t*
+region_create(size_t size)
+{
+	sized_region_type_t sized = region_estimate_length(size);
+
+	region_t *region = mmap(NULL, sized.length, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (region == MAP_FAILED)
+	{
+		ft_printf(COLOR_GREEN "%s" COLOR_RESET "\n", strerror(errno));
+		return (NULL);
+	}
+
+	memset(region, 0, sizeof(region_t));
+	region->size = sized.length - sizeof(region_t);
+	region->type = sized.type;
+
+	if (sized.type != RT_LARGE)
+	{
+		region->free_size = sized.length - sizeof(region_t) - sizeof(block_t);
+
+		block_t *block = region_get_first_block(region);
+		memset(block, 0, sizeof(block_t));
+		block->free = true;
+		block->size = region->free_size;
+	}
+
+	return (region);
+}
+
+region_t*
+region_find_or_create(size_t size)
+{
+	region_t *region = g_region;
+
+	while (region)
+	{
+		if (region->free_size >= size)
+			return (region);
+
+		region = region->next;
+	}
+
+	region = region_create(size);
+	if (!region)
+		return (NULL);
+
+	if (g_region)
+	{
+		region->next = g_region;
+		region->next->previous = region;
+	}
+
+	g_region = region;
+
+	return (region);
+}
+
+const char*
+region_type_to_string(region_type_t type)
+{
+	if (type == RT_TINY)
+		return ("TINY");
+
+	if (type == RT_SMALL)
+		return ("SMALL");
+
+	if (type == RT_LARGE)
+		return ("LARGE");
+
+	return ("UNKNOWN");
+}
