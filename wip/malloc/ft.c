@@ -14,36 +14,57 @@
 
 #include <stddef.h>
 #include <string.h>
+#include <sys/types.h>
 #include <sys/unistd.h>
 
-void
-ft_putchar(char c)
+ssize_t
+ft_putchar_fd(char c, int fd)
 {
-	write(1, &c, 1);
+	return (write(fd, &c, 1));
 }
 
-void
-ft_putnbr(size_t n, size_t radix)
+ssize_t
+ft_putunbr_fd(unsigned long n, size_t radix, int fd)
 {
+	ssize_t recursive = 0;
+
 	if (n >= radix)
-		ft_putnbr(n / radix, radix);
-	ft_putchar("0123456789abcdef"[n % radix]);
+		recursive = ft_putunbr_fd(n / radix, radix, fd);
+
+	if (recursive == -1)
+		return (-1);
+
+	return (recursive + ft_putchar_fd("0123456789abcdef"[n % radix], fd));
 }
 
-void
-ft_putnbr_dec(unsigned long n)
+ssize_t
+ft_putunbr_fd_dec(unsigned long n, int fd)
 {
-	ft_putnbr(n, 10);
+	return (ft_putunbr_fd(n, 10, fd));
 }
 
-void
-ft_putnbr_hex(unsigned long n)
+ssize_t
+ft_putunbr_fd_hex(unsigned long n, int fd)
 {
-	ft_putnbr(n, 16);
+	return (ft_putunbr_fd(n, 16, fd));
 }
 
-void
-ft_putstr(const char *str)
+ssize_t
+ft_putstr_fd(const char *str, int fd)
 {
-	write(1, str, strlen(str));
+	return (write(fd, str, ft_strlen(str)));
+}
+
+size_t
+ft_strlen(const char *str)
+{
+	if (!str)
+		return (0);
+
+	const char *start = str;
+
+	while (*str)
+		str++;
+
+	return (str - start);
 }

@@ -22,47 +22,31 @@ typedef struct
 {
 	size_t length;
 	size_t allocated;
+} region_t;
+
+typedef struct
+{
+	size_t length;
+	size_t allocated;
 } block_header_t;
 
 int malloc_count = 0, free_count = 0, realloc_count = 0;
 
-void
-free(void *ptr)
-{
-	ft_putstr(COLOR_RED "free(ptr=");
-	ft_putnbr_hex((unsigned long)ptr);
-	ft_putstr(")" COLOR_RESET "\n");
-
-	if (!ptr)
-		return;
-
-	block_header_t *header = (void*)((char*)ptr - sizeof(block_header_t));
-	munmap(header, header->length);
-
-	errno = 0;
-
-	++free_count;
-}
-
 void*
 malloc(size_t size)
 {
-	ft_putstr(COLOR_GREEN "malloc(size=");
-	ft_putnbr_dec(size);
-	ft_putstr(") : ");
+	ft_printf(COLOR_GREEN "malloc(size=%l): ", size);
 
 	size_t length = size + sizeof(block_header_t);
 
 	void *ptr = mmap(NULL, length, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (ptr == MAP_FAILED)
 	{
-		ft_putstr(strerror(errno));
-		ft_putstr(COLOR_RESET "\n");
+		ft_printf(COLOR_GREEN "%s" COLOR_RESET "\n", strerror(errno));
 		return (NULL);
 	}
 
-	ft_putnbr_hex((unsigned long)((char*)ptr + sizeof(block_header_t)));
-	ft_putstr(COLOR_RESET "\n");
+	ft_printf("%p" COLOR_RESET "\n", (unsigned long)((char*)ptr + sizeof(block_header_t)));
 
 	errno = 0;
 
@@ -76,12 +60,26 @@ malloc(size_t size)
 	return ((char*)ptr + sizeof(block_header_t));
 }
 
+void
+free(void *ptr)
+{
+	ft_printf(COLOR_RED "free(ptr=%p)" COLOR_RESET "\n", ptr);
+
+	if (!ptr)
+		return;
+
+	block_header_t *header = (void*)((char*)ptr - sizeof(block_header_t));
+	munmap(header, header->length);
+
+	errno = 0;
+
+	++free_count;
+}
+
 void*
 realloc(void *ptr, size_t size)
 {
-	ft_putstr(COLOR_YELLOW "realloc(ptr=");
-	ft_putnbr_hex((unsigned long)ptr);
-	ft_putstr(") : ");
+	ft_printf(COLOR_YELLOW "realloc(ptr=%p): ", ptr);
 
 	if (!ptr)
 		return (malloc(0));
@@ -105,15 +103,7 @@ realloc(void *ptr, size_t size)
 static void __attribute__ ((destructor))
 destructor(void)
 {
-	ft_putstr(COLOR_BLUE "malloc_count = ");
-	ft_putnbr_dec(malloc_count);
-	ft_putstr("\n");
-
-	ft_putstr(COLOR_BLUE "free_count = ");
-	ft_putnbr_dec(free_count);
-	ft_putstr("\n");
-
-	ft_putstr(COLOR_BLUE "realloc_count = ");
-	ft_putnbr_dec(realloc_count);
-	ft_putstr("\n");
+	ft_printf(COLOR_BLUE "malloc_count = %d" COLOR_RESET "\n", malloc_count);
+	ft_printf(COLOR_BLUE "free_count = %d" COLOR_RESET "\n", free_count);
+	ft_printf(COLOR_BLUE "realloc_count = %d" COLOR_RESET "\n", realloc_count);
 }
