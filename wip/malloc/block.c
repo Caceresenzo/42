@@ -80,6 +80,7 @@ block_find_or_create(region_t *region, size_t size)
 		block = block->next;
 	}
 
+	show_alloc_mem();
 	return (NULL);
 }
 

@@ -17,6 +17,15 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
+#define MAX(a, b) (((a) > (b)) ? (a) : (b))
+#define ALIGN(value, alignment) ((value) + (-(value) & ((alignment) - 1)))
+#define ALIGN_MIN(value, alignment, min) MAX(ALIGN(value, alignment), min)
+
+#define MEMORY_ALIGNMENT (sizeof(void*) * 2)
+#define MEMORY_ALIGN(value) ALIGN(value, MEMORY_ALIGNMENT)
+#define MEMORY_ALIGN_MIN(value, min) ALIGN_MIN(value, MEMORY_ALIGNMENT, min)
+
 void
 free(void *ptr);
 
@@ -42,8 +51,11 @@ typedef struct sized_region_type_s
 	size_t length;
 } sized_region_type_t;
 
+#define REGION_MAGIC (42)
+
 typedef struct region_s
 {
+	char magic;
 	size_t size;
 	size_t free_size;
 	region_type_t type;
@@ -58,8 +70,6 @@ typedef struct block_s
 	struct block_s *next;
 	struct block_s *previous;
 } block_t;
-
-region_t *g_region;
 
 void*
 region_get_start(region_t *region);

@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -20,6 +21,8 @@
 
 #include "ft.h"
 #include "malloc.h"
+
+region_t *g_region = NULL;
 
 void*
 region_get_start(region_t *region)
@@ -58,7 +61,7 @@ region_estimate_length(size_t size)
 	else
 	{
 		sized.type = RT_LARGE;
-		sized.length = size;
+		sized.length = ALIGN_MIN(size + sizeof(region_t), page_size, page_size);
 	}
 
 	return (sized);
@@ -77,6 +80,7 @@ region_create(size_t size)
 	}
 
 	memset(region, 0, sizeof(region_t));
+	region->magic = REGION_MAGIC;
 	region->size = sized.length - sizeof(region_t);
 	region->type = sized.type;
 
@@ -131,6 +135,8 @@ region_search(void *ptr)
 
 	while (region)
 	{
+		assert(region->magic == REGION_MAGIC);
+
 		void *start = region_get_start(region);
 
 		if (region->type == RT_LARGE)

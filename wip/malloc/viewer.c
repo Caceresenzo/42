@@ -13,9 +13,12 @@
 #include "malloc.h"
 #include "ft.h"
 
+extern region_t *g_region;
+
 void
 show_alloc_mem()
 {
+	ft_printf(COLOR_RESET "\n");
 	region_t *region = g_region;
 	while (region)
 	{
