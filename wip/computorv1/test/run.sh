@@ -22,10 +22,10 @@ do
 	name=$(basename "$file")
 	replaced=$(echo "$name" | sed 's/×/*/g' | sed "s/'//g")
 	
+	printf "%s%s%s" "$COLOR_CYAN" "$name" "$COLOR_RESET"
+	
 	./computor "$replaced" > /tmp/computor_output 2>&1
 	exit_code=$?
-	
-	printf "%s%s%s" "$COLOR_CYAN" "$name" "$COLOR_RESET"
 	
 	if [ $exit_code != $EXPECTED_EXIT_CODE ]
 	then
