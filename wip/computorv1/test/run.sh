@@ -20,8 +20,9 @@ function print_outcome()
 for file in $CASES_DIRECTORY/*
 do
 	name=$(basename "$file")
+	replaced=$(echo "$name"| sed 's/×/*/g')
 	
-	./computor "$name" > /tmp/computor_output 2>&1
+	./computor "$replaced" > /tmp/computor_output 2>&1
 	exit_code=$?
 	
 	printf "%s%s%s" "$COLOR_CYAN" "$name" "$COLOR_RESET"

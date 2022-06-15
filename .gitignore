@@ -3,3 +3,4 @@
 .pydevproject
 *.o
 a.out
+/bin/
