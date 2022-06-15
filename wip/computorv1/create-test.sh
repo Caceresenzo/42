@@ -17,7 +17,7 @@ read response
 
 if [ "$response" = "y" ]
 then
-	file="test/cases/$type/$expression"
+	file=$(echo "test/cases/$type/$expression" | sed 's/*/×/g')
 	
 	cp "$TEMPORARY_FILE" "$file"
 	echo "$PREFIX created: $file"

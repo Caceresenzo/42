@@ -20,7 +20,7 @@ function print_outcome()
 for file in $CASES_DIRECTORY/*
 do
 	name=$(basename "$file")
-	replaced=$(echo "$name"| sed 's/×/*/g')
+	replaced=$(echo "$name" | sed 's/×/*/g' | sed "s/'//g")
 	
 	./computor "$replaced" > /tmp/computor_output 2>&1
 	exit_code=$?
