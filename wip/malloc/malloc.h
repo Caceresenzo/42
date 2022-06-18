@@ -26,6 +26,8 @@
 #define MEMORY_ALIGN(value) ALIGN(value, MEMORY_ALIGNMENT)
 #define MEMORY_ALIGN_MIN(value, min) ALIGN_MIN(value, MEMORY_ALIGNMENT, min)
 
+#define TO_ENV_VAR_NAME(suffix) ("MALLOC_" suffix)
+
 void
 free(void *ptr);
 
@@ -77,6 +79,13 @@ typedef struct block_s
 	struct block_s *previous;
 } block_t;
 
+typedef struct
+{
+	bool log;
+	bool log_colored;
+	bool check_magic;
+} tunes_t;
+
 void*
 region_get_start(region_t *region);
 
@@ -124,6 +133,15 @@ block_destroy(region_t *region, block_t *block);
 
 sized_region_type_t
 region_estimate_length(size_t size);
+
+const tunes_t*
+tune_get();
+
+bool
+tune_find_boolean(const char *key, bool default_value);
+
+void
+tune_initialize(tunes_t *tunes);
 
 void
 free_impl(const char *caller, void *ptr);

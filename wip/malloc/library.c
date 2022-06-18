@@ -10,81 +10,158 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <strings.h>
+#include <pthread.h>
 
 #include "ft.h"
 #include "malloc.h"
 
-static bool g_log = false;
+#define TUNER_GET() const tunes_t *tunes = tune_get();
+
+#define LOG_START(color_string, params, ...) \
+		if (tunes->log) \
+		{ \
+			const char *color = tunes->log_colored ? color_string : ""; \
+			ft_printf("%s%s(" params "): ", color, __FUNCTION__, __VA_ARGS__); \
+		}
+
+#define LOG_END_RESULT(result) \
+		if (tunes->log) \
+		{ \
+			const char *color = tunes->log_colored ? COLOR_RESET : ""; \
+			ft_printf("%p%s\n", result, color); \
+		}
+
+#define LOG_END_VOID() \
+	if (tunes->log) \
+	{ \
+		const char *color = tunes->log_colored ? COLOR_RESET : ""; \
+		ft_printf("<void>%s\n", color); \
+	}
+
+static pthread_mutex_t g_malloc_lock = PTHREAD_MUTEX_INITIALIZER;
+
+static void
+lock_acquire(const char *caller)
+{
+	int err = pthread_mutex_lock(&g_malloc_lock);
+
+	if (err)
+	{
+		ft_putstr_fd(caller, 2);
+		ft_putstr_fd(": could not acquire the lock: ", 2);
+		ft_putstr_fd(strerror(err), 2);
+		ft_putstr_fd("\n", 2);
+		abort();
+	}
+}
+
+static void
+lock_release(const char *caller)
+{
+	int err = pthread_mutex_unlock(&g_malloc_lock);
+
+	if (err)
+	{
+		ft_putstr_fd(caller, 2);
+		ft_putstr_fd(": could not release the lock: ", 2);
+		ft_putstr_fd(strerror(err), 2);
+		ft_putstr_fd("\n", 2);
+		abort();
+	}
+}
+
+#define LOCK_ACQUIRE() lock_acquire(__FUNCTION__)
+#define LOCK_RELEASE() lock_release(__FUNCTION__)
 
 void*
 malloc(size_t size)
 {
-	if (g_log)
-		ft_printf(COLOR_GREEN "malloc(size=%l): ", size);
+	LOCK_ACQUIRE();
 
-	void *ptr = malloc_impl(__FUNCTION__, size);
+	TUNER_GET();
 
-	if (g_log)
-		ft_printf("%p" COLOR_RESET "\n", ptr);
+	LOG_START(COLOR_GREEN, "size=%l", size);
 
-	return (ptr);
+	void *result = malloc_impl(__FUNCTION__, size);
+
+	LOG_END_RESULT(result);
+
+	LOCK_RELEASE();
+
+	return (result);
 }
 
 void
 free(void *ptr)
 {
-	if (g_log)
-		ft_printf(COLOR_RED "free(ptr=%p)", ptr);
+	LOCK_ACQUIRE();
+
+	TUNER_GET();
+
+	LOG_START(COLOR_GREEN, "ptr=%p", ptr);
 
 	free_impl(__FUNCTION__, ptr);
 
-	if (g_log)
-		ft_printf(COLOR_RESET "\n");
+	LOG_END_VOID();
+
+	LOCK_RELEASE();
 }
 
 void*
 realloc(void *ptr, size_t size)
 {
-	if (g_log)
-		ft_printf(COLOR_GREEN "realloc(ptr=%p, size=%l): ", ptr, size);
+	LOCK_ACQUIRE();
 
-	void *new_ptr = realloc_impl(__FUNCTION__, ptr, size);
+	TUNER_GET();
 
-	if (g_log)
-		ft_printf("%p" COLOR_RESET "\n", new_ptr);
+	LOG_START(COLOR_GREEN, "ptr=%p, size=%l", ptr, size);
 
-	return (new_ptr);
+	void *result = realloc_impl(__FUNCTION__, ptr, size);
+
+	LOG_END_RESULT(result);
+
+	LOCK_RELEASE();
+
+	return (result);
 }
 
 void*
 calloc(size_t nmemb, size_t size)
 {
-	if (g_log)
-		ft_printf(COLOR_GREEN "calloc(nmemb=%l, size=%l): ", nmemb, size);
+	LOCK_ACQUIRE();
 
-	void *ptr = calloc_impl(__FUNCTION__, nmemb, size);
+	TUNER_GET();
 
-	if (g_log)
-		ft_printf("%p" COLOR_RESET "\n", ptr);
+	LOG_START(COLOR_GREEN, "nmemb=%l, size=%l", nmemb, size);
 
-	return (ptr);
+	void *result = calloc_impl(__FUNCTION__, nmemb, size);
+
+	LOG_END_RESULT(result);
+
+	LOCK_RELEASE();
+
+	return (result);
 }
 
 void*
 reallocarray(void *ptr, size_t nmemb, size_t size)
 {
-	if (g_log)
-		ft_printf(COLOR_GREEN "reallocarray(ptr=%p, nmemb=%l, size=%l): ", ptr, nmemb, size);
+	LOCK_ACQUIRE();
 
-	void *new_pre = realloc_impl(__FUNCTION__, ptr, nmemb * size);
+	TUNER_GET();
 
-	if (g_log)
-		ft_printf("%p" COLOR_RESET "\n", new_pre);
+	LOG_START(COLOR_GREEN, "ptr=%p, nmemb=%l, size=%l", ptr, nmemb, size);
 
-	return (new_pre);
+	void *result = reallocarray_impl(__FUNCTION__, ptr, nmemb, size);
+
+	LOG_END_RESULT(result);
+
+	LOCK_RELEASE();
+
+	return (result);
 }

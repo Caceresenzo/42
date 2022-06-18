@@ -17,6 +17,20 @@
 #include <sys/types.h>
 #include <sys/unistd.h>
 
+int
+ft_tolower(int c)
+{
+	if (ft_isupper(c))
+		return (c + 0x20);
+	return (c);
+}
+
+int
+ft_isupper(int c)
+{
+	return (c >= 'A' && c <= 'Z');
+}
+
 ssize_t
 ft_putchar_fd(char c, int fd)
 {
@@ -67,4 +81,20 @@ ft_strlen(const char *str)
 		str++;
 
 	return (str - start);
+}
+
+int
+ft_strcasecmp(const char *left, const char *right)
+{
+	for (;; left++, right++)
+	{
+		char a = ft_tolower((unsigned char)*left);
+		char b = ft_tolower((unsigned char)*right);
+
+		int diff = a - b;
+		if (diff || !a || !b)
+			return (diff);
+	}
+
+	return (0);
 }

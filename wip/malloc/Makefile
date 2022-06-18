@@ -1,5 +1,5 @@
 NAME = libft_malloc.so
-SRCS = library.c impl.c ft.c ft_printf.c block.c region.c viewer.c
+SRCS = library.c impl.c ft.c ft_printf.c block.c region.c viewer.c tune.c
 OBJS = $(SRCS:.c=.o)
 CC   = gcc
 FLAGS = -Wall -Wextra -g3 -fPIC -fno-gnu-unique -rdynamic

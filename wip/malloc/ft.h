@@ -25,6 +25,12 @@
 #define COLOR_BLUE "\e[34m"
 #define COLOR_RESET "\e[0m"
 
+int
+ft_tolower(int c);
+
+int
+ft_isupper(int c);
+
 ssize_t
 ft_putchar_fd(char c, int fd);
 
@@ -42,6 +48,9 @@ ft_putstr_fd(const char *str, int fd);
 
 size_t
 ft_strlen(const char *str);
+
+int
+ft_strcasecmp(const char *left, const char *right);
 
 int
 ft_printf(const char *format, ...);
