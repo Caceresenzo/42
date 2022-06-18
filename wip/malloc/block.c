@@ -68,17 +68,28 @@ block_split(region_t *region, block_t *block, size_t size)
 }
 
 block_t*
-block_find_or_create(region_t *region, size_t size)
+block_find(region_t *region, size_t size)
 {
 	block_t *block = region_get_first_block(region);
 
 	while (block)
 	{
 		if (block->free && block->size >= size)
-			return (block_split(region, block, size));
+			return (block);
 
 		block = block->next;
 	}
+
+	return (NULL);
+}
+
+block_t*
+block_find_and_split(region_t *region, size_t size)
+{
+	block_t *block = block_find(region, size);
+
+	if (block)
+		return (block_split(region, block, size));
 
 	show_alloc_mem();
 	return (NULL);

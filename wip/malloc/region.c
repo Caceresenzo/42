@@ -104,7 +104,7 @@ region_find_or_create(size_t size)
 
 	while (region)
 	{
-		if (region->free_size >= size)
+		if (region->free_size >= size && block_find(region, size))
 			return (region);
 
 		region = region->next;

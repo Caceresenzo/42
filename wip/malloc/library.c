@@ -120,12 +120,12 @@ print_trace(void)
 void
 _hook()
 {
-	if (!g_removed)
-	{
-		int res = unsetenv("LD_PRELOAD");
-		ft_printf("unsetenv=%d\n", res);
-		g_removed = true;
-	}
+//	if (!g_removed)
+//	{
+//		int res = unsetenv("LD_PRELOAD");
+//		ft_printf("unsetenv=%d\n", res);
+//		g_removed = true;
+//	}
 }
 
 extern region_t *g_region;
@@ -139,6 +139,7 @@ region_get(const char *caller, void *ptr)
 	{
 		ft_putstr_fd(caller, 2);
 		ft_putstr_fd(": invalid pointer: region not found\n", 2);
+		show_alloc_mem();
 
 //		region_t *region = g_region;
 //		while (region)
@@ -153,7 +154,6 @@ region_get(const char *caller, void *ptr)
 //		}
 
 //		show_alloc_mem	();
-		sleep(1000);
 		abort();
 	}
 
@@ -169,7 +169,6 @@ block_get_free(const char *caller, region_t *region, void *ptr)
 	{
 		ft_putstr_fd(caller, 2);
 		ft_putstr_fd(": invalid pointer: block not found\n", 2);
-//		show_alloc_mem();
 		abort();
 	}
 
@@ -177,7 +176,6 @@ block_get_free(const char *caller, region_t *region, void *ptr)
 	{
 		ft_putstr_fd(caller, 2);
 		ft_putstr_fd(": double free\n", 2);
-//		show_alloc_mem();
 		abort();
 	}
 
@@ -204,7 +202,7 @@ malloc(size_t size)
 		ptr = region_get_start(region);
 	else
 	{
-		block_t *block = block_find_or_create(region, size);
+		block_t *block = block_find_and_split(region, size);
 		assert(block != NULL);
 
 		ptr = block_get_start(block);
@@ -290,7 +288,10 @@ realloc(void *ptr, size_t size)
 		length = block->size;
 	}
 
-	ft_printf(COLOR_YELLOW "length=%l: ", length);
+	ft_printf(COLOR_YELLOW "length=%l, ", length);
+
+	size_t to_move = MIN(length, size);
+	ft_printf(COLOR_YELLOW "move=%l: " COLOR_RESET, to_move);
 
 	void *new_ptr = malloc(size);
 	if (!new_ptr)
@@ -298,12 +299,27 @@ realloc(void *ptr, size_t size)
 
 	memset(new_ptr, 0xAA, size);
 
-	size_t to_move = MIN(length, size);
 	memmove(new_ptr, ptr, to_move);
-
-	ft_printf(COLOR_YELLOW "to_move=%l\n" COLOR_RESET, to_move);
 
 	region_or_block_destroy(region, block);
 
 	return (new_ptr);
+}
+
+void*
+calloc(size_t nmemb, size_t size)
+{
+	const size_t total = nmemb * size;
+
+	void *ptr = malloc(total);
+	if (ptr)
+		memset(ptr, 0, total);
+
+	return (ptr);
+}
+
+void*
+reallocarray(void *ptr, size_t nmemb, size_t size)
+{
+	return (realloc(ptr, nmemb * size));
 }

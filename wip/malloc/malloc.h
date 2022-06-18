@@ -35,6 +35,9 @@ malloc(size_t size);
 void*
 realloc(void *ptr, size_t size);
 
+void*
+calloc(size_t nmemb, size_t size);
+
 void
 show_alloc_mem();
 
@@ -105,7 +108,10 @@ block_t*
 block_split(region_t *region, block_t *block, size_t size);
 
 block_t*
-block_find_or_create(region_t *region, size_t size);
+block_find(region_t *region, size_t size);
+
+block_t*
+block_find_and_split(region_t *region, size_t size);
 
 block_t*
 block_search(region_t *region, void *ptr);
