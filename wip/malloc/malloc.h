@@ -38,6 +38,9 @@ realloc(void *ptr, size_t size);
 void*
 calloc(size_t nmemb, size_t size);
 
+void*
+reallocarray(void *ptr, size_t nmemb, size_t size);
+
 void
 show_alloc_mem();
 
@@ -121,5 +124,20 @@ block_destroy(region_t *region, block_t *block);
 
 sized_region_type_t
 region_estimate_length(size_t size);
+
+void
+free_impl(const char *caller, void *ptr);
+
+void*
+malloc_impl(const char *caller, size_t size);
+
+void*
+realloc_impl(const char *caller, void *ptr, size_t size);
+
+void*
+calloc_impl(const char *caller, size_t nmemb, size_t size);
+
+void*
+reallocarray_impl(const char *caller, void *ptr, size_t nmemb, size_t size);
 
 #endif

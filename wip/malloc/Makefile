@@ -1,5 +1,5 @@
 NAME = libft_malloc.so
-SRCS = library.c ft.c ft_printf.c block.c region.c viewer.c
+SRCS = library.c impl.c ft.c ft_printf.c block.c region.c viewer.c
 OBJS = $(SRCS:.c=.o)
 CC   = gcc
 FLAGS = -Wall -Wextra -g3 -fPIC -fno-gnu-unique -rdynamic
@@ -29,7 +29,8 @@ test-no-preload: $(NAME)
 	@valgrind ./a.out
 
 test-ls: $(NAME)
-	LD_PRELOAD=./libft_malloc.so $(shell which ls) -la
+	#LD_PRELOAD=./libft_malloc.so ./track/coreutils-8.30/src/ls -la
+	LD_PRELOAD=./libft_malloc.so ls -la
 
 test-find: $(NAME)
 	LD_PRELOAD=./libft_malloc.so $(shell which find) $(shell pwd)
