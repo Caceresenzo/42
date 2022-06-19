@@ -1,3 +1,0 @@
-expected: digit, variable, minus
-a = a
-^
