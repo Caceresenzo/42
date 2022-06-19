@@ -103,7 +103,7 @@ free(void *ptr)
 
 	TUNER_GET();
 
-	LOG_START(COLOR_GREEN, "ptr=%p", ptr);
+	LOG_START(COLOR_YELLOW, "ptr=%p", ptr);
 
 	free_impl(__FUNCTION__, ptr);
 
@@ -119,7 +119,7 @@ realloc(void *ptr, size_t size)
 
 	TUNER_GET();
 
-	LOG_START(COLOR_GREEN, "ptr=%p, size=%l", ptr, size);
+	LOG_START(COLOR_BLUE, "ptr=%p, size=%l", ptr, size);
 
 	void *result = realloc_impl(__FUNCTION__, ptr, size);
 
@@ -137,7 +137,7 @@ calloc(size_t nmemb, size_t size)
 
 	TUNER_GET();
 
-	LOG_START(COLOR_GREEN, "nmemb=%l, size=%l", nmemb, size);
+	LOG_START(COLOR_PURPLE, "nmemb=%l, size=%l", nmemb, size);
 
 	void *result = calloc_impl(__FUNCTION__, nmemb, size);
 
@@ -155,7 +155,7 @@ reallocarray(void *ptr, size_t nmemb, size_t size)
 
 	TUNER_GET();
 
-	LOG_START(COLOR_GREEN, "ptr=%p, nmemb=%l, size=%l", ptr, nmemb, size);
+	LOG_START(COLOR_CYAN, "ptr=%p, nmemb=%l, size=%l", ptr, nmemb, size);
 
 	void *result = reallocarray_impl(__FUNCTION__, ptr, nmemb, size);
 

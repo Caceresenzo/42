@@ -19,11 +19,14 @@
 #include <unistd.h>
 #include <string.h>
 
-#define COLOR_RED "\e[31m"
-#define COLOR_GREEN "\e[32m"
-#define COLOR_YELLOW "\e[33m"
-#define COLOR_BLUE "\e[34m"
-#define COLOR_RESET "\e[0m"
+#define BASH_COLOR(n) ("\e[" #n "m")
+#define COLOR_RED BASH_COLOR(31)
+#define COLOR_GREEN BASH_COLOR(32)
+#define COLOR_YELLOW BASH_COLOR(33)
+#define COLOR_BLUE BASH_COLOR(34)
+#define COLOR_PURPLE BASH_COLOR(35)
+#define COLOR_CYAN BASH_COLOR(36)
+#define COLOR_RESET BASH_COLOR(0)
 
 int
 ft_tolower(int c);
