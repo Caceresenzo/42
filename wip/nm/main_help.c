@@ -27,6 +27,7 @@ main_help(bool is_err)
 	ft_putstr_fd("  -g, --extern-only      Display only external symbols\n", fd);
 	ft_putstr_fd("  -u, --undefined-only   Display only undefined symbols\n", fd);
 	ft_putstr_fd("  -r, --reverse-sort     Reverse the sense of the sort\n", fd);
+	ft_putstr_fd("  -n, --numeric-sort     Sort symbols numerically by address\n", fd);
 	ft_putstr_fd("  -p, --no-sort          Do not sort the symbols\n", fd);
 	ft_putstr_fd("  -h, --help             Display this information\n", fd);
 	ft_putstr_fd("  -V, --version          Display this program's version number\n", fd);

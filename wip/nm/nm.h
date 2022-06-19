@@ -22,9 +22,9 @@
 
 typedef enum
 {
-	SORT_NORMAL = 0,
-	SORT_NONE,
-	SORT_REVERSE
+	SORT_NAME = 0,
+	SORT_NUMERIC,
+	SORT_NONE
 } t_sort;
 
 typedef struct
@@ -35,6 +35,7 @@ typedef struct
 	bool only_extern :1;
 	bool only_undefined :1;
 	t_sort sort :2;
+	bool sort_reverse;
 	char unknown_letter;
 	const char *unknown_word;
 } t_flags;
@@ -194,10 +195,10 @@ int
 symbol_compare(const t_symbol *left, const t_symbol *right);
 
 int
-symbol_list_compare(const void *a, const void *b);
+symbol_list_compare_name(const void *a, const void *b);
 
 int
-symbol_list_compare_reverse(const void *a, const void *b);
+symbol_list_compare_numeric(const void *a, const void *b);
 
 t_message
 message_simple(const char *text);

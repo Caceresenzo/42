@@ -23,11 +23,10 @@ typedef struct s_list_node
 	struct s_list_node *next;
 } t_list_node;
 
-typedef void
-(*t_list_node_consumer)(void*);
-
-typedef int
-(*t_list_node_compare)(const void*, const void*);
+// @formatter:off
+typedef void (*t_list_node_consumer)(void*);
+typedef int (*t_list_node_compare)(const void*, const void*);
+// @formatter:on
 
 typedef struct
 {
@@ -62,5 +61,8 @@ list_node_next(t_list_node *node);
 
 bool
 list_sort(t_list *list, t_list_node_compare comparator);
+
+void
+list_reverse(t_list *list);
 
 #endif

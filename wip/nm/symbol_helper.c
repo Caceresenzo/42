@@ -77,27 +77,36 @@ symbol_print_x32(t_symbol *symbol)
 	return (symbol_print(8, symbol));
 }
 
-int
-symbol_compare(const t_symbol *left, const t_symbol *right)
+static const char*
+skip_underscores(const char *str)
 {
-	if (right->name == NULL)
-		return (left->name != NULL);
-	if (left->name == NULL)
-		return (-1);
-	return (ft_strcmp(left->name, right->name));
+	while (*str == '_')
+		++str;
+	return (str);
 }
 
 int
-symbol_list_compare(const void *a, const void *b)
+symbol_list_compare_name(const void *a, const void *b)
 {
 	const t_symbol *left = *(const t_symbol**)a;
 	const t_symbol *right = *(const t_symbol**)b;
 
-	return (symbol_compare(left, right));
+	if (right->name == NULL)
+		return (left->name != NULL);
+	if (left->name == NULL)
+		return (-1);
+	return (ft_strcasecmp(skip_underscores(left->name), skip_underscores(right->name)));
 }
 
 int
-symbol_list_compare_reverse(const void *a, const void *b)
+symbol_list_compare_numeric(const void *a, const void *b)
 {
-	return (-symbol_list_compare(a, b));
+	const t_symbol *left = *(const t_symbol**)a;
+	const t_symbol *right = *(const t_symbol**)b;
+
+	if (right->value == left->value)
+		return (0);
+	if (right->value > left->value)
+		return (-1);
+	return (1);
 }

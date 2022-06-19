@@ -100,7 +100,14 @@ flags_parse_letter(t_flags *flags, char letter)
 
 		case 'r':
 		{
-			flags->sort = SORT_REVERSE;
+			flags->sort_reverse = true;
+
+			return (true);
+		}
+
+		case 'n':
+		{
+			flags->sort = SORT_NUMERIC;
 
 			return (true);
 		}
@@ -137,6 +144,9 @@ flags_parse_word(t_flags *flags, const char *word)
 
 	if (ft_strcmp("undefined-only", word) == 0)
 		return (flags_parse_letter(flags, 'u'));
+
+	if (ft_strcmp("numeric-sort", word) == 0)
+		return (flags_parse_letter(flags, 'n'));
 
 	if (ft_strcmp("reverse-sort", word) == 0)
 		return (flags_parse_letter(flags, 'r'));

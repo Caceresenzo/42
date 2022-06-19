@@ -33,6 +33,9 @@ ft_strncmp(const char *s1, const char *s2, size_t n);
 int
 ft_strcmp(const char *s1, const char *s2);
 
+int
+ft_strcasecmp(const char *left, const char *right);
+
 bool
 ft_strstartswith(const char *str, const char *prefix);
 

@@ -176,10 +176,14 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 	}
 
 	t_sort sort = nm->flags.sort;
-	if (sort == SORT_REVERSE)
-		list_sort(&list, &symbol_list_compare_reverse);
-	else if (sort == SORT_NORMAL)
-		list_sort(&list, &symbol_list_compare);
+	if (sort == SORT_NAME)
+		list_sort(&list, &symbol_list_compare_name);
+	else if (sort == SORT_NUMERIC)
+		list_sort(&list, &symbol_list_compare_numeric);
+
+	bool sort_reverse = nm->flags.sort_reverse;
+	if (sort_reverse && sort != SORT_NONE)
+		list_reverse(&list);
 
 	if (elf.x32)
 		list_for_each(&list, (t_list_node_consumer)&symbol_print_x32);
