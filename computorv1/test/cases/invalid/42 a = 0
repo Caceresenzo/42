@@ -1,0 +1,3 @@
+expected: multiply, variable, sign, end
+42 a = 0
+   ^
