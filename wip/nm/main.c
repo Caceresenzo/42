@@ -29,14 +29,6 @@
 #include "list.h"
 #include "nm.h"
 
-#ifndef SAFE_BYTE
-# define SAFE_BYTE 32
-#endif
-
-#if SAFE_BYTE < 0
-# error "SAFE_BYTE is negative"
-#endif
-
 static void
 print_message(int fd, const char *file, const char *text)
 {
@@ -250,16 +242,13 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
-	char *ptr = mmap(NULL, statbuf.st_size + SAFE_BYTE, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 	if (!ptr)
 	{
 		print_message_errno(STDERR_FILENO, file);
 		close(fd);
 		return (1);
 	}
-
-	if (SAFE_BYTE)
-		ft_memset(ptr + statbuf.st_size, '0', SAFE_BYTE);
 
 	t_message message = main_nm(nm, file, multiple, ptr, &statbuf);
 	if (message.text)
