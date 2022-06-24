@@ -1,5 +1,7 @@
 set -e
 
+make -s -C tests
+
 make -s -C tests list-files | grep -v make | while read -r file
 do
 	sh tests/test.sh $file

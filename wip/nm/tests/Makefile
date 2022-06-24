@@ -1,10 +1,15 @@
+DOCKER_IMAGE = nm-test-compiler
+
 all: simple advanced
 
-simple:
-	make -C simple
+docker:
+	docker build -t $(DOCKER_IMAGE) .
 
-advanced:
-	make -C advanced
+simple: docker
+	docker run --rm -it -v $(shell pwd):/app $(DOCKER_IMAGE) make -C simple
+
+advanced: docker
+	docker run --rm -it -v $(shell pwd):/app $(DOCKER_IMAGE) make -C advanced
 
 clean:
 	make clean -C simple
@@ -16,4 +21,4 @@ list-files:
 	@make -s list-files -C simple | xargs -I{} readlink -f simple/{}
 	@make -s list-files -C advanced | xargs -I{} readlink -f advanced/{}
 
-.PHONY: simple advanced list-files self
+.PHONY: simple advanced list-files
