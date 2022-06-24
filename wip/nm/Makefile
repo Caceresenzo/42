@@ -1,13 +1,27 @@
 NAME = ft_nm
-SRCS = elf_header.c elf_string.c elf_symbol_decode.c list.c main_help.c elf_section.c elf_symbol.c flags.c main.c symbol_helper.c message.c ft.c
-OBJS = $(SRCS:.c=.o)
+SOURCES = \
+	main.c \
+	main_help.c \
+	flags.c \
+	elf_header.c \
+	elf_string.c \
+	elf_symbol_decode.c \
+	elf_section.c \
+	elf_symbol.c \
+	symbol.c \
+	symbol_print.c \
+	symbol_sort.c \
+	message.c \
+	list.c \
+	ft.c
+OBJECTS = $(SOURCES:.c=.o)
 FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 .c.o:
 	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
-$(NAME): ${OBJS}
-	${CC} ${FLAGS} $(OBJS) -o $(NAME)
+$(NAME): ${OBJECTS}
+	${CC} ${FLAGS} $(OBJECTS) -o $(NAME)
 
 all: $(NAME)
 
@@ -15,7 +29,7 @@ fclean: clean
 	rm -f $(NAME)
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJECTS)
 
 re: fclean all
 
