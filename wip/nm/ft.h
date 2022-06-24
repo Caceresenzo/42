@@ -13,10 +13,11 @@
 #ifndef FT_H
 # define FT_H
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdbool.h>
-# include <string.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 int
 ft_islower(int c);
@@ -32,9 +33,6 @@ ft_strncmp(const char *s1, const char *s2, size_t n);
 
 int
 ft_strcmp(const char *s1, const char *s2);
-
-int
-ft_strcasecmp(const char *left, const char *right);
 
 bool
 ft_strstartswith(const char *str, const char *prefix);

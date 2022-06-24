@@ -1,3 +1,5 @@
+export LC_COLLATE=C
+
 echo "Running: $@" 1>&2
 
 nm $@ >/tmp/nm.output 2>&1

@@ -17,14 +17,6 @@
 
 #include "nm.h"
 
-static const char*
-skip_underscores(const char *str)
-{
-	while (*str == '_')
-		++str;
-	return (str);
-}
-
 int
 symbol_list_compare_name(const void *a, const void *b)
 {
@@ -35,7 +27,13 @@ symbol_list_compare_name(const void *a, const void *b)
 		return (left->name != NULL);
 	if (left->name == NULL)
 		return (-1);
-	return (ft_strcasecmp(skip_underscores(left->name), skip_underscores(right->name)));
+	return (ft_strcmp(left->name, right->name));
+}
+
+int
+symbol_list_compare_name_reversed(const void *a, const void *b)
+{
+	return (-symbol_list_compare_name(a, b));
 }
 
 int
@@ -49,4 +47,10 @@ symbol_list_compare_numeric(const void *a, const void *b)
 	if (right->value > left->value)
 		return (-1);
 	return (1);
+}
+
+int
+symbol_list_compare_numeric_reversed(const void *a, const void *b)
+{
+	return (-symbol_list_compare_numeric(a, b));
 }

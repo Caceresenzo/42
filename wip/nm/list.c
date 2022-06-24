@@ -172,27 +172,9 @@ list_set_from_array(t_list *list, void **array)
 }
 
 void
-list_sort_impl_qsort(void **array, long int size, t_list_node_compare comparator)
+list_sort_impl(void **array, long int size, t_list_node_compare comparator)
 {
 	qsort(array, size, sizeof(void*), comparator);
-}
-
-void
-list_sort_impl_bubble(void **array, long int size, t_list_node_compare comparator)
-{
-	for (long int index = 0; index < size; ++index)
-		for (long int jndex = index + 1; jndex < size; ++jndex)
-		{
-			void *left = array[index];
-			void *right = array[jndex];
-
-			if ((*comparator)(&left, &right) > 0)
-			{
-				void *tmp = array[index];
-				array[index] = array[jndex];
-				array[jndex] = tmp;
-			}
-		}
 }
 
 bool
@@ -209,7 +191,7 @@ list_sort(t_list *list, t_list_node_compare comparator)
 	array = list_to_array(list, size);
 	if (!array)
 		return (false);
-	list_sort_impl_qsort(array, size, comparator);
+	list_sort_impl(array, size, comparator);
 	list_set_from_array(list, array);
 	free(array);
 	return (true);

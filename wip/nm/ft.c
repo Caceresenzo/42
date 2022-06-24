@@ -12,6 +12,8 @@
 
 #include "ft.h"
 
+#include <stddef.h>
+
 int
 ft_islower(int c)
 {
@@ -65,22 +67,6 @@ ft_strcmp(const char *s1, const char *s2)
 		s2++;
 	}
 	return (*(unsigned char*)s1 - *(unsigned char*)s2);
-}
-
-int
-ft_strcasecmp(const char *left, const char *right)
-{
-	for (;; left++, right++)
-	{
-		char a = ft_toupper((unsigned char)*left);
-		char b = ft_toupper((unsigned char)*right);
-
-		int diff = a - b;
-		if (diff || !a || !b)
-			return (diff);
-	}
-
-	return (0);
 }
 
 bool

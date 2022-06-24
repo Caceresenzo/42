@@ -69,6 +69,30 @@ print_invalid_option_letter(char letter)
 	ft_putstr_fd("'\n", STDERR_FILENO);
 }
 
+static void
+sort_apply(t_flags *flags, t_list *list)
+{
+	t_list_node_compare comparator = NULL;
+
+	if (flags->sort == SORT_NAME)
+	{
+		if (flags->sort_reverse)
+			comparator = &symbol_list_compare_name_reversed;
+		else
+			comparator = &symbol_list_compare_name;
+	}
+	else if (flags->sort == SORT_NUMERIC)
+	{
+		if (flags->sort_reverse)
+			comparator = &symbol_list_compare_numeric_reversed;
+		else
+			comparator = &symbol_list_compare_numeric;
+	}
+
+	if (comparator)
+		list_sort(&*list, comparator);
+}
+
 t_symbol*
 main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *section_strtab, t_elf_section_header *symbol_strtab)
 {
@@ -187,15 +211,7 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 		elf_symbol = elf_symbol_next(&elf, elf_symbol);
 	}
 
-	t_sort sort = nm->flags.sort;
-	if (sort == SORT_NAME)
-		list_sort(&list, &symbol_list_compare_name);
-	else if (sort == SORT_NUMERIC)
-		list_sort(&list, &symbol_list_compare_numeric);
-
-	bool sort_reverse = nm->flags.sort_reverse;
-	if (sort_reverse && sort != SORT_NONE)
-		list_reverse(&list);
+	sort_apply(&nm->flags, &list);
 
 	if (elf.x32)
 		list_for_each(&list, (t_list_node_consumer)&symbol_print_x32);

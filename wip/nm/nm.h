@@ -198,7 +198,13 @@ int
 symbol_list_compare_name(const void *a, const void *b);
 
 int
+symbol_list_compare_name_reversed(const void *a, const void *b);
+
+int
 symbol_list_compare_numeric(const void *a, const void *b);
+
+int
+symbol_list_compare_numeric_reversed(const void *a, const void *b);
 
 t_message
 message_simple(const char *text);
