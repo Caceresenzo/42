@@ -242,6 +242,12 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
+	if (!statbuf.st_size)
+	{
+		close(fd);
+		return (1);
+	}
+
 	char *ptr = mmap(NULL, statbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 	if (!ptr)
 	{
