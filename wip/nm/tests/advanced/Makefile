@@ -1,4 +1,4 @@
-PROJECTS = bash bc bzip2 file less
+PROJECTS = bash bc bzip2 file less grep binutils make nano
 
 all: $(PROJECTS)
 
@@ -24,6 +24,22 @@ file:
 less:
 	sh download-and-compile.sh less https://www.greenwoodsoftware.com/less/less-590.tar.gz
 	sh copy-elf.sh less
+
+grep:
+	sh download-and-compile.sh grep https://ftp.gnu.org/gnu/grep/grep-3.7.tar.xz
+	sh copy-elf.sh grep
+
+binutils:
+	sh download-and-compile.sh binutils https://mirror.cyberbits.eu/gnu/binutils/binutils-2.38.tar.xz
+	sh copy-elf.sh binutils
+
+make:
+	sh download-and-compile.sh make https://ftp.gnu.org/gnu/make/make-4.3.tar.gz
+	sh copy-elf.sh make
+
+nano:
+	sh download-and-compile.sh nano https://www.nano-editor.org/dist/v6/nano-6.3.tar.xz
+	sh copy-elf.sh nano
 
 list-files: $(PROJECTS)
 	@find $(PROJECTS) -type f
