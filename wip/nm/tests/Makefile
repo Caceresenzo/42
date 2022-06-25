@@ -1,3 +1,9 @@
+ifneq (,$(findstring Microsoft,$(shell uname -r)))
+	CURRENT_WORKING_DIRECTORY = "%cd%"
+else
+    CURRENT_WORKING_DIRECTORY = $(shell pwd)
+endif
+
 DOCKER_IMAGE = nm-test-compiler
 
 all: simple advanced
@@ -6,10 +12,10 @@ docker:
 	docker build -t $(DOCKER_IMAGE) .
 
 simple: docker
-	docker run --rm -it -v $(shell pwd):/app $(DOCKER_IMAGE) make -C simple
+	docker run --rm -it -v $(CURRENT_WORKING_DIRECTORY):/app $(DOCKER_IMAGE) make -C simple
 
 advanced: docker
-	docker run --rm -it -v $(shell pwd):/app $(DOCKER_IMAGE) make -C advanced
+	docker run --rm -it -v $(CURRENT_WORKING_DIRECTORY):/app $(DOCKER_IMAGE) make -C advanced
 
 clean:
 	make clean -C simple
