@@ -141,7 +141,7 @@ main_nm(t_nm *nm, const char *file, bool multiple, char *ptr, struct stat *statb
 		return (message_error("invalid header"));
 
 	if (ft_memcmp(ptr, ELFMAG, 4) != 0)
-		return (message_error("invalid magic"));
+		return (message_error("file format not recognized"));
 
 	bool is32 = ptr[EI_CLASS] == ELFCLASS32;
 	bool is64 = ptr[EI_CLASS] == ELFCLASS64;
