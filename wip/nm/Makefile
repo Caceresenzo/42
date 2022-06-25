@@ -15,7 +15,8 @@ SOURCES = \
 	list.c \
 	ft.c
 OBJECTS = $(SOURCES:.c=.o)
-FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CC = clang
 
 .c.o:
 	${CC} ${FLAGS} -c $< -o ${<:.c=.o}

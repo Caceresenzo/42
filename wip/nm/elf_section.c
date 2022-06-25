@@ -130,6 +130,18 @@ elf_section_next(t_elf *elf, t_elf_section_header *section, t_elf_word n)
 	return (0);
 }
 
+size_t
+sizeof_elf_section(t_elf *elf)
+{
+	if (!elf)
+		return (0);
+	if (elf->x32)
+		return (sizeof(Elf32_Shdr));
+	if (elf->x64)
+		return (sizeof(Elf64_Shdr));
+	return (0);
+}
+
 t_elf_section_header*
 elf_sections(t_elf *elf)
 {
@@ -141,6 +153,21 @@ elf_sections(t_elf *elf)
 	if (!offset)
 		return (NULL);
 	return ((void*)(elf->ptr + offset));
+}
+
+bool
+elf_section_check(t_elf *elf, t_elf_section_header *section)
+{
+	char *start = section;
+	char *end = start + sizeof_elf_section(elf);
+
+	if (!section)
+		return (false);
+	if (end >= elf->ptr + elf->size)
+		return (false);
+	if (start <= elf->ptr)
+		return (false);
+	return (true);
 }
 
 t_elf_section_header*
@@ -155,6 +182,8 @@ elf_sections_find_by_type(t_elf *elf, t_elf_word type)
 	section = elf_sections(elf);
 	while (total--)
 	{
+		if (!elf_section_check(elf, section))
+			break;
 		if (elf_section_get_type(elf, section) == type)
 			return (section);
 		section = elf_section_next(elf, section, 1);
