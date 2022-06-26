@@ -1,21 +1,21 @@
 NAME = ft_nm
 SOURCES = \
-	main.c \
-	main_help.c \
-	flags.c \
-	elf_header.c \
-	elf_string.c \
-	elf_symbol_decode.c \
-	elf_section.c \
-	elf_symbol.c \
-	symbol.c \
-	symbol_print.c \
-	symbol_sort.c \
-	message.c \
-	list.c \
-	ft.c
+	source/main.c \
+	source/main_help.c \
+	source/flags.c \
+	source/elf_header.c \
+	source/elf_string.c \
+	source/elf_symbol_decode.c \
+	source/elf_section.c \
+	source/elf_symbol.c \
+	source/symbol.c \
+	source/symbol_print.c \
+	source/symbol_sort.c \
+	source/message.c \
+	source/list.c \
+	source/ft.c
 OBJECTS = $(SOURCES:.c=.o)
-FLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g3 #-fsanitize=address
 CC = clang
 
 .c.o:
@@ -35,6 +35,6 @@ clean:
 re: fclean all
 
 test: all
-	sh tests/run.sh
+	sh test/run.sh
 
 .PHONY: all bonus clean fclean re .c.o test
