@@ -66,9 +66,9 @@ elf_symbol_get_section_info_bind(t_elf *elf, t_elf_symbol *symbol)
 	if (!elf || !symbol)
 		return (0);
 	if (elf->x32)
-		return (ELF32_ST_BIND(((Elf32_Sym*)symbol)->st_info));
+		return (ELF32_ST_BIND(((Elf32_Sym* )symbol)->st_info));
 	if (elf->x64)
-		return (ELF64_ST_BIND(((Elf64_Sym*)symbol)->st_info));
+		return (ELF64_ST_BIND(((Elf64_Sym* )symbol)->st_info));
 	return (0);
 }
 
@@ -78,9 +78,9 @@ elf_symbol_get_section_info_type(t_elf *elf, t_elf_symbol *symbol)
 	if (!elf || !symbol)
 		return (0);
 	if (elf->x32)
-		return (ELF32_ST_TYPE(((Elf32_Sym*)symbol)->st_info));
+		return (ELF32_ST_TYPE(((Elf32_Sym* )symbol)->st_info));
 	if (elf->x64)
-		return (ELF64_ST_TYPE(((Elf64_Sym*)symbol)->st_info));
+		return (ELF64_ST_TYPE(((Elf64_Sym* )symbol)->st_info));
 	return (0);
 }
 
@@ -90,9 +90,9 @@ elf_symbol_get_section_other_visibility(t_elf *elf, t_elf_symbol *symbol)
 	if (!elf || !symbol)
 		return (0);
 	if (elf->x32)
-		return (ELF32_ST_VISIBILITY(((Elf32_Sym*)symbol)->st_other));
+		return (ELF32_ST_VISIBILITY(((Elf32_Sym* )symbol)->st_other));
 	if (elf->x64)
-		return (ELF32_ST_VISIBILITY(((Elf64_Sym*)symbol)->st_other));
+		return (ELF32_ST_VISIBILITY(((Elf64_Sym* )symbol)->st_other));
 	return (0);
 }
 
@@ -137,4 +137,14 @@ elf_symbol_next(t_elf *elf, t_elf_symbol *symbol)
 	if (elf->x64)
 		return (((Elf64_Sym*)symbol) + 1);
 	return (0);
+}
+
+const char*
+elf_symbol_find_name(t_elf *elf, t_elf_symbol *symbol, t_elf_section_header *symbol_strtab)
+{
+	t_elf_word name_offset = elf_symbol_get_name(elf, symbol);
+	if (!name_offset)
+		return (NULL);
+
+	return (elf_string_get_safer(elf, symbol_strtab, name_offset));
 }

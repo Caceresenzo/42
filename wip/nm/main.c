@@ -117,7 +117,8 @@ main_nm_process(t_elf *elf, t_elf_symbol *elf_symbol, t_elf_section_header *sect
 	if (!name_offset && elf_symbol_get_section_index(elf, elf_symbol) != SHN_ABS)
 		return (NULL);
 
-	const char *name = elf_string_get(elf, symbol_strtab, name_offset);
+	const char *name = elf_symbol_find_name(elf, elf_symbol, symbol_strtab);
+//	printf("%p: %s\n", elf_symbol, name);
 
 	char letter = elf_symbol_decode(elf, elf_symbol);
 	if (!letter)

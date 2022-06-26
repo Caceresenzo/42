@@ -174,7 +174,13 @@ t_elf_symbol*
 elf_symbol_next(t_elf *elf, t_elf_symbol *symbol);
 
 const char*
+elf_symbol_find_name(t_elf *elf, t_elf_symbol *symbol, t_elf_section_header *symbol_strtab);
+
+const char*
 elf_string_get(t_elf *elf, t_elf_section_header *strtab, t_elf_offset offset);
+
+const char*
+elf_string_get_safer(t_elf *elf, t_elf_section_header *strtab, t_elf_word offset);
 
 char
 elf_symbol_decode(t_elf *elf, t_elf_symbol *symbol);

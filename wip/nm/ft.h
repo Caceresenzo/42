@@ -19,6 +19,9 @@
 #include <string.h>
 #include <unistd.h>
 
+# define MIN(a, b) (((a) < (b)) ? (a) : (b))
+# define MAX(a, b) (((a) > (b)) ? (a) : (b))
+
 int
 ft_islower(int c);
 
@@ -27,6 +30,9 @@ ft_toupper(int c);
 
 size_t
 ft_strlen(const char *str);
+
+size_t
+ft_strnlen(const char *str, size_t max);
 
 int
 ft_strncmp(const char *s1, const char *s2, size_t n);
