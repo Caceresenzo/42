@@ -212,6 +212,21 @@ main(int argc, char **argv)
 		SAVE();
 	}
 
+	FORK("no null terminated strtab")
+	{
+		Elf64_Shdr *symbol_section_header = section_header_find(header, SHT_SYMTAB);
+		assert(symbol_section_header != NULL);
+
+		Elf64_Shdr *strtab_section_header = section_header_at(header, symbol_section_header->sh_link);
+		assert(strtab_section_header != NULL);
+		assert(strtab_section_header->sh_type == SHT_STRTAB);
+
+		char *data = ptr + strtab_section_header->sh_offset;
+		memset(data, 'x', strtab_section_header->sh_size + 1);
+
+		SAVE();
+	}
+
 	FORK("overflowing strtab")
 	{
 		Elf64_Shdr *symbol_section_header = section_header_find(header, SHT_SYMTAB);
@@ -222,16 +237,7 @@ main(int argc, char **argv)
 		assert(strtab_section_header->sh_type == SHT_STRTAB);
 
 		char *data = ptr + strtab_section_header->sh_offset;
-		memset(data, 'x', strtab_section_header->sh_size);
-
-//		Elf64_Shdr *section_strtab_section_header = section_header_at(header, header->e_shstrndx);
-//		assert(section_strtab_section_header != NULL);
-//		assert(section_strtab_section_header->sh_type == SHT_STRTAB);
-//
-//		data = ptr + section_strtab_section_header->sh_offset;
-//		memset(data, 'x', section_strtab_section_header->sh_size);
-//
-//		printf("%p\n%p\n", strtab_section_header->sh_offset, section_strtab_section_header->sh_offset);
+		memset(data, 'x', statbuf.st_size - strtab_section_header->sh_offset);
 
 		SAVE();
 	}
