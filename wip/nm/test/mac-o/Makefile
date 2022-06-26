@@ -4,7 +4,7 @@ binaries:
 	unzip binaries.zip -d binaries/
 
 clean:
-	rm -rf binaries/
+	rm -rf binaries
 
 list-files: binaries
 	@find binaries/ -type f
