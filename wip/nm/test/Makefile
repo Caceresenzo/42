@@ -6,7 +6,7 @@ endif
 
 DOCKER_IMAGE = nm-test-compiler
 
-all: simple advanced
+all: simple advanced mac-o
 
 docker:
 	docker build -t $(DOCKER_IMAGE) .
@@ -32,4 +32,4 @@ list-files:
 	@make -s list-files -C mac-o | xargs -I{} readlink -f mac-o/{}
 	@make -s list-files -C advanced | xargs -I{} readlink -f advanced/{}
 
-.PHONY: simple advanced list-files
+.PHONY: simple advanced mac-o list-files
