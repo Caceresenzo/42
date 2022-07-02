@@ -41,7 +41,7 @@ nano:
 	sh download-and-compile.sh nano https://www.nano-editor.org/dist/v6/nano-6.3.tar.xz
 	sh copy-elf.sh nano
 
-list-files: $(PROJECTS)
+list-files:
 	@find $(PROJECTS) -type f
 
 .PHONY: all clean list-files

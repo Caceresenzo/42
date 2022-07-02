@@ -6,7 +6,7 @@ binaries:
 clean:
 	rm -rf binaries
 
-list-files: binaries
+list-files:
 	@find binaries/ -type f
 
 .PHONY: all clean list-files
