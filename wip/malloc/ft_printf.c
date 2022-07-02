@@ -126,21 +126,32 @@ ft_vdprintf(int fd, const char *format, va_list args)
 				break;
 			}
 
+			case 'L':
+			{
+				unsigned long n = va_arg(args, long);
+
+				wrote += ft_putunbr_fd_dec(n, fd);
+
+				break;
+			}
+
 			case 'x':
+			case 'X':
 			{
 				unsigned long n = va_arg(args, unsigned long);
 
-				wrote += ft_putunbr_fd_hex(n, fd);
+				wrote += ft_putunbr_fd_hex(n, fd, specifier == 'X');
 
 				break;
 			}
 
 			case 'p':
+			case 'P':
 			{
 				void *ptr = va_arg(args, void*);
 
 				wrote += ft_putstr_fd("0x", fd);
-				wrote += ft_putunbr_fd_hex((unsigned long)ptr, fd);
+				wrote += ft_putunbr_fd_hex((unsigned long)ptr, fd, specifier == 'P');
 
 				break;
 			}

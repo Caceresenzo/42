@@ -24,6 +24,12 @@
 
 region_t *g_region = NULL;
 
+region_t*
+region_get_first(void)
+{
+	return (g_region);
+}
+
 void*
 region_get_start(region_t *region)
 {

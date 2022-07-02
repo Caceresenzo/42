@@ -13,6 +13,7 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <strings.h>
 
 #include "ft.h"
@@ -33,6 +34,12 @@ tune_get()
 		{
 			tune_initialize(&tunes);
 			initialized = true;
+
+			if (tunes.show_mem_at_exit)
+			{
+				if (atexit(&show_alloc_mem) != 0)
+					ft_dprintf(2, "atexit(show_alloc_mem): %s\n", strerror(errno));
+			}
 		}
 
 		pthread_mutex_unlock(&lock);
@@ -64,4 +71,5 @@ tune_initialize(tunes_t *tunes)
 	tunes->log = tune_find_boolean(TO_ENV_VAR_NAME("LOG"), false);
 	tunes->log_colored = tune_find_boolean(TO_ENV_VAR_NAME("LOG_COLORED"), true);
 	tunes->check_magic = tune_find_boolean(TO_ENV_VAR_NAME("CHECK_MAGIC"), true);
+	tunes->show_mem_at_exit = tune_find_boolean(TO_ENV_VAR_NAME("SHOW_MEM_AT_EXIT"), false);
 }

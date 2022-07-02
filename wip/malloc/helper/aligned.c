@@ -19,6 +19,7 @@ main()
 //				printf("%p\n", ptr);
 
 			find |= ptr;
+			free((void*)ptr);
 		}
 	}
 	char bits = 0;

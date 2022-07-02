@@ -38,29 +38,35 @@ ft_putchar_fd(char c, int fd)
 }
 
 ssize_t
-ft_putunbr_fd(unsigned long n, size_t radix, int fd)
+ft_putunbr_fd(unsigned long n, size_t radix, int fd, bool upper)
 {
+	static const char *alphabets[] = {
+		"0123456789abcdef",
+		"0123456789ABCDEF",
+	};
+
 	ssize_t recursive = 0;
 
 	if (n >= radix)
-		recursive = ft_putunbr_fd(n / radix, radix, fd);
+		recursive = ft_putunbr_fd(n / radix, radix, fd, upper);
 
 	if (recursive == -1)
 		return (-1);
 
-	return (recursive + ft_putchar_fd("0123456789abcdef"[n % radix], fd));
+	const char *alphabet = alphabets[!!upper];
+	return (recursive + ft_putchar_fd(alphabet[n % radix], fd));
 }
 
 ssize_t
 ft_putunbr_fd_dec(unsigned long n, int fd)
 {
-	return (ft_putunbr_fd(n, 10, fd));
+	return (ft_putunbr_fd(n, 10, fd, false));
 }
 
 ssize_t
-ft_putunbr_fd_hex(unsigned long n, int fd)
+ft_putunbr_fd_hex(unsigned long n, int fd, bool upper)
 {
-	return (ft_putunbr_fd(n, 16, fd));
+	return (ft_putunbr_fd(n, 16, fd, upper));
 }
 
 ssize_t

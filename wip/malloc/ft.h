@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include <string.h>
 
-#define BASH_COLOR(n) ("\e[" #n "m")
+#define BASH_COLOR(n) "\e[" #n "m"
 #define COLOR_RED BASH_COLOR(31)
 #define COLOR_GREEN BASH_COLOR(32)
 #define COLOR_YELLOW BASH_COLOR(33)
@@ -38,13 +38,13 @@ ssize_t
 ft_putchar_fd(char c, int fd);
 
 ssize_t
-ft_putunbr_fd(unsigned long n, size_t radix, int fd);
+ft_putunbr_fd(unsigned long n, size_t radix, int fd, bool upper);
 
 ssize_t
 ft_putunbr_fd_dec(unsigned long n, int fd);
 
 ssize_t
-ft_putunbr_fd_hex(unsigned long n, int fd);
+ft_putunbr_fd_hex(unsigned long n, int fd, bool upper);
 
 ssize_t
 ft_putstr_fd(const char *str, int fd);

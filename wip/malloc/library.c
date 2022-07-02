@@ -165,3 +165,13 @@ reallocarray(void *ptr, size_t nmemb, size_t size)
 
 	return (result);
 }
+
+void
+show_alloc_mem()
+{
+	LOCK_ACQUIRE();
+
+	show_alloc_mem_impl();
+
+	LOCK_RELEASE();
+}

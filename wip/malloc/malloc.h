@@ -84,7 +84,11 @@ typedef struct
 	bool log;
 	bool log_colored;
 	bool check_magic;
+	bool show_mem_at_exit;
 } tunes_t;
+
+region_t*
+region_get_first(void);
 
 void*
 region_get_start(region_t *region);
@@ -157,5 +161,8 @@ calloc_impl(const char *caller, size_t nmemb, size_t size);
 
 void*
 reallocarray_impl(const char *caller, void *ptr, size_t nmemb, size_t size);
+
+void
+show_alloc_mem_impl();
 
 #endif
