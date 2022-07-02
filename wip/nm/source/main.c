@@ -221,7 +221,7 @@ main_file(t_nm *nm, const char *file, bool multiple)
 {
 	struct stat statbuf;
 
-	int fd = open(file, 0);
+	int fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
 		print_message_errno(STDERR_FILENO, file);
