@@ -1,5 +1,5 @@
-NM_OUTPUT=/dev/nm.output
-FT_NM_OUTPUT=/dev/ft_nm.output
+NM_OUTPUT=/tmp/nm.output
+FT_NM_OUTPUT=/tmp/ft_nm.output
 
 COLOR_RED=$(printf '\033[31m')
 COLOR_GREEN=$(printf '\033[32m')
