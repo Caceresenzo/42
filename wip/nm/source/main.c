@@ -30,11 +30,25 @@
 #include "nm.h"
 
 static void
-print_message(int fd, const char *file, const char *text)
+print_message(int fd, const char *file, const char *text, bool quote)
 {
 	ft_putstr_fd("ft_nm: ", fd);
+	if (quote)
+		ft_putchar_fd('\'', fd);
 	ft_putstr_fd(file, fd);
+	if (quote)
+		ft_putchar_fd('\'', fd);
 	ft_putstr_fd(": ", fd);
+	ft_putstr_fd(text, fd);
+	ft_putstr_fd("\n", fd);
+}
+
+static void
+print_message_warning(int fd, const char *file, const char *text)
+{
+	ft_putstr_fd("ft_nm: Warning: '", fd);
+	ft_putstr_fd(file, fd);
+	ft_putstr_fd("' ", fd);
 	ft_putstr_fd(text, fd);
 	ft_putstr_fd("\n", fd);
 }
@@ -42,7 +56,14 @@ print_message(int fd, const char *file, const char *text)
 static void
 print_message_errno(int fd, const char *file)
 {
-	print_message(fd, file, strerror(errno));
+	const char *error;
+
+	if (errno == ENOENT)
+		error = "No such file";
+	else
+		error = strerror(errno);
+
+	print_message(fd, file, error, true);
 }
 
 static void
@@ -236,9 +257,16 @@ main_file(t_nm *nm, const char *file, bool multiple)
 		return (1);
 	}
 
+	if (S_ISDIR(statbuf.st_mode))
+	{
+		print_message_warning(STDERR_FILENO, file, "is a directory");
+		close(fd);
+		return (1);
+	}
+
 	if (!S_ISREG(statbuf.st_mode))
 	{
-		print_message(STDERR_FILENO, file, "not a regular file");
+		print_message_warning(STDERR_FILENO, file, "is not an ordinary file");
 		close(fd);
 		return (1);
 	}
@@ -261,9 +289,9 @@ main_file(t_nm *nm, const char *file, bool multiple)
 	if (message.text)
 	{
 		if (message.error)
-			print_message(STDERR_FILENO, file, message.text);
+			print_message(STDERR_FILENO, file, message.text, false);
 		else
-			print_message(STDOUT_FILENO, file, message.text);
+			print_message(STDOUT_FILENO, file, message.text, false);
 	}
 
 	munmap(ptr, statbuf.st_size);

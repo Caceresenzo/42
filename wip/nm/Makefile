@@ -37,6 +37,9 @@ re: fclean all
 test: all
 	sh test/run.sh
 
+test-error: all
+	sh test/run-error.sh
+
 test-corrupted: all
 	make -C test/corrupted test
 

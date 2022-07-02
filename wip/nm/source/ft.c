@@ -13,7 +13,7 @@
 #include "ft.h"
 
 #include <stddef.h>
-#include <sys/unistd.h>
+#include <unistd.h>
 
 int
 ft_islower(int c)
@@ -125,24 +125,6 @@ ft_strstartswith(const char *str, const char *prefix)
 }
 
 void*
-ft_memchr(const void *s, int c, size_t n)
-{
-	if (!s)
-		return (NULL);
-
-	size_t index = 0;
-	while (index < n)
-	{
-		if (((unsigned char*)s)[index] == (unsigned char)c)
-			return (((unsigned char*)s) + index);
-
-		index++;
-	}
-
-	return (NULL);
-}
-
-void*
 ft_calloc(size_t count, size_t size)
 {
 	size_t required = count * size;
@@ -251,4 +233,25 @@ ft_itoa(long n, char *string, int radix)
 			break;
 	}
 	return (string);
+}
+
+char*
+ft_strchr(const char *s, int c)
+{
+	return (ft_memchr(s, c, ft_strlen(s) + 1));
+}
+
+void*
+ft_memchr(const void *s, int c, size_t n)
+{
+	const char *ptr = s;
+
+	while (n--)
+	{
+		if (*ptr == c)
+			return ((void*)ptr);
+		++ptr;
+	}
+
+	return (NULL);
 }

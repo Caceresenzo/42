@@ -44,9 +44,6 @@ bool
 ft_strstartswith(const char *str, const char *prefix);
 
 void*
-ft_memchr(const void *s, int c, size_t n);
-
-void*
 ft_calloc(size_t count, size_t size);
 
 void*
@@ -66,5 +63,11 @@ ft_memcmp(const void *s1, const void *s2, size_t n);
 
 char*
 ft_itoa(long n, char *string, int radix);
+
+char*
+ft_strchr(const char *s, int c);
+
+void*
+ft_memchr(const void *s, int c, size_t n);
 
 #endif
