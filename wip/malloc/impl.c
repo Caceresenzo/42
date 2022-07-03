@@ -92,11 +92,14 @@ malloc_impl(const char *caller, size_t size)
 		return (region_get_start(region));
 
 	block_t *block = block_find_and_split(region, size);
-	assert(block != NULL);
+	if (!block)
+	{
+		ft_putstr_fd(caller, 2);
+		ft_putstr_fd(": no block found\n", 2);
+		abort();
+	}
 
 	return (block_get_start(block));
-
-	(void)caller;
 }
 
 void*
@@ -167,6 +170,7 @@ show_alloc_mem_impl()
 {
 	for (region_t *region = region_get_first(); region != NULL; region = region->next)
 	{
+//		ft_printf("%P\n", region_get_start(region));
 		ft_printf("%s : %P\n", region_type_to_string(region->type), region_get_start(region));
 
 		if (region->type == RT_LARGE)
