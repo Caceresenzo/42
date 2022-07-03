@@ -103,6 +103,52 @@ region_create(size_t size)
 	return (region);
 }
 
+void
+region_insert(region_t *region)
+{
+	region_t *iterator = g_region;
+	region_t *previous = NULL;
+
+	for (; iterator; iterator = iterator->next)
+	{
+		region_t *previous = iterator->previous;
+
+		if (region > previous && region < iterator)
+			break;
+
+		previous = iterator;
+	}
+
+	if (iterator)
+	{
+		if (iterator->previous)
+		{
+			iterator->previous->next = region;
+			region->previous = iterator->previous;
+
+			iterator->previous = region;
+			region->next = iterator;
+		}
+		else /* first */
+		{
+			region->next = g_region;
+			region->next->previous = region;
+
+			g_region = region;
+		}
+	}
+	else if (previous) /* end */
+	{
+		previous->next = region;
+		region->previous = previous;
+	}
+	else
+	{
+		assert(g_region == NULL);
+		g_region = region;
+	}
+}
+
 region_t*
 region_find_or_create(size_t size)
 {
@@ -120,13 +166,7 @@ region_find_or_create(size_t size)
 	if (!region)
 		return (NULL);
 
-	if (g_region)
-	{
-		region->next = g_region;
-		region->next->previous = region;
-	}
-
-	g_region = region;
+	region_insert(region);
 
 	return (region);
 }
