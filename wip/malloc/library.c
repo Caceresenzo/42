@@ -16,9 +16,14 @@
 #include <unistd.h>
 #include <strings.h>
 #include <pthread.h>
+#include <errno.h>
 
 #include "ft.h"
 #include "malloc.h"
+
+#define ERRNO_ZERO() errno = 0;
+#define ERRNO_SAVE() int error = errno;
+#define ERRNO_RESTORE() errno = error;
 
 #define TUNER_GET() const tunes_t *tunes = tune_get();
 
@@ -87,11 +92,17 @@ malloc(size_t size)
 
 	LOG_START(COLOR_GREEN, "size=%l", size);
 
+	ERRNO_ZERO();
+
 	void *result = malloc_impl(__FUNCTION__, size);
+
+	ERRNO_SAVE();
 
 	LOG_END_RESULT(result);
 
 	LOCK_RELEASE();
+
+	ERRNO_RESTORE();
 
 	return (result);
 }
@@ -105,11 +116,17 @@ free(void *ptr)
 
 	LOG_START(COLOR_YELLOW, "ptr=%p", ptr);
 
+	ERRNO_ZERO();
+
 	free_impl(__FUNCTION__, ptr);
+
+	ERRNO_SAVE();
 
 	LOG_END_VOID();
 
 	LOCK_RELEASE();
+
+	ERRNO_RESTORE();
 }
 
 void*
@@ -121,11 +138,17 @@ realloc(void *ptr, size_t size)
 
 	LOG_START(COLOR_BLUE, "ptr=%p, size=%l", ptr, size);
 
+	ERRNO_ZERO();
+
 	void *result = realloc_impl(__FUNCTION__, ptr, size);
+
+	ERRNO_SAVE();
 
 	LOG_END_RESULT(result);
 
 	LOCK_RELEASE();
+
+	ERRNO_RESTORE();
 
 	return (result);
 }
@@ -139,11 +162,17 @@ calloc(size_t nmemb, size_t size)
 
 	LOG_START(COLOR_PURPLE, "nmemb=%l, size=%l", nmemb, size);
 
+	ERRNO_ZERO();
+
 	void *result = calloc_impl(__FUNCTION__, nmemb, size);
+
+	ERRNO_SAVE();
 
 	LOG_END_RESULT(result);
 
 	LOCK_RELEASE();
+
+	ERRNO_RESTORE();
 
 	return (result);
 }
@@ -157,11 +186,17 @@ reallocarray(void *ptr, size_t nmemb, size_t size)
 
 	LOG_START(COLOR_CYAN, "ptr=%p, nmemb=%l, size=%l", ptr, nmemb, size);
 
+	ERRNO_ZERO();
+
 	void *result = reallocarray_impl(__FUNCTION__, ptr, nmemb, size);
+
+	ERRNO_SAVE();
 
 	LOG_END_RESULT(result);
 
 	LOCK_RELEASE();
+
+	ERRNO_RESTORE();
 
 	return (result);
 }
@@ -171,7 +206,13 @@ show_alloc_mem()
 {
 	LOCK_ACQUIRE();
 
+	ERRNO_ZERO();
+
 	show_alloc_mem_impl();
 
+	ERRNO_SAVE();
+
 	LOCK_RELEASE();
+
+	ERRNO_RESTORE();
 }
