@@ -80,10 +80,7 @@ region_create(size_t size)
 
 	region_t *region = mmap(NULL, sized.length, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (region == MAP_FAILED)
-	{
-		ft_printf(COLOR_GREEN "%s" COLOR_RESET "\n", strerror(errno));
 		return (NULL);
-	}
 
 	memset(region, 0, sizeof(region_t));
 	region->magic = REGION_MAGIC;
