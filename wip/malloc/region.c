@@ -57,7 +57,7 @@ region_estimate_length(size_t size)
 	if (size < page_size * 4)
 	{
 		sized.type = RT_TINY;
-		sized.length = page_size * 4;
+		sized.length = page_size * 8;
 	}
 	else if (size < page_size * 32)
 	{
@@ -93,6 +93,7 @@ region_create(size_t size)
 
 		block_t *block = region_get_first_block(region);
 		memset(block, 0, sizeof(block_t));
+		block->magic = BLOCK_MAGIC;
 		block->free = true;
 		block->size = region->free_size;
 	}

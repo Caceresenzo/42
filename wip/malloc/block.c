@@ -40,6 +40,7 @@ block_split(region_t *region, block_t *block, size_t size)
 	{
 		block_t *second = (void*)((char*)block_get_start(block) + size);
 		memset(second, 0, sizeof(block_t));
+		second->magic = BLOCK_MAGIC;
 		second->free = true;
 		second->size = block->size - size - sizeof(block_t);
 
@@ -74,6 +75,8 @@ block_find(region_t *region, size_t size)
 
 	while (block)
 	{
+		assert(block->magic == BLOCK_MAGIC);
+
 		if (block->free && block->size >= size)
 			return (block);
 

@@ -59,11 +59,12 @@ typedef struct sized_region_type_s
 	size_t length;
 } sized_region_type_t;
 
-#define REGION_MAGIC (42)
+/* 0b10101010 */
+#define REGION_MAGIC (0xaa)
 
 typedef struct region_s
 {
-	char magic;
+	unsigned char magic;
 	size_t size;
 	size_t free_size;
 	region_type_t type;
@@ -71,8 +72,12 @@ typedef struct region_s
 	struct region_s *previous;
 } region_t;
 
+/* 0b01010101 */
+#define BLOCK_MAGIC (0x55)
+
 typedef struct block_s
 {
+	unsigned char magic;
 	bool free;
 	size_t size;
 	struct block_s *next;
