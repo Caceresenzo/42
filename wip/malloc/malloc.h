@@ -83,7 +83,6 @@ typedef struct
 {
 	bool log;
 	bool log_colored;
-	bool check_magic;
 	bool show_mem_at_exit;
 	bool show_free_block;
 } tunes_t;
