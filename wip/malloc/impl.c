@@ -156,39 +156,69 @@ reallocarray_impl(const char *caller, void *ptr, size_t nmemb, size_t size)
 }
 
 static void
-show_alloc_mem_impl_print_range(const void *start, const void *end, bool free)
+show_alloc_mem_impl_print_range(const void *start, const void *end, bool show_free, bool free)
 {
 	size_t size = end - start;
 	const char *plural = size > 1 ? "s" : "";
-	const char *used = free ? "free" : "used";
 
-	ft_printf("%P - %P : %L octet%s (%s)\n", start, end, size, plural, used);
+	if (show_free)
+	{
+		const char *used = free ? "free" : "used";
+
+		ft_printf("%P - %P : %L octet%s (%s)\n", start, end, size, plural, used);
+	}
+	else
+		ft_printf("%P - %P : %L octet%s\n", start, end, size, plural);
+}
+
+static void
+show_alloc_mem_impl_print_header(region_t *region)
+{
+	ft_printf("%s : %P\n", region_type_to_string(region->type), region_get_start(region));
+}
+
+static void
+show_alloc_mem_impl_show_large(region_t *region, bool show_free)
+{
+	void *start = region_get_start(region);
+	void *end = region_get_end(region);
+
+	show_alloc_mem_impl_print_range(start, end, show_free, false);
+}
+
+static void
+show_alloc_mem_impl_show_block(region_t *region, block_t *block, bool show_free, bool *header)
+{
+	void *start = block_get_start(block);
+	void *end = block_get_end(block);
+
+	if (!show_free && block->free)
+		return;
+
+	if (!*header)
+	{
+		show_alloc_mem_impl_print_header(region);
+		*header = true;
+	}
+
+	show_alloc_mem_impl_print_range(start, end, show_free, block->free);
 }
 
 void
-show_alloc_mem_impl()
+show_alloc_mem_impl(bool show_free)
 {
 	for (region_t *region = region_get_first(); region != NULL; region = region->next)
 	{
-//		ft_printf("%P\n", region_get_start(region));
-		ft_printf("%s : %P\n", region_type_to_string(region->type), region_get_start(region));
-
 		if (region->type == RT_LARGE)
 		{
-			void *start = region_get_start(region);
-			void *end = region_get_end(region);
-
-			show_alloc_mem_impl_print_range(start, end, false);
+			show_alloc_mem_impl_print_header(region);
+			show_alloc_mem_impl_show_large(region, show_free);
 		}
 		else
 		{
+			bool header = false;
 			for (block_t *block = region_get_first_block(region); block != NULL; block = block->next)
-			{
-				void *start = block_get_start(block);
-				void *end = block_get_end(block);
-
-				show_alloc_mem_impl_print_range(start, end, block->free);
-			}
+				show_alloc_mem_impl_show_block(region, block, show_free, &header);
 		}
 	}
 }

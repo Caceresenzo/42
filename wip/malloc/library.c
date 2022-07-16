@@ -206,9 +206,11 @@ show_alloc_mem()
 {
 	LOCK_ACQUIRE();
 
+	TUNER_GET();
+
 	ERRNO_ZERO();
 
-	show_alloc_mem_impl();
+	show_alloc_mem_impl(tunes->show_free_block);
 
 	ERRNO_SAVE();
 

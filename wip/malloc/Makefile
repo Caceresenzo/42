@@ -51,6 +51,10 @@ test-align: $(NAME)
 	gcc helper/aligned.c
 	LD_PRELOAD=./libft_malloc.so ./a.out
 
+test-simple: $(NAME)
+	gcc helper/simple.c
+	LD_PRELOAD=./libft_malloc.so ./a.out
+
 gdb: $(NAME)
 	@gcc test.c
 	gdb ./a.out

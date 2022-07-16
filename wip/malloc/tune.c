@@ -72,4 +72,5 @@ tune_initialize(tunes_t *tunes)
 	tunes->log_colored = tune_find_boolean(TO_ENV_VAR_NAME("LOG_COLORED"), true);
 	tunes->check_magic = tune_find_boolean(TO_ENV_VAR_NAME("CHECK_MAGIC"), true);
 	tunes->show_mem_at_exit = tune_find_boolean(TO_ENV_VAR_NAME("SHOW_MEM_AT_EXIT"), false);
+	tunes->show_free_block = tune_find_boolean(TO_ENV_VAR_NAME("SHOW_FREE_BLOCK"), false);
 }

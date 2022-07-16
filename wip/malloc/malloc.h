@@ -85,6 +85,7 @@ typedef struct
 	bool log_colored;
 	bool check_magic;
 	bool show_mem_at_exit;
+	bool show_free_block;
 } tunes_t;
 
 region_t*
@@ -163,6 +164,6 @@ void*
 reallocarray_impl(const char *caller, void *ptr, size_t nmemb, size_t size);
 
 void
-show_alloc_mem_impl();
+show_alloc_mem_impl(bool show_free);
 
 #endif
