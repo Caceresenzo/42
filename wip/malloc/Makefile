@@ -4,16 +4,26 @@ OBJS = $(SRCS:.c=.o)
 CC   = gcc
 FLAGS = -Wall -Wextra -g3 -fPIC -fno-gnu-unique -rdynamic
 
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
+
+NAME_HOST = libft_malloc_${HOSTTYPE}.so
+
 .c.o:
 	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
+
+$(NAME_HOST): $(NAME)
+	rm -f $(NAME_HOST)
+	ln -s $(NAME) $(NAME_HOST)
 
 $(NAME): ${OBJS}
 	gcc $(OBJS) -o $(NAME) -fPIC -shared -fno-gnu-unique
 
-all: $(NAME)
+all: $(NAME) $(NAME_HOST)
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(NAME) $(NAME_HOST)
 
 clean:
 	rm -f $(OBJS)
