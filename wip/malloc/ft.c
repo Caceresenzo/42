@@ -16,6 +16,15 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+
+void
+ft_assert_abort(const char *filename, int line, const char *function, const char *code)
+{
+	ft_printf("%s:%d: %s: Assertion `%s' failed.\n", filename, line, function, code);
+	abort();
+}
 
 int
 ft_tolower(int c)

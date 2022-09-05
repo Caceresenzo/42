@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h>
 #include <errno.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -142,7 +141,7 @@ region_insert(region_t *region)
 	}
 	else
 	{
-		assert(g_region == NULL);
+		ASSERT(g_region == NULL);
 		g_region = region;
 	}
 }
@@ -179,7 +178,7 @@ region_search(void *ptr)
 
 	while (region)
 	{
-		assert(region->magic == REGION_MAGIC);
+		ASSERT(region->magic == REGION_MAGIC);
 
 		void *start = region_get_start(region);
 

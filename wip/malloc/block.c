@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <assert.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <string.h>
@@ -45,7 +44,7 @@ block_split(region_t *region, block_t *block, size_t size)
 		second->size = block->size - size - sizeof(block_t);
 
 		/* prevent zero size block */
-		assert(second->size);
+		ASSERT(second->size);
 
 		if (block->next)
 		{
@@ -75,7 +74,7 @@ block_find(region_t *region, size_t size)
 
 	while (block)
 	{
-		assert(block->magic == BLOCK_MAGIC);
+		ASSERT(block->magic == BLOCK_MAGIC);
 
 		if (block->free && block->size >= size)
 			return (block);

@@ -28,6 +28,11 @@
 #define COLOR_CYAN BASH_COLOR(36)
 #define COLOR_RESET BASH_COLOR(0)
 
+#define ASSERT(code) if (!(code)) ft_assert_abort(__FILE__, __LINE__, __FUNCTION__, #code);
+
+void
+ft_assert_abort(const char *filename, int line, const char *function, const char *code);
+
 int
 ft_tolower(int c);
 
