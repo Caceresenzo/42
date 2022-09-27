@@ -51,8 +51,19 @@ ui_label_set_background_color(t_ui_label *label, t_color background_color)
 void
 ui_label_size(t_ui_label *label, void *data)
 {
-	size_t len = strlen(label->text);
-	label->super.size = (t_vector2i ) { .x = len * 8, .y = 16 };
+	size_t len = 0;
+	size_t line = 1;
+
+	char *str = label->text;
+	while (*str)
+	{
+		++len;
+		if (*str == '\n')
+			++line;
+		++str;
+	}
+
+	label->super.size = (t_vector2i ) { .x = len * 8, .y = line * 16 };
 	(void)data;
 }
 
