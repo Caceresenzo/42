@@ -28,7 +28,7 @@ typedef struct s_ui_container
 } t_ui_container;
 
 t_ui_container*
-ui_container_new(void);
+ui_container_new(t_ui_container_direction direction);
 
 void
 ui_container_size(t_ui_container *widget, void *data);

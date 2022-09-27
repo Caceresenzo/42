@@ -21,12 +21,12 @@ static t_ui_widget_descriptor container_descriptor = {
 };
 
 t_ui_container*
-ui_container_new(void)
+ui_container_new(t_ui_container_direction direction)
 {
 	t_ui_container *container = cast(ui_widget_new(&container_descriptor));
 	container->super.on.size.function = cast(&ui_container_size);
 	container->super.on.draw.function = cast(&ui_container_draw);
-	container->direction = CONTAINER_DIRECTION_HORIZONTAL;
+	container->direction = direction;
 
 	return (container);
 }
@@ -44,9 +44,16 @@ ui_container_size(t_ui_container *container, void *data)
 	{
 		widget = node->data;
 		ui_widget_size(widget);
-		widget->position.y = y;
-		y += widget->size.y;
-		x = MAX(widget->size.x, x);
+		if (container->direction == CONTAINER_DIRECTION_VERTICAL)
+		{
+			widget->position.y = y;
+			y += widget->size.y;
+			x = MAX(widget->size.x, x);
+		} else {
+			widget->position.x = x;
+			x += widget->size.x;
+			y = MAX(widget->size.y, y);
+		}
 		node = node->next;
 	}
 	container->super.size.x = x;
