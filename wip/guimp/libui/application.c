@@ -17,7 +17,12 @@ ui_application_new(void)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL_Error: %s\n", SDL_GetError());
+		printf("SDL_Init: %s\n", SDL_GetError());
+		abort();
+	}
+	if (TTF_Init() < 0)
+	{
+		printf("TTF_Init: %s\n", TTF_GetError());
 		abort();
 	}
 	return (calloc(sizeof(t_ui_application), 1));

@@ -18,6 +18,7 @@
 # include "utility.h"
 # include "core.h"
 # include "application.h"
+# include "font.h"
 # include "window.h"
 # include "debug.h"
 # include "callback.h"

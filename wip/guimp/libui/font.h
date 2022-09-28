@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math.h                                             :+:      :+:    :+:   */
+/*   font.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/25 23:29:04 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/09/25 23:29:04 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/09/28 21:38:33 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/09/28 21:38:33 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#ifndef FONT_H
+# define FONT_H
 
-typedef struct
-{
-	int x;
-	int y;
-} t_vector2i;
+# include "ui.h"
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
+bool ui_font_load(t_ui_application *app, const char *path, int size);
 
 #endif

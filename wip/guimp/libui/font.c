@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math.h                                             :+:      :+:    :+:   */
+/*   font.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/25 23:29:04 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/09/25 23:29:04 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/09/28 21:38:20 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/09/28 21:38:20 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MATH_H
-# define MATH_H
+#include "font.h"
 
-typedef struct
+bool
+ui_font_load(t_ui_application *app, const char *path, int size)
 {
-	int x;
-	int y;
-} t_vector2i;
-
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-
-#endif
+	app->font = TTF_OpenFont(path, size);
+	if (!app->font)
+		sdl_abort(TTF_OpenFont);
+	return (true);
+}

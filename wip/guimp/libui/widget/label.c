@@ -51,28 +51,77 @@ ui_label_set_background_color(t_ui_label *label, t_color background_color)
 void
 ui_label_size(t_ui_label *label, void *data)
 {
-	size_t len = 0;
-	size_t line = 1;
+	t_vector2i size = { 0, 0 };
 
 	char *str = label->text;
+	char *line_start = label->text;
 	while (*str)
 	{
-		++len;
 		if (*str == '\n')
-			++line;
+		{
+			*str = '\0';
+			int w, h;
+			TTF_SizeText(label->super.window->app->font, line_start, &w, &h);
+			size.x = MAX(size.x, w);
+			size.y += h;
+			*str = '\n';
+			line_start = str + 1;
+		}
 		++str;
 	}
 
-	label->super.size = (t_vector2i ) { .x = len * 8, .y = line * 16 };
+	int w, h;
+	TTF_SizeText(label->super.window->app->font, line_start, &w, &h);
+	size.x = MAX(size.x, w);
+	size.y += h;
+
+	label->super.size = size;
 	(void)data;
 }
 
 void
 ui_label_draw(t_ui_label *label, void *data)
 {
-	SDL_LockSurface(label->super._surface);
+	SDL_Color White = { 255, 255, 255 };
+
+	//	SDL_LockSurface(label->super._surface);
 	SDL_FillRect(label->super._surface, NULL, SDL_MapRGB(label->super._surface->format, label->background_color.red, label->background_color.green, label->background_color.blue));
-	SDL_UnlockSurface(label->super._surface);
+
+
+	int y = 0;
+
+	char *str = label->text;
+	char *line_start = label->text;
+	while (*str)
+	{
+		if (*str == '\n')
+		{
+			*str = '\0';
+
+			SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
+			printf("%s\n", TTF_GetError());
+			SDL_Rect destrec = { 0, y, line->w, line->h };
+			SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
+			SDL_FreeSurface(line);
+
+			y += line->h;
+
+			*str = '\n';
+			line_start = str + 1;
+		}
+		++str;
+	}
+
+
+	SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
+	printf("%s\n", TTF_GetError());
+	SDL_Rect destrec = { 0, y, line->w, line->h };
+	SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
+	SDL_FreeSurface(line);
+
+//	SDL_BlitSurface(line, NULL, label->super._surface, NULL);
+
+//	SDL_UnlockSurface(label->super._surface);
 
 	(void)data;
 }

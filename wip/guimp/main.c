@@ -110,25 +110,41 @@ create_window(t_ui_application *app)
 	window = ui_window_new(app, position, size, SDL_WINDOW_SHOWN);
 	ui_window_set_title(window, "Hello");
 
-	t_ui_container *root = ui_container_new();
+	t_ui_container *root = ui_container_new(CONTAINER_DIRECTION_VERTICAL);
 	ui_window_set_root(window, cast(root));
 
-	for (int i = 0; i < 3; ++i)
+	//	for (int i = 0; i < 3; ++i)
+	//	{
+	//		container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
+	//		ui_widget_add(cast(root), cast(container));
+	//
+	//		label = ui_label_new("Hello World");
+	//		ui_label_set_background_color(label, (t_color ) { 0, 255, 0 });
+	//		ui_widget_add(cast(container), cast(label));
+	//
+	//		label = ui_label_new("Hello World\nIn publishing and graphic design");
+	//		ui_label_set_background_color(label, (t_color ) { 0, 0, 255 });
+	//		ui_widget_add(cast(container), cast(label));
+	//
+	//		label = ui_label_new("Hello World");
+	//		ui_label_set_background_color(label, (t_color ) { 0, 255, 255 });
+	//		ui_widget_add(cast(container), cast(label));
+	//	}
+
+	container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
+	ui_widget_add(cast(root), cast(container));
+
+	const int max = 15;
+	for (int i = 0; i < max; ++i)
 	{
-		container = ui_container_new();
-		ui_widget_add(cast(root), cast(container));
-
-		label = ui_label_new("Hello World");
-		ui_label_set_background_color(label, (t_color ) { 0, 255, 0 });
+		int x = (255 / max) * i;
+		label = ui_label_new("Hello\nWorld");
+		ui_label_set_background_color(label, (t_color ) { 0, x, x });
 		ui_widget_add(cast(container), cast(label));
 
-		label = ui_label_new("Hello WorldHello World");
-		ui_label_set_background_color(label, (t_color ) { 0, 0, 255 });
-		ui_widget_add(cast(container), cast(label));
-
-		label = ui_label_new("Hello World");
-		ui_label_set_background_color(label, (t_color ) { 0, 255, 255 });
-		ui_widget_add(cast(container), cast(label));
+		t_ui_container *parent = container;
+		container = ui_container_new(i % 2);
+		ui_widget_add(cast(parent), cast(container));
 	}
 }
 
@@ -140,6 +156,7 @@ main(int arc, char **argv)
 	t_ui_application *app;
 
 	app = ui_application_new();
+	ui_font_load(app, "Consolas.ttf", 24);
 
 	create_window(app);
 

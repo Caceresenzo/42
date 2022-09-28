@@ -12,9 +12,6 @@
 
 #include "container.h"
 
-#define MAX(x, y) (((x) > (y)) ? (x) : (y))
-#define MIN(x, y) (((x) < (y)) ? (x) : (y))
-
 static t_ui_widget_descriptor container_descriptor = {
 	.name = "container",
 	.size = sizeof(t_ui_container)

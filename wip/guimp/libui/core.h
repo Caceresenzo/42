@@ -42,6 +42,7 @@ struct s_ui_callback_size
 struct s_ui_application
 {
 	const char *name;
+	TTF_Font *font;
 	t_list windows;
 };
 
