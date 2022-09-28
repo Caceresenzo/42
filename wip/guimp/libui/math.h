@@ -22,4 +22,7 @@ typedef struct
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
+t_vector2i
+vector2i_zero();
+
 #endif

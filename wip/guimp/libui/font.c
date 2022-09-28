@@ -17,6 +17,6 @@ ui_font_load(t_ui_application *app, const char *path, int size)
 {
 	app->font = TTF_OpenFont(path, size);
 	if (!app->font)
-		sdl_abort(TTF_OpenFont);
+		sdl_abort("TTF_OpenFont");
 	return (true);
 }

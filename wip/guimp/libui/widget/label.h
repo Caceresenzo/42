@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LABEL_H
-# define LABEL_H
+#ifndef WIDGET_LABEL_H
+# define WIDGET_LABEL_H
 
 # include "../ui.h"
 

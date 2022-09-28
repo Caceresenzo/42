@@ -134,7 +134,7 @@ create_window(t_ui_application *app)
 	container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
 	ui_widget_add(cast(root), cast(container));
 
-	const int max = 15;
+	const int max = 10;
 	for (int i = 0; i < max; ++i)
 	{
 		int x = (255 / max) * i;
@@ -146,6 +146,9 @@ create_window(t_ui_application *app)
 		container = ui_container_new(i % 2);
 		ui_widget_add(cast(parent), cast(container));
 	}
+
+	t_ui_image *image = ui_image_new("buse.png");
+	ui_widget_add(cast(container), cast(image));
 }
 
 int

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CONTAINER_H
-# define CONTAINER_H
+#ifndef WIDGET_CONTAINER_H
+# define WIDGET_CONTAINER_H
 
 #include "../ui.h"
 

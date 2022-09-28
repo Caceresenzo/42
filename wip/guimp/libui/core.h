@@ -64,11 +64,8 @@ struct s_ui_widget
 	t_vector2i size;
 	bool dirty;
 	t_list children;
-	struct
-	{
-		struct s_ui_callback_draw draw;
-		struct s_ui_callback_size size;
-	} on;
+	struct s_ui_callback_draw draw_handler;
+	struct s_ui_callback_size size_handler;
 	SDL_Surface *_surface;
 };
 

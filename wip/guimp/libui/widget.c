@@ -16,6 +16,8 @@ t_ui_widget*
 ui_widget_new(t_ui_widget_descriptor *descriptor)
 {
 	t_ui_widget *widget = calloc(descriptor->size, 1);
+	if (!widget)
+		return (NULL);
 	widget->descriptor = descriptor;
 	widget->dirty = true;
 

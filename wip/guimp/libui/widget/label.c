@@ -21,8 +21,8 @@ t_ui_label*
 ui_label_new(const char *text)
 {
 	t_ui_label *label = cast(ui_widget_new(&label_descriptor));
-	label->super.on.size.function = cast(&ui_label_size);
-	label->super.on.draw.function = cast(&ui_label_draw);
+	label->super.size_handler.function = cast(&ui_label_size);
+	label->super.draw_handler.function = cast(&ui_label_draw);
 	label->text = strdup(text);
 
 	return (label);
@@ -99,7 +99,6 @@ ui_label_draw(t_ui_label *label, void *data)
 			*str = '\0';
 
 			SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
-			printf("%s\n", TTF_GetError());
 			SDL_Rect destrec = { 0, y, line->w, line->h };
 			SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 			SDL_FreeSurface(line);
@@ -114,7 +113,6 @@ ui_label_draw(t_ui_label *label, void *data)
 
 
 	SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
-	printf("%s\n", TTF_GetError());
 	SDL_Rect destrec = { 0, y, line->w, line->h };
 	SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 	SDL_FreeSurface(line);

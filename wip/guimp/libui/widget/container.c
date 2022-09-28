@@ -21,8 +21,8 @@ t_ui_container*
 ui_container_new(t_ui_container_direction direction)
 {
 	t_ui_container *container = cast(ui_widget_new(&container_descriptor));
-	container->super.on.size.function = cast(&ui_container_size);
-	container->super.on.draw.function = cast(&ui_container_draw);
+	container->super.size_handler.function = cast(&ui_container_size);
+	container->super.draw_handler.function = cast(&ui_container_draw);
 	container->direction = direction;
 
 	return (container);

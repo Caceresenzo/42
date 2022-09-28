@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   callback.c                                         :+:      :+:    :+:   */
+/*   optional.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/25 23:25:53 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/09/25 23:25:53 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/09/28 23:47:58 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/09/28 23:47:58 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ui.h"
+#ifndef OPTIONAL_H
+# define OPTIONAL_H
 
-void
-ui_callback_size_call(t_ui_widget *widget)
-{
-	if (widget->size_handler.function)
-		widget->size_handler.function(widget, widget->size_handler.data);
-}
+# include <stdbool.h>
 
-void
-ui_callback_draw_call(t_ui_widget *widget)
+typedef struct s_error
 {
-	if (widget->draw_handler.function)
-		widget->draw_handler.function(widget, widget->draw_handler.data);
-}
+	bool present;
+	const char *message;
+} t_error;
+
+#endif

@@ -25,6 +25,11 @@ ui_application_new(void)
 		printf("TTF_Init: %s\n", TTF_GetError());
 		abort();
 	}
+	if (IMG_Init(IMG_INIT_PNG) < 0)
+	{
+		printf("IMG_Init: %s\n", IMG_GetError());
+		abort();
+	}
 	return (calloc(sizeof(t_ui_application), 1));
 }
 
