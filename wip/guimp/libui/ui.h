@@ -21,7 +21,6 @@
 # include "font.h"
 # include "window.h"
 # include "debug.h"
-# include "callback.h"
 # include "optional.h"
 # include "widget.h"
 # include "widget/container.h"

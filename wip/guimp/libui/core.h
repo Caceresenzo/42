@@ -25,9 +25,8 @@ typedef struct s_ui_window t_ui_window;
 typedef struct s_ui_widget t_ui_widget;
 typedef struct s_ui_widget_descriptor t_ui_widget_descriptor;
 
-typedef struct s_ui_callback_draw t_ui_handler_draw;
-typedef struct s_ui_callback_size t_ui_handler_size;
-typedef struct s_ui_callback_event t_ui_handler_event;
+typedef struct s_ui_widget_function t_ui_widget_function;
+typedef struct s_ui_widget_function_event t_ui_widget_function_event;
 
 typedef enum e_ui_event_type
 {
@@ -76,24 +75,17 @@ typedef struct s_ui_event_mouse_wheel
 	t_vector2i scroll;
 } t_ui_event_mouse_wheel;
 
-struct s_ui_callback_draw
+struct s_ui_widget_function
 {
 	void
-	(*function)(t_ui_widget*, void*);
+	(*code)(t_ui_widget*, void*);
 	void *data;
 };
 
-struct s_ui_callback_size
-{
-	void
-	(*function)(t_ui_widget*, void*);
-	void *data;
-};
-
-struct s_ui_callback_event
+struct s_ui_widget_function_event
 {
 	int
-	(*function)(t_ui_widget*, const t_ui_event_base*, void*);
+	(*code)(t_ui_widget*, const t_ui_event_base*, void*);
 	void *data;
 };
 
@@ -122,27 +114,19 @@ struct s_ui_widget
 	t_vector2i size;
 	bool dirty;
 	t_list children;
-	struct
-	{
-		t_ui_handler_draw draw;
-		t_ui_handler_size size;
-		t_ui_handler_event event;
-	} handlers;
 	SDL_Surface *_surface;
 };
-
-//typedef struct s_handlers
-//{
-//	t_ui_handler_draw draw;
-//	t_ui_handler_size size;
-//	t_ui_handler_event event;
-//} t_handlers;
 
 struct s_ui_widget_descriptor
 {
 	const char *name;
 	const size_t size;
-//	t_handlers handlers;
+	struct
+	{
+		t_ui_widget_function draw;
+		t_ui_widget_function size;
+		t_ui_widget_function_event event;
+	} handlers;
 };
 
 /* Continue to go deeper. */

@@ -30,4 +30,13 @@ ui_widget_set_dirty(t_ui_widget *widget);
 bool
 ui_widget_is_inside(t_ui_widget *widget, t_vector2i point);
 
+void
+ui_widget_draw_call(t_ui_widget *widget);
+
+void
+ui_widget_size_call(t_ui_widget *widget);
+
+int
+ui_widget_event_call(t_ui_widget *widget, const t_ui_event_base *event);
+
 #endif

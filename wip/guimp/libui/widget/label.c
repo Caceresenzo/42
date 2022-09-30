@@ -14,29 +14,27 @@
 
 static t_ui_widget_descriptor label_descriptor = {
 	.name = "label",
-	.size = sizeof(t_ui_label)
+	.size = sizeof(t_ui_label),
+	.handlers = {
+		.draw = {
+			.code = (void*)&ui_label_draw,
+			.data = NULL
+		},
+		.size = {
+			.code = (void*)&ui_label_size,
+			.data = NULL
+		},
+		.event = {
+			.code = (void*)&ui_label_event,
+			.data = NULL
+		}
+	}
 };
-
-static int
-ui_label_event(t_ui_label *label, t_ui_event_base *event, void *data)
-{
-	if (event->type == UI_EVENT_TYPE_MOUSE_MOTION)
-		ui_label_set_background_color(label, (t_color ) { rand() % 255, rand() % 255, rand() % 255 });
-	else if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
-		ui_label_set_background_color(label, (t_color ) { 0, 0, 0 });
-	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
-		ui_label_set_background_color(label, (t_color ) { 255, 255, 255 });
-	return (UI_EVENT_CONSUME);
-	(void)data;
-}
 
 t_ui_label*
 ui_label_new(const char *text)
 {
 	t_ui_label *label = cast(ui_widget_new(&label_descriptor));
-	label->super.handlers.size.function = cast(&ui_label_size);
-	label->super.handlers.draw.function = cast(&ui_label_draw);
-	label->super.handlers.event.function = cast(&ui_label_event);
 	label->text = strdup(text);
 
 	return (label);
@@ -133,5 +131,18 @@ ui_label_draw(t_ui_label *label, void *data)
 
 //	SDL_UnlockSurface(label->super._surface);
 
+	(void)data;
+}
+
+int
+ui_label_event(t_ui_label *label, t_ui_event_base *event, void *data)
+{
+	if (event->type == UI_EVENT_TYPE_MOUSE_MOTION)
+		ui_label_set_background_color(label, (t_color ) { rand() % 255, rand() % 255, rand() % 255 });
+	else if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
+		ui_label_set_background_color(label, (t_color ) { 0, 0, 0 });
+	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
+		ui_label_set_background_color(label, (t_color ) { 255, 255, 255 });
+	return (UI_EVENT_CONSUME);
 	(void)data;
 }

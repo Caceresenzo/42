@@ -44,4 +44,7 @@ ui_label_size(t_ui_label *label, void *data);
 void
 ui_label_draw(t_ui_label *label, void *data);
 
+int
+ui_label_event(t_ui_label *label, t_ui_event_base *event, void *data);
+
 #endif

@@ -146,7 +146,7 @@ hitscan_at(t_ui_widget *widget, const t_ui_event_base *event, t_vector2i point)
 	}
 
 	if (response == UI_EVENT_CONTINUE)
-		response = ui_callback_event_call(widget, event);
+		response = ui_widget_event_call(widget, event);
 
 	return (response);
 }

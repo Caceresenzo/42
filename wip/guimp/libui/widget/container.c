@@ -15,38 +15,26 @@
 static t_ui_widget_descriptor container_descriptor = {
 	.name = "container",
 	.size = sizeof(t_ui_container),
-//	.handlers = {
-//		.draw = {
-//			.function = (void*)&ui_container_draw,
-//			.data = NULL
-//		},
-//		.size = (void*)&ui_container_size,
-//		.event = (void*)&ui_container_mouse_motion
-//	}
+	.handlers = {
+		.draw = {
+			.code = (void*)&ui_container_draw,
+			.data = NULL
+		},
+		.size = {
+			.code = (void*)&ui_container_size,
+			.data = NULL
+		},
+		.event = {
+			.code = (void*)&ui_container_event,
+			.data = NULL
+		}
+	}
 };
-
-static int
-ui_container_mouse_motion(t_ui_container *container, t_ui_event_base *event, void *data)
-{
-	if (event->type == UI_EVENT_TYPE_MOUSE_MOTION)
-		container->color = SDL_MapRGB(container->super._surface->format, rand() % 255, rand() % 255, rand() % 255);
-	else if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
-		container->color = SDL_MapRGB(container->super._surface->format, 0, 0, 0);
-	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
-		container->color = SDL_MapRGB(container->super._surface->format, 255, 255, 255);
-	ui_widget_set_dirty(cast(container));
-	return (UI_EVENT_CONSUME);
-//	return (UI_EVENT_CONTINUE);
-	(void)data;
-}
 
 t_ui_container*
 ui_container_new(t_ui_container_direction direction)
 {
 	t_ui_container *container = cast(ui_widget_new(&container_descriptor));
-	container->super.handlers.size.function = cast(&ui_container_size);
-	container->super.handlers.draw.function = cast(&ui_container_draw);
-	container->super.handlers.event.function = cast(&ui_container_mouse_motion);
 	container->direction = direction;
 
 	return (container);
@@ -100,5 +88,20 @@ ui_container_draw(t_ui_container *container, void *data)
 		ui_widget_draw(node->data);
 		node = node->next;
 	}
+	(void)data;
+}
+
+int
+ui_container_event(t_ui_container *container, t_ui_event_base *event, void *data)
+{
+	if (event->type == UI_EVENT_TYPE_MOUSE_MOTION)
+		container->color = SDL_MapRGB(container->super._surface->format, rand() % 255, rand() % 255, rand() % 255);
+	else if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
+		container->color = SDL_MapRGB(container->super._surface->format, 0, 0, 0);
+	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
+		container->color = SDL_MapRGB(container->super._surface->format, 255, 255, 255);
+	ui_widget_set_dirty(cast(container));
+	return (UI_EVENT_CONSUME);
+//	return (UI_EVENT_CONTINUE);
 	(void)data;
 }
