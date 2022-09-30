@@ -23,6 +23,9 @@ typedef struct
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
 t_vector2i
-vector2i_zero();
+vector2i_zero(void);
+
+t_vector2i
+vector2i_substract(t_vector2i left, t_vector2i right);
 
 #endif

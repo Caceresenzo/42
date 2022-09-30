@@ -25,6 +25,7 @@ typedef struct s_ui_container
 {
 	t_ui_widget super;
 	t_ui_container_direction direction;
+	int color;
 } t_ui_container;
 
 t_ui_container*

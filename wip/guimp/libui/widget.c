@@ -69,7 +69,24 @@ ui_widget_set_dirty(t_ui_widget *widget)
 {
 	widget->dirty = true;
 
-	// TODO
-//	assert(widget->window);
-//	widget->window->dirty = true;
+	// TODO Mark tree as dirty
+	if (widget->window)
+		widget->window->dirty = true;
+}
+
+bool
+ui_widget_is_inside(t_ui_widget *widget, t_vector2i point)
+{
+//	printf("widget(%s, %d, %d, %d, %d), point(%d, %d) - %d %d %d %d\n",
+//		widget->descriptor->name, widget->position.x, widget->position.y, widget->size.x, widget->size.y,
+//		point.x, point.y,
+//		point.x >= widget->position.x,
+//		point.y >= widget->position.y,
+//		widget->position.x + widget->size.x >= point.x,
+//		widget->position.y + widget->size.y >= point.y
+//			);
+	return (point.x >= widget->position.x
+		&& point.y >= widget->position.y
+		&& widget->position.x + widget->size.x >= point.x
+		&& widget->position.y + widget->size.y >= point.y);
 }

@@ -26,8 +26,8 @@ ui_image_new(const char *path)
 	image = cast(ui_widget_new(&image_descriptor));
 	if (!image)
 		return (NULL);
-	image->super.size_handler.function = cast(&ui_image_size);
-	image->super.draw_handler.function = cast(&ui_image_draw);
+	image->super.handlers.size.function = cast(&ui_image_size);
+	image->super.handlers.draw.function = cast(&ui_image_draw);
 	error = ui_image_set_picture(image, path);
 	if (error.present)
 		printf("warning: could not load `%s`: %s\n", path, error.message);

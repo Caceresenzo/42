@@ -17,12 +17,26 @@ static t_ui_widget_descriptor label_descriptor = {
 	.size = sizeof(t_ui_label)
 };
 
+static int
+ui_label_event(t_ui_label *label, t_ui_event_base *event, void *data)
+{
+	if (event->type == UI_EVENT_TYPE_MOUSE_MOTION)
+		ui_label_set_background_color(label, (t_color ) { rand() % 255, rand() % 255, rand() % 255 });
+	else if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
+		ui_label_set_background_color(label, (t_color ) { 0, 0, 0 });
+	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
+		ui_label_set_background_color(label, (t_color ) { 255, 255, 255 });
+	return (UI_EVENT_CONSUME);
+	(void)data;
+}
+
 t_ui_label*
 ui_label_new(const char *text)
 {
 	t_ui_label *label = cast(ui_widget_new(&label_descriptor));
-	label->super.size_handler.function = cast(&ui_label_size);
-	label->super.draw_handler.function = cast(&ui_label_draw);
+	label->super.handlers.size.function = cast(&ui_label_size);
+	label->super.handlers.draw.function = cast(&ui_label_draw);
+	label->super.handlers.event.function = cast(&ui_label_event);
 	label->text = strdup(text);
 
 	return (label);
@@ -87,7 +101,6 @@ ui_label_draw(t_ui_label *label, void *data)
 	//	SDL_LockSurface(label->super._surface);
 	SDL_FillRect(label->super._surface, NULL, SDL_MapRGB(label->super._surface->format, label->background_color.red, label->background_color.green, label->background_color.blue));
 
-
 	int y = 0;
 
 	char *str = label->text;
@@ -110,7 +123,6 @@ ui_label_draw(t_ui_label *label, void *data)
 		}
 		++str;
 	}
-
 
 	SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
 	SDL_Rect destrec = { 0, y, line->w, line->h };

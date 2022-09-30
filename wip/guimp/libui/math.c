@@ -13,11 +13,21 @@
 #include "math.h"
 
 t_vector2i
-vector2i_zero()
+vector2i_zero(void)
 {
 	t_vector2i vector;
 
 	vector.x = 0;
 	vector.y = 0;
+	return (vector);
+}
+
+t_vector2i
+vector2i_substract(t_vector2i left, t_vector2i right)
+{
+	t_vector2i vector;
+
+	vector.x = left.x - right.x;
+	vector.y = left.y - right.y;
 	return (vector);
 }

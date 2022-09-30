@@ -91,6 +91,81 @@ ui_loop(t_ui_application *app)
 
 				break;
 			}
+
+			case SDL_MOUSEMOTION:
+			{
+				window = ui_application_find_window(app, event.motion.windowID);
+				if (!window)
+					continue;
+
+				t_ui_event_mouse_motion ui_event;
+				ui_event.base.type = UI_EVENT_TYPE_MOUSE_MOTION;
+				ui_event.base.window = window;
+				ui_event.position.x = event.motion.x;
+				ui_event.position.y = event.motion.y;
+				ui_event.relative.x = event.motion.xrel;
+				ui_event.relative.y = event.motion.yrel;
+
+				ui_window_dispatch(cast(&ui_event));
+//				hitscan(&ui_event);
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				window = ui_application_find_window(app, event.button.windowID);
+				if (!window)
+					continue;
+
+				t_ui_event_mouse_button ui_event;
+				ui_event.base.type = UI_EVENT_TYPE_MOUSE_PRESSED;
+				ui_event.base.window = window;
+				ui_event.position.x = event.button.x;
+				ui_event.position.y = event.button.y;
+				ui_event.button = event.button.button;
+				ui_event.state = UI_EVENT_MOUSE_STATE_PRESSED;
+
+				ui_window_dispatch(cast(&ui_event));
+
+				break;
+			}
+
+			case SDL_MOUSEBUTTONUP:
+			{
+				window = ui_application_find_window(app, event.button.windowID);
+				if (!window)
+					continue;
+
+				t_ui_event_mouse_button ui_event;
+				ui_event.base.type = UI_EVENT_TYPE_MOUSE_RELEASED;
+				ui_event.base.window = window;
+				ui_event.position.x = event.button.x;
+				ui_event.position.y = event.button.y;
+				ui_event.button = event.button.button;
+				ui_event.state = UI_EVENT_MOUSE_STATE_RELEASED;
+
+				ui_window_dispatch(cast(&ui_event));
+
+				break;
+			}
+
+			case SDL_MOUSEWHEEL:
+			{
+				window = ui_application_find_window(app, event.wheel.windowID);
+				if (!window)
+					continue;
+
+				t_ui_event_mouse_wheel ui_event;
+				ui_event.base.type = UI_EVENT_TYPE_MOUSE_WHEEL;
+				ui_event.base.window = window;
+				ui_event.scroll.x = event.wheel.x;
+				ui_event.scroll.y = event.wheel.y;
+
+				ui_window_dispatch(cast(&ui_event));
+
+				break;
+			}
 		}
 
 		ui_application_draw(app);
@@ -113,23 +188,23 @@ create_window(t_ui_application *app)
 	t_ui_container *root = ui_container_new(CONTAINER_DIRECTION_VERTICAL);
 	ui_window_set_root(window, cast(root));
 
-	//	for (int i = 0; i < 3; ++i)
-	//	{
-	//		container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
-	//		ui_widget_add(cast(root), cast(container));
-	//
-	//		label = ui_label_new("Hello World");
-	//		ui_label_set_background_color(label, (t_color ) { 0, 255, 0 });
-	//		ui_widget_add(cast(container), cast(label));
-	//
-	//		label = ui_label_new("Hello World\nIn publishing and graphic design");
-	//		ui_label_set_background_color(label, (t_color ) { 0, 0, 255 });
-	//		ui_widget_add(cast(container), cast(label));
-	//
-	//		label = ui_label_new("Hello World");
-	//		ui_label_set_background_color(label, (t_color ) { 0, 255, 255 });
-	//		ui_widget_add(cast(container), cast(label));
-	//	}
+//	for (int i = 0; i < 3; ++i)
+//	{
+//		container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
+//		ui_widget_add(cast(root), cast(container));
+//
+//		label = ui_label_new("Hello World");
+//		ui_label_set_background_color(label, (t_color ) { 0, 255, 0 });
+//		ui_widget_add(cast(container), cast(label));
+//
+//		label = ui_label_new("Hello World\nIn publishing and graphic design");
+//		ui_label_set_background_color(label, (t_color ) { 0, 0, 255 });
+//		ui_widget_add(cast(container), cast(label));
+//
+//		label = ui_label_new("Hello World");
+//		ui_label_set_background_color(label, (t_color ) { 0, 255, 255 });
+//		ui_widget_add(cast(container), cast(label));
+//	}
 
 	container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
 	ui_widget_add(cast(root), cast(container));
@@ -147,8 +222,8 @@ create_window(t_ui_application *app)
 		ui_widget_add(cast(parent), cast(container));
 	}
 
-	t_ui_image *image = ui_image_new("buse.png");
-	ui_widget_add(cast(container), cast(image));
+//	t_ui_image *image = ui_image_new("buse.png");
+//	ui_widget_add(cast(container), cast(image));
 }
 
 int

@@ -36,4 +36,7 @@ ui_widget_add(t_ui_widget *parent, t_ui_widget *widget);
 void
 ui_window_draw(t_ui_window *window);
 
+void
+ui_window_dispatch(const t_ui_event_base *event);
+
 #endif

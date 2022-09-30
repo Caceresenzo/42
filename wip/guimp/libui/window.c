@@ -118,5 +118,61 @@ ui_window_draw(t_ui_window *window)
 //	SDL_UnlockSurface(surface);
 	SDL_UpdateWindowSurface(window->_window);
 
-	ui_window_dump(window);
+//	ui_window_dump(window);
+}
+
+typedef int
+(*t_ui_event_mouse_consumer)(t_ui_widget*, const t_ui_event_mouse*);
+
+int
+hitscan_at(t_ui_widget *widget, const t_ui_event_base *event, t_vector2i point)
+{
+	t_list_node *node;
+	t_ui_widget *child;
+	int response = UI_EVENT_CONTINUE;
+
+	node = widget->children.first;
+	while (node)
+	{
+		child = node->data;
+//		printf("%d <= %d (%d) && %d <= %d (%d)\n", widget->size.x, x, widget->size.x <= x, widget->size.y, y, widget->size.y <= y);
+		if (ui_widget_is_inside(child, point))
+		{
+			printf("%p :: %s\n", child, child->descriptor->name);
+			response = hitscan_at(child, event, vector2i_substract(point, child->position));
+			break;
+		}
+		node = node->next;
+	}
+
+	if (response == UI_EVENT_CONTINUE)
+		response = ui_callback_event_call(widget, event);
+
+	return (response);
+}
+
+void
+hitscan(const t_ui_event_base *event, t_vector2i point)
+{
+	t_ui_window *window = event->window;
+
+	printf("\n\nhitscan_at\n");
+	hitscan_at(window->root, event, point);
+}
+
+void
+ui_window_dispatch_mouse(const t_ui_event_mouse *event)
+{
+	hitscan(ccast(event), event->position);
+}
+
+void
+ui_window_dispatch(const t_ui_event_base *base_event)
+{
+	if (base_event->type == UI_EVENT_TYPE_MOUSE_MOTION
+		|| base_event->type == UI_EVENT_TYPE_MOUSE_PRESSED
+		|| base_event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
+	{
+		ui_window_dispatch_mouse(ccast(base_event));
+	}
 }

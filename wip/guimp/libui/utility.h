@@ -16,4 +16,7 @@
 void*
 cast(void *ptr);
 
+const void*
+ccast(const void *ptr);
+
 #endif

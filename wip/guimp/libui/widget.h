@@ -27,4 +27,7 @@ ui_widget_draw(t_ui_widget *widget);
 void
 ui_widget_set_dirty(t_ui_widget *widget);
 
+bool
+ui_widget_is_inside(t_ui_widget *widget, t_vector2i point);
+
 #endif

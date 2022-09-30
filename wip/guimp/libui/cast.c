@@ -17,3 +17,9 @@ cast(void *ptr)
 {
 	return (ptr);
 }
+
+const void*
+ccast(const void *ptr)
+{
+	return (ptr);
+}

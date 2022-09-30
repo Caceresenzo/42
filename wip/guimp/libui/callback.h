@@ -19,4 +19,7 @@ ui_callback_size_call(t_ui_widget *widget);
 void
 ui_callback_draw_call(t_ui_widget *widget);
 
+int
+ui_callback_event_call(t_ui_widget *widget, const t_ui_event_base *event);
+
 #endif
