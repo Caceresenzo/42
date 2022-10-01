@@ -125,11 +125,12 @@ ui_window_draw(t_ui_window *window)
 }
 
 t_ui_widget*
-hitscan(t_ui_widget *widget, t_vector2i point)
+hitscan(t_ui_widget *widget, t_vector2i point, t_vector2i *local)
 {
 	t_list_node *node;
 	t_ui_widget *child;
 
+	*local = point;
 	if (!widget->traversable)
 		return (widget);
 
@@ -140,7 +141,7 @@ hitscan(t_ui_widget *widget, t_vector2i point)
 		if (ui_widget_is_inside(child, point))
 		{
 			printf("%p :: %s\n", child, child->descriptor->name);
-			return (hitscan(child, vector2i_substract(point, child->position)));
+			return (hitscan(child, vector2i_substract(point, child->position), local));
 		}
 		node = node->next;
 	}
@@ -160,12 +161,12 @@ hitscan(t_ui_widget *widget, t_vector2i point)
 //}
 
 void
-ui_window_dispatch_mouse(const t_ui_event_mouse *event)
+ui_window_dispatch_mouse(t_ui_event_mouse *event)
 {
 	t_ui_window *window = event->super.window;
 
 	printf("\n\nui_window_dispatch_mouse\n");
-	t_ui_widget *widget = hitscan(window->root, vector2i(event->x, event->y));
+	t_ui_widget *widget = hitscan(window->root, event->position, &event->local);
 	if (window->focused && widget != window->focused)
 	{
 		t_ui_event_mouse event2 = *event;
@@ -202,7 +203,7 @@ ui_window_dispatch_mouse(const t_ui_event_mouse *event)
 }
 
 void
-ui_window_dispatch(const t_ui_event_base *base_event)
+ui_window_dispatch(t_ui_event_base *base_event)
 {
 	if (base_event->type == UI_EVENT_TYPE_MOUSE_MOVED
 		|| base_event->type == UI_EVENT_TYPE_MOUSE_DRAGGED
@@ -212,7 +213,7 @@ ui_window_dispatch(const t_ui_event_base *base_event)
 		|| base_event->type == UI_EVENT_TYPE_MOUSE_PRESSED
 		|| base_event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
 	{
-		ui_window_dispatch_mouse(ccast(base_event));
+		ui_window_dispatch_mouse(cast(base_event));
 	}
 }
 

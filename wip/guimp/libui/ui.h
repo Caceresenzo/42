@@ -134,8 +134,8 @@ typedef struct s_ui_event_base
 typedef struct s_ui_event_mouse
 {
 	t_ui_event_base super;
-	int x;
-	int y;
+	t_vector2i position;
+	t_vector2i local;
 	int button;
 } t_ui_event_mouse;
 
@@ -173,7 +173,7 @@ void
 ui_window_draw(t_ui_window *window);
 
 void
-ui_window_dispatch(const t_ui_event_base *event);
+ui_window_dispatch(t_ui_event_base *event);
 
 t_ui_widget*
 ui_window_find_by_id(t_ui_window *window, const char *id);
@@ -237,5 +237,6 @@ ui_error_absent(void);
 # include "widget/label.h"
 # include "widget/image.h"
 # include "widget/button.h"
+# include "widget/canvas.h"
 
 #endif

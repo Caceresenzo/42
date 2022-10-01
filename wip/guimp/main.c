@@ -112,8 +112,8 @@ ui_loop(t_ui_application *app)
 				if (event.motion.state == SDL_PRESSED)
 					ui_event.super.type = UI_EVENT_TYPE_MOUSE_DRAGGED;
 				ui_event.super.window = window;
-				ui_event.x = event.motion.x;
-				ui_event.y = event.motion.y;
+				ui_event.position.x = event.motion.x;
+				ui_event.position.y = event.motion.y;
 
 				ui_window_dispatch(cast(&ui_event));
 //				hitscan(&ui_event);
@@ -131,8 +131,8 @@ ui_loop(t_ui_application *app)
 				ui_event.super.type = UI_EVENT_TYPE_MOUSE_PRESSED;
 				ui_event.super.timestamp = event.button.timestamp;
 				ui_event.super.window = window;
-				ui_event.x = event.button.x;
-				ui_event.y = event.button.y;
+				ui_event.position.x = event.button.x;
+				ui_event.position.y = event.button.y;
 				ui_event.button = event.button.button;
 
 				ui_window_dispatch(cast(&ui_event));
@@ -150,8 +150,8 @@ ui_loop(t_ui_application *app)
 				ui_event.super.type = UI_EVENT_TYPE_MOUSE_RELEASED;
 				ui_event.super.timestamp = event.button.timestamp;
 				ui_event.super.window = window;
-				ui_event.x = event.button.x;
-				ui_event.y = event.button.y;
+				ui_event.position.x = event.button.x;
+				ui_event.position.y = event.button.y;
 				ui_event.button = event.button.button;
 
 				ui_window_dispatch(cast(&ui_event));
@@ -305,6 +305,17 @@ create_window(t_ui_application *app)
 		image->super.style.max_height = optional_int(64);
 		image->super.style.max_width = optional_int(64);
 		ui_widget_add(cast(container), cast(image));
+	}
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		ui_widget_add(cast(list), cast(container));
+
+		label = ui_label_new("A canvas");
+		ui_widget_add(cast(container), cast(label));
+
+		t_ui_canvas *canvas = ui_canvas_new((t_vector2i) { 400, 400 });
+		ui_widget_add(cast(container), cast(canvas));
 	}
 }
 
