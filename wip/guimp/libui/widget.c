@@ -40,6 +40,7 @@ ui_widget_is_new_surface_needed(t_ui_widget *widget)
 void
 ui_widget_size(t_ui_widget *widget)
 {
+//	printf("ui_widget_size(%p aka %s (children: %ld)\n", widget, widget->descriptor->name, widget->children.size);
 	ui_widget_size_call(widget);
 }
 
@@ -50,7 +51,11 @@ ui_widget_draw(t_ui_widget *widget)
 	{
 		if (widget->_surface)
 			SDL_FreeSurface(widget->_surface);
-		widget->_surface = SDL_CreateRGBSurface(0, widget->size.x, widget->size.y, 32, 0, 0, 0, 0);
+		widget->_surface = SDL_CreateRGBSurface(0, widget->size.x, widget->size.y, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
+//		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 255, 0, 0, 80));
+		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 0, 0, 0, 0));
+//		SDL_SetSurfaceBlendMode(widget->_surface, SDL_BLENDMODE_NONE);
+//		SDL_SetSurfaceAlphaMod(widget->_surface, SDL_ALPHA_TRANSPARENT);
 		printf("allocated surface: %p\n", widget->_surface);
 	}
 
@@ -60,8 +65,12 @@ ui_widget_draw(t_ui_widget *widget)
 	{
 		SDL_Rect srcrect = { 0, 0, widget->size.x, widget->size.y };
 		SDL_Rect dstrect = { widget->position.x, widget->position.y, widget->size.x, widget->size.y };
+//		SDL_BlendMode mode;
+//		SDL_GetSurfaceBlendMode(widget->_surface, &mode);
+//		SDL_SetSurfaceBlendMode(widget->_surface, SDL_BLENDMODE_BLEND);
 		if (SDL_BlitSurface(widget->_surface, &srcrect, widget->parent->_surface, &dstrect))
 			sdl_abort("SDL_BlitSurface");
+//		SDL_SetSurfaceBlendMode(widget->_surface, mode);
 	}
 }
 

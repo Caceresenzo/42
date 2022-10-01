@@ -16,6 +16,8 @@ ui_loop(t_ui_application *app)
 	SDL_Event event;
 	t_ui_window *window;
 
+	bool first = false;
+
 	while (true)
 	{
 		if (!(list_size(&app->windows) > 0 && SDL_WaitEvent(&event)))
@@ -169,6 +171,12 @@ ui_loop(t_ui_application *app)
 		}
 
 		ui_application_draw(app);
+
+		if (!first)
+		{
+			first = true;
+			ui_application_dump(app);
+		}
 	}
 }
 
@@ -185,7 +193,7 @@ create_window(t_ui_application *app)
 	window = ui_window_new(app, position, size, SDL_WINDOW_SHOWN);
 	ui_window_set_title(window, "Hello");
 
-	t_ui_container *root = ui_container_new(CONTAINER_DIRECTION_VERTICAL);
+	t_ui_container *root = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
 	ui_window_set_root(window, cast(root));
 
 //	for (int i = 0; i < 3; ++i)
@@ -206,24 +214,81 @@ create_window(t_ui_application *app)
 //		ui_widget_add(cast(container), cast(label));
 //	}
 
-	container = ui_container_new(CONTAINER_DIRECTION_HORIZONTAL);
-	ui_widget_add(cast(root), cast(container));
+//	container = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
+//	ui_widget_add(cast(root), cast(container));
+//
+//	const int max = 10;
+//	for (int i = 0; i < max; ++i)
+//	{
+//		int x = (255 / max) * i;
+//		label = ui_label_new("Hello\nWorld");
+//		ui_label_set_background_color(label, (t_color ) { 0, x, x });
+//		ui_widget_add(cast(container), cast(label));
+//
+//		t_ui_container *parent = container;
+//		container = ui_container_new((i % 2) + 1);
+//		ui_widget_add(cast(parent), cast(container));
+//	}
+//
+////	t_ui_image *image = ui_image_new("buse.png");
+////	ui_widget_add(cast(container), cast(image));
+//
+//	t_ui_button *button = ui_button_new();
+//	ui_widget_add(cast(container), cast(button));
+//
+//	label = ui_label_new("Click me");
+//	ui_widget_add(cast(button), cast(label));
 
-	const int max = 10;
-	for (int i = 0; i < max; ++i)
+	t_ui_container *list = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+	ui_widget_add(cast(root), cast(list));
+
 	{
-		int x = (255 / max) * i;
-		label = ui_label_new("Hello\nWorld");
-		ui_label_set_background_color(label, (t_color ) { 0, x, x });
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		ui_widget_add(cast(list), cast(container));
+
+		label = ui_label_new("A label");
 		ui_widget_add(cast(container), cast(label));
 
-		t_ui_container *parent = container;
-		container = ui_container_new(i % 2);
-		ui_widget_add(cast(parent), cast(container));
+		label = ui_label_new("Hello World!");
+		ui_widget_add(cast(container), cast(label));
 	}
 
-//	t_ui_image *image = ui_image_new("buse.png");
-//	ui_widget_add(cast(container), cast(image));
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		container->forced_size.y = 20;
+		ui_widget_add(cast(list), cast(container));
+	}
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		ui_widget_add(cast(list), cast(container));
+
+		label = ui_label_new("A button");
+		ui_widget_add(cast(container), cast(label));
+
+		t_ui_button *button = ui_button_new();
+		ui_widget_add(cast(container), cast(button));
+
+		label = ui_label_new("Click me!");
+		ui_widget_add(cast(button), cast(label));
+	}
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		container->forced_size.y = 20;
+		ui_widget_add(cast(list), cast(container));
+	}
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		ui_widget_add(cast(list), cast(container));
+
+		label = ui_label_new("An Image");
+		ui_widget_add(cast(container), cast(label));
+
+		t_ui_image *image = ui_image_new("buse.png");
+		ui_widget_add(cast(container), cast(image));
+	}
 }
 
 int
@@ -234,7 +299,7 @@ main(int arc, char **argv)
 	t_ui_application *app;
 
 	app = ui_application_new();
-	ui_font_load(app, "Consolas.ttf", 24);
+	ui_font_load(app, "Consolas.ttf", 14);
 
 	create_window(app);
 

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   label.h                                            :+:      :+:    :+:   */
+/*   button.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,38 +10,39 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WIDGET_LABEL_H
-# define WIDGET_LABEL_H
+#ifndef WIDGET_BUTTON_H
+# define WIDGET_BUTTON_H
 
 # include "../ui.h"
 
-typedef struct s_color
+typedef enum e_ui_button_state
 {
-	unsigned char red;
-	unsigned char green;
-	unsigned char blue;
-} t_color;
+	UI_BUTTON_STATE_NONE,
+	UI_BUTTON_STATE_HOVER,
+	UI_BUTTON_STATE_PRESSED
+} t_ui_button_state;
 
-typedef struct s_ui_label
+typedef struct s_ui_button
 {
 	t_ui_widget super;
-	char *text;
-	t_color background_color;
-} t_ui_label;
+	t_ui_button_state state;
+	int color;
+	int pressed_color;
+} t_ui_button;
 
-t_ui_label*
-ui_label_new(const char *text);
+t_ui_button*
+ui_button_new(void);
 
-void
-ui_label_set_text(t_ui_label *label, const char *text);
-
-void
-ui_label_set_background_color(t_ui_label *label, t_color background_color);
+bool
+ui_button_set_state(t_ui_button *button, t_ui_button_state state);
 
 void
-ui_label_size(t_ui_label *label, void *data);
+ui_button_size(t_ui_button *button, void *data);
 
 void
-ui_label_draw(t_ui_label *label, void *data);
+ui_button_draw(t_ui_button *button, void *data);
+
+int
+ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data);
 
 #endif

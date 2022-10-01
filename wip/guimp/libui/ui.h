@@ -23,8 +23,10 @@
 # include "debug.h"
 # include "optional.h"
 # include "widget.h"
+# include "widget/group.h"
 # include "widget/container.h"
 # include "widget/label.h"
 # include "widget/image.h"
+# include "widget/button.h"
 
 #endif

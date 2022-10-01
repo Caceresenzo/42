@@ -131,6 +131,10 @@ hitscan_at(t_ui_widget *widget, const t_ui_event_base *event, t_vector2i point)
 	t_ui_widget *child;
 	int response = UI_EVENT_CONTINUE;
 
+	response = ui_widget_event_call(widget, event);
+	if (response != UI_EVENT_CONTINUE)
+		return (response);
+
 	node = widget->children.first;
 	while (node)
 	{
@@ -138,15 +142,12 @@ hitscan_at(t_ui_widget *widget, const t_ui_event_base *event, t_vector2i point)
 //		printf("%d <= %d (%d) && %d <= %d (%d)\n", widget->size.x, x, widget->size.x <= x, widget->size.y, y, widget->size.y <= y);
 		if (ui_widget_is_inside(child, point))
 		{
-			printf("%p :: %s\n", child, child->descriptor->name);
+//			printf("%p :: %s\n", child, child->descriptor->name);
 			response = hitscan_at(child, event, vector2i_substract(point, child->position));
 			break;
 		}
 		node = node->next;
 	}
-
-	if (response == UI_EVENT_CONTINUE)
-		response = ui_widget_event_call(widget, event);
 
 	return (response);
 }
@@ -156,7 +157,7 @@ hitscan(const t_ui_event_base *event, t_vector2i point)
 {
 	t_ui_window *window = event->window;
 
-	printf("\n\nhitscan_at\n");
+//	printf("\n\nhitscan_at\n");
 	hitscan_at(window->root, event, point);
 }
 

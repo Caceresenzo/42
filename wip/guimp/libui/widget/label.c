@@ -24,10 +24,6 @@ static t_ui_widget_descriptor label_descriptor = {
 			.code = (void*)&ui_label_size,
 			.data = NULL
 		},
-		.event = {
-			.code = (void*)&ui_label_event,
-			.data = NULL
-		}
 	}
 };
 
@@ -91,13 +87,18 @@ ui_label_size(t_ui_label *label, void *data)
 	(void)data;
 }
 
+
+extern void
+setPixel(SDL_Surface *surface, Uint8 r, Uint8 g, Uint8 b, Uint8 a, size_t x, size_t y);
+
 void
 ui_label_draw(t_ui_label *label, void *data)
 {
 	SDL_Color White = { 255, 255, 255 };
 
 	//	SDL_LockSurface(label->super._surface);
-	SDL_FillRect(label->super._surface, NULL, SDL_MapRGB(label->super._surface->format, label->background_color.red, label->background_color.green, label->background_color.blue));
+//	SDL_FillRect(label->super._surface, NULL, SDL_MapRGBA(label->super._surface->format, 0, 0, 0, 0));
+//	SDL_FillRect(label->super._surface, NULL, SDL_MapRGBA(label->super._surface->format, label->background_color.red, label->background_color.green, label->background_color.blue, 0));
 
 	int y = 0;
 
@@ -127,22 +128,11 @@ ui_label_draw(t_ui_label *label, void *data)
 	SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 	SDL_FreeSurface(line);
 
+//	setPixel(label->super._surface, 0, 0, 0, 127, 1, 1);
+
 //	SDL_BlitSurface(line, NULL, label->super._surface, NULL);
 
 //	SDL_UnlockSurface(label->super._surface);
 
-	(void)data;
-}
-
-int
-ui_label_event(t_ui_label *label, t_ui_event_base *event, void *data)
-{
-	if (event->type == UI_EVENT_TYPE_MOUSE_MOTION)
-		ui_label_set_background_color(label, (t_color ) { rand() % 255, rand() % 255, rand() % 255 });
-	else if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
-		ui_label_set_background_color(label, (t_color ) { 0, 0, 0 });
-	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
-		ui_label_set_background_color(label, (t_color ) { 255, 255, 255 });
-	return (UI_EVENT_CONSUME);
 	(void)data;
 }

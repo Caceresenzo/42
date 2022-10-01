@@ -13,12 +13,12 @@
 #ifndef WIDGET_CONTAINER_H
 # define WIDGET_CONTAINER_H
 
-#include "../ui.h"
+# include "../ui.h"
 
 typedef enum e_ui_container_direction
 {
-	CONTAINER_DIRECTION_VERTICAL,
-	CONTAINER_DIRECTION_HORIZONTAL,
+	UI_CONTAINER_DIRECTION_VERTICAL = 1,
+	UI_CONTAINER_DIRECTION_HORIZONTAL = 2,
 } t_ui_container_direction;
 
 typedef struct s_ui_container
@@ -26,6 +26,8 @@ typedef struct s_ui_container
 	t_ui_widget super;
 	t_ui_container_direction direction;
 	int color;
+	// TODO Replace with styling
+	t_vector2i forced_size;
 } t_ui_container;
 
 t_ui_container*
