@@ -27,6 +27,7 @@ typedef struct s_ui_button
 	t_ui_widget super;
 	t_ui_button_state state;
 	int color;
+	int hover_color;
 	int pressed_color;
 } t_ui_button;
 
@@ -42,7 +43,7 @@ ui_button_size(t_ui_button *button, void *data);
 void
 ui_button_draw(t_ui_button *button, void *data);
 
-int
+void
 ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data);
 
 #endif

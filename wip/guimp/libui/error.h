@@ -1,43 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   math.c                                             :+:      :+:    :+:   */
+/*   error.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/29 00:00:47 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/09/29 00:00:47 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/10/01 19:10:31 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/10/01 19:10:31 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "math.h"
+#ifndef ERROR_H
+# define ERROR_H
 
-t_vector2i
-vector2i(int x, int y)
+# include <stdbool.h>
+# include <string.h>
+
+typedef struct s_error
 {
-	t_vector2i vector;
+	bool present;
+	const char *message;
+} t_ui_error;
 
-	vector.x = x;
-	vector.y = y;
-	return (vector);
-}
+t_ui_error
+ui_error_present(const char *message);
 
-t_vector2i
-vector2i_zero(void)
-{
-	t_vector2i vector;
+t_ui_error
+ui_error_absent(void);
 
-	vector.x = 0;
-	vector.y = 0;
-	return (vector);
-}
-
-t_vector2i
-vector2i_substract(t_vector2i left, t_vector2i right)
-{
-	t_vector2i vector;
-
-	vector.x = left.x - right.x;
-	vector.y = left.y - right.y;
-	return (vector);
-}
+#endif

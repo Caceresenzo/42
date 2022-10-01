@@ -24,7 +24,7 @@ typedef struct s_ui_image
 t_ui_image*
 ui_image_new(const char *path);
 
-t_error
+t_ui_error
 ui_image_set_picture(t_ui_image *image, const char *path);
 
 void

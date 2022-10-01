@@ -36,7 +36,7 @@ ui_widget_draw_call(t_ui_widget *widget);
 void
 ui_widget_size_call(t_ui_widget *widget);
 
-int
+void
 ui_widget_event_call(t_ui_widget *widget, const t_ui_event_base *event);
 
 #endif

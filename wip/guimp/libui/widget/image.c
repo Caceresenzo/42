@@ -31,33 +31,32 @@ t_ui_image*
 ui_image_new(const char *path)
 {
 	t_ui_image *image;
-	t_error error;
+	t_ui_error error;
 
 	image = cast(ui_widget_new(&image_descriptor));
-	if (!image)
-		return (NULL);
+	image->super.traversable = false;
+	image->super.focusable = false;
+
 	error = ui_image_set_picture(image, path);
 	if (error.present)
 		printf("warning: could not load `%s`: %s\n", path, error.message);
+
 	return (image);
 }
 
-t_error
+t_ui_error
 ui_image_set_picture(t_ui_image *image, const char *path)
 {
 	SDL_Surface *picture;
-	t_error error;
 
 	picture = IMG_Load(path);
 	if (!picture)
-	{
-		error = (t_error ) { .present = true, .message = IMG_GetError() };
-		return (error);
-	}
+		return (ui_error_present(IMG_GetError()));
+	if (image->picture)
+		SDL_FreeSurface(image->picture);
 	image->picture = picture;
 	ui_widget_set_dirty(cast(image));
-	error = (t_error ) { .present = false, .message = NULL };
-	return (error);
+	return (ui_error_absent());
 }
 
 void

@@ -39,7 +39,4 @@ ui_container_size(t_ui_container *widget, void *data);
 void
 ui_container_draw(t_ui_container *widget, void *data);
 
-int
-ui_container_event(t_ui_container *container, t_ui_event_base *event, void *data);
-
 #endif

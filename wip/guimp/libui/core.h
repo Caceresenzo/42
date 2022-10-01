@@ -30,44 +30,29 @@ typedef struct s_ui_widget_function_event t_ui_widget_function_event;
 
 typedef enum e_ui_event_type
 {
-	UI_EVENT_TYPE_MOUSE_MOTION = 1,
+	UI_EVENT_TYPE_MOUSE_MOVED = 1,
+	UI_EVENT_TYPE_MOUSE_DRAGGED,
+	UI_EVENT_TYPE_MOUSE_CLICKED,
+	UI_EVENT_TYPE_MOUSE_ENTERED,
+	UI_EVENT_TYPE_MOUSE_EXITED,
 	UI_EVENT_TYPE_MOUSE_PRESSED,
 	UI_EVENT_TYPE_MOUSE_RELEASED,
-	UI_EVENT_TYPE_MOUSE_WHEEL,
 } t_ui_event_type;
 
 typedef struct s_ui_event_base
 {
 	t_ui_event_type type;
+	long timestamp;
 	t_ui_window *window;
 } t_ui_event_base;
 
 typedef struct s_ui_event_mouse
 {
-	t_ui_event_base base;
-	t_vector2i position;
-} t_ui_event_mouse;
-
-typedef struct s_ui_event_mouse_motion
-{
-	t_ui_event_base base;
-	t_vector2i position;
-	t_vector2i relative;
-} t_ui_event_mouse_motion;
-
-typedef enum s_ui_event_mouse_state
-{
-	UI_EVENT_MOUSE_STATE_PRESSED,
-	UI_EVENT_MOUSE_STATE_RELEASED,
-} t_ui_event_mouse_state;
-
-typedef struct s_ui_event_mouse_button
-{
-	t_ui_event_base base;
-	t_vector2i position;
+	t_ui_event_base super;
+	int x;
+	int y;
 	int button;
-	t_ui_event_mouse_state state;
-} t_ui_event_mouse_button;
+} t_ui_event_mouse;
 
 typedef struct s_ui_event_mouse_wheel
 {
@@ -84,7 +69,7 @@ struct s_ui_widget_function
 
 struct s_ui_widget_function_event
 {
-	int
+	void
 	(*code)(t_ui_widget*, const t_ui_event_base*, void*);
 	void *data;
 };
@@ -92,7 +77,9 @@ struct s_ui_widget_function_event
 struct s_ui_application
 {
 	const char *name;
+	bool running;
 	TTF_Font *font;
+	bool exit_on_close;
 	t_list windows;
 };
 
@@ -102,6 +89,8 @@ struct s_ui_window
 	t_ui_widget *root;
 	bool dirty;
 	t_vector2i size;
+	t_ui_widget *focused;
+	t_ui_widget *hovered;
 	SDL_Window *_window;
 };
 
@@ -113,6 +102,8 @@ struct s_ui_widget
 	t_vector2i position;
 	t_vector2i size;
 	bool dirty;
+	bool focusable;
+	bool traversable;
 	t_list children;
 	SDL_Surface *_surface;
 };
@@ -128,11 +119,5 @@ struct s_ui_widget_descriptor
 		t_ui_widget_function_event event;
 	} handlers;
 };
-
-/* Continue to go deeper. */
-# define UI_EVENT_CONTINUE 0
-
-/* Mark event as consumed, and do not notify parents. */
-# define UI_EVENT_CONSUME 1
 
 #endif

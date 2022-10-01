@@ -21,7 +21,7 @@
 # include "font.h"
 # include "window.h"
 # include "debug.h"
-# include "optional.h"
+# include "error.h"
 # include "widget.h"
 # include "widget/group.h"
 # include "widget/container.h"

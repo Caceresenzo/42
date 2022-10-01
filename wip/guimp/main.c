@@ -18,7 +18,8 @@ ui_loop(t_ui_application *app)
 
 	bool first = false;
 
-	while (true)
+	app->running = true;
+	while (app->running)
 	{
 		if (!(list_size(&app->windows) > 0 && SDL_WaitEvent(&event)))
 			break;
@@ -80,6 +81,12 @@ ui_loop(t_ui_application *app)
 //				COND(event.window.event, SDL_WINDOWEVENT_CLOSE);
 				if (event.window.event == SDL_WINDOWEVENT_CLOSE)
 				{
+					if (app->exit_on_close)
+					{
+						app->running = false;
+						break;
+					}
+
 					window = ui_application_find_window(app, event.window.windowID);
 					if (!window)
 					{
@@ -100,13 +107,13 @@ ui_loop(t_ui_application *app)
 				if (!window)
 					continue;
 
-				t_ui_event_mouse_motion ui_event;
-				ui_event.base.type = UI_EVENT_TYPE_MOUSE_MOTION;
-				ui_event.base.window = window;
-				ui_event.position.x = event.motion.x;
-				ui_event.position.y = event.motion.y;
-				ui_event.relative.x = event.motion.xrel;
-				ui_event.relative.y = event.motion.yrel;
+				t_ui_event_mouse ui_event;
+				ui_event.super.type = UI_EVENT_TYPE_MOUSE_MOVED;
+				if (event.motion.state == SDL_PRESSED)
+					ui_event.super.type = UI_EVENT_TYPE_MOUSE_DRAGGED;
+				ui_event.super.window = window;
+				ui_event.x = event.motion.x;
+				ui_event.y = event.motion.y;
 
 				ui_window_dispatch(cast(&ui_event));
 //				hitscan(&ui_event);
@@ -116,17 +123,18 @@ ui_loop(t_ui_application *app)
 
 			case SDL_MOUSEBUTTONDOWN:
 			{
+				printf("SDL_MOUSEBUTTONDOWN\n");
 				window = ui_application_find_window(app, event.button.windowID);
 				if (!window)
 					continue;
 
-				t_ui_event_mouse_button ui_event;
-				ui_event.base.type = UI_EVENT_TYPE_MOUSE_PRESSED;
-				ui_event.base.window = window;
-				ui_event.position.x = event.button.x;
-				ui_event.position.y = event.button.y;
+				t_ui_event_mouse ui_event;
+				ui_event.super.type = UI_EVENT_TYPE_MOUSE_PRESSED;
+				ui_event.super.timestamp = event.button.timestamp;
+				ui_event.super.window = window;
+				ui_event.x = event.button.x;
+				ui_event.y = event.button.y;
 				ui_event.button = event.button.button;
-				ui_event.state = UI_EVENT_MOUSE_STATE_PRESSED;
 
 				ui_window_dispatch(cast(&ui_event));
 
@@ -135,39 +143,40 @@ ui_loop(t_ui_application *app)
 
 			case SDL_MOUSEBUTTONUP:
 			{
+				printf("SDL_MOUSEBUTTONUP\n");
 				window = ui_application_find_window(app, event.button.windowID);
 				if (!window)
 					continue;
 
-				t_ui_event_mouse_button ui_event;
-				ui_event.base.type = UI_EVENT_TYPE_MOUSE_RELEASED;
-				ui_event.base.window = window;
-				ui_event.position.x = event.button.x;
-				ui_event.position.y = event.button.y;
+				t_ui_event_mouse ui_event;
+				ui_event.super.type = UI_EVENT_TYPE_MOUSE_RELEASED;
+				ui_event.super.timestamp = event.button.timestamp;
+				ui_event.super.window = window;
+				ui_event.x = event.button.x;
+				ui_event.y = event.button.y;
 				ui_event.button = event.button.button;
-				ui_event.state = UI_EVENT_MOUSE_STATE_RELEASED;
 
 				ui_window_dispatch(cast(&ui_event));
 
 				break;
 			}
 
-			case SDL_MOUSEWHEEL:
-			{
-				window = ui_application_find_window(app, event.wheel.windowID);
-				if (!window)
-					continue;
-
-				t_ui_event_mouse_wheel ui_event;
-				ui_event.base.type = UI_EVENT_TYPE_MOUSE_WHEEL;
-				ui_event.base.window = window;
-				ui_event.scroll.x = event.wheel.x;
-				ui_event.scroll.y = event.wheel.y;
-
-				ui_window_dispatch(cast(&ui_event));
-
-				break;
-			}
+//			case SDL_MOUSEWHEEL:
+//			{
+//				window = ui_application_find_window(app, event.wheel.windowID);
+//				if (!window)
+//					continue;
+//
+//				t_ui_event_mouse_wheel ui_event;
+//				ui_event.base.type = UI_EVENT_TYPE_MOUSE_PRESSED;
+//				ui_event.base.window = window;
+//				ui_event.scroll.x = event.wheel.x;
+//				ui_event.scroll.y = event.wheel.y;
+//
+//				ui_window_dispatch(cast(&ui_event));
+//
+//				break;
+//			}
 		}
 
 		ui_application_draw(app);
@@ -299,8 +308,11 @@ main(int arc, char **argv)
 	t_ui_application *app;
 
 	app = ui_application_new();
-	ui_font_load(app, "Consolas.ttf", 14);
+	app->exit_on_close = true;
 
+	ui_font_load(app, "Consolas.ttf", 24);
+
+//	create_window(app);
 	create_window(app);
 
 	ui_application_dump(app);

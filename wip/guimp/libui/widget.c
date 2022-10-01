@@ -22,6 +22,8 @@ ui_widget_new(t_ui_widget_descriptor *descriptor)
 		return (NULL);
 	widget->descriptor = descriptor;
 	widget->dirty = true;
+	widget->focusable = true;
+	widget->traversable = true;
 	return (widget);
 }
 
@@ -120,13 +122,12 @@ ui_widget_size_call(t_ui_widget *widget)
 	ui_widget_function_call(widget, &widget->descriptor->handlers.size);
 }
 
-int
+void
 ui_widget_event_call(t_ui_widget *widget, const t_ui_event_base *event)
 {
 	t_ui_widget_function_event *function;
 
 	function = &widget->descriptor->handlers.event;
 	if (function->code)
-		return (function->code(widget, event, function->data));
-	return (UI_EVENT_CONTINUE);
+		function->code(widget, event, function->data);
 }

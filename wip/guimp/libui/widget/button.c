@@ -35,7 +35,9 @@ t_ui_button*
 ui_button_new(void)
 {
 	t_ui_button *button = cast(ui_widget_new(&button_descriptor));
+	button->super.traversable = false;
 	button->color = 0xFF888888;
+	button->hover_color = 0xFF000000;
 	button->pressed_color = 0xFF555555;
 
 	return (button);
@@ -60,11 +62,12 @@ ui_button_size(t_ui_button *button, void *data)
 void
 ui_button_draw(t_ui_button *button, void *data)
 {
-	t_list_node *node;
 	int color;
 
 	color = button->color;
-	if (button->state == UI_BUTTON_STATE_PRESSED)
+	if (button->state == UI_BUTTON_STATE_HOVER)
+		color = button->hover_color;
+	else if (button->state == UI_BUTTON_STATE_PRESSED)
 		color = button->pressed_color;
 
 	SDL_FillRect(button->super._surface, NULL, color);
@@ -73,15 +76,16 @@ ui_button_draw(t_ui_button *button, void *data)
 	(void)data;
 }
 
-int
+void
 ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data)
 {
-	if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED)
+	t_ui_event_mouse *mouse_event = cast(event);
+
+	if (event->type == UI_EVENT_TYPE_MOUSE_PRESSED && mouse_event->button == 1)
 		ui_button_set_state(button, UI_BUTTON_STATE_PRESSED);
-	else if (event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
+	else if (event->type == UI_EVENT_TYPE_MOUSE_ENTERED || (event->type == UI_EVENT_TYPE_MOUSE_RELEASED && mouse_event->button == 1))
+		ui_button_set_state(button, UI_BUTTON_STATE_HOVER);
+	else if (event->type == UI_EVENT_TYPE_MOUSE_EXITED)
 		ui_button_set_state(button, UI_BUTTON_STATE_NONE);
-	else
-		return (UI_EVENT_CONTINUE);
-	return (UI_EVENT_CONSUME);
 	(void)data;
 }
