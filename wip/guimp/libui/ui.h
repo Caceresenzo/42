@@ -88,6 +88,7 @@ struct s_ui_window
 struct s_ui_widget
 {
 	t_ui_widget_descriptor *descriptor;
+	char *id;
 	t_ui_window *window;
 	t_ui_widget *parent;
 	t_vector2i position;
@@ -175,6 +176,9 @@ void
 ui_window_dispatch(const t_ui_event_base *event);
 
 t_ui_widget*
+ui_window_find_by_id(t_ui_window *window, const char *id);
+
+t_ui_widget*
 ui_widget_new(t_ui_widget_descriptor *descriptor);
 
 void
@@ -184,10 +188,19 @@ void
 ui_widget_draw(t_ui_widget *widget);
 
 void
+ui_widget_set_id(t_ui_widget *widget, const char *id);
+
+void
 ui_widget_set_dirty(t_ui_widget *widget);
+
+t_ui_widget*
+ui_widget_find_by_id(t_ui_widget *widget, const char *id);
 
 bool
 ui_widget_is_inside(t_ui_widget *widget, t_vector2i point);
+
+void
+ui_widget_function_call(t_ui_widget *widget, t_ui_widget_function *function);
 
 void
 ui_widget_draw_call(t_ui_widget *widget);

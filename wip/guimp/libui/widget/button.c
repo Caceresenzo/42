@@ -89,5 +89,9 @@ ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data)
 		ui_button_set_state(button, UI_BUTTON_STATE_HOVER);
 	else if (event->type == UI_EVENT_TYPE_MOUSE_EXITED)
 		ui_button_set_state(button, UI_BUTTON_STATE_NONE);
+
+	if (event->type == UI_EVENT_TYPE_MOUSE_CLICKED)
+		ui_widget_function_call(cast(button), &button->on.click);
+
 	(void)data;
 }

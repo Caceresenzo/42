@@ -29,6 +29,10 @@ typedef struct s_ui_button
 	int color;
 	int hover_color;
 	int pressed_color;
+	struct
+	{
+		t_ui_widget_function click;
+	} on;
 } t_ui_button;
 
 t_ui_button*

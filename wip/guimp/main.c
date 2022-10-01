@@ -308,6 +308,75 @@ create_window(t_ui_application *app)
 	}
 }
 
+void
+tool_on_click(t_ui_widget *widget, void *data)
+{
+	int id = (long)data;
+
+	printf("Clicked on: %d\n", id);
+
+	t_ui_label *label = cast(ui_window_find_by_id(widget->window, "selected-tool"));
+	char buffer[255];
+	sprintf(buffer, "Clicked: %d", id);
+	ui_label_set_text(label, buffer);
+}
+
+void
+create_toolbox_window(t_ui_application *app)
+{
+	t_ui_window *window;
+	t_ui_label *label;
+	t_ui_container *container;
+	t_ui_image *image;
+	t_ui_button *button;
+
+	SDL_DisplayMode display_mode;
+	SDL_GetCurrentDisplayMode(0, &display_mode);
+
+	int window_x = display_mode.w / 6;
+
+	t_vector2i position = { window_x, SDL_WINDOWPOS_CENTERED };
+	t_vector2i size = { window_x * 0.80, SCREEN_HEIGHT };
+
+	window = ui_window_new(app, position, size, SDL_WINDOW_SHOWN);
+	ui_window_set_title(window, "Toolbox");
+
+	t_ui_container *root = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+	ui_window_set_root(window, cast(root));
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
+		ui_widget_add(cast(root), cast(container));
+
+		label = ui_label_new("No tool selected");
+		label->super.style.max_width = optional_int(window->size.x);
+		label->super.style.min_height = optional_int(64);
+		ui_widget_set_id(cast(label), "selected-tool");
+		ui_widget_add(cast(container), cast(label));
+	}
+
+	int third = window->size.x / 4;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
+		ui_widget_add(cast(root), cast(container));
+
+		for (int j = 0; j < 4; ++j)
+		{
+			button = ui_button_new();
+			ui_widget_add(cast(container), cast(button));
+			button->on.click.code = &tool_on_click;
+			button->on.click.data = (void*)(i * 4 + j);
+
+			t_ui_image *image = ui_image_new("resources/icons/tools/brush.png");
+			image->super.style.height = optional_int(third);
+			image->super.style.width = optional_int(third);
+			ui_widget_add(cast(button), cast(image));
+		}
+	}
+}
+
 int
 main(int arc, char **argv)
 {
@@ -321,6 +390,7 @@ main(int arc, char **argv)
 	ui_font_load(app, "Consolas.ttf", 24);
 
 //	create_window(app);
+	create_toolbox_window(app);
 	create_window(app);
 
 	ui_application_dump(app);

@@ -82,6 +82,5 @@ ui_image_draw(t_ui_image *image, void *data)
 		SDL_Rect destrec = { 0, 0, image->super.size.x, image->super.size.y };
 		SDL_BlitScaled(image->picture, &srcrec, image->super._surface, &destrec);
 	}
-
 	(void)data;
 }

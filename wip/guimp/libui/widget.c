@@ -55,14 +55,15 @@ ui_widget_draw(t_ui_widget *widget)
 			SDL_FreeSurface(widget->_surface);
 		widget->_surface = SDL_CreateRGBSurface(0, widget->size.x, widget->size.y, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
 //		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 255, 0, 0, 80));
-		if (widget->style.background_color.present)
-			SDL_FillRect(widget->_surface, NULL, widget->style.background_color.value);
-		else
-			SDL_FillRect(widget->_surface, NULL, 0x00000000);
 //		SDL_SetSurfaceBlendMode(widget->_surface, SDL_BLENDMODE_NONE);
 //		SDL_SetSurfaceAlphaMod(widget->_surface, SDL_ALPHA_TRANSPARENT);
 		printf("allocated surface: %p\n", widget->_surface);
 	}
+
+	if (widget->style.background_color.present)
+		SDL_FillRect(widget->_surface, NULL, widget->style.background_color.value);
+	else
+		SDL_FillRect(widget->_surface, NULL, 0x00000000);
 
 	ui_widget_draw_call(widget);
 
@@ -80,6 +81,16 @@ ui_widget_draw(t_ui_widget *widget)
 }
 
 void
+ui_widget_set_id(t_ui_widget *widget, const char *id)
+{
+	free(widget->id);
+	if (id)
+		widget->id = strdup(id);
+	else
+		widget->id = NULL;
+}
+
+void
 ui_widget_set_dirty(t_ui_widget *widget)
 {
 	widget->dirty = true;
@@ -87,6 +98,28 @@ ui_widget_set_dirty(t_ui_widget *widget)
 	// TODO Mark tree as dirty
 	if (widget->window)
 		widget->window->dirty = true;
+}
+
+t_ui_widget*
+ui_widget_find_by_id(t_ui_widget *widget, const char *id)
+{
+	t_list_node *node;
+	t_ui_widget *found;
+
+	if (!id)
+		return (NULL);
+	if (widget->id && !strcmp(widget->id, id))
+		return (widget);
+	node = widget->children.first;
+	while (node)
+	{
+		found = ui_widget_find_by_id(node->data, id);
+		if (found)
+			return (found);
+		node = node->next;
+	}
+
+	return (NULL);
 }
 
 bool
@@ -106,7 +139,7 @@ ui_widget_is_inside(t_ui_widget *widget, t_vector2i point)
 		&& widget->position.y + widget->size.y >= point.y);
 }
 
-static void
+void
 ui_widget_function_call(t_ui_widget *widget, t_ui_widget_function *function)
 {
 	if (function->code)

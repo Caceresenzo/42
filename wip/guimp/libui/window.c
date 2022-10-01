@@ -215,3 +215,11 @@ ui_window_dispatch(const t_ui_event_base *base_event)
 		ui_window_dispatch_mouse(ccast(base_event));
 	}
 }
+
+t_ui_widget*
+ui_window_find_by_id(t_ui_window *window, const char *id)
+{
+	if (!window->root)
+		return (NULL);
+	return (ui_widget_find_by_id(window->root, id));
+}
