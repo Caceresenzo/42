@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   application.h                                      :+:      :+:    :+:   */
+/*   optional.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/25 23:28:06 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/09/25 23:28:06 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/10/01 22:30:02 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/10/01 22:30:02 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef APPLICATION_H
-# define APPLICATION_H
+#ifndef OPTIONAL_H
+# define OPTIONAL_H
 
-# include "ui.h"
+# include <stdbool.h>
 
-t_ui_application*
-ui_application_new(void);
+typedef struct s_optional_int
+{
+	bool present;
+	int value;
+} t_optional_int;
 
-void
-ui_application_destroy(t_ui_application *app);
+typedef t_optional_int t_optional_color;
 
-t_ui_window*
-ui_application_find_window(t_ui_application *app, uint32_t id);
-
-void
-ui_application_draw(t_ui_application *app);
+t_optional_int
+optional_int(int value);
 
 #endif

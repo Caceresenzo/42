@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "error.h"
+#include "ui.h"
 
 t_ui_error
 ui_error_present(const char *message)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "application.h"
+#include "ui.h"
 
 t_ui_application*
 ui_application_new(void)

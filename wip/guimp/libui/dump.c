@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "debug.h"
+#include "ui.h"
 
 static void
 ui_widget_dump_impl(t_ui_widget *widget, int depth)

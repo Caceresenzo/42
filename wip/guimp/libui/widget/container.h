@@ -26,8 +26,6 @@ typedef struct s_ui_container
 	t_ui_widget super;
 	t_ui_container_direction direction;
 	int color;
-	// TODO Replace with styling
-	t_vector2i forced_size;
 } t_ui_container;
 
 t_ui_container*

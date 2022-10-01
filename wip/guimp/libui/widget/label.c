@@ -84,17 +84,16 @@ ui_label_size(t_ui_label *label, void *data)
 	size.y += h;
 
 	label->super.size = size;
+	ui_style_apply_size(cast(label));
 	(void)data;
 }
-
-
-extern void
-setPixel(SDL_Surface *surface, Uint8 r, Uint8 g, Uint8 b, Uint8 a, size_t x, size_t y);
 
 void
 ui_label_draw(t_ui_label *label, void *data)
 {
-	SDL_Color White = { 255, 255, 255 };
+	SDL_Color color = { 255, 255, 255 };
+	if (label->super.style.text_color.present)
+		*((int*) &color) = label->super.style.text_color.value;
 
 	//	SDL_LockSurface(label->super._surface);
 //	SDL_FillRect(label->super._surface, NULL, SDL_MapRGBA(label->super._surface->format, 0, 0, 0, 0));
@@ -110,7 +109,7 @@ ui_label_draw(t_ui_label *label, void *data)
 		{
 			*str = '\0';
 
-			SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
+			SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, color);
 			SDL_Rect destrec = { 0, y, line->w, line->h };
 			SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 			SDL_FreeSurface(line);
@@ -123,7 +122,7 @@ ui_label_draw(t_ui_label *label, void *data)
 		++str;
 	}
 
-	SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, White);
+	SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, color);
 	SDL_Rect destrec = { 0, y, line->w, line->h };
 	SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 	SDL_FreeSurface(line);

@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   optional.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/01 19:10:31 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/10/01 19:10:31 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/10/01 22:12:46 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/10/01 22:12:46 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "optional.h"
 
-# include <stdbool.h>
-# include <string.h>
-
-typedef struct s_error
+t_optional_int
+optional_int(int value)
 {
-	bool present;
-	const char *message;
-} t_ui_error;
+	t_optional_int optional;
 
-t_ui_error
-ui_error_present(const char *message);
-
-t_ui_error
-ui_error_absent(void);
-
-#endif
+	optional.present = true;
+	optional.value = value;
+	return (optional);
+}

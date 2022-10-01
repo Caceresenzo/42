@@ -57,6 +57,8 @@ void
 ui_button_size(t_ui_button *button, void *data)
 {
 	ui_group_size_widget(cast(button), UI_GROUP_DIRECTION_HORIZONTAL);
+
+	ui_style_apply_size(cast(button));
 }
 
 void

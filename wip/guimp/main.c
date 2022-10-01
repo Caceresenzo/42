@@ -123,7 +123,6 @@ ui_loop(t_ui_application *app)
 
 			case SDL_MOUSEBUTTONDOWN:
 			{
-				printf("SDL_MOUSEBUTTONDOWN\n");
 				window = ui_application_find_window(app, event.button.windowID);
 				if (!window)
 					continue;
@@ -143,7 +142,6 @@ ui_loop(t_ui_application *app)
 
 			case SDL_MOUSEBUTTONUP:
 			{
-				printf("SDL_MOUSEBUTTONUP\n");
 				window = ui_application_find_window(app, event.button.windowID);
 				if (!window)
 					continue;
@@ -264,7 +262,7 @@ create_window(t_ui_application *app)
 
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		container->forced_size.y = 20;
+		container->super.style.height = optional_int(20);
 		ui_widget_add(cast(list), cast(container));
 	}
 
@@ -280,11 +278,19 @@ create_window(t_ui_application *app)
 
 		label = ui_label_new("Click me!");
 		ui_widget_add(cast(button), cast(label));
+
+		button = ui_button_new();
+		ui_widget_add(cast(container), cast(button));
+
+		t_ui_image *image = ui_image_new("resources/icons/tools/brush.png");
+		image->super.style.height = optional_int(64);
+		image->super.style.width = optional_int(64);
+		ui_widget_add(cast(button), cast(image));
 	}
 
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		container->forced_size.y = 20;
+		container->super.style.height = optional_int(20);
 		ui_widget_add(cast(list), cast(container));
 	}
 
@@ -296,6 +302,8 @@ create_window(t_ui_application *app)
 		ui_widget_add(cast(container), cast(label));
 
 		t_ui_image *image = ui_image_new("buse.png");
+		image->super.style.max_height = optional_int(64);
+		image->super.style.max_width = optional_int(64);
 		ui_widget_add(cast(container), cast(image));
 	}
 }

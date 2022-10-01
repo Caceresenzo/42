@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "widget.h"
+#include "ui.h"
 
 t_ui_widget*
 ui_widget_new(t_ui_widget_descriptor *descriptor)
@@ -55,7 +55,10 @@ ui_widget_draw(t_ui_widget *widget)
 			SDL_FreeSurface(widget->_surface);
 		widget->_surface = SDL_CreateRGBSurface(0, widget->size.x, widget->size.y, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
 //		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 255, 0, 0, 80));
-		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 0, 0, 0, 0));
+		if (widget->style.background_color.present)
+			SDL_FillRect(widget->_surface, NULL, widget->style.background_color.value);
+		else
+			SDL_FillRect(widget->_surface, NULL, 0x00000000);
 //		SDL_SetSurfaceBlendMode(widget->_surface, SDL_BLENDMODE_NONE);
 //		SDL_SetSurfaceAlphaMod(widget->_surface, SDL_ALPHA_TRANSPARENT);
 		printf("allocated surface: %p\n", widget->_surface);

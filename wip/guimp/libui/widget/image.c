@@ -69,6 +69,7 @@ ui_image_size(t_ui_image *image, void *data)
 	}
 	else
 		image->super.size = vector2i_zero();
+	ui_style_apply_size(cast(image));
 	(void)data;
 }
 
@@ -76,7 +77,11 @@ void
 ui_image_draw(t_ui_image *image, void *data)
 {
 	if (image->picture)
-		SDL_BlitSurface(image->picture, NULL, image->super._surface, NULL);
+	{
+		SDL_Rect srcrec = { 0, 0, image->picture->w, image->picture->h };
+		SDL_Rect destrec = { 0, 0, image->super.size.x, image->super.size.y };
+		SDL_BlitScaled(image->picture, &srcrec, image->super._surface, &destrec);
+	}
 
 	(void)data;
 }

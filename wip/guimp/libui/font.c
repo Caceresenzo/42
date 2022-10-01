@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "font.h"
+#include "ui.h"
 
 bool
 ui_font_load(t_ui_application *app, const char *path, int size)

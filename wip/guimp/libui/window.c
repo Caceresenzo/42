@@ -84,6 +84,9 @@ ui_window_set_root(t_ui_window *window, t_ui_widget *widget)
 	widget->position.y = 0;
 
 	widget->size = window->size;
+	widget->style.width = optional_int(window->size.x);
+	widget->style.height = optional_int(window->size.y);
+	widget->style.background_color = optional_int(0xff111111);
 
 	ui_widget_set_window_resursive(widget, window);
 
