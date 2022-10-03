@@ -60,20 +60,20 @@ ui_group_size_widget(t_ui_widget *widget, t_ui_group_direction direction)
 }
 
 void
-ui_group_draw(t_list *children)
+ui_group_draw(t_list *children, bool blit_to_parent)
 {
 	t_list_node *node;
 
 	node = children->first;
 	while (node)
 	{
-		ui_widget_draw(node->data);
+		ui_widget_draw(node->data, blit_to_parent);
 		node = node->next;
 	}
 }
 
 void
-ui_group_draw_widget(t_ui_widget *widget)
+ui_group_draw_widget(t_ui_widget *widget, bool blit_to_parent)
 {
-	ui_group_draw(&widget->children);
+	ui_group_draw(&widget->children, blit_to_parent);
 }

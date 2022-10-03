@@ -15,6 +15,7 @@
 static t_ui_widget_descriptor label_descriptor = {
 	.name = "label",
 	.size = sizeof(t_ui_label),
+	.children_limit = 0,
 	.handlers = {
 		.draw = {
 			.code = (void*)&ui_label_draw,
@@ -110,6 +111,8 @@ ui_label_draw(t_ui_label *label, void *data)
 			*str = '\0';
 
 			SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, color);
+			if (!line)
+				sdl_abort("TTF_RenderText_Solid");
 			SDL_Rect destrec = { 0, y, line->w, line->h };
 			SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 			SDL_FreeSurface(line);
@@ -123,6 +126,8 @@ ui_label_draw(t_ui_label *label, void *data)
 	}
 
 	SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, color);
+	if (!line)
+		sdl_abort("TTF_RenderText_Solid");
 	SDL_Rect destrec = { 0, y, line->w, line->h };
 	SDL_BlitSurface(line, NULL, label->super._surface, &destrec);
 	SDL_FreeSurface(line);

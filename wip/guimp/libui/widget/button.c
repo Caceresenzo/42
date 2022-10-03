@@ -15,6 +15,7 @@
 static t_ui_widget_descriptor button_descriptor = {
 	.name = "button",
 	.size = sizeof(t_ui_button),
+	.children_limit = 1,
 	.handlers = {
 		.draw = {
 			.code = (void*)&ui_button_draw,
@@ -74,7 +75,7 @@ ui_button_draw(t_ui_button *button, void *data)
 
 	SDL_FillRect(button->super._surface, NULL, color);
 
-	ui_group_draw_widget(cast(button));
+	ui_group_draw_widget(cast(button), true);
 	(void)data;
 }
 

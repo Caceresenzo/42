@@ -15,6 +15,7 @@
 static t_ui_widget_descriptor canvas_descriptor = {
 	.name = "canvas",
 	.size = sizeof(t_ui_canvas),
+	.children_limit = 0,
 	.handlers = {
 		.draw = {
 			.code = (void*)&ui_canvas_draw,
@@ -43,6 +44,7 @@ ui_canvas_new(t_vector2i dimension)
 	canvas->surface = SDL_CreateRGBSurface(0, dimension.x, dimension.y, 32, 0xff0000, 0xff00, 0xff, 0xff000000);
 	SDL_FillRect(canvas->surface, NULL, 0xff535353);
 	canvas->dimension = dimension;
+	canvas->color = 0xffffff;
 
 	return (canvas);
 }
@@ -76,17 +78,22 @@ void
 ui_canvas_event(t_ui_canvas *canvas, t_ui_event_base *event, void *data)
 {
 	t_ui_event_mouse *mouse_event = cast(event);
+	t_ui_event_mouse_wheel *mouse_wheel_event = cast(event);
+
+	if (event->type == UI_EVENT_TYPE_MOUSE_WHEEL_MOVED)
+		canvas->color += mouse_wheel_event->scroll.y * 1000;
+	printf("color: %06x\n", canvas->color);
 
 	int color = 0;
 	if (event->type == UI_EVENT_TYPE_MOUSE_MOVED)
-		color = 0xffffffff;
+		color = canvas->color;
 	else if (event->type == UI_EVENT_TYPE_MOUSE_DRAGGED)
-		color = 0xff00ffff;
+		color = ~canvas->color;
 
 	if (color)
 	{
 		printf("color=%x x=%d y=%d\n", color, mouse_event->local.x, mouse_event->local.y);
-		ui_canvas_set_pixel(canvas, mouse_event->local, color);
+		ui_canvas_set_pixel(canvas, mouse_event->local, 0xff000000 | color);
 	}
 
 	(void)data;

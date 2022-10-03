@@ -94,15 +94,6 @@ ui_window_set_root(t_ui_window *window, t_ui_widget *widget)
 }
 
 void
-ui_widget_add(t_ui_widget *parent, t_ui_widget *widget)
-{
-	list_add(&parent->children, widget);
-	widget->parent = parent;
-	widget->window = parent->window;
-	parent->dirty = true;
-}
-
-void
 ui_window_draw(t_ui_window *window)
 {
 	if (!window->dirty || !window->root)
@@ -110,7 +101,7 @@ ui_window_draw(t_ui_window *window)
 	window->dirty = false;
 
 	ui_widget_size(window->root);
-	ui_widget_draw(window->root);
+	ui_widget_draw(window->root, true);
 
 	SDL_Surface *surface = SDL_GetWindowSurface(window->_window);
 //	SDL_LockSurface(surface);
@@ -203,6 +194,17 @@ ui_window_dispatch_mouse(t_ui_event_mouse *event)
 }
 
 void
+ui_window_dispatch_mouse_wheel(t_ui_event_mouse_wheel *event)
+{
+	t_ui_window *window = event->super.window;
+
+	printf("\n\nui_window_dispatch_mouse_wheel\n");
+	t_ui_widget *widget = hitscan(window->root, event->position, &event->local);
+	if (widget)
+		ui_widget_event_call(widget, ccast(event));
+}
+
+void
 ui_window_dispatch(t_ui_event_base *base_event)
 {
 	if (base_event->type == UI_EVENT_TYPE_MOUSE_MOVED
@@ -214,6 +216,10 @@ ui_window_dispatch(t_ui_event_base *base_event)
 		|| base_event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
 	{
 		ui_window_dispatch_mouse(cast(base_event));
+	}
+	if (base_event->type == UI_EVENT_TYPE_MOUSE_WHEEL_MOVED)
+	{
+		ui_window_dispatch_mouse_wheel(cast(base_event));
 	}
 }
 

@@ -28,6 +28,28 @@ ui_widget_new(t_ui_widget_descriptor *descriptor)
 }
 
 static bool
+ui_widget_can_add(t_ui_widget *widget)
+{
+	int limit = widget->descriptor->children_limit;
+
+	if (limit == UI_WIDGET_DESCRIPTOR_UNLIMITED_CHILDREN)
+		return (true);
+	return (list_size(&widget->children) <= limit);
+}
+
+bool
+ui_widget_add(t_ui_widget *parent, t_ui_widget *widget)
+{
+	if (!ui_widget_can_add(parent))
+		return (false);
+	list_add(&parent->children, widget);
+	widget->parent = parent;
+	widget->window = parent->window;
+	parent->dirty = true;
+	return (true);
+}
+
+static bool
 ui_widget_is_new_surface_needed(t_ui_widget *widget)
 {
 	SDL_Surface *surface;
@@ -47,7 +69,7 @@ ui_widget_size(t_ui_widget *widget)
 }
 
 void
-ui_widget_draw(t_ui_widget *widget)
+ui_widget_draw(t_ui_widget *widget, bool blit_to_parent)
 {
 	if (ui_widget_is_new_surface_needed(widget))
 	{
@@ -67,7 +89,7 @@ ui_widget_draw(t_ui_widget *widget)
 
 	ui_widget_draw_call(widget);
 
-	if (widget->parent)
+	if (blit_to_parent && widget->parent)
 	{
 		SDL_Rect srcrect = { 0, 0, widget->size.x, widget->size.y };
 		SDL_Rect dstrect = { widget->position.x, widget->position.y, widget->size.x, widget->size.y };

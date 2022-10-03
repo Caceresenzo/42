@@ -20,6 +20,7 @@ typedef struct s_ui_canvas
 	t_ui_widget super;
 	SDL_Surface *surface;
 	t_vector2i dimension;
+	int color;
 } t_ui_canvas;
 
 t_ui_canvas*

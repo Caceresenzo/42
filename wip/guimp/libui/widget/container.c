@@ -15,6 +15,7 @@
 static t_ui_widget_descriptor container_descriptor = {
 	.name = "container",
 	.size = sizeof(t_ui_container),
+	.children_limit = UI_WIDGET_DESCRIPTOR_UNLIMITED_CHILDREN,
 	.handlers = {
 		.draw = {
 			.code = (void*)&ui_container_draw,
@@ -54,6 +55,6 @@ ui_container_draw(t_ui_container *container, void *data)
 //		container->color = SDL_MapRGB(container->super._surface->format, rand() % 255, rand() % 255, rand() % 255);
 //	SDL_FillRect(container->super._surface, NULL, container->color);
 
-	ui_group_draw_widget(cast(container));
+	ui_group_draw_widget(cast(container), true);
 	(void)data;
 }

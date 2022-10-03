@@ -101,10 +101,13 @@ struct s_ui_widget
 	SDL_Surface *_surface;
 };
 
+# define UI_WIDGET_DESCRIPTOR_UNLIMITED_CHILDREN (-1)
+
 struct s_ui_widget_descriptor
 {
 	const char *name;
 	const size_t size;
+	const int children_limit;
 	struct
 	{
 		t_ui_widget_function draw;
@@ -122,6 +125,7 @@ typedef enum e_ui_event_type
 	UI_EVENT_TYPE_MOUSE_EXITED,
 	UI_EVENT_TYPE_MOUSE_PRESSED,
 	UI_EVENT_TYPE_MOUSE_RELEASED,
+	UI_EVENT_TYPE_MOUSE_WHEEL_MOVED,
 } t_ui_event_type;
 
 typedef struct s_ui_event_base
@@ -138,6 +142,14 @@ typedef struct s_ui_event_mouse
 	t_vector2i local;
 	int button;
 } t_ui_event_mouse;
+
+typedef struct s_ui_event_mouse_wheel
+{
+	t_ui_event_base super;
+	t_vector2i position;
+	t_vector2i local;
+	t_vector2i scroll;
+} t_ui_event_mouse_wheel;
 
 t_ui_application*
 ui_application_new(void);
@@ -167,9 +179,6 @@ t_ui_widget*
 ui_window_set_root(t_ui_window *window, t_ui_widget *widget);
 
 void
-ui_widget_add(t_ui_widget *parent, t_ui_widget *widget);
-
-void
 ui_window_draw(t_ui_window *window);
 
 void
@@ -181,11 +190,14 @@ ui_window_find_by_id(t_ui_window *window, const char *id);
 t_ui_widget*
 ui_widget_new(t_ui_widget_descriptor *descriptor);
 
+bool
+ui_widget_add(t_ui_widget *parent, t_ui_widget *widget);
+
 void
 ui_widget_size(t_ui_widget *widget);
 
 void
-ui_widget_draw(t_ui_widget *widget);
+ui_widget_draw(t_ui_widget *widget, bool blit_to_parent);
 
 void
 ui_widget_set_id(t_ui_widget *widget, const char *id);
@@ -238,5 +250,6 @@ ui_error_absent(void);
 # include "widget/image.h"
 # include "widget/button.h"
 # include "widget/canvas.h"
+# include "widget/scroll.h"
 
 #endif

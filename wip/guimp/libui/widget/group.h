@@ -27,9 +27,9 @@ void
 ui_group_size_widget(t_ui_widget *widget, t_ui_group_direction direction);
 
 void
-ui_group_draw(t_list *children);
+ui_group_draw(t_list *children, bool blit_to_parent);
 
 void
-ui_group_draw_widget(t_ui_widget *widget);
+ui_group_draw_widget(t_ui_widget *widget, bool blit_to_parent);
 
 #endif

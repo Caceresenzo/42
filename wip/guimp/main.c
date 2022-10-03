@@ -159,22 +159,24 @@ ui_loop(t_ui_application *app)
 				break;
 			}
 
-//			case SDL_MOUSEWHEEL:
-//			{
-//				window = ui_application_find_window(app, event.wheel.windowID);
-//				if (!window)
-//					continue;
-//
-//				t_ui_event_mouse_wheel ui_event;
-//				ui_event.base.type = UI_EVENT_TYPE_MOUSE_PRESSED;
-//				ui_event.base.window = window;
-//				ui_event.scroll.x = event.wheel.x;
-//				ui_event.scroll.y = event.wheel.y;
-//
-//				ui_window_dispatch(cast(&ui_event));
-//
-//				break;
-//			}
+			case SDL_MOUSEWHEEL:
+			{
+				window = ui_application_find_window(app, event.wheel.windowID);
+				if (!window)
+					continue;
+
+				t_ui_event_mouse_wheel ui_event;
+				ui_event.super.type = UI_EVENT_TYPE_MOUSE_WHEEL_MOVED;
+				ui_event.super.timestamp = event.wheel.timestamp;
+				ui_event.super.window = window;
+				ui_event.scroll.x = event.wheel.x;
+				ui_event.scroll.y = event.wheel.y;
+				SDL_GetMouseState(&ui_event.position.x, &ui_event.position.y);
+
+				ui_window_dispatch(cast(&ui_event));
+
+				break;
+			}
 		}
 
 		ui_application_draw(app);
@@ -193,6 +195,7 @@ create_window(t_ui_application *app)
 	t_ui_window *window;
 	t_ui_label *label;
 	t_ui_container *container;
+	t_ui_scroll *scroll;
 
 	t_vector2i position = { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED };
 	t_vector2i size = { SCREEN_WIDTH, SCREEN_HEIGHT };
@@ -200,7 +203,7 @@ create_window(t_ui_application *app)
 	window = ui_window_new(app, position, size, SDL_WINDOW_SHOWN);
 	ui_window_set_title(window, "Hello");
 
-	t_ui_container *root = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+	t_ui_container *root = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
 	ui_window_set_root(window, cast(root));
 
 //	for (int i = 0; i < 3; ++i)
@@ -246,12 +249,12 @@ create_window(t_ui_application *app)
 //	label = ui_label_new("Click me");
 //	ui_widget_add(cast(button), cast(label));
 
-	t_ui_container *list = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-	ui_widget_add(cast(root), cast(list));
+	t_ui_container *left = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+	ui_widget_add(cast(root), cast(left));
 
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		ui_widget_add(cast(list), cast(container));
+		ui_widget_add(cast(left), cast(container));
 
 		label = ui_label_new("A label");
 		ui_widget_add(cast(container), cast(label));
@@ -263,12 +266,12 @@ create_window(t_ui_application *app)
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
 		container->super.style.height = optional_int(20);
-		ui_widget_add(cast(list), cast(container));
+		ui_widget_add(cast(left), cast(container));
 	}
 
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		ui_widget_add(cast(list), cast(container));
+		ui_widget_add(cast(left), cast(container));
 
 		label = ui_label_new("A button");
 		ui_widget_add(cast(container), cast(label));
@@ -291,12 +294,12 @@ create_window(t_ui_application *app)
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
 		container->super.style.height = optional_int(20);
-		ui_widget_add(cast(list), cast(container));
+		ui_widget_add(cast(left), cast(container));
 	}
 
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		ui_widget_add(cast(list), cast(container));
+		ui_widget_add(cast(left), cast(container));
 
 		label = ui_label_new("An Image");
 		ui_widget_add(cast(container), cast(label));
@@ -309,13 +312,36 @@ create_window(t_ui_application *app)
 
 	{
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		ui_widget_add(cast(list), cast(container));
+		ui_widget_add(cast(left), cast(container));
 
 		label = ui_label_new("A canvas");
 		ui_widget_add(cast(container), cast(label));
 
 		t_ui_canvas *canvas = ui_canvas_new((t_vector2i) { 400, 400 });
 		ui_widget_add(cast(container), cast(canvas));
+	}
+
+	t_ui_container *right = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+	ui_widget_add(cast(root), cast(right));
+
+	{
+		scroll = ui_scroll_new();
+		ui_widget_add(cast(right), cast(scroll));
+
+		scroll->super.style.height = optional_int(300);
+		scroll->super.style.width = optional_int(300);
+
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		ui_widget_add(cast(scroll), cast(container));
+
+		for (int i = 0; i < 300; ++i)
+		{
+			char buffer[64];
+			sprintf(buffer, "Label #%04d", i);
+
+			label = ui_label_new(buffer);
+			ui_widget_add(cast(container), cast(label));
+		}
 	}
 }
 

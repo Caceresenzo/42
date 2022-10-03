@@ -15,6 +15,7 @@
 static t_ui_widget_descriptor image_descriptor = {
 	.name = "image",
 	.size = sizeof(t_ui_image),
+	.children_limit = 0,
 	.handlers = {
 		.draw = {
 			.code = (void*)&ui_image_draw,
