@@ -41,6 +41,7 @@ typedef struct s_ui_scrollbar
 	{
 		int position;
 		int size;
+		int margin;
 	} thumb;
 	struct
 	{

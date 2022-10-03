@@ -145,6 +145,14 @@ ui_scrollbar_draw(t_ui_scrollbar *this, void *data)
 	else
 		rect = (SDL_Rect ) { 0, this->thumb.position, this->super.size.x, this->thumb.size };
 
+	if (this->thumb.margin)
+	{
+		rect.x += this->thumb.margin;
+		rect.y += this->thumb.margin;
+		rect.w -= this->thumb.margin * 2;
+		rect.h -= this->thumb.margin * 2;
+	}
+
 	int color = this->super.style.color.value;
 	if (this->hovered)
 		color = this->super.style.hover_color.value;
