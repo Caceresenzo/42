@@ -130,7 +130,7 @@ ui_scrollbar_draw(t_ui_scrollbar *this, void *data)
 
 		if (this->max)
 		{
-			this->thumb.size = size * 100 / (size + this->max);
+			this->thumb.size = size * 100 / ((size + this->max) / 2);
 			this->thumb.position = this->offset * (size - this->thumb.size) / this->max;
 		}
 		else
