@@ -36,6 +36,23 @@ static t_ui_widget_descriptor scroll_descriptor = {
 # define HORIZONTAL_SCROLLBAR_INDEX (VERTICAL_SCROLLBAR_INDEX + 1)
 # define CHILD_INDEX (HORIZONTAL_SCROLLBAR_INDEX + 1)
 
+void
+ui_scroll_listener_on_scoll(t_ui_scrollbar *scrollbar, int value, t_ui_scroll *this)
+{
+	printf("ui_scroll_listener_on_scoll\n");
+	printf("scrollbar == this->horizontal: %d\n", scrollbar == this->horizontal);
+	if (scrollbar == this->horizontal)
+		this->viewport->offset.x = scrollbar->offset;
+
+	printf("scrollbar == this->vertical: %d\n", scrollbar == this->vertical);
+	if (scrollbar == this->vertical)
+		this->viewport->offset.y = scrollbar->offset;
+
+	ui_widget_set_dirty(cast(this->viewport));
+
+	(void)value;
+}
+
 t_ui_scroll*
 ui_scroll_new(void)
 {
@@ -46,9 +63,13 @@ ui_scroll_new(void)
 
 	scroll->vertical = ui_scrollbar_new(UI_SCROLLBAR_ORIENTATION_VERTICAL);
 	scroll->vertical->super.managed = true;
+	scroll->vertical->on.scroll.code = cast(ui_scroll_listener_on_scoll);
+	scroll->vertical->on.scroll.data = scroll;
 
 	scroll->horizontal = ui_scrollbar_new(UI_SCROLLBAR_ORIENTATION_HORIZONTAL);
 	scroll->horizontal->super.managed = true;
+	scroll->horizontal->on.scroll.code = cast(ui_scroll_listener_on_scoll);
+	scroll->horizontal->on.scroll.data = scroll;
 
 	ui_widget_add(cast(scroll), cast(scroll->viewport));
 	ui_widget_add(cast(scroll), cast(scroll->vertical));
@@ -99,7 +120,6 @@ ui_scroll_size(t_ui_scroll *this, void *data)
 		ui_scrollbar_set_max(this->vertical, 0);
 		ui_scrollbar_set_max(this->horizontal, 0);
 	}
-
 
 	(void)data;
 }

@@ -36,10 +36,16 @@ typedef struct s_ui_scrollbar
 	int max;
 	int offset;
 	bool visible;
-	struct {
+	bool hovered;
+	struct
+	{
 		int position;
 		int size;
 	} thumb;
+	struct
+	{
+		t_ui_widget_function_int scroll;
+	} on;
 } t_ui_scrollbar;
 
 t_ui_scrollbar*
@@ -50,6 +56,9 @@ ui_scrollbar_set_max(t_ui_scrollbar *scrollbar, int max);
 
 void
 ui_scrollbar_set_offset(t_ui_scrollbar *widget, int offset);
+
+int
+ui_scrollbar_get_component(t_ui_scrollbar *this, t_vector2i vector);
 
 void
 ui_scrollbar_describe(t_ui_scrollbar *this, char *buffer, void *data);
@@ -62,5 +71,8 @@ ui_scrollbar_draw(t_ui_scrollbar *widget, void *data);
 
 int
 ui_scrollbar_event(t_ui_scrollbar *widget, t_ui_event_base *event, void *data);
+
+void
+ui_scrollbar_on_scroll_call(t_ui_scrollbar *this);
 
 #endif

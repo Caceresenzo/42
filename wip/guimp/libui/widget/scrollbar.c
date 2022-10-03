@@ -14,7 +14,7 @@
 
 #define DEFAULT_SIZE (15)
 
-static t_ui_widget_descriptor scrollbar_descriptor = {
+static t_ui_widget_descriptor descriptor = {
 	.name = "scrollbar",
 	.size = sizeof(t_ui_scrollbar),
 	.children_limit = 0,
@@ -41,55 +41,59 @@ static t_ui_widget_descriptor scrollbar_descriptor = {
 t_ui_scrollbar*
 ui_scrollbar_new(t_ui_scrollbar_orientation orientation)
 {
-	t_ui_scrollbar *scrollbar = cast(ui_widget_new(&scrollbar_descriptor));
-	scrollbar->orientation = orientation;
-	scrollbar->policy = UI_SCROLLBAR_POLICY_ALWAYS;
-	scrollbar->visible = true;
+	t_ui_scrollbar *this = cast(ui_widget_new(&descriptor));
+	this->orientation = orientation;
+	this->policy = UI_SCROLLBAR_POLICY_ALWAYS;
+	this->visible = true;
 
-	scrollbar->super.style.background_color = optional_int(0xff201c13);
-	scrollbar->super.style.color = optional_int(0xff453a29);
+	this->super.style.background_color = optional_int(0xff201c13);
+	this->super.style.color = optional_int(0xff453a29);
+	this->super.style.hover_color = optional_int(0xff575143);
 
-	return (scrollbar);
+	return (this);
 }
 
 void
-ui_scrollbar_update_visibility(t_ui_scrollbar *scrollbar)
+ui_scrollbar_update_visibility(t_ui_scrollbar *this)
 {
-	if (scrollbar->policy == UI_SCROLLBAR_POLICY_ALWAYS)
-		scrollbar->visible = true;
-	else if (scrollbar->policy == UI_SCROLLBAR_POLICY_NEVER)
-		scrollbar->visible = false;
-	else if (scrollbar->policy == UI_SCROLLBAR_POLICY_AS_NEEDED)
-	{
-		if (scrollbar->orientation == UI_SCROLLBAR_ORIENTATION_HORIZONTAL)
-			scrollbar->visible = scrollbar->max <= scrollbar->super.size.y;
-		else
-			scrollbar->visible = scrollbar->max <= scrollbar->super.size.x;
-	}
+	if (this->policy == UI_SCROLLBAR_POLICY_ALWAYS)
+		this->visible = true;
+	else if (this->policy == UI_SCROLLBAR_POLICY_NEVER)
+		this->visible = false;
+	else if (this->policy == UI_SCROLLBAR_POLICY_AS_NEEDED)
+		this->visible = this->max <= ui_scrollbar_get_component(this, this->super.size);
 
-	ui_widget_set_dirty(cast(scrollbar));
+	ui_widget_set_dirty(cast(this));
 }
 
 void
-ui_scrollbar_set_max(t_ui_scrollbar *scrollbar, int max)
+ui_scrollbar_set_max(t_ui_scrollbar *this, int max)
 {
 	max = MAX(0, max);
-	if (scrollbar->max == max)
+	if (this->max == max)
 		return;
 
-	scrollbar->max = max;
-	ui_scrollbar_update_visibility(scrollbar);
+	this->max = max;
+	ui_scrollbar_update_visibility(this);
 }
 
 void
-ui_scrollbar_set_offset(t_ui_scrollbar *scrollbar, int offset)
+ui_scrollbar_set_offset(t_ui_scrollbar *this, int offset)
 {
-	offset = CLAMP(offset, 0, scrollbar->max);
-	if (scrollbar->offset == offset)
+	offset = CLAMP(offset, 0, this->max);
+	if (this->offset == offset)
 		return;
 
-	scrollbar->offset = offset;
-	ui_scrollbar_update_visibility(scrollbar);
+	this->offset = offset;
+	ui_scrollbar_update_visibility(this);
+}
+
+int
+ui_scrollbar_get_component(t_ui_scrollbar *this, t_vector2i vector)
+{
+	if (this->orientation == UI_SCROLLBAR_ORIENTATION_VERTICAL)
+		return (vector.y);
+	return (vector.x);
 }
 
 void
@@ -120,18 +124,19 @@ ui_scrollbar_draw(t_ui_scrollbar *this, void *data)
 
 	if (this->visible)
 	{
-		int size = this->super.size.y;
-		if (this->orientation == UI_SCROLLBAR_ORIENTATION_HORIZONTAL)
-			size = this->super.size.x;
-
+		int size = ui_scrollbar_get_component(this, this->super.size);
 		if (!size)
 			size = 1;
 
 		if (this->max)
 		{
-			this->thumb.size = size * 100 / this->max;
-			printf("size=%d thumb.size=%d\n", size, this->thumb.size);
+			this->thumb.size = size * 100 / (size + this->max);
 			this->thumb.position = this->offset * (size - this->thumb.size) / this->max;
+		}
+		else
+		{
+			this->thumb.size = 0;
+			this->thumb.position = 0;
 		}
 	}
 
@@ -140,12 +145,48 @@ ui_scrollbar_draw(t_ui_scrollbar *this, void *data)
 	else
 		rect = (SDL_Rect ) { 0, this->thumb.position, this->super.size.x, this->thumb.size };
 
-	SDL_FillRect(this->super._surface, &rect, this->super.style.color.value);
+	int color = this->super.style.color.value;
+	if (this->hovered)
+		color = this->super.style.hover_color.value;
+
+	SDL_FillRect(this->super._surface, &rect, color);
 }
 
 int
-ui_scrollbar_event(t_ui_scrollbar *scrollbar, t_ui_event_base *event, void *data)
+ui_scrollbar_event(t_ui_scrollbar *this, t_ui_event_base *event, void *data)
 {
+	t_ui_event_mouse *mouse = cast(event);
+
+	if (event->type == UI_EVENT_TYPE_MOUSE_ENTERED)
+	{
+		this->hovered = true;
+		return (UI_EVENT_CONTINUE);
+	}
+
+	if (event->type == UI_EVENT_TYPE_MOUSE_EXITED)
+	{
+		this->hovered = false;
+		return (UI_EVENT_CONTINUE);
+	}
+
+	if (event->type == UI_EVENT_TYPE_MOUSE_DRAGGED || event->type == UI_EVENT_TYPE_MOUSE_CLICKED)
+	{
+		int local = ui_scrollbar_get_component(this, mouse->local);
+		int size = ui_scrollbar_get_component(this, this->super.size);
+
+		int offset = local * this->max / size;
+		ui_scrollbar_set_offset(this, offset);
+		ui_scrollbar_on_scroll_call(this);
+
+		return (UI_EVENT_CONSUME);
+	}
+
 	return (UI_EVENT_CONTINUE);
 	(void)data;
+}
+
+void
+ui_scrollbar_on_scroll_call(t_ui_scrollbar *this)
+{
+	ui_widget_function_int_call(cast(this), &this->on.scroll, this->offset);
 }

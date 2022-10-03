@@ -1,7 +1,7 @@
 #include "libui/ui.h"
 
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
+const int SCREEN_WIDTH = 900;
+const int SCREEN_HEIGHT = 900;
 
 void
 setPixel(SDL_Surface *surface, Uint8 r, Uint8 g, Uint8 b, Uint8 a, size_t x, size_t y)
@@ -320,6 +320,12 @@ create_window(t_ui_application *app)
 		ui_widget_add(cast(container), cast(canvas));
 	}
 
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		container->super.style.width = optional_int(20);
+		ui_widget_add(cast(root), cast(container));
+	}
+
 	t_ui_container *right = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
 	ui_widget_add(cast(root), cast(right));
 
@@ -363,6 +369,23 @@ create_window(t_ui_application *app)
 		}
 	}
 
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		container->super.style.height = optional_int(20);
+		ui_widget_add(cast(right), cast(container));
+	}
+
+	{
+		scroll = ui_scroll_new();
+		ui_widget_add(cast(right), cast(scroll));
+
+		scroll->super.style.height = optional_int(300);
+		scroll->super.style.width = optional_int(300);
+
+		t_ui_image *image = ui_image_new("buse.png");
+		ui_widget_add(cast(scroll->viewport), cast(image));
+	}
+
 	ui_window_set_root(window, cast(root));
 }
 
@@ -385,7 +408,7 @@ create_toolbox_window(t_ui_application *app)
 	t_ui_window *window;
 	t_ui_label *label;
 	t_ui_container *container;
-	t_ui_image *image;
+//	t_ui_image *image;
 	t_ui_button *button;
 
 	SDL_DisplayMode display_mode;
@@ -425,7 +448,7 @@ create_toolbox_window(t_ui_application *app)
 			button = ui_button_new();
 			ui_widget_add(cast(container), cast(button));
 			button->on.click.code = &tool_on_click;
-			button->on.click.data = (void*)(i * 4 + j);
+			button->on.click.data = (void*)(long)(i * 4 + j);
 
 			t_ui_image *image = ui_image_new("resources/icons/tools/brush.png");
 			image->super.style.height = optional_int(third);

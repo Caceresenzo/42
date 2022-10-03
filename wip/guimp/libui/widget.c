@@ -200,6 +200,13 @@ ui_widget_function_call(t_ui_widget *widget, t_ui_widget_function *function)
 }
 
 void
+ui_widget_function_int_call(t_ui_widget *widget, t_ui_widget_function_int *function, int value)
+{
+	if (function->code)
+		function->code(widget, value, function->data);
+}
+
+void
 ui_widget_draw_call(t_ui_widget *widget)
 {
 	ui_widget_function_call(widget, &widget->descriptor->handlers.draw);

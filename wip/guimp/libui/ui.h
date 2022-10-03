@@ -39,6 +39,7 @@ typedef struct s_ui_widget_function t_ui_widget_function;
 typedef struct s_ui_widget_function_event t_ui_widget_function_event;
 typedef struct s_ui_widget_function_describe t_ui_widget_function_describe;
 typedef struct s_ui_widget_function_hitscan_interceptor t_ui_widget_function_hitscan_interceptor;
+typedef struct s_ui_widget_function_int t_ui_widget_function_int;
 typedef struct s_ui_event_base t_ui_event_base;
 
 struct s_ui_widget_function
@@ -72,6 +73,13 @@ struct s_ui_widget_function_hitscan_interceptor
 	void *data;
 };
 
+struct s_ui_widget_function_int
+{
+	void
+	(*code)(t_ui_widget*, int, void*);
+	void *data;
+};
+
 typedef struct s_style
 {
 	t_optional_int width;
@@ -82,6 +90,7 @@ typedef struct s_style
 	t_optional_int max_height;
 	t_optional_color color;
 	t_optional_color background_color;
+	t_optional_color hover_color;
 } t_style;
 
 struct s_ui_application
@@ -238,6 +247,9 @@ ui_widget_get_child(t_ui_widget *widget, int index);
 
 void
 ui_widget_function_call(t_ui_widget *widget, t_ui_widget_function *function);
+
+void
+ui_widget_function_int_call(t_ui_widget *widget, t_ui_widget_function_int *function, int value);
 
 void
 ui_widget_draw_call(t_ui_widget *widget);
