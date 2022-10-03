@@ -59,7 +59,7 @@ ui_window_set_title(t_ui_window *window, const char *title)
 }
 
 static void
-ui_widget_set_window_resursive(t_ui_widget *widget, t_ui_window *window)
+ui_widget_set_window_recursive(t_ui_widget *widget, t_ui_window *window)
 {
 	t_list_node *node;
 
@@ -67,7 +67,7 @@ ui_widget_set_window_resursive(t_ui_widget *widget, t_ui_window *window)
 	node = widget->children.first;
 	while (node)
 	{
-		ui_widget_set_window_resursive(node->data, window);
+		ui_widget_set_window_recursive(node->data, window);
 		node = node->next;
 	}
 }
@@ -88,7 +88,7 @@ ui_window_set_root(t_ui_window *window, t_ui_widget *widget)
 	widget->style.height = optional_int(window->size.y);
 	widget->style.background_color = optional_int(0xff111111);
 
-	ui_widget_set_window_resursive(widget, window);
+	ui_widget_set_window_recursive(widget, window);
 
 	return (old);
 }
@@ -136,7 +136,7 @@ hitscan(t_ui_widget **widget, t_vector2i point, t_vector2i *local)
 			*(widget + 1) = child;
 			char buffer[300] = { 0 };
 			ui_widget_describe_call(child, buffer);
-			printf("%p :: %s (%s)\n", child, child->descriptor->name, buffer);
+			printf("%p :: %20s position={%3d,%3d} size={%3d,%3d} %s\n", child, child->descriptor->name, child->position.x, child->position.y, child->size.x, child->size.y, buffer);
 			return (hitscan(widget + 1, vector2i_substract(point, child->position), local));
 		}
 		node = node->next;

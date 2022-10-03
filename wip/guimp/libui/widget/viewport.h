@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   scroll.h                                           :+:      :+:    :+:   */
+/*   viewport.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,29 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WIDGET_SCROLL_H
-# define WIDGET_SCROLL_H
+#ifndef WIDGET_VIEWPORT_H
+# define WIDGET_VIEWPORT_H
 
 # include "../ui.h"
 
-typedef struct s_ui_scroll
+typedef struct s_ui_viewport
 {
 	t_ui_widget super;
-	t_ui_viewport* viewport;
-	t_ui_scrollbar* vertical;
-	t_ui_scrollbar* horizontal;
-} t_ui_scroll;
+	t_vector2i offset;
+} t_ui_viewport;
 
-t_ui_scroll*
-ui_scroll_new(void);
+t_ui_viewport*
+ui_viewport_new(void);
 
 void
-ui_scroll_size(t_ui_scroll *widget, void *data);
+ui_viewport_describe(t_ui_viewport *this, char *buffer, void *data);
 
 void
-ui_scroll_draw(t_ui_scroll *widget, void *data);
+ui_viewport_size(t_ui_viewport *viewport, void *data);
 
-int
-ui_scroll_event(t_ui_scroll *widget, t_ui_event_base *event, void *data);
+void
+ui_viewport_draw(t_ui_viewport *viewport, void *data);
+
+void
+ui_viewport_hitscan_interceptor(t_ui_viewport *viewport, t_vector2i *point, void *data);
 
 #endif

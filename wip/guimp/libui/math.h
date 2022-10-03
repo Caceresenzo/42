@@ -21,6 +21,7 @@ typedef struct
 
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
+#define CLAMP(x,lo,hi) MIN((hi), MAX((lo), (x)))
 
 t_vector2i
 vector2i(int x, int y);
@@ -30,5 +31,8 @@ vector2i_zero(void);
 
 t_vector2i
 vector2i_substract(t_vector2i left, t_vector2i right);
+
+t_vector2i
+vector2i_add(t_vector2i left, t_vector2i right);
 
 #endif

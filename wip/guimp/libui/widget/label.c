@@ -90,8 +90,8 @@ void
 ui_label_draw(t_ui_label *label, void *data)
 {
 	SDL_Color color = { 255, 255, 255 };
-	if (label->super.style.text_color.present)
-		*((int*) &color) = label->super.style.text_color.value;
+	if (label->super.style.color.present)
+		*((int*) &color) = label->super.style.color.value;
 
 	//	SDL_LockSurface(label->super._surface);
 //	SDL_FillRect(label->super._surface, NULL, SDL_MapRGBA(label->super._surface->format, 0, 0, 0, 0));
@@ -107,6 +107,7 @@ ui_label_draw(t_ui_label *label, void *data)
 		{
 			*str = '\0';
 
+			assert(label->super.window);
 			SDL_Surface *line = TTF_RenderText_Solid(label->super.window->app->font, line_start, color);
 			if (!line)
 				sdl_abort("TTF_RenderText_Solid");

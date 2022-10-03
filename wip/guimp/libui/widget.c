@@ -28,20 +28,34 @@ ui_widget_new(t_ui_widget_descriptor *descriptor)
 }
 
 static bool
+ui_widget_is_managed(t_ui_widget *widget)
+{
+	return (widget->managed);
+}
+
+static bool
 ui_widget_can_add(t_ui_widget *widget)
 {
-	int limit = widget->descriptor->children_limit;
+	if (widget->managed)
+		return (true);
 
+	int limit = widget->descriptor->children_limit;
 	if (limit == UI_WIDGET_DESCRIPTOR_UNLIMITED_CHILDREN)
 		return (true);
-	return (list_size(&widget->children) <= limit);
+
+	int size = list_size_filtered(&widget->children, cast(&ui_widget_is_managed), true);
+	return (size <= limit);
 }
 
 bool
 ui_widget_add(t_ui_widget *parent, t_ui_widget *widget)
 {
 	if (!ui_widget_can_add(parent))
+	{
+		printf("error: can't add");
+		abort();
 		return (false);
+	}
 	list_add(&parent->children, widget);
 	widget->parent = parent;
 	widget->window = parent->window;
@@ -75,8 +89,10 @@ ui_widget_draw(t_ui_widget *widget, bool blit_to_parent)
 	{
 		if (widget->_surface)
 			SDL_FreeSurface(widget->_surface);
-		widget->_surface = SDL_CreateRGBSurface(0, widget->size.x, widget->size.y, 32, 0xff, 0xff00, 0xff0000, 0xff000000);
-//		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 255, 0, 0, 80));
+		widget->_surface = SDL_CreateRGBSurface(0, widget->size.x, widget->size.y, 32, 0xff0000, 0xff00, 0xff, 0xff000000);
+		if (!widget->_surface)
+			sdl_abort("SDL_CreateRGBSurface");
+		//		SDL_FillRect(widget->_surface, NULL, SDL_MapRGBA(widget->_surface->format, 255, 0, 0, 80));
 //		SDL_SetSurfaceBlendMode(widget->_surface, SDL_BLENDMODE_NONE);
 //		SDL_SetSurfaceAlphaMod(widget->_surface, SDL_ALPHA_TRANSPARENT);
 		printf("allocated surface: %p\n", widget->_surface);
@@ -161,6 +177,21 @@ ui_widget_is_inside(t_ui_widget *widget, t_vector2i point)
 		&& widget->position.y + widget->size.y >= point.y);
 }
 
+t_ui_widget*
+ui_widget_get_child(t_ui_widget *widget, int index)
+{
+	t_list_node *node;
+
+	node = widget->children.first;
+	while (node)
+	{
+		if (index-- == 0)
+			return (node->data);
+		node = node->next;
+	}
+	return (NULL);
+}
+
 void
 ui_widget_function_call(t_ui_widget *widget, t_ui_widget_function *function)
 {
@@ -207,7 +238,6 @@ ui_widget_describe_call(t_ui_widget *widget, char *buffer)
 	t_ui_widget_function_describe *function;
 
 	function = &widget->descriptor->handlers.describe;
-	printf("function=%p\n", function->code);
 	if (function->code)
 		function->code(widget, buffer, function->data);
 }

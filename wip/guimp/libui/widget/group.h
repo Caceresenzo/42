@@ -16,7 +16,8 @@
 # include "../ui.h"
 
 typedef enum e_ui_group_direction {
-	UI_GROUP_DIRECTION_VERTICAL = 1,
+	UI_GROUP_DIRECTION_NONE = 1,
+	UI_GROUP_DIRECTION_VERTICAL,
 	UI_GROUP_DIRECTION_HORIZONTAL
 } t_ui_group_direction;
 

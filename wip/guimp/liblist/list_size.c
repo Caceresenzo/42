@@ -21,3 +21,22 @@ long
 		return (-1);
 	return (list->size);
 }
+
+long
+	list_size_filtered(t_list *list, bool (*predicate)(void*), bool negate)
+{
+	long size;
+	t_list_node	*node;
+
+	if (!list)
+		return (-1);
+	size = 0;
+	node = list->first;
+	while (node)
+	{
+		if (predicate(node->data) != negate)
+			++size;
+		node = node->next;
+	}
+	return (size);
+}

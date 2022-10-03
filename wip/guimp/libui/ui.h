@@ -80,7 +80,7 @@ typedef struct s_style
 	t_optional_int height;
 	t_optional_int min_height;
 	t_optional_int max_height;
-	t_optional_color text_color;
+	t_optional_color color;
 	t_optional_color background_color;
 } t_style;
 
@@ -115,6 +115,7 @@ struct s_ui_widget
 	bool dirty;
 	bool focusable;
 	bool traversable;
+	bool managed;
 	t_style style;
 	t_list children;
 	SDL_Surface *_surface;
@@ -232,6 +233,9 @@ ui_widget_find_by_id(t_ui_widget *widget, const char *id);
 bool
 ui_widget_is_inside(t_ui_widget *widget, t_vector2i point);
 
+t_ui_widget*
+ui_widget_get_child(t_ui_widget *widget, int index);
+
 void
 ui_widget_function_call(t_ui_widget *widget, t_ui_widget_function *function);
 
@@ -274,12 +278,17 @@ ui_error_absent(void);
 bool
 ui_event_type_is_mouse(t_ui_event_type type);
 
+typedef struct s_ui_scrollbar t_ui_scrollbar;
+typedef struct s_ui_viewport t_ui_viewport;
+
 # include "widget/group.h"
 # include "widget/container.h"
 # include "widget/label.h"
 # include "widget/image.h"
 # include "widget/button.h"
 # include "widget/canvas.h"
+# include "widget/scrollbar.h"
+# include "widget/viewport.h"
 # include "widget/scroll.h"
 
 #endif

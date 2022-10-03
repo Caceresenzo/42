@@ -52,6 +52,9 @@ ui_canvas_new(t_vector2i dimension)
 void
 ui_canvas_set_pixel(t_ui_canvas *canvas, t_vector2i position, int color)
 {
+	if (position.x < 0 || position.x >= canvas->dimension.x
+		|| position.y < 0 || position.y >= canvas->dimension.y)
+		return;
 	Uint32 *pixels = canvas->surface->pixels;
 	pixels[position.y * canvas->dimension.x + position.x] = color;
 	ui_widget_set_dirty(cast(canvas));

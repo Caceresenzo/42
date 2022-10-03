@@ -34,6 +34,7 @@ t_list_node		*list_add(t_list *list, void *data);
 void			list_delete(t_list *list, void (*del)(void*));
 bool			list_remove(t_list *list, void *data, void (*del)(void*));
 long			list_size(t_list *list);
+long			list_size_filtered(t_list *list, bool (*predicate)(void*), bool negate);
 void			list_for_each(t_list *list, void (*consumer)(void*));
 
 void			list_node_initialize(t_list_node *node, void *data);

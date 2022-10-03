@@ -204,7 +204,6 @@ create_window(t_ui_application *app)
 	ui_window_set_title(window, "Hello");
 
 	t_ui_container *root = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
-	ui_window_set_root(window, cast(root));
 
 //	for (int i = 0; i < 3; ++i)
 //	{
@@ -317,7 +316,7 @@ create_window(t_ui_application *app)
 		label = ui_label_new("A canvas");
 		ui_widget_add(cast(container), cast(label));
 
-		t_ui_canvas *canvas = ui_canvas_new((t_vector2i) { 400, 400 });
+		t_ui_canvas *canvas = ui_canvas_new((t_vector2i ) { 400, 400 });
 		ui_widget_add(cast(container), cast(canvas));
 	}
 
@@ -328,24 +327,43 @@ create_window(t_ui_application *app)
 		scroll = ui_scroll_new();
 		ui_widget_add(cast(right), cast(scroll));
 
+		scroll->super.style.background_color = optional_int(0xffff0000);
 		scroll->super.style.height = optional_int(300);
 		scroll->super.style.width = optional_int(300);
 
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
-		ui_widget_add(cast(scroll), cast(container));
+		ui_widget_add(cast(scroll->viewport), cast(container));
 
-		for (int i = 0; i < 10; ++i)
+//		scroll->vertical->policy = UI_SCROLLBAR_POLICY_NEVER;
+
+		for (int i = 0; i < 30; ++i)
 		{
-			char buffer[64];
-			sprintf(buffer, "Label #%04d", i);
+			t_ui_container *row = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
+			ui_widget_add(cast(container), cast(row));
 
-			label = ui_label_new(buffer);
-			ui_widget_add(cast(container), cast(label));
+			for (int j = 0; j < 30; ++j)
+			{
+				t_ui_container *block = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+				block->super.style.height = optional_int(60);
+				block->super.style.width = optional_int(60);
+				block->super.style.background_color = optional_int((i + j) % 2 ? 0xffffff00 : 0xff00ffff);
+//				block->super.style.background_color = optional_int(i % 2 ? 0xffffff00 : 0xff00ffff);
+				//			char buffer[64];
+				//			sprintf(buffer, "Label #%04d\naaaaaaa\nbbbbbbbbbbbbbbbbbbbbbbbbbb", i);
+				//
+				//			label = ui_label_new(buffer);
+				//			label->super.style.height = optional_int(60);
+//							ui_widget_add(cast(container), cast(label));
+				ui_widget_add(cast(row), cast(block));
+//				ui_widget_add(cast(container), cast(block));
 
-			t_ui_canvas *canvas = ui_canvas_new((t_vector2i) { 50, 50 });
-			ui_widget_add(cast(container), cast(canvas));
+//							t_ui_canvas *canvas = ui_canvas_new((t_vector2i) { 50, 50 });
+//							ui_widget_add(cast(container), cast(canvas));
+			}
 		}
 	}
+
+	ui_window_set_root(window, cast(root));
 }
 
 void
@@ -430,7 +448,7 @@ main(int arc, char **argv)
 	ui_font_load(app, "Consolas.ttf", 24);
 
 //	create_window(app);
-	create_toolbox_window(app);
+//	create_toolbox_window(app);
 	create_window(app);
 
 	ui_application_dump(app);
