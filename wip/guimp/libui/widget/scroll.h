@@ -41,9 +41,12 @@ void
 ui_scroll_size(t_ui_scroll *widget, void *data);
 
 void
-ui_scroll_draw(t_ui_scroll *widget, void *data);
+ui_scroll_hitscan_interceptor(t_ui_scroll *scroll, t_vector2i *point, void *data);
 
 void
+ui_scroll_draw(t_ui_scroll *widget, void *data);
+
+int
 ui_scroll_event(t_ui_scroll *widget, t_ui_event_base *event, void *data);
 
 #endif

@@ -116,28 +116,34 @@ ui_window_draw(t_ui_window *window)
 }
 
 t_ui_widget*
-hitscan(t_ui_widget *widget, t_vector2i point, t_vector2i *local)
+hitscan(t_ui_widget **widget, t_vector2i point, t_vector2i *local)
 {
 	t_list_node *node;
 	t_ui_widget *child;
 
+	ui_widget_hitscan_interceptor_call(*widget, &point);
+	*(widget + 1) = NULL;
 	*local = point;
-	if (!widget->traversable)
-		return (widget);
+	if (!(*widget)->traversable)
+		return (*widget);
 
-	node = widget->children.first;
+	node = (*widget)->children.first;
 	while (node)
 	{
 		child = node->data;
 		if (ui_widget_is_inside(child, point))
 		{
-			printf("%p :: %s\n", child, child->descriptor->name);
-			return (hitscan(child, vector2i_substract(point, child->position), local));
+			*(widget + 1) = child;
+			char buffer[300] = { 0 };
+			ui_widget_describe_call(child, buffer);
+			printf("%p :: %s (%s)\n", child, child->descriptor->name, buffer);
+			return (hitscan(widget + 1, vector2i_substract(point, child->position), local));
 		}
 		node = node->next;
 	}
 
-	return (widget);
+	*(widget + 1) = NULL;
+	return (*widget);
 }
 
 //void
@@ -157,7 +163,8 @@ ui_window_dispatch_mouse(t_ui_event_mouse *event)
 	t_ui_window *window = event->super.window;
 
 	printf("\n\nui_window_dispatch_mouse\n");
-	t_ui_widget *widget = hitscan(window->root, event->position, &event->local);
+	t_ui_widget *hits[200] = { window->root, NULL };
+	t_ui_widget *widget = hitscan((t_ui_widget**)&hits, event->position, &event->local);
 	if (window->focused && widget != window->focused)
 	{
 		t_ui_event_mouse event2 = *event;
@@ -199,21 +206,34 @@ ui_window_dispatch_mouse_wheel(t_ui_event_mouse_wheel *event)
 	t_ui_window *window = event->super.window;
 
 	printf("\n\nui_window_dispatch_mouse_wheel\n");
-	t_ui_widget *widget = hitscan(window->root, event->position, &event->local);
-	if (widget)
-		ui_widget_event_call(widget, ccast(event));
+	t_ui_widget *hits[200] = { window->root, NULL };
+	hitscan((t_ui_widget**)&hits, event->position, &event->local);
+
+	t_ui_widget **widget = hits;
+//	while (*widget)
+//	{
+//		printf("++ %p\n", *widget);
+//		widget++;
+//	}
+//	while (widget != hits)
+//	{
+//		widget--;
+//		printf("-- %p\n", *widget);
+//		if (ui_widget_event_call(*widget, cast(event)) == UI_EVENT_CONSUME)
+//			break;
+//	}
+	while (*widget)
+	{
+		if (ui_widget_event_call(*widget, cast(event)) == UI_EVENT_CONSUME)
+			break;
+		widget++;
+	}
 }
 
 void
 ui_window_dispatch(t_ui_event_base *base_event)
 {
-	if (base_event->type == UI_EVENT_TYPE_MOUSE_MOVED
-		|| base_event->type == UI_EVENT_TYPE_MOUSE_DRAGGED
-		|| base_event->type == UI_EVENT_TYPE_MOUSE_CLICKED
-		|| base_event->type == UI_EVENT_TYPE_MOUSE_ENTERED
-		|| base_event->type == UI_EVENT_TYPE_MOUSE_EXITED
-		|| base_event->type == UI_EVENT_TYPE_MOUSE_PRESSED
-		|| base_event->type == UI_EVENT_TYPE_MOUSE_RELEASED)
+	if (ui_event_type_is_mouse(base_event->type))
 	{
 		ui_window_dispatch_mouse(cast(base_event));
 	}

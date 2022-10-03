@@ -35,7 +35,7 @@ ui_canvas_size(t_ui_canvas *canvas, void *data);
 void
 ui_canvas_draw(t_ui_canvas *canvas, void *data);
 
-void
+int
 ui_canvas_event(t_ui_canvas *canvas, t_ui_event_base *event, void *data);
 
 #endif

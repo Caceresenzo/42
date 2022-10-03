@@ -47,7 +47,7 @@ ui_button_size(t_ui_button *button, void *data);
 void
 ui_button_draw(t_ui_button *button, void *data);
 
-void
+int
 ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data);
 
 #endif

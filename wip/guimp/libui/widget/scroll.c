@@ -17,6 +17,10 @@ static t_ui_widget_descriptor scroll_descriptor = {
 	.size = sizeof(t_ui_scroll),
 	.children_limit = 1,
 	.handlers = {
+		.hitscan_interceptor = {
+			.code = (void*)&ui_scroll_hitscan_interceptor,
+			.data = NULL
+		},
 		.draw = {
 			.code = (void*)&ui_scroll_draw,
 			.data = NULL
@@ -65,6 +69,12 @@ ui_widget_get_child(t_ui_widget *widget, int index)
 }
 
 void
+ui_scroll_hitscan_interceptor(t_ui_scroll *scroll, t_vector2i *point, void *data)
+{
+	point->y += scroll->vertical.offset;
+}
+
+void
 ui_scroll_draw(t_ui_scroll *scroll, void *data)
 {
 	ui_group_draw_widget(cast(scroll), false);
@@ -81,11 +91,11 @@ ui_scroll_draw(t_ui_scroll *scroll, void *data)
 
 #define CLAMP(x,lo,hi) MIN((hi), MAX((lo), (x)))
 
-void
+int
 ui_scroll_event(t_ui_scroll *scroll, t_ui_event_base *event, void *data)
 {
 	if (event->type != UI_EVENT_TYPE_MOUSE_WHEEL_MOVED)
-		return;
+		return (UI_EVENT_CONTINUE);
 
 	t_ui_event_mouse_wheel *wheel_event = cast(event);
 	t_ui_widget *first = ui_widget_get_child(cast(scroll), 0);
@@ -100,4 +110,7 @@ ui_scroll_event(t_ui_scroll *scroll, t_ui_event_base *event, void *data)
 	printf("offset v%d\n", scroll->vertical.offset);
 
 	ui_widget_set_dirty(cast(scroll));
+
+	return (UI_EVENT_CONSUME);
+	(void)data;
 }

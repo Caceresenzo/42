@@ -79,7 +79,7 @@ ui_button_draw(t_ui_button *button, void *data)
 	(void)data;
 }
 
-void
+int
 ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data)
 {
 	t_ui_event_mouse *mouse_event = cast(event);
@@ -94,5 +94,6 @@ ui_button_event(t_ui_button *button, t_ui_event_base *event, void *data)
 	if (event->type == UI_EVENT_TYPE_MOUSE_CLICKED)
 		ui_widget_function_call(cast(button), &button->on.click);
 
+	return (UI_EVENT_CONTINUE);
 	(void)data;
 }

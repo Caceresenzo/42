@@ -334,13 +334,16 @@ create_window(t_ui_application *app)
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
 		ui_widget_add(cast(scroll), cast(container));
 
-		for (int i = 0; i < 300; ++i)
+		for (int i = 0; i < 10; ++i)
 		{
 			char buffer[64];
 			sprintf(buffer, "Label #%04d", i);
 
 			label = ui_label_new(buffer);
 			ui_widget_add(cast(container), cast(label));
+
+			t_ui_canvas *canvas = ui_canvas_new((t_vector2i) { 50, 50 });
+			ui_widget_add(cast(container), cast(canvas));
 		}
 	}
 }

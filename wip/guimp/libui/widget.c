@@ -180,12 +180,34 @@ ui_widget_size_call(t_ui_widget *widget)
 	ui_widget_function_call(widget, &widget->descriptor->handlers.size);
 }
 
-void
+int
 ui_widget_event_call(t_ui_widget *widget, const t_ui_event_base *event)
 {
 	t_ui_widget_function_event *function;
 
 	function = &widget->descriptor->handlers.event;
 	if (function->code)
-		function->code(widget, event, function->data);
+		return (function->code(widget, event, function->data));
+	return (UI_EVENT_CONTINUE);
+}
+
+void
+ui_widget_hitscan_interceptor_call(t_ui_widget *widget, t_vector2i *point)
+{
+	t_ui_widget_function_hitscan_interceptor *function;
+
+	function = &widget->descriptor->handlers.hitscan_interceptor;
+	if (function->code)
+		function->code(widget, point, function->data);
+}
+
+void
+ui_widget_describe_call(t_ui_widget *widget, char *buffer)
+{
+	t_ui_widget_function_describe *function;
+
+	function = &widget->descriptor->handlers.describe;
+	printf("function=%p\n", function->code);
+	if (function->code)
+		function->code(widget, buffer, function->data);
 }

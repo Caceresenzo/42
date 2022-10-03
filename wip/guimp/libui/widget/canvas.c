@@ -74,7 +74,7 @@ ui_canvas_draw(t_ui_canvas *canvas, void *data)
 	(void)data;
 }
 
-void
+int
 ui_canvas_event(t_ui_canvas *canvas, t_ui_event_base *event, void *data)
 {
 	t_ui_event_mouse *mouse_event = cast(event);
@@ -96,5 +96,6 @@ ui_canvas_event(t_ui_canvas *canvas, t_ui_event_base *event, void *data)
 		ui_canvas_set_pixel(canvas, mouse_event->local, 0xff000000 | color);
 	}
 
+	return (UI_EVENT_CONTINUE);
 	(void)data;
 }

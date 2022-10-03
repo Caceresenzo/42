@@ -17,6 +17,10 @@ static t_ui_widget_descriptor label_descriptor = {
 	.size = sizeof(t_ui_label),
 	.children_limit = 0,
 	.handlers = {
+		.describe = {
+			.code = (void*)&ui_label_describe,
+			.data = NULL
+		},
 		.draw = {
 			.code = (void*)&ui_label_draw,
 			.data = NULL
@@ -47,13 +51,6 @@ ui_label_set_text(t_ui_label *label, const char *text)
 	else
 		label->text = NULL;
 
-	ui_widget_set_dirty(cast(label));
-}
-
-void
-ui_label_set_background_color(t_ui_label *label, t_color background_color)
-{
-	label->background_color = background_color;
 	ui_widget_set_dirty(cast(label));
 }
 
@@ -139,4 +136,10 @@ ui_label_draw(t_ui_label *label, void *data)
 //	SDL_UnlockSurface(label->super._surface);
 
 	(void)data;
+}
+
+void
+ui_label_describe(t_ui_label *label, char *buffer, void *data)
+{
+	sprintf(buffer, "text=%s", label->text);
 }

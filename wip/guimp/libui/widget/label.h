@@ -26,7 +26,6 @@ typedef struct s_ui_label
 {
 	t_ui_widget super;
 	char *text;
-	t_color background_color;
 } t_ui_label;
 
 t_ui_label*
@@ -36,12 +35,12 @@ void
 ui_label_set_text(t_ui_label *label, const char *text);
 
 void
-ui_label_set_background_color(t_ui_label *label, t_color background_color);
-
-void
 ui_label_size(t_ui_label *label, void *data);
 
 void
 ui_label_draw(t_ui_label *label, void *data);
+
+void
+ui_label_describe(t_ui_label *label, char *buffer, void *data);
 
 #endif

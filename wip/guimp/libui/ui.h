@@ -37,6 +37,8 @@ typedef struct s_style t_style;
 
 typedef struct s_ui_widget_function t_ui_widget_function;
 typedef struct s_ui_widget_function_event t_ui_widget_function_event;
+typedef struct s_ui_widget_function_describe t_ui_widget_function_describe;
+typedef struct s_ui_widget_function_hitscan_interceptor t_ui_widget_function_hitscan_interceptor;
 typedef struct s_ui_event_base t_ui_event_base;
 
 struct s_ui_widget_function
@@ -46,10 +48,27 @@ struct s_ui_widget_function
 	void *data;
 };
 
+# define UI_EVENT_CONSUME 1
+# define UI_EVENT_CONTINUE 2
+
 struct s_ui_widget_function_event
 {
-	void
+	int
 	(*code)(t_ui_widget*, const t_ui_event_base*, void*);
+	void *data;
+};
+
+struct s_ui_widget_function_describe
+{
+	void
+	(*code)(t_ui_widget*, char*, void*);
+	void *data;
+};
+
+struct s_ui_widget_function_hitscan_interceptor
+{
+	void
+	(*code)(t_ui_widget*, t_vector2i*, void*);
 	void *data;
 };
 
@@ -110,6 +129,8 @@ struct s_ui_widget_descriptor
 	const int children_limit;
 	struct
 	{
+		t_ui_widget_function_describe describe;
+		t_ui_widget_function_hitscan_interceptor hitscan_interceptor;
 		t_ui_widget_function draw;
 		t_ui_widget_function size;
 		t_ui_widget_function_event event;
@@ -220,8 +241,14 @@ ui_widget_draw_call(t_ui_widget *widget);
 void
 ui_widget_size_call(t_ui_widget *widget);
 
-void
+int
 ui_widget_event_call(t_ui_widget *widget, const t_ui_event_base *event);
+
+void
+ui_widget_hitscan_interceptor_call(t_ui_widget *widget, t_vector2i *point);
+
+void
+ui_widget_describe_call(t_ui_widget *widget, char *buffer);
 
 bool
 ui_font_load(t_ui_application *app, const char *path, int size);
@@ -243,6 +270,9 @@ ui_error_present(const char *message);
 
 t_ui_error
 ui_error_absent(void);
+
+bool
+ui_event_type_is_mouse(t_ui_event_type type);
 
 # include "widget/group.h"
 # include "widget/container.h"
