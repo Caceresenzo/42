@@ -18,3 +18,9 @@ sdl_abort(const char *function)
 	printf("%s: %s\n", function, SDL_GetError());
 	abort();
 }
+
+SDL_Color
+sdl_as_color(int color)
+{
+	return (*((SDL_Color*)&color));
+}

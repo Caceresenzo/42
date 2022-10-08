@@ -21,3 +21,11 @@ optional_int(int value)
 	optional.value = value;
 	return (optional);
 }
+
+int
+optional_int_or_else(t_optional_int optional, int default_value)
+{
+	if (optional.present)
+		return (optional.value);
+	return (default_value);
+}

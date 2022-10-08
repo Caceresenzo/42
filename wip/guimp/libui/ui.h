@@ -93,11 +93,18 @@ typedef struct s_style
 	t_optional_color hover_color;
 } t_style;
 
+typedef struct s_font
+{
+	char *name;
+	int size;
+	TTF_Font *_font;
+} t_font;
+
 struct s_ui_application
 {
 	const char *name;
 	bool running;
-	TTF_Font *font;
+	t_font *font;
 	bool exit_on_close;
 	t_list windows;
 };
@@ -269,6 +276,12 @@ ui_widget_describe_call(t_ui_widget *widget, char *buffer);
 bool
 ui_font_load(t_ui_application *app, const char *path, int size);
 
+t_vector2i
+ui_font_size(t_font *font, char *text);
+
+void
+ui_font_draw(t_font *font, SDL_Surface *surface, char *text, t_vector2i position, int color);
+
 void
 ui_style_apply_size(t_ui_widget *widget);
 
@@ -302,5 +315,6 @@ typedef struct s_ui_viewport t_ui_viewport;
 # include "widget/scrollbar.h"
 # include "widget/viewport.h"
 # include "widget/scroll.h"
+# include "widget/checkbox.h"
 
 #endif

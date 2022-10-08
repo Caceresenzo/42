@@ -20,4 +20,7 @@
 void
 sdl_abort(const char *function);
 
+SDL_Color
+sdl_as_color(int color);
+
 #endif

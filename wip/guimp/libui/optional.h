@@ -26,4 +26,7 @@ typedef t_optional_int t_optional_color;
 t_optional_int
 optional_int(int value);
 
+int
+optional_int_or_else(t_optional_int optional, int default_value);
+
 #endif

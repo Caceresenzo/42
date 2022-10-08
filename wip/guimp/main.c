@@ -272,6 +272,29 @@ create_window(t_ui_application *app)
 		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
 		ui_widget_add(cast(left), cast(container));
 
+		label = ui_label_new("A checkbox");
+		ui_widget_add(cast(container), cast(label));
+
+		t_ui_container *line = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
+		ui_widget_add(cast(container), cast(line));
+
+		t_ui_checkbox *checkbox = ui_checkbox_new("Hello\nWorld!");
+		ui_widget_add(cast(line), cast(checkbox));
+
+		checkbox = ui_checkbox_new("Hello World!");
+		ui_widget_add(cast(line), cast(checkbox));
+	}
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		container->super.style.height = optional_int(20);
+		ui_widget_add(cast(left), cast(container));
+	}
+
+	{
+		container = ui_container_new(UI_CONTAINER_DIRECTION_VERTICAL);
+		ui_widget_add(cast(left), cast(container));
+
 		label = ui_label_new("A button");
 		ui_widget_add(cast(container), cast(label));
 
