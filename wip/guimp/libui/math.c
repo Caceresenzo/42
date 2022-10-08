@@ -32,6 +32,12 @@ vector2i_zero(void)
 	return (vector);
 }
 
+bool
+vector2i_equals(t_vector2i left, t_vector2i right)
+{
+	return (left.x == right.x && left.y == right.y);
+}
+
 t_vector2i
 vector2i_substract(t_vector2i left, t_vector2i right)
 {

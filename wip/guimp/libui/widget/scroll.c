@@ -133,7 +133,7 @@ ui_scroll_draw(t_ui_scroll *scroll, void *data)
 }
 
 int
-ui_scroll_event(t_ui_scroll *scroll, t_ui_event_base *event, void *data)
+ui_scroll_event(t_ui_scroll *this, t_ui_event_base *event, void *data)
 {
 	if (event->type != UI_EVENT_TYPE_MOUSE_WHEEL_MOVED)
 		return (UI_EVENT_CONTINUE);
@@ -147,27 +147,26 @@ ui_scroll_event(t_ui_scroll *scroll, t_ui_event_base *event, void *data)
 	{
 		if (shift)
 		{
-			int offset = scroll->horizontal->offset - wheel_event->scroll.y * 10;
-			ui_scrollbar_set_offset(scroll->horizontal, offset);
+			int offset = this->horizontal->offset - wheel_event->scroll.y * 10;
+			ui_scrollbar_set_offset(this->horizontal, offset);
 		}
 		else
 		{
-			int offset = scroll->vertical->offset - wheel_event->scroll.y * 10;
-			ui_scrollbar_set_offset(scroll->vertical, offset);
+			int offset = this->vertical->offset - wheel_event->scroll.y * 10;
+			ui_scrollbar_set_offset(this->vertical, offset);
 		}
 	}
 
 	if (wheel_event->scroll.x)
 	{
-		int offset = scroll->horizontal->offset - wheel_event->scroll.x * 10;
-		ui_scrollbar_set_offset(scroll->horizontal, offset);
+		int offset = this->horizontal->offset - wheel_event->scroll.x * 10;
+		ui_scrollbar_set_offset(this->horizontal, offset);
 	}
 
-	printf("offset v%d\n", scroll->vertical->offset);
+	printf("offset v%d\n", this->vertical->offset);
 
-	scroll->viewport->offset = vector2i(scroll->horizontal->offset, scroll->vertical->offset);
-	ui_widget_set_dirty(cast(scroll));
-
-	return (UI_EVENT_CONSUME);
+	if (ui_viewport_set_offset(this->viewport, vector2i(this->horizontal->offset, this->vertical->offset)))
+		return (UI_EVENT_CONSUME);
+	return (UI_EVENT_CONTINUE);
 	(void)data;
 }

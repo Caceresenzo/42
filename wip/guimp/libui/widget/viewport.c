@@ -43,6 +43,18 @@ ui_viewport_new(void)
 	return (viewport);
 }
 
+bool
+ui_viewport_set_offset(t_ui_viewport *this, t_vector2i offset)
+{
+	if (!vector2i_equals(this->offset, offset))
+	{
+		this->offset = offset;
+		ui_widget_set_dirty(cast(this));
+		return (true);
+	}
+	return (false);
+}
+
 void
 ui_viewport_size(t_ui_viewport *viewport, void *data)
 {

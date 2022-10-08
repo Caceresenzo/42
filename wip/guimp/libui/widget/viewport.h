@@ -24,6 +24,9 @@ typedef struct s_ui_viewport
 t_ui_viewport*
 ui_viewport_new(void);
 
+bool
+ui_viewport_set_offset(t_ui_viewport *this, t_vector2i offset);
+
 void
 ui_viewport_describe(t_ui_viewport *this, char *buffer, void *data);
 

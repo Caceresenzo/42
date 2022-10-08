@@ -1,7 +1,7 @@
 #include "libui/ui.h"
 
-const int SCREEN_WIDTH = 900;
-const int SCREEN_HEIGHT = 900;
+const int SCREEN_WIDTH = 400;
+const int SCREEN_HEIGHT = 400;
 
 void
 setPixel(SDL_Surface *surface, Uint8 r, Uint8 g, Uint8 b, Uint8 a, size_t x, size_t y)
@@ -203,6 +203,7 @@ create_window(t_ui_application *app)
 	window = ui_window_new(app, position, size, SDL_WINDOW_SHOWN);
 	ui_window_set_title(window, "Hello");
 
+	t_ui_scroll *scroll_root = ui_scroll_new();
 	t_ui_container *root = ui_container_new(UI_CONTAINER_DIRECTION_HORIZONTAL);
 
 //	for (int i = 0; i < 3; ++i)
@@ -412,7 +413,8 @@ create_window(t_ui_application *app)
 		ui_widget_add(cast(scroll->viewport), cast(image));
 	}
 
-	ui_window_set_root(window, cast(root));
+	ui_widget_add(cast(scroll_root->viewport), cast(root));
+	ui_window_set_root(window, cast(scroll_root));
 }
 
 void

@@ -13,6 +13,8 @@
 #ifndef MATH_H
 # define MATH_H
 
+# include <stdbool.h>
+
 typedef struct
 {
 	int x;
@@ -28,6 +30,9 @@ vector2i(int x, int y);
 
 t_vector2i
 vector2i_zero(void);
+
+bool
+vector2i_equals(t_vector2i left, t_vector2i right);
 
 t_vector2i
 vector2i_substract(t_vector2i left, t_vector2i right);
