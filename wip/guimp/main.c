@@ -384,8 +384,8 @@ create_window(t_ui_application *app)
 		scroll->vertical->thumb.margin = 3;
 
 		t_ui_image *image = ui_image_new("buse.png");
-		image->super.style.height = optional_int(286);
-		image->super.style.width = optional_int(286);
+		image->super.style.height = optional_int(600 - 15);
+		image->super.style.width = optional_int(600 - 15);
 		ui_widget_add(cast(scroll->viewport), cast(image));
 	}
 

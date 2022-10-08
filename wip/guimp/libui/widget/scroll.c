@@ -112,8 +112,10 @@ ui_scroll_size(t_ui_scroll *this, void *data)
 	t_ui_widget *widget = ui_widget_get_child(cast(this->viewport), 0);
 	if (widget)
 	{
-		ui_scrollbar_set_max(this->vertical, widget->size.y - this->viewport->super.size.y);
-		ui_scrollbar_set_max(this->horizontal, widget->size.x - this->viewport->super.size.x);
+		ui_scrollbar_set_max(this->vertical, widget->size.y);
+		ui_scrollbar_set_max(this->horizontal, widget->size.x);
+//		ui_scrollbar_set_max(this->vertical, widget->size.y - this->viewport->super.size.y);
+//		ui_scrollbar_set_max(this->horizontal, widget->size.x - this->viewport->super.size.x);
 	}
 	else
 	{

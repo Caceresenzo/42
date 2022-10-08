@@ -80,7 +80,8 @@ ui_scrollbar_set_max(t_ui_scrollbar *this, int max)
 void
 ui_scrollbar_set_offset(t_ui_scrollbar *this, int offset)
 {
-	offset = CLAMP(offset, 0, this->max);
+	int size = ui_scrollbar_get_component(this, this->super.size);
+	offset = CLAMP(offset, 0, this->max - size);
 	if (this->offset == offset)
 		return;
 
@@ -125,13 +126,10 @@ ui_scrollbar_draw(t_ui_scrollbar *this, void *data)
 	if (this->visible)
 	{
 		int size = ui_scrollbar_get_component(this, this->super.size);
-		if (!size)
-			size = 1;
-
-		if (this->max)
+		if (size && this->max)
 		{
-			this->thumb.size = size * 100 / ((size + this->max) / 2);
-			this->thumb.position = this->offset * (size - this->thumb.size) / this->max;
+			this->thumb.size = size / (this->max / size);
+			this->thumb.position = this->offset * (size - this->thumb.size) / (this->max - size);
 		}
 		else
 		{
@@ -177,12 +175,16 @@ ui_scrollbar_event(t_ui_scrollbar *this, t_ui_event_base *event, void *data)
 		return (UI_EVENT_CONTINUE);
 	}
 
-	if (event->type == UI_EVENT_TYPE_MOUSE_DRAGGED || event->type == UI_EVENT_TYPE_MOUSE_CLICKED)
+	if (event->type == UI_EVENT_TYPE_MOUSE_DRAGGED || event->type == UI_EVENT_TYPE_MOUSE_PRESSED || event->type == UI_EVENT_TYPE_MOUSE_CLICKED)
 	{
 		int local = ui_scrollbar_get_component(this, mouse->local);
 		int size = ui_scrollbar_get_component(this, this->super.size);
 
 		int offset = local * this->max / size;
+//		printf("local=%d offset=%d ", local, offset);
+		offset -= (this->thumb.size / 2) * this->max / size;
+//		printf("offset=%d\n", offset);
+
 		ui_scrollbar_set_offset(this, offset);
 		ui_scrollbar_on_scroll_call(this);
 
