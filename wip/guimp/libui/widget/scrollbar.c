@@ -81,7 +81,7 @@ void
 ui_scrollbar_set_offset(t_ui_scrollbar *this, int offset)
 {
 	int size = ui_scrollbar_get_component(this, this->super.size);
-	offset = CLAMP(offset, 0, this->max - size);
+	offset = CLAMP(offset, 0, MAX(this->max - size, 0));
 	if (this->offset == offset)
 		return;
 
@@ -125,20 +125,18 @@ ui_scrollbar_draw(t_ui_scrollbar *this, void *data)
 
 	if (this->visible)
 	{
+		this->thumb.size = 0;
+		this->thumb.position = 0;
+
 		int size = ui_scrollbar_get_component(this, this->super.size);
 		if (size && this->max)
 		{
-			int ratio = this->max / size;
+			float ratio = (float)this->max / (float)size;
 			if (ratio)
 			{
 				this->thumb.size = size / ratio;
 				this->thumb.position = this->offset * (size - this->thumb.size) / (this->max - size);
 			}
-		}
-		else
-		{
-			this->thumb.size = 0;
-			this->thumb.position = 0;
 		}
 	}
 

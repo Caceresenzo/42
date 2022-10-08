@@ -46,6 +46,7 @@ ui_viewport_new(void)
 bool
 ui_viewport_set_offset(t_ui_viewport *this, t_vector2i offset)
 {
+	offset = vector2i_max(offset, vector2i_zero());
 	if (!vector2i_equals(this->offset, offset))
 	{
 		this->offset = offset;

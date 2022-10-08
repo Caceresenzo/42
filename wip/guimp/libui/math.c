@@ -57,3 +57,13 @@ vector2i_add(t_vector2i left, t_vector2i right)
 	vector.y = left.y + right.y;
 	return (vector);
 }
+
+t_vector2i
+vector2i_max(t_vector2i left, t_vector2i right)
+{
+	t_vector2i vector;
+
+	vector.x = MAX(left.x, right.x);
+	vector.y = MAX(left.y, right.y);
+	return (vector);
+}

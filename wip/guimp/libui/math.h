@@ -40,4 +40,7 @@ vector2i_substract(t_vector2i left, t_vector2i right);
 t_vector2i
 vector2i_add(t_vector2i left, t_vector2i right);
 
+t_vector2i
+vector2i_max(t_vector2i left, t_vector2i right);
+
 #endif

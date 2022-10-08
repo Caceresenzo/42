@@ -40,11 +40,9 @@ void
 ui_scroll_listener_on_scoll(t_ui_scrollbar *scrollbar, int value, t_ui_scroll *this)
 {
 	printf("ui_scroll_listener_on_scoll\n");
-	printf("scrollbar == this->horizontal: %d\n", scrollbar == this->horizontal);
 	if (scrollbar == this->horizontal)
 		this->viewport->offset.x = scrollbar->offset;
 
-	printf("scrollbar == this->vertical: %d\n", scrollbar == this->vertical);
 	if (scrollbar == this->vertical)
 		this->viewport->offset.y = scrollbar->offset;
 
