@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-The `robots.txt` usually used by indexer contains the information to not look in the `whatever` directory.
+The `robots.txt` usually used by indexer contains the information to not look in the [`whatever`](http://darkly/whatever/) directory.
 
 This directory only contains a `htpasswd` file.
 
