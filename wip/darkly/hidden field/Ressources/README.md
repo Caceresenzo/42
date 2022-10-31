@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-The `signin` page have a `I forgot my password` link to: `http://darkly/index.php?page=recover`.
+The `signin` page have a `I forgot my password` link to: [`index.php?page=recover`](http://darkly/index.php?page=recover).
 
 The page contains a hidden input:
 ```html
