@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-At the top right of the site, there a `Survey` page: `http://darkly/index.php?page=survey`.
+At the top right of the site, there a `Survey` page: [`index.php?page=survey`](http://darkly/index.php?page=survey).
 
 This page contains a Table with editable value.
 When a value is edited, a request is made and the page is refreshed.
