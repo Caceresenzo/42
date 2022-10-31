@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-The `robots.txt` usually used by indexer contains the information to not look in the [`.hidden`](http://darkly/.hidden/) directory.
+The [`robots.txt`](http://darkly/robots.txt) usually used by indexer contains the information to not look in the [`.hidden`](http://darkly/.hidden/) directory.
 
 The listing shows a lot of directories with random names.
 After a depth of 3, a README file contains one of 5 text:
