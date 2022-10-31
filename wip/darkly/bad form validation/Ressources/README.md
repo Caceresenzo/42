@@ -1,4 +1,4 @@
-# Unsanitized Form Value
+# Bad Form Validation
 
 ## Vulnerability
 
