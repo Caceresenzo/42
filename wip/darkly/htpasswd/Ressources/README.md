@@ -16,7 +16,7 @@ Using a universal hash decryptor likes [hashes.com](https://hashes.com/en/decryp
 437394baff5aa33daa618be47b75cb49:qwerty123@:MD5
 ```
 
-Theses inputs can be entered on: `http://darkly/admin/`.
+Theses inputs can be entered on: [`/admin/`](http://darkly/admin/).
 Giving us the flag:
 ```
 The flag is : ...
