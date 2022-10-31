@@ -1,4 +1,4 @@
-# Unsanitized Form Value
+# Unsanitized HTML
 
 ## Vulnerability
 
