@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-The site includes a `signin` page at `http://darkly/?page=signin`.
+The site includes a `signin` page at [`index.php?page=signin`](http://darkly/?page=signin).
 
 A good choice would be to try to force account like `admin`, `root`, `master`, or `owner`.
 
@@ -16,7 +16,7 @@ password: shadow
 17it [00:34,  2.00s/it]
 ```
 
-Trying to login with the user `admin` and password `shadow` gave us the flag:
+Trying to login with the user `admin` and password `shadow` gave us the flag: [[run]](http://darkly/?page=signin&username=admin&password=shadow&Login=Login#)
 ```
 The flag is : ... 
 ```
