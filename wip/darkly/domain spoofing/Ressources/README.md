@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-At the very bottom of the page, there is a clickable `© BornToSec` link redirecting to: `http://darkly/index.php?page=b7e44c7a40c5f80139f0a50f3650fb2bd8d00b0d24667c4c2ca32c88e13b758f`.
+At the very bottom of the page, there is a clickable `© BornToSec` link redirecting to: [`index.php?page=b7e44c7a40c5f80139f0a50f3650fb2bd8d00b0d24667c4c2ca32c88e13b758f`](http://darkly/index.php?page=b7e44c7a40c5f80139f0a50f3650fb2bd8d00b0d24667c4c2ca32c88e13b758f).
 
 Looking at the page code, we can see a few comment like:
 ```html
@@ -15,8 +15,8 @@ You must come from : "https://www.nsa.gov/".
 -->
 ```
 
-`You must come from` mean spoofing the HTTP Referer Header.
-And `Let's use this browser` mean spoofing the HTTP User Agent.
+`You must come from` mean spoofing the [HTTP Referer Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer).
+And `Let's use this browser` mean spoofing the [HTTP User Agent Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent).
 
 So by doing the cURL command:
 ```bash
