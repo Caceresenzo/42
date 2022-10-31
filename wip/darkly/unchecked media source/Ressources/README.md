@@ -2,7 +2,7 @@
 
 ## Vulnerability
 
-In the middle of the page, the third picture of the NSA is a link redirecting to: `http://darkly/?page=media&src=nsa`.
+In the middle of the page, the third picture of the NSA is a link redirecting to: [`index.php?page=media&src=nsa`](http://darkly/index.php?page=media&src=nsa).
 
 This page shows an `<object>` element.
 The source seems to be controlled by the `src` query.
@@ -20,7 +20,7 @@ Once encoded to base64, it gives:
 PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
 ```
 
-So the URL:
+So the URL: [[run]](http://darkly/?page=media&src=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==)
 ```
 http://darkly/?page=media&src=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
 ```
