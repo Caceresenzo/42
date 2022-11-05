@@ -15,8 +15,8 @@ You must come from : "https://www.nsa.gov/".
 -->
 ```
 
-`You must come from` mean spoofing the [HTTP Referer Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer).
-And `Let's use this browser` mean spoofing the [HTTP User Agent Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent).
+`You must come from` means spoofing the [HTTP Referer Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer).
+And `Let's use this browser` means spoofing the [HTTP User Agent Header](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent).
 
 So by doing the cURL command:
 ```bash
