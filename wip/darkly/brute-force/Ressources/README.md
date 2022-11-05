@@ -24,4 +24,4 @@ The flag is : ...
 ## Possible Fix
 
 - Use a more complex password.
-- use a multiple-factor system.
+- Use a multiple-factor system.
