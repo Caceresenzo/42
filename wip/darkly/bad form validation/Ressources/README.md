@@ -22,4 +22,4 @@ We get the flag:
 
 ## Possible Fix
 
-- Do not include the comments?
+- Do a server-side validation on inputs.
