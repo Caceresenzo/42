@@ -60,6 +60,15 @@ template<typename T>
 			{
 			}
 
+			inline Vector<2, T>&
+			operator=(const Vector<2, T> &right)
+			{
+				x = right.x;
+				y = right.y;
+
+				return (*this);
+			}
+
 			inline T&
 			operator[](int index)
 			{
@@ -120,6 +129,16 @@ template<typename T>
 
 			~Vector()
 			{
+			}
+
+			inline Vector<3, T>&
+			operator=(const Vector<3, T> &right)
+			{
+				x = right.x;
+				y = right.y;
+				z = right.z;
+
+				return (*this);
 			}
 
 			inline Vector<3, T>&
@@ -212,6 +231,17 @@ template<typename T>
 
 			~Vector()
 			{
+			}
+
+			inline Vector<4, T>&
+			operator=(const Vector<4, T> &right)
+			{
+				x = right.x;
+				y = right.y;
+				z = right.z;
+				w = right.w;
+
+				return (*this);
 			}
 
 			inline T&
