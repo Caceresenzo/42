@@ -27,7 +27,6 @@ PerspectiveCamera::PerspectiveCamera(const Vector<3, float> &position, float yaw
 		m_pitch(pitch),
 		m_speed(2.5f),
 		m_sensitivity(0.1f),
-		m_zoom(45.0f),
 		m_view_matrix(/* will be computed*/)
 {
 	compute_vectors();

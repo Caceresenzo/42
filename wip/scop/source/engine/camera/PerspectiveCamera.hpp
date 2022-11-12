@@ -30,7 +30,6 @@ class PerspectiveCamera :
 		float m_pitch;
 		float m_speed;
 		float m_sensitivity;
-		float m_zoom;
 		Matrix<4, 4, float> m_view_matrix;
 
 	public:
