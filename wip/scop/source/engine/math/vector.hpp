@@ -39,20 +39,24 @@ template<typename T>
 
 		public:
 			Vector(const T &initial = T()) :
-					x(initial),
-					y(initial)
+				x(initial),
+				y(initial)
 			{
 			}
 
 			Vector(const T &x, const T &y) :
-					x(x),
-					y(y)
+				x(x),
+				y(y)
 			{
 			}
 
 			Vector(const Vector &other) :
-					x(other.x),
-					y(other.y)
+				x(other.x),
+				y(other.y)
+			{
+			}
+
+			~Vector()
 			{
 			}
 
@@ -94,23 +98,27 @@ template<typename T>
 
 		public:
 			Vector(const T &initial = T()) :
-					x(initial),
-					y(initial),
-					z(initial)
+				x(initial),
+				y(initial),
+				z(initial)
 			{
 			}
 
 			Vector(const T &x, const T &y, const T &z) :
-					x(x),
-					y(y),
-					z(z)
+				x(x),
+				y(y),
+				z(z)
 			{
 			}
 
 			Vector(const Vector &other) :
-					x(other.x),
-					y(other.y),
-					z(other.z)
+				x(other.x),
+				y(other.y),
+				z(other.z)
+			{
+			}
+
+			~Vector()
 			{
 			}
 
@@ -179,26 +187,30 @@ template<typename T>
 
 		public:
 			Vector(const T &initial = T()) :
-					x(initial),
-					y(initial),
-					z(initial),
-					w(initial)
+				x(initial),
+				y(initial),
+				z(initial),
+				w(initial)
 			{
 			}
 
 			Vector(const T &x, const T &y, const T &z, const T &w) :
-					x(x),
-					y(y),
-					z(z),
-					w(w)
+				x(x),
+				y(y),
+				z(z),
+				w(w)
 			{
 			}
 
 			Vector(const Vector &other) :
-					x(other.x),
-					y(other.y),
-					z(other.z),
-					w(other.w)
+				x(other.x),
+				y(other.y),
+				z(other.z),
+				w(other.w)
+			{
+			}
+
+			~Vector()
 			{
 			}
 
