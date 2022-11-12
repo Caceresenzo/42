@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <io/IOException.hpp>
-#include <sys/errno.h>
+#include <errno.h>
 #include <cerrno>
 #include <cstring>
 #include <string>
