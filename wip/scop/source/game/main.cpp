@@ -44,6 +44,8 @@ const Option OPT_VERSION('v', "version", "display application's version");
 const Option OPT_LOG_LEVEL('l', "log-level", "change the log-level", "level");
 const Option OPT_NO_GRID('g', "no-grid", "disable world grid");
 const Option OPT_NO_ARROWS('a', "no-arrows", "disable axis arrows");
+const Option OPT_HIDE_INSTRUCTIONS('i', "hide-instructions", "hide key/mouse instructions");
+const Option OPT_HIDE_DEBUG('d', "hide-debug", "hide debug info");
 const Option OPT_FULLSCREEN('f', "fullscreen", "enable fullscreen on opening");
 const Option OPT_WIDTH('w', "width", "set window's width", "width");
 const Option OPT_HEIGHT('h', "height", "set window's height", "height");
@@ -61,6 +63,8 @@ struct Options
 		int height = 800;
 		std::string object_file = "";
 		std::string texture_file = "";
+		bool hide_instructions = false;
+		bool hide_debug = false;
 };
 
 int cli(int argc, char **argv, Options &options)
@@ -73,6 +77,8 @@ int cli(int argc, char **argv, Options &options)
 	lst.push_back(&OPT_LOG_LEVEL);
 	lst.push_back(&OPT_NO_GRID);
 	lst.push_back(&OPT_NO_ARROWS);
+	lst.push_back(&OPT_HIDE_INSTRUCTIONS);
+	lst.push_back(&OPT_HIDE_DEBUG);
 	lst.push_back(&OPT_FULLSCREEN);
 	lst.push_back(&OPT_WIDTH);
 	lst.push_back(&OPT_HEIGHT);
@@ -105,6 +111,12 @@ int cli(int argc, char **argv, Options &options)
 
 		if (command_line.has(OPT_NO_ARROWS))
 			options.no_arrows = true;
+
+		if (command_line.has(OPT_HIDE_INSTRUCTIONS))
+			options.hide_instructions = true;
+
+		if (command_line.has(OPT_HIDE_DEBUG))
+			options.hide_debug = true;
 
 		if (command_line.has(OPT_FULLSCREEN))
 			options.fullscreen = true;
@@ -275,15 +287,28 @@ bool game(Options &options)
 		if (Keyboard::is_pressed(Keyboard::C) == Keyboard::JUST_PRESSED)
 			options.no_arrows = !options.no_arrows;
 
+		if (Keyboard::is_pressed(Keyboard::V) == Keyboard::JUST_PRESSED)
+			options.hide_instructions = !options.hide_instructions;
+
+		if (Keyboard::is_pressed(Keyboard::B) == Keyboard::JUST_PRESSED)
+			options.hide_debug = !options.hide_debug;
+
 		transform.rotation += Vector<3, float>(0, 1, 0) * delta_time;
 
 		mesh_renderer->render(transform, *mesh.value());
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
-		fps_text_mesh.set_and_build(get_info_string(high_frame_counter, frame_counter, camera));
-		text_renderer->render(controls_text_mesh);
-		text_renderer->render(fps_text_mesh);
+		if (!options.hide_instructions)
+		{
+			text_renderer->render(controls_text_mesh);
+		}
+
+		if (!options.hide_debug)
+		{
+			fps_text_mesh.set_and_build(get_info_string(high_frame_counter, frame_counter, camera));
+			text_renderer->render(fps_text_mesh);
+		}
 
 		camera->move(delta_time);
 

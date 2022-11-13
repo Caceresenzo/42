@@ -41,6 +41,7 @@ key_callback(GLFWwindow *raw_window, int key, int, int action, int)
 		mapping[GLFW_KEY_P] = Keyboard::P;
 		mapping[GLFW_KEY_Q] = Keyboard::Q;
 		mapping[GLFW_KEY_S] = Keyboard::S;
+		mapping[GLFW_KEY_V] = Keyboard::V;
 		mapping[GLFW_KEY_W] = Keyboard::W;
 		mapping[GLFW_KEY_X] = Keyboard::X;
 		mapping[GLFW_KEY_Y] = Keyboard::Y;

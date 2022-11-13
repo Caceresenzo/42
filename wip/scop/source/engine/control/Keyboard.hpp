@@ -41,6 +41,7 @@ class Keyboard
 			P = 'p',
 			Q = 'q',
 			S = 's',
+			V = 'V',
 			W = 'w',
 			X = 'x',
 			Y = 'y',
