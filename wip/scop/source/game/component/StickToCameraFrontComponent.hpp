@@ -13,7 +13,7 @@
 #ifndef STICKTOCAMERAFRONTCOMPONENT_HPP_
 # define STICKTOCAMERAFRONTCOMPONENT_HPP_
 
-#include <engine/camera/ICamera.hpp>
+#include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/scene/Component.hpp>
 #include <lang/reference/SharedReference.hpp>
 
@@ -21,7 +21,7 @@ class StickToCameraFrontComponent :
 		public Component
 {
 	public:
-		SharedReference<ICamera> camera;
+		SharedReference<PerspectiveCamera> camera;
 
 	public:
 		StickToCameraFrontComponent(GameObject &parent);

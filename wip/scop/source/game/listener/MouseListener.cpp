@@ -14,7 +14,7 @@
 #include <engine/application/Window.hpp>
 #include <game/listener/MouseListener.hpp>
 
-MouseListener::MouseListener(SharedReference<ICamera> &camera) :
+MouseListener::MouseListener(SharedReference<PerspectiveCamera> &camera) :
 		WindowMouseListener(),
 		m_camera(camera)
 {

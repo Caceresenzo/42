@@ -13,12 +13,10 @@
 #ifndef PERSPECTIVECAMERA_HPP_
 # define PERSPECTIVECAMERA_HPP_
 
-#include <engine/camera/ICamera.hpp>
 #include <engine/math/matrix.hpp>
 #include <engine/math/vector.hpp>
 
-class PerspectiveCamera :
-		public ICamera
+class PerspectiveCamera
 {
 	private:
 		Vector<3, float> m_position;
@@ -39,49 +37,49 @@ class PerspectiveCamera :
 		~PerspectiveCamera();
 
 	public:
-		virtual void
+		void
 		move(double delta_time);
 
-		virtual void
+		void
 		look(const Vector<2, int> &offset);
 
-		inline virtual const Vector<3, float>&
+		inline const Vector<3, float>&
 		position() const
 		{
 			return (m_position);
 		}
 
-		inline virtual float
+		inline float
 		yaw() const
 		{
 			return (m_yaw);
 		}
 
-		inline virtual float
+		inline float
 		pitch() const
 		{
 			return (m_pitch);
 		}
 
-		inline virtual float
+		inline float
 		speed() const
 		{
 			return (m_speed);
 		}
 
-		inline virtual void
+		inline void
 		set_speed(float value)
 		{
 			m_speed = value;
 		}
 
-		inline virtual const Matrix<4, 4, float>&
+		inline const Matrix<4, 4, float>&
 		view_matrix() const
 		{
 			return (m_view_matrix);
 		}
 
-		inline virtual const Vector<3, float>&
+		inline const Vector<3, float>&
 		front() const
 		{
 			return (m_front);

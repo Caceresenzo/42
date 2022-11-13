@@ -49,10 +49,10 @@ class FPSTextUpdater :
 	public:
 		WeakReference<FrameCounter> frame_counter;
 		WeakReference<HighFrameCounter> high_frame_counter;
-		WeakReference<ICamera> camera;
+		WeakReference<PerspectiveCamera> camera;
 
 	public:
-		FPSTextUpdater(WeakReference<FrameCounter> frame_counter, WeakReference<HighFrameCounter> high_frame_counter, WeakReference<ICamera> camera) :
+		FPSTextUpdater(WeakReference<FrameCounter> frame_counter, WeakReference<HighFrameCounter> high_frame_counter, WeakReference<PerspectiveCamera> camera) :
 				Supplier(),
 				frame_counter(frame_counter),
 				high_frame_counter(high_frame_counter),
@@ -205,7 +205,7 @@ main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	}
 
-	SharedReference<ICamera> camera(*new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f)));
+	SharedReference<PerspectiveCamera> camera(*new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f)));
 
 	try
 	{

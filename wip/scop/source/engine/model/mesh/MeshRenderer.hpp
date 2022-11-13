@@ -13,7 +13,7 @@
 #ifndef MESHRENDERER_HPP_
 # define MESHRENDERER_HPP_
 
-#include <engine/camera/ICamera.hpp>
+#include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/model/mesh/MeshShader.hpp>
 #include <engine/model/Model.hpp>
 #include <engine/scene/Component.hpp>
@@ -27,7 +27,7 @@ class MeshRenderer :
 		static std::string NAME;
 
 	public:
-		SharedReference<ICamera> camera;
+		SharedReference<PerspectiveCamera> camera;
 		SharedReference<MeshShader> shader;
 		SharedReference<Model> model;
 		bool no_depth;

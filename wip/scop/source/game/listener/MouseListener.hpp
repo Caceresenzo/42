@@ -14,7 +14,7 @@
 # define MOUSELISTENER_HPP_
 
 #include <engine/application/listener/WindowMouseListener.hpp>
-#include <engine/camera/ICamera.hpp>
+#include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/math/vector.hpp>
 #include <lang/reference/SharedReference.hpp>
 
@@ -24,10 +24,10 @@ class MouseListener :
 		public WindowMouseListener
 {
 	private:
-		SharedReference<ICamera> m_camera;
+		SharedReference<PerspectiveCamera> m_camera;
 
 	public:
-		MouseListener(SharedReference<ICamera> &camera);
+		MouseListener(SharedReference<PerspectiveCamera> &camera);
 
 		virtual
 		~MouseListener();
