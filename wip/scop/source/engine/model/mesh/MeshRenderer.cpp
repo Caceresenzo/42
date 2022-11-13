@@ -16,7 +16,6 @@
 #include <engine/model/mesh/Mesh.hpp>
 #include <engine/model/mesh/MeshRenderer.hpp>
 #include <engine/model/mesh/MeshShader.hpp>
-#include <engine/shader/uniform/MatrixUniform.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <lang/Math.hpp>

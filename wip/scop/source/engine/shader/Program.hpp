@@ -1,30 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BooleanUniform.hpp                                 :+:      :+:    :+:   */
+/*   ShaderProgram.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 13:56:11 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 13:56:11 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/24 13:59:49 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/24 13:59:49 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BOOLEANUNIFORM_HPP_
-# define BOOLEANUNIFORM_HPP_
+#ifndef PROGRAM_HPP_
+# define PROGRAM_HPP_
 
-#include <engine/shader/uniform/Uniform.hpp>
+#include <engine/opengl.hpp>
+#include <GL/glew.h>
 #include <string>
 
-class BooleanUniform :
-		public Uniform
+class Variable;
+
+class Program
 {
 	public:
-		BooleanUniform(const std::string &name);
+		static const GLuint UNDEFINED_VALUE;
+
+	private:
+		GLuint m_id;
 
 	public:
+		Program(const std::string &vertex_file, const std::string &fragment_file);
+
+		virtual
+		~Program();
+
 		void
-		set(bool value);
+		use();
+
+		void
+		unuse();
+
+		void
+		locate(Variable &variable) const;
+
+	public:
+		GLuint
+		id() const;
 };
 
-#endif /* BooleanUniform_HPP_ */
+#endif /* PROGRAM_HPP_ */

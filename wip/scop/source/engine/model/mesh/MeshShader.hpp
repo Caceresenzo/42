@@ -13,24 +13,24 @@
 #ifndef MESHSHADER_HPP_
 # define MESHSHADER_HPP_
 
-#include <engine/shader/attribute/VectorAttribute.hpp>
-#include <engine/shader/ShaderProgram.hpp>
-#include <engine/shader/uniform/BooleanUniform.hpp>
-#include <engine/shader/uniform/MatrixUniform.hpp>
-#include <engine/shader/uniform/SamplerUniform.hpp>
+#include <engine/math/vector.hpp>
+#include <engine/math/matrix.hpp>
+#include <engine/shader/Attribute.hpp>
+#include <engine/shader/Program.hpp>
+#include <engine/shader/Uniform.hpp>
 #include <string>
 
 class MeshShader :
-		public ShaderProgram
+		public Program
 {
 	public:
-		MatrixUniform<4, 4, float> model;
-		MatrixUniform<4, 4, float> view;
-		MatrixUniform<4, 4, float> projection;
-		BooleanUniform use_texture;
-		SamplerUniform<int> texture_sampler;
-		VectorAttribute<2, float> texture_positions;
-		VectorAttribute<3, float> positions;
+		Uniform<Matrix<4, 4, float>> model;
+		Uniform<Matrix<4, 4, float>> view;
+		Uniform<Matrix<4, 4, float>> projection;
+		Uniform<bool> use_texture;
+		Uniform<int> texture_sampler;
+		Attribute<Vector<2, float>> texture_positions;
+		Attribute<Vector<3, float>> positions;
 
 	public:
 		MeshShader(const std::string &vertex_file, const std::string &fragment_file);

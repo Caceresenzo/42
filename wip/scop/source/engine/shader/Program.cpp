@@ -10,10 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <engine/shader/Program.hpp>
+#include <engine/shader/Variable.hpp>
 #include <lang/IllegalStateException.hpp>
 #include <lang/RuntimeException.hpp>
-#include <engine/shader/ShaderProgram.hpp>
-#include <engine/shader/ShaderVariable.hpp>
 #include <GL/glew.h>
 #include <sys/unistd.h>
 #include <unistd.h>
@@ -82,9 +82,9 @@ link_shaders(GLuint program_id, GLuint vertex_shader_id, GLuint fragment_shader_
 	}
 }
 
-const GLuint ShaderProgram::UNDEFINED_VALUE = GLuint(-1);
+const GLuint Program::UNDEFINED_VALUE = GLuint(-1);
 
-ShaderProgram::ShaderProgram(const std::string &vertex_file, const std::string &fragment_file)
+Program::Program(const std::string &vertex_file, const std::string &fragment_file)
 {
 	GLuint vertex_shader_id = -1;
 	GLuint fragment_shader_id = -1;
@@ -127,31 +127,31 @@ ShaderProgram::ShaderProgram(const std::string &vertex_file, const std::string &
 	}
 }
 
-ShaderProgram::~ShaderProgram()
+Program::~Program()
 {
 	glDeleteProgram(m_id);
 }
 
 void
-ShaderProgram::use()
+Program::use()
 {
 	glUseProgram(m_id);
 }
 
 void
-ShaderProgram::unuse()
+Program::unuse()
 {
 	glUseProgram(0);
 }
 
 void
-ShaderProgram::locate(ShaderVariable &variable) const
+Program::locate(Variable &variable) const
 {
 	variable.locate(*this);
 }
 
 GLuint
-ShaderProgram::id() const
+Program::id() const
 {
 	return (m_id);
 }

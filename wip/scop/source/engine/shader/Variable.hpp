@@ -1,49 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ShaderProgram.hpp                                  :+:      :+:    :+:   */
+/*   ShaderVariable.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/24 13:59:49 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/24 13:59:49 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/26 21:25:42 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/26 21:25:42 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SHADERPROGRAM_HPP_
-# define SHADERPROGRAM_HPP_
+#ifndef VARIABLE_HPP_
+# define VARIABLE_HPP_
 
 #include <engine/opengl.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
 #include <GL/glew.h>
 #include <string>
 
-class ShaderProgram
+class Program;
+
+class Variable
 {
-	public:
-		static const GLuint UNDEFINED_VALUE;
-
 	private:
-		GLuint m_id;
+		std::string m_name;
+		GLint m_location;
 
-	public:
-		ShaderProgram(const std::string &vertex_file, const std::string &fragment_file);
+	protected:
+		Variable(const std::string &name);
 
 		virtual
-		~ShaderProgram();
-
-		void
-		use();
-
-		void
-		unuse();
-
-		void
-		locate(ShaderVariable &variable) const;
+		~Variable();
 
 	public:
-		GLuint
-		id() const;
+		void
+		locate(const Program &program);
+
+	protected:
+		virtual GLint
+		find_location(GLuint program_id, const char *name) const = 0;
+
+	public:
+		inline const std::string&
+		name() const
+		{
+			return (m_name);
+		}
+
+		inline GLint
+		location() const
+		{
+			return (m_location);
+		}
 };
 
-#endif /* SHADERPROGRAM_HPP_ */
+#endif /* VARIABLE_HPP_ */

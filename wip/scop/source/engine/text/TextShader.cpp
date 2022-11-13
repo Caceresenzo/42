@@ -13,7 +13,7 @@
 #include <engine/text/TextShader.hpp>
 
 TextShader::TextShader(const std::string &vertex_file, const std::string &fragment_file) :
-		ShaderProgram(vertex_file, fragment_file),
+		Program(vertex_file, fragment_file),
 		window_size("windowSize"),
 		texture_sampler("textureSampler"),
 		position("in_Positions"),

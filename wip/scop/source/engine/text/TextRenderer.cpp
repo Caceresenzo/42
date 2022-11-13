@@ -13,9 +13,6 @@
 #include <engine/application/Window.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/opengl.hpp>
-#include <engine/shader/attribute/VectorAttribute.hpp>
-#include <engine/shader/uniform/SamplerUniform.hpp>
-#include <engine/shader/uniform/VectorUniform.hpp>
 #include <engine/text/TextRenderer.hpp>
 #include <engine/texture/Texture.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>

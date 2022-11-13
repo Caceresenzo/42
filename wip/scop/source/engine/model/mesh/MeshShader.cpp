@@ -13,7 +13,7 @@
 #include <engine/model/mesh/MeshShader.hpp>
 
 MeshShader::MeshShader(const std::string &vertex_file, const std::string &fragment_file) :
-		ShaderProgram(vertex_file, fragment_file),
+		Program(vertex_file, fragment_file),
 		model("model"),
 		view("view"),
 		projection("projection"),

@@ -1,36 +1,55 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   SamplerUniform.hpp                                 :+:      :+:    :+:   */
+/*   MathObject.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/25 00:24:22 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/25 00:24:22 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/11/13 18:33:33 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/11/13 18:33:33 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SAMPLERUNIFORM_HPP_
-# define SAMPLERUNIFORM_HPP_
+#ifndef MATHOBJECT_HPP_
+# define MATHOBJECT_HPP_
 
+#include <engine/math/vector.hpp>
 #include <engine/math/matrix.hpp>
-#include <engine/shader/uniform/Uniform.hpp>
-#include <GL/glew.h>
-#include <string>
 
 template<typename T>
-	class SamplerUniform :
-			public Uniform
+	struct MathObject
 	{
 		public:
-			SamplerUniform(const std::string &name) :
-					Uniform(name)
-			{
-			}
+			typedef T value_type;
 
-		public:
-			void
-			set(const T &sampler);
+			enum
+			{
+				size = 1
+			};
 	};
 
-#endif /* SAMPLERUNIFORM_HPP_ */
+template<typename T, int N>
+	struct MathObject<Vector<N, T>>
+	{
+		public:
+			typedef T value_type;
+
+			enum
+			{
+				size = N
+			};
+	};
+
+template<typename T, int R, int C>
+	struct MathObject<Matrix<R, C, T>>
+	{
+		public:
+			typedef T value_type;
+
+			enum
+			{
+				size = R * C
+			};
+	};
+
+#endif /* MATHOBJECT_HPP_ */

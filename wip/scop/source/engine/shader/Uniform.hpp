@@ -1,36 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   VectorAttribute.hpp                                :+:      :+:    :+:   */
+/*   Uniform.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/26 21:34:52 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/02/26 21:34:52 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/02/24 13:47:18 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/02/24 13:47:18 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VECTORATTRIBUTE_HPP_
-# define VECTORATTRIBUTE_HPP_
+#ifndef UNIFORM_HPP_
+# define UNIFORM_HPP_
 
 #include <engine/opengl.hpp>
-#include <engine/shader/attribute/Attribute.hpp>
+#include <engine/shader/Variable.hpp>
 #include <string>
 
-template<int N, typename T>
-	class VectorAttribute :
-			public Attribute
+template<typename T>
+	class Uniform :
+		public Variable
 	{
 		public:
-			VectorAttribute(const std::string &name) :
-					Attribute(name, N, GLType<T>::DATA_TYPE, false)
+			Uniform(const std::string &name) :
+				Variable(name)
 			{
 			}
 
 			virtual
-			~VectorAttribute()
+			~Uniform()
 			{
 			}
+
+		protected:
+			virtual GLint
+			find_location(GLuint program_id, const char *name) const
+			{
+				return (glGetUniformLocation(program_id, name));
+			}
+
+		public:
+			void set(const T &value);
 	};
 
-#endif /* VECTORATTRIBUTE_HPP_ */
+#endif /* UNIFORM_HPP_ */

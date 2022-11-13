@@ -24,6 +24,12 @@ template<int N, typename T>
 	struct Vector
 	{
 		public:
+			typedef T value_type;
+
+		public:
+			static const int SIZE = N;
+
+		public:
 			T data[N];
 	};
 
@@ -31,6 +37,10 @@ template<typename T>
 	struct Vector<2, T>
 	{
 		public:
+			typedef T value_type;
+
+		public:
+			static const int SIZE = 2;
 			static const Vector ZERO;
 
 		public:
@@ -98,6 +108,10 @@ template<typename T>
 	struct Vector<3, T>
 	{
 		public:
+			typedef T value_type;
+
+		public:
+			static const int SIZE = 3;
 			static const Vector ZERO;
 
 		public:
@@ -196,6 +210,10 @@ template<typename T>
 	struct Vector<4, T>
 	{
 		public:
+			typedef T value_type;
+
+		public:
+			static const int SIZE = 4;
 			static const Vector ZERO;
 
 		public:

@@ -10,22 +10,22 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <engine/shader/Program.hpp>
+#include <engine/shader/Variable.hpp>
 #include <lang/RuntimeException.hpp>
-#include <engine/shader/ShaderProgram.hpp>
-#include <engine/shader/ShaderVariable.hpp>
 
-ShaderVariable::ShaderVariable(const std::string &name) :
+Variable::Variable(const std::string &name) :
 		m_name(name),
 		m_location(-1)
 {
 }
 
-ShaderVariable::~ShaderVariable()
+Variable::~Variable()
 {
 }
 
 void
-ShaderVariable::locate(const ShaderProgram &program)
+Variable::locate(const Program &program)
 {
 	GLint location = find_location(program.id(), m_name.c_str());
 	if (location == -1)

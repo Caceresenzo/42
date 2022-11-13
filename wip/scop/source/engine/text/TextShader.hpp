@@ -13,19 +13,19 @@
 #ifndef TEXTSHADER_HPP_
 # define TEXTSHADER_HPP_
 
-#include <engine/shader/attribute/VectorAttribute.hpp>
-#include <engine/shader/ShaderProgram.hpp>
-#include <engine/shader/uniform/SamplerUniform.hpp>
-#include <engine/shader/uniform/VectorUniform.hpp>
+#include <engine/math/vector.hpp>
+#include <engine/shader/Attribute.hpp>
+#include <engine/shader/Program.hpp>
+#include <engine/shader/Uniform.hpp>
 
 class TextShader :
-		public ShaderProgram
+		public Program
 {
 	public:
-		VectorUniform<2, int> window_size;
-		SamplerUniform<int> texture_sampler;
-		VectorAttribute<2, float> position;
-		VectorAttribute<2, float> uv;
+		Uniform<Vector<2, int>> window_size;
+		Uniform<int> texture_sampler;
+		Attribute<Vector<2, float>> position;
+		Attribute<Vector<2, float>> uv;
 
 	public:
 		TextShader(const std::string &vertex_file, const std::string &fragment_file);
