@@ -13,18 +13,17 @@
 #include <engine/application/Window.hpp>
 #include <engine/math/matrix.hpp>
 #include <engine/math/Transform.hpp>
-#include <engine/model/mesh/Mesh.hpp>
-#include <engine/model/mesh/MeshRenderer.hpp>
-#include <engine/model/mesh/MeshShader.hpp>
+#include <engine/mesh/Mesh.hpp>
+#include <engine/mesh/MeshRenderer.hpp>
+#include <engine/mesh/MeshShader.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <lang/Math.hpp>
 
-std::string MeshRenderer::NAME = "mesh-renderer";
-
-MeshRenderer::MeshRenderer(GameObject &parent) :
-		Component(parent, NAME),
-		no_depth(false)
+MeshRenderer::MeshRenderer(SharedReference<MeshShader> &shader, SharedReference<PerspectiveCamera> &camera) :
+	shader(shader),
+	camera(camera),
+	no_depth(false)
 {
 }
 
@@ -33,9 +32,9 @@ MeshRenderer::~MeshRenderer()
 }
 
 void
-MeshRenderer::render()
+MeshRenderer::render(const Transform<float> &transform, const Mesh &mesh)
 {
-	if (!shader || !model || !camera)
+	if (!shader || !camera)
 		return;
 
 	Vector<2, int> size = Window::current().size();
@@ -45,12 +44,12 @@ MeshRenderer::render()
 
 	shader->projection.set(projection);
 	shader->view.set(camera->view_matrix());
-	shader->model.set(transform().model());
+	shader->model.set(transform.model());
 
 	if (no_depth)
 		glDepthRange(0, 0.01);
 
-	model->mesh->render(*shader);
+	mesh.render(*shader);
 
 	if (no_depth)
 		glDepthRange(0, 1.0);

@@ -54,18 +54,22 @@ template<typename T>
 			enable()
 			{
 				glEnableVertexAttribArray(location());
+				OpenGL::check_error();
 			}
 
 			inline void
 			disable()
 			{
 				glDisableVertexAttribArray(location());
+				OpenGL::check_error();
 			}
 
 			inline void
 			link(GLsizei stride = 0, const void *pointer = NULL)
 			{
+//				std::cout << name() << ":" << __PRETTY_FUNCTION__ << std::endl;
 				glVertexAttribPointer(location(), m_size, m_data_type, m_normalized, stride, pointer);
+				OpenGL::check_error();
 			}
 
 		protected:

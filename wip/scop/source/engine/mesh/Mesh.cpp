@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/model/mesh/Mesh.hpp>
-#include <engine/model/mesh/MeshShader.hpp>
+#include <engine/mesh/Mesh.hpp>
+#include <engine/mesh/MeshShader.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <stddef.h>
 #include <queue>
@@ -81,7 +81,7 @@ Mesh::remove_texture(void)
 }
 
 void
-Mesh::render(MeshShader &shader)
+Mesh::render(MeshShader &shader) const
 {
 	m_vertex_buffer_array->bind(true);
 

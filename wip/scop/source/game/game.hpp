@@ -14,5 +14,6 @@
 # define GAME_HPP_
 
 # define APPLICATION_NAME_AND_VERSION "scop v1.0"
+# define APPLICATION_DESCRIPTION "A simple model viewer"
 
 #endif /* GAME_HPP_ */

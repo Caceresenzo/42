@@ -40,7 +40,7 @@ template<typename T>
 			}
 
 		public:
-			void set(const T &value);
+			void set(const T &value) const;
 	};
 
 #endif /* UNIFORM_HPP_ */

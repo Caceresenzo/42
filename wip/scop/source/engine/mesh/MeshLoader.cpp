@@ -13,9 +13,9 @@
 #include <io/IOException.hpp>
 #include <lang/Math.hpp>
 #include <engine/math/vector.hpp>
-#include <engine/model/mesh/Mesh.hpp>
-#include <engine/model/mesh/MeshException.hpp>
-#include <engine/model/mesh/MeshLoader.hpp>
+#include <engine/mesh/Mesh.hpp>
+#include <engine/mesh/MeshException.hpp>
+#include <engine/mesh/MeshLoader.hpp>
 #include <stddef.h>
 #include <cstdio>
 #include <fstream>

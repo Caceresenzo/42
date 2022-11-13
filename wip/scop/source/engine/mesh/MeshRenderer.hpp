@@ -14,33 +14,28 @@
 # define MESHRENDERER_HPP_
 
 #include <engine/camera/PerspectiveCamera.hpp>
-#include <engine/model/mesh/MeshShader.hpp>
-#include <engine/model/Model.hpp>
-#include <engine/scene/Component.hpp>
+#include <engine/mesh/MeshShader.hpp>
+#include <engine/math/Transform.hpp>
+#include <engine/mesh/Mesh.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <string>
 
-class MeshRenderer :
-		public Component
+class MeshRenderer
 {
 	public:
-		static std::string NAME;
-
-	public:
-		SharedReference<PerspectiveCamera> camera;
 		SharedReference<MeshShader> shader;
-		SharedReference<Model> model;
+		SharedReference<PerspectiveCamera> camera;
 		bool no_depth;
 
 	public:
-		MeshRenderer(GameObject &parent);
+		MeshRenderer(SharedReference<MeshShader> &shader, SharedReference<PerspectiveCamera> &camera);
 
 		virtual
 		~MeshRenderer();
 
 	public:
-		virtual void
-		render();
+		void
+		render(const Transform<float> &transform, const Mesh &mesh);
 };
 
 #endif /* MESHRENDERER_HPP_ */

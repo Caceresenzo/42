@@ -28,6 +28,9 @@ template<>
 	const Vector<3, float> Vector<3, float>::ZERO(0);
 
 template<>
+	const Vector<3, float> Vector<3, float>::ONE(1);
+
+template<>
 	const Vector<3, double> Vector<3, double>::ZERO(0);
 
 template<>

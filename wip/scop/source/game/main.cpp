@@ -3,25 +3,20 @@
 #include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/math/Transform.hpp>
 #include <engine/math/vector.hpp>
-#include <engine/model/mesh/Mesh.hpp>
-#include <engine/model/mesh/MeshLoader.hpp>
-#include <engine/model/mesh/MeshRenderer.hpp>
-#include <engine/model/mesh/MeshShader.hpp>
-#include <engine/model/mesh/simple/Arrow.hpp>
-#include <engine/model/mesh/simple/Grid.hpp>
-#include <engine/model/Model.hpp>
-#include <engine/scene/GameObject.hpp>
-#include <engine/scene/Node.hpp>
-#include <engine/scene/Scene.hpp>
+#include <engine/mesh/Mesh.hpp>
+#include <engine/mesh/MeshLoader.hpp>
+#include <engine/mesh/MeshRenderer.hpp>
+#include <engine/mesh/MeshShader.hpp>
+#include <engine/mesh/simple/Arrow.hpp>
+#include <engine/mesh/simple/Grid.hpp>
+#include <engine/opengl.hpp>
 #include <engine/text/Font.hpp>
-#include <engine/text/Text.hpp>
+#include <engine/text/TextMesh.hpp>
 #include <engine/text/TextRenderer.hpp>
 #include <engine/text/TextShader.hpp>
 #include <engine/texture/Texture.hpp>
 #include <engine/utility/counter/FrameCounter.hpp>
 #include <engine/utility/counter/HighFrameCounter.hpp>
-#include <game/component/AlwaysRotateComponent.hpp>
-#include <game/component/StickToCameraFrontComponent.hpp>
 #include <game/game.hpp>
 #include <game/listener/KeyboardListener.hpp>
 #include <game/listener/MouseListener.hpp>
@@ -38,65 +33,11 @@
 #include <util/option/OptionParser.hpp>
 #include <cstdio>
 #include <cstdlib>
+#include <cwchar>
 #include <iostream>
 #include <list>
 #include <string>
 #include <vector>
-
-class FPSTextUpdater :
-		public Supplier<std::string>
-{
-	public:
-		WeakReference<FrameCounter> frame_counter;
-		WeakReference<HighFrameCounter> high_frame_counter;
-		WeakReference<PerspectiveCamera> camera;
-
-	public:
-		FPSTextUpdater(WeakReference<FrameCounter> frame_counter, WeakReference<HighFrameCounter> high_frame_counter, WeakReference<PerspectiveCamera> camera) :
-				Supplier(),
-				frame_counter(frame_counter),
-				high_frame_counter(high_frame_counter),
-				camera(camera)
-		{
-		}
-
-		virtual
-		~FPSTextUpdater()
-		{
-		}
-
-	public:
-		virtual std::string
-		get()
-		{
-			char text[255] = { 0 };
-
-			const char *format = ""
-					"   frame %d (%d)\n"
-					"position %4.4f %4.4f %4.4f\n"
-					"     yaw %4.4f\n"
-					"   pitch %4.4f\n"
-					"   speed %4.4f"
-					"";
-
-			sprintf(text, format, high_frame_counter->frame(), frame_counter->frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch(), camera->speed());
-
-			return (text);
-		}
-};
-
-static Vector<3, float> positions[] = {
-/**/Vector<3, float>(0.0f, 0.0f, 0.0f),
-/**/Vector<3, float>(2.0f, 5.0f, -15.0f),
-/**/Vector<3, float>(-1.5f, -2.2f, -2.5f),
-/**/Vector<3, float>(-3.8f, -2.0f, -12.3f),
-/**/Vector<3, float>(2.4f, -0.4f, -3.5f),
-/**/Vector<3, float>(-1.7f, 3.0f, -7.5f),
-/**/Vector<3, float>(1.3f, -2.0f, -2.5f),
-/**/Vector<3, float>(1.5f, 2.0f, -2.5f),
-/**/Vector<3, float>(1.5f, 0.2f, -1.5f),
-/**/Vector<3, float>(-1.3f, 1.0f, -1.5f) //
-};
 
 const Option OPT_HELP('h', "help", "display this help message");
 const Option OPT_VERSION('v', "version", "display application's version");
@@ -109,18 +50,22 @@ const Option OPT_HEIGHT('h', "height", "set window's height", "height");
 const Option OPT_OBJECT('o', "object", "specify object", "file");
 const Option OPT_TEXTURE('t', "texture", "specify texture", "file");
 
-int
-main(int argc, char **argv)
+struct Options
 {
-	const char *program = argv[0];
+	public:
+		std::string program;
+		bool no_grid = false;
+		bool no_arrows = false;
+		bool fullscreen = false;
+		int width = 800;
+		int height = 800;
+		std::string object_file = "";
+		std::string texture_file = "";
+};
 
-	bool no_grid = false;
-	bool no_arrows = false;
-	bool fullscreen = false;
-	int width = 800;
-	int height = 800;
-	std::string object_file = "";
-	std::string texture_file = "";
+int cli(int argc, char **argv, Options &options)
+{
+	options.program = argv[0];
 
 	std::list<const Option*> lst;
 	lst.push_back(&OPT_HELP);
@@ -145,7 +90,7 @@ main(int argc, char **argv)
 			std::vector<std::string> authors;
 			authors.push_back("Enzo CACERES <ecaceres@student.42.fr>");
 
-			std::cout << parser.help(program, "A simple model viewer", authors) << std::endl;
+			std::cout << parser.help(options.program, APPLICATION_DESCRIPTION, authors) << std::endl;
 			return (0);
 		}
 
@@ -156,224 +101,214 @@ main(int argc, char **argv)
 		}
 
 		if (command_line.has(OPT_NO_GRID))
-			no_grid = true;
+			options.no_grid = true;
 
 		if (command_line.has(OPT_NO_ARROWS))
-			no_arrows = true;
+			options.no_arrows = true;
 
 		if (command_line.has(OPT_FULLSCREEN))
-			fullscreen = true;
+			options.fullscreen = true;
 
 		if (command_line.has(OPT_WIDTH))
-			width = Number::parse<int>(command_line.first(OPT_WIDTH));
+			options.width = Number::parse<int>(command_line.first(OPT_WIDTH));
 
 		if (command_line.has(OPT_HEIGHT))
-			height = Number::parse<int>(command_line.first(OPT_HEIGHT));
+			options.height = Number::parse<int>(command_line.first(OPT_HEIGHT));
 
 		if (command_line.has(OPT_OBJECT))
-			object_file = command_line.first(OPT_OBJECT);
+			options.object_file = command_line.first(OPT_OBJECT);
 
 		if (command_line.has(OPT_TEXTURE))
-			texture_file = command_line.first(OPT_TEXTURE);
+			options.texture_file = command_line.first(OPT_TEXTURE);
 	}
 	catch (Exception &exception)
 	{
 		std::cerr << argv[0] << ": " << exception.what() << std::endl;
 		std::cerr << "Try '" << argv[0] << " --help' for more informations." << std::endl;
-		return (1);
+		return (false);
 	}
 
-	if (object_file.empty())
+	if (options.object_file.empty())
 	{
 		std::cerr << "no object file specified" << std::endl;
-		return (EXIT_FAILURE);
+		return (false);
 	}
 
-	if (texture_file.empty())
+	if (options.texture_file.empty())
 		std::cerr << "no texture file specified" << std::endl;
 
-	SharedReference<Application> application;
-	SharedReference<Window> window;
+	return (true);
+}
 
+Application& create_application(Options &options)
+{
 	try
 	{
-		application = *new Application(argv[0]);
+		return (*new Application(options.program));
 	}
 	catch (Exception &exception)
 	{
-		std::cout << "Could not start application: " << exception.what() << std::endl;
-		return (EXIT_FAILURE);
+		throw new Exception("Could not start application: " + exception.message());
 	}
+}
 
-	SharedReference<PerspectiveCamera> camera(*new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f)));
+PerspectiveCamera& create_camera()
+{
+	return (*new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f)));
+}
 
+Window& create_window(Options &options, SharedReference<PerspectiveCamera> &camera)
+{
 	try
 	{
-		window = *new Window(width, height);
-		window->set_title("scop");
+		Window &window = *new Window(options.width, options.height);
+		window.set_title("scop");
 
-		window->keyboard_listeners.push_back(*new KeyboardListener());
-		window->mouse_listeners.push_back(*new MouseListener(camera));
+		window.keyboard_listeners.push_back(*new KeyboardListener());
+		window.mouse_listeners.push_back(*new MouseListener(camera));
 
-		window->set_fullscreen(fullscreen);
+		window.set_fullscreen(options.fullscreen);
+
+		return (window);
 	}
 	catch (Exception &exception)
 	{
-		std::cout << "Could not create window: " << exception.what() << std::endl;
-		return (EXIT_FAILURE);
+		throw new Exception("Could not create window: " + exception.message());
 	}
+}
 
-	fprintf(stdout, "INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
-	fprintf(stdout, "INFO: OpenGL Renderer: %s\n", glGetString(GL_RENDERER));
-	fprintf(stdout, "INFO: OpenGL Vendor: %s\n", glGetString(GL_VENDOR));
-	fflush(stdout);
+std::string get_info_string(HighFrameCounter &high_frame_counter, FrameCounter &frame_counter, SharedReference<PerspectiveCamera> camera)
+{
+	char text[255] = { 0 };
 
-	SharedReference<Font> consolas;
+	const char *format = ""
+		"   frame %d (%d)\n"
+		"position %4.4f %4.4f %4.4f\n"
+		"     yaw %4.4f\n"
+		"   pitch %4.4f\n"
+		"   speed %4.4f"
+		"";
 
-	try
-	{
-		consolas = Font::consolas();
-	}
-	catch (Exception &exception)
-	{
-		std::cout << "Could not load font: " << exception.what() << std::endl;
-		return (EXIT_FAILURE);
-	}
+	sprintf(text, format, high_frame_counter.frame(), frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch(), camera->speed());
 
-	SharedReference<Scene> scene(*new Scene());
-	SharedReference<MeshShader> mesh_render(*MeshShader::basic());
-	SharedReference<TextShader> text_shader(*TextShader::basic());
+	return (text);
+}
 
-	SharedReference<FrameCounter> frame_counter(*new FrameCounter());
-	SharedReference<HighFrameCounter> high_frame_counter(*new HighFrameCounter());
+#define CONTROLS_TEXT "" \
+	" move   ZQSD\n" \
+	"   up   SPACE\n" \
+	" down   A\n" \
+	"speed   scroll\n" \
+	" size   O/P\n" \
+	" grid   X\n" \
+	" arrows C" \
 
-	if (!no_grid)
-	{
-		GameObject &object = scene->add_child_as(*new GameObject());
-		object.transform.translation = Vector<3, float>(-25.0, 0, -25.0);
-		object.transform.scaling = Vector<3, float>(100, 0, 100);
+bool game(Options &options)
+{
+	SharedReference<Application> application = create_application(options);
+	SharedReference<PerspectiveCamera> camera = create_camera();
+	SharedReference<Window> window = create_window(options, camera);
 
-		MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
-		renderer.shader = mesh_render;
-		renderer.model = *new Model(*Grid::of(10));
-		renderer.camera = camera;
-	}
+	OpenGL::print_basic_info();
 
-	if (!no_arrows)
-	{
-		GameObject &object = scene->add_child_as(*new GameObject());
-		object.transform.scaling = Vector<3, float>(0.02);
+	FrameCounter frame_counter;
+	HighFrameCounter high_frame_counter;
 
-		StickToCameraFrontComponent &sticky = object.add_component_as(*new StickToCameraFrontComponent(object));
-		sticky.camera = camera;
+	SharedReference<Font> font = Font::consolas();
 
-		MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
-		renderer.shader = mesh_render;
-		renderer.model = *new Model(*Arrow::of(2));
-		renderer.camera = camera;
-		renderer.no_depth = true;
-	}
+	SharedReference<MeshShader> mesh_shader = *MeshShader::basic();
+	SharedReference<MeshRenderer> mesh_renderer = *new MeshRenderer(mesh_shader, camera);
 
-	{
-		GameObject &object = scene->add_child_as(*new GameObject());
+	SharedReference<TextShader> text_shader = *TextShader::basic();
+	SharedReference<TextRenderer> text_renderer = *new TextRenderer(text_shader, font);
+	TextMesh fps_text_mesh("", Vector<2, float>(0, 0), 20);
+	TextMesh controls_text_mesh(CONTROLS_TEXT, Vector<2, float>(0, 180));
+	controls_text_mesh.build();
 
-		{
-			TextRenderer &renderer = object.add_component_as(*new TextRenderer(object));
-			renderer.shader = text_shader;
-			renderer.font = consolas;
-			renderer.text = *new Text("", Vector<2, float>(0, 0), 20);
-			renderer.updater = *new FPSTextUpdater(frame_counter, high_frame_counter, camera);
-		}
+	SharedReference<Mesh> grid_mesh = *Grid::of(10, true);
+	Transform<float> grid_transform;
+	grid_transform.scaling = Vector<3, float>(25, 0, 25);
 
-		{
-			const char *message = ""
-					" move ZQSD\n"
-					"   up SPACE\n"
-					" down A\n"
-					"speed scroll\n"
-					" size O/P";
+	SharedReference<Mesh> arrows_mesh = *Arrow::of(2);
+	Transform<float> arrows_transform;
+	arrows_transform.scaling = Vector<3, float>(0.02);
 
-			TextRenderer &renderer = object.add_component_as(*new TextRenderer(object));
-			renderer.shader = text_shader;
-			renderer.font = consolas;
-			renderer.text = *new Text(message, Vector<2, float>(0, 180));
-		}
-	}
+	MeshLoader mesh_loader;
+	SharedReference<Mesh> mesh = *mesh_loader.load(options.object_file);
+	Transform<float> transform;
 
-	{
-		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	high_frame_counter.reset();
 
-		SharedReference<Mesh> mesh;
-		try
-		{
-			mesh = *MeshLoader().load(object_file);
-		}
-		catch (Exception &exception)
-		{
-			std::cout << "Could not load mesh: " << exception.what() << std::endl;
-			return (EXIT_FAILURE);
-		}
-
-		SharedReference<Model> model = *new Model(mesh);
-
-		if (!texture_file.empty())
-		{
-			try
-			{
-				ImageData *image = BMPImageLoader().load(texture_file);
-				mesh->set_texture(*Texture::from_image(image), true);
-				delete image;
-			}
-			catch (Exception &exception)
-			{
-				std::cout << "Could not load texture: " << exception.what() << std::endl;
-				return (EXIT_FAILURE);
-			}
-		}
-
-		for (unsigned int i = 0; i < 10; i++)
-		{
-			GameObject &object = scene->add_child_as(*new GameObject());
-			object.transform.translation = positions[i];
-
-			AlwaysRotateComponent &always_rotate = object.add_component_as(*new AlwaysRotateComponent(object));
-			always_rotate.speed = Vector<3, float>(1);
-
-			MeshRenderer &renderer = object.add_component_as(*new MeshRenderer(object));
-			renderer.shader = mesh_render;
-			renderer.model = model;
-			renderer.camera = camera;
-		}
-	}
-
-	high_frame_counter->reset();
-
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	while (!window->is_should_be_closed())
 	{
-		high_frame_counter->start();
+		high_frame_counter.start();
 
-		glGetError();
+		OpenGL::check_error();
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		double delta_time = high_frame_counter->delta_time();
+		double delta_time = high_frame_counter.delta_time();
 
-		scene->update(delta_time);
-		scene->render();
+		if (!options.no_grid)
+		{
+			mesh_renderer->render(grid_transform, *grid_mesh.value());
+		}
+
+		if (!options.no_arrows)
+		{
+			arrows_transform.translation = camera->position() + camera->front();
+			mesh_renderer->render(arrows_transform, *arrows_mesh.value());
+		}
+
+		if (Keyboard::is_pressed(Keyboard::O))
+			transform.scaling -= 0.02f;
+
+		if (Keyboard::is_pressed(Keyboard::P))
+			transform.scaling += 0.02f;
+
+		if (Keyboard::is_pressed(Keyboard::X) == Keyboard::JUST_PRESSED)
+			options.no_grid = !options.no_grid;
+
+		if (Keyboard::is_pressed(Keyboard::C) == Keyboard::JUST_PRESSED)
+			options.no_arrows = !options.no_arrows;
+
+		transform.rotation += Vector<3, float>(0, 1, 0) * delta_time;
+
+		mesh_renderer->render(transform, *mesh.value());
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 
+		fps_text_mesh.set_and_build(get_info_string(high_frame_counter, frame_counter, camera));
+		text_renderer->render(controls_text_mesh);
+		text_renderer->render(fps_text_mesh);
+
 		camera->move(delta_time);
 
-		frame_counter->count();
-		high_frame_counter->count();
+		frame_counter.count();
+		high_frame_counter.count();
 
 		window->swap_buffers();
+		Keyboard::increment();
 		application->poll_events();
 
-		high_frame_counter->end();
+		high_frame_counter.end();
 	}
+
+	return (true);
+}
+
+int
+main(int argc, char **argv)
+{
+	Options options;
+	if (!cli(argc, argv, options))
+		return (EXIT_FAILURE);
+
+	if (!game(options))
+		return (EXIT_FAILURE);
 
 	return (EXIT_SUCCESS);
 }

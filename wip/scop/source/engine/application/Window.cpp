@@ -29,6 +29,8 @@ key_callback(GLFWwindow *raw_window, int key, int, int action, int)
 	if (mapping.empty())
 	{
 		mapping[GLFW_KEY_A] = Keyboard::A;
+		mapping[GLFW_KEY_B] = Keyboard::B;
+		mapping[GLFW_KEY_C] = Keyboard::C;
 		mapping[GLFW_KEY_D] = Keyboard::D;
 		mapping[GLFW_KEY_F] = Keyboard::F;
 		mapping[GLFW_KEY_I] = Keyboard::I;
@@ -40,6 +42,8 @@ key_callback(GLFWwindow *raw_window, int key, int, int action, int)
 		mapping[GLFW_KEY_Q] = Keyboard::Q;
 		mapping[GLFW_KEY_S] = Keyboard::S;
 		mapping[GLFW_KEY_W] = Keyboard::W;
+		mapping[GLFW_KEY_X] = Keyboard::X;
+		mapping[GLFW_KEY_Y] = Keyboard::Y;
 		mapping[GLFW_KEY_Z] = Keyboard::Z;
 		mapping[GLFW_KEY_ESCAPE] = Keyboard::ESCAPE;
 		mapping[GLFW_KEY_RIGHT_SHIFT] = Keyboard::SHIFT;

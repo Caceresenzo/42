@@ -34,7 +34,7 @@ template<typename T = float>
 
 		public:
 			Matrix<4, 4, T>
-			model()
+			model() const
 			{
 				return (::scale(::rotate(::translate(Matrix<4, 4, T>(1), translation), rotation), scaling));
 			}

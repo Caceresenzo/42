@@ -31,21 +31,21 @@ template<typename T>
 
 		public:
 			SharedReference() :
-					m_counter(NULL),
-					m_value(NULL)
+				m_counter(NULL),
+				m_value(NULL)
 			{
 			}
 
 			SharedReference(T &value) :
-					m_counter(new ReferenceCounter()),
-					m_value(&value)
+				m_counter(new ReferenceCounter()),
+				m_value(&value)
 			{
 				add();
 			}
 
 			SharedReference(const SharedReference &other) :
-					m_counter(other.m_counter),
-					m_value(other.m_value)
+				m_counter(other.m_counter),
+				m_value(other.m_value)
 			{
 				/* if no value, then no counter either */
 				assert(!m_value == !m_counter);
@@ -129,7 +129,6 @@ template<typename T>
 				m_counter = NULL;
 			}
 
-		private:
 			void
 			add()
 			{

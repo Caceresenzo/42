@@ -13,41 +13,29 @@
 #ifndef TEXTRENDERER_HPP_
 # define TEXTRENDERER_HPP_
 
-#include <engine/scene/Component.hpp>
 #include <engine/text/Font.hpp>
-#include <engine/text/Text.hpp>
+#include <engine/text/TextMesh.hpp>
 #include <engine/text/TextShader.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <util/function/Supplier.hpp>
 #include <string>
 #include <vector>
 
-class TextRenderer :
-		public Component
+class TextRenderer
 {
-	public:
-		static std::string NAME;
-
-		enum Location
-		{
-
-		};
-
 	public:
 		SharedReference<TextShader> shader;
 		SharedReference<Font> font;
-		SharedReference<Text> text;
-		SharedReference<Supplier<std::string> > updater;
 
 	public:
-		TextRenderer(GameObject &parent);
+		TextRenderer(SharedReference<TextShader> &shader, SharedReference<Font> &font);
 
 		virtual
 		~TextRenderer();
 
 	public:
-		virtual void
-		render();
+		void
+		render(TextMesh &mesh);
 };
 
 #endif /* TEXTRENDERER_HPP_ */

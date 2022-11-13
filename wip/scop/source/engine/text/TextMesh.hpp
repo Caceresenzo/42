@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEXT_HPP_
-# define TEXT_HPP_
+#ifndef TEXTMESH_HPP_
+# define TEXTMESH_HPP_
 
 #include <engine/math/vector.hpp>
 #include <engine/vertex/VertexArrayObject.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <string>
 
-class Text
+class TextMesh
 {
 	private:
 		std::string m_value;
@@ -30,10 +30,10 @@ class Text
 		VertexBufferObject m_uv_buffer;
 
 	public:
-		Text(const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);
+		TextMesh(const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);
 
 		virtual
-		~Text();
+		~TextMesh();
 
 		void
 		build();
@@ -43,6 +43,9 @@ class Text
 
 		void
 		set(const std::string &value);
+
+		void
+		set_and_build(const std::string &value);
 
 	public:
 		inline bool
@@ -76,4 +79,4 @@ class Text
 		}
 };
 
-#endif /* TEXT_HPP_ */
+#endif /* TEXTMESH_HPP_ */

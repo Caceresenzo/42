@@ -53,7 +53,7 @@ class Mesh
 		remove_texture(void);
 
 		void
-		render(MeshShader &shader);
+		render(MeshShader &shader) const;
 };
 
 #endif /* MESH_HPP_ */

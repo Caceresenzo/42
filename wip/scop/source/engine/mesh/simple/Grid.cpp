@@ -11,19 +11,28 @@
 /* ************************************************************************** */
 
 #include <engine/math/vector.hpp>
-#include <engine/model/mesh/Mesh.hpp>
-#include <engine/model/mesh/simple/Grid.hpp>
+#include <engine/mesh/Mesh.hpp>
+#include <engine/mesh/simple/Grid.hpp>
 #include <vector>
 
 Mesh*
-Grid::of(int slices)
+Grid::of(int slices, bool centered)
 {
 	std::vector<Vector<3, float> > vertices;
 	std::vector<unsigned int> indices;
 
-	for (int j = 0; j <= slices; ++j)
+	int start = 0;
+	int end = slices;
+
+	if (centered)
 	{
-		for (int i = 0; i <= slices; ++i)
+		end = slices / 2;
+		start = -end;
+	}
+
+	for (int j = start; j <= end; ++j)
+	{
+		for (int i = start; i <= end; ++i)
 		{
 			float x = (float)i / (float)slices;
 			float z = (float)j / (float)slices;

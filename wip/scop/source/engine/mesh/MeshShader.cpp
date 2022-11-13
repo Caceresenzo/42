@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/model/mesh/MeshShader.hpp>
+#include <engine/mesh/MeshShader.hpp>
 
 MeshShader::MeshShader(const std::string &vertex_file, const std::string &fragment_file) :
 		Program(vertex_file, fragment_file),

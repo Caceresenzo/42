@@ -10,35 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/text/Text.hpp>
+#include <engine/text/TextMesh.hpp>
 #include <stddef.h>
 #include <vector>
 
-Text::Text(const std::string &initial, const Vector<2, float> &position, float size) :
-		m_value(initial),
-		m_position(position),
-		m_size(size),
-		m_invalidated(true),
-		m_vertex_array(),
-		m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW),
-		m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)
+TextMesh::TextMesh(const std::string &initial, const Vector<2, float> &position, float size) :
+	m_value(initial),
+	m_position(position),
+	m_size(size),
+	m_invalidated(true),
+	m_vertex_array(),
+	m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW),
+	m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)
 {
 	m_vertex_array.add(m_vertex_buffer, false);
 	m_vertex_array.add(m_uv_buffer, false);
 }
 
-Text::~Text()
+TextMesh::~TextMesh()
 {
 }
 
 void
-Text::invalidate()
+TextMesh::invalidate()
 {
 	m_invalidated = true;
 }
 
 void
-Text::build()
+TextMesh::build()
 {
 	std::vector<Vector<2, float> > vertices;
 	std::vector<Vector<2, float> > uvs;
@@ -106,11 +106,19 @@ Text::build()
 }
 
 void
-Text::set(const std::string &value)
+TextMesh::set(const std::string &value)
 {
 	if (m_value == value)
 		return;
 
 	m_value = value;
 	invalidate();
+}
+void
+TextMesh::set_and_build(const std::string &value)
+{
+	set(value);
+
+	if (is_invalidated())
+		build();
 }

@@ -34,10 +34,10 @@ class Program
 		~Program();
 
 		void
-		use();
+		use() const;
 
 		void
-		unuse();
+		unuse() const;
 
 		void
 		locate(Variable &variable) const;

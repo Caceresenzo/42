@@ -133,13 +133,13 @@ Program::~Program()
 }
 
 void
-Program::use()
+Program::use() const
 {
 	glUseProgram(m_id);
 }
 
 void
-Program::unuse()
+Program::unuse() const
 {
 	glUseProgram(0);
 }

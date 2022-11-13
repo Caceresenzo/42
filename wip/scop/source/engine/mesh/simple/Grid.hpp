@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Model.hpp                                          :+:      :+:    :+:   */
+/*   Grid.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/13 01:36:55 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/13 01:36:55 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/03/04 00:23:24 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/04 00:23:24 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MODEL_HPP_
-# define MODEL_HPP_
+#ifndef GRID_HPP_
+# define GRID_HPP_
 
-#include <engine/model/mesh/Mesh.hpp>
-#include <engine/model/Material.hpp>
-#include <lang/reference/SharedReference.hpp>
+class Mesh;
 
-class Model
+class Grid
 {
 	public:
-		SharedReference<Mesh> mesh;
-		SharedReference<Material> material;
-
-	public:
-		Model(SharedReference<Mesh> mesh);
-		Model(SharedReference<Mesh> mesh, SharedReference<Material> material);
-
-		virtual
-		~Model();
+		static Mesh*
+		of(int slices, bool centered);
 };
 
-#endif /* MODEL_HPP_ */
+#endif /* GRID_HPP_ */

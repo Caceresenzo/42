@@ -34,6 +34,9 @@ class OpenGL
 
 		static void
 		check_error();
+
+		static void
+		print_basic_info();
 };
 
 #endif /* OPENGL_HPP_ */

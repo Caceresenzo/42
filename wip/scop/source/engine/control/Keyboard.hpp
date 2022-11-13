@@ -19,9 +19,18 @@
 class Keyboard
 {
 	public:
+		enum PressState
+		{
+			UNPRESSED,
+			JUST_PRESSED,
+			PRESSED,
+		};
+
 		enum Key
 		{
 			A = 'a',
+			B = 'b',
+			C = 'c',
 			D = 'd',
 			F = 'f',
 			I = 'i',
@@ -33,6 +42,8 @@ class Keyboard
 			Q = 'q',
 			S = 's',
 			W = 'w',
+			X = 'x',
+			Y = 'y',
 			Z = 'z',
 			SPACE = ' ',
 			ESCAPE = 27,
@@ -40,17 +51,20 @@ class Keyboard
 		};
 
 	private:
-		static bool s_states[UCHAR_MAX];
+		static PressState s_states[UCHAR_MAX];
 
 	private:
 		Keyboard();
 
 	public:
-		static bool
+		static PressState
 		is_pressed(Key key);
 
 		static void
 		set_pressed(Key key, bool state);
+
+		static void
+		increment();
 };
 
 #endif /* KEYBOARD_HPP_ */

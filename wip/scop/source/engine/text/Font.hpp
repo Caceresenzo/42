@@ -19,22 +19,19 @@
 
 class Font
 {
-	private:
-		SharedReference<Texture> m_atlas;
+	public:
+		SharedReference<Texture> atlas;
 
 	public:
-		Font(const std::string &font_atlas_file);
 		Font(SharedReference<Texture> &atlas);
 
+	public:
 		virtual
 		~Font();
 
 	public:
-		inline Texture&
-		atlas()
-		{
-			return (*m_atlas);
-		}
+		static Font&
+		load(const std::string &path);
 
 	public:
 		static Font&

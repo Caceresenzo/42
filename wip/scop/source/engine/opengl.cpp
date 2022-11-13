@@ -70,3 +70,12 @@ OpenGL::check_error()
 	if (error != GL_NO_ERROR)
 		throw RuntimeException(_debug_types[error]);
 }
+
+void
+OpenGL::print_basic_info()
+{
+	std::cout << "INFO: OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+	std::cout << "INFO: OpenGL Renderer: " << glGetString(GL_RENDERER) << std::endl;
+	std::cout << "INFO: OpenGL Vendor: " << glGetString(GL_VENDOR) << std::endl;
+	std::cout << std::flush;
+}

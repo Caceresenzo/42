@@ -15,20 +15,31 @@
 #include <lang/image/ImageData.hpp>
 #include <string>
 
-Font::Font(const std::string &font_atlas_file) :
-		m_atlas()
+Font::Font(SharedReference<Texture> &atlas) :
+	atlas(atlas)
+{
+}
+
+Font::~Font()
+{
+}
+
+Font&
+Font::load(const std::string &path)
 {
 	ImageData *image_data = NULL;
 
 	try
 	{
 		BMPImageLoader loader;
-		image_data = loader.load(font_atlas_file);
+		image_data = loader.load(path);
 
-		m_atlas = *Texture::from_image(image_data);
+		SharedReference<Texture> atlas = *Texture::from_image(image_data);
 
 		delete image_data;
 		image_data = NULL;
+
+		return (*new Font(atlas));
 	}
 	catch (...)
 	{
@@ -39,17 +50,8 @@ Font::Font(const std::string &font_atlas_file) :
 	}
 }
 
-Font::Font(SharedReference<Texture> &atlas) :
-		m_atlas(atlas)
-{
-}
-
-Font::~Font()
-{
-}
-
 Font&
 Font::consolas()
 {
-	return (*new Font("assets/fonts/consolas.bmp"));
+	return (load("assets/fonts/consolas.bmp"));
 }

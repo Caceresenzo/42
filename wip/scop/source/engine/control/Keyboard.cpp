@@ -12,13 +12,13 @@
 
 #include <engine/control/Keyboard.hpp>
 
-bool Keyboard::s_states[UCHAR_MAX] = { false };
+Keyboard::PressState Keyboard::s_states[UCHAR_MAX] = { Keyboard::UNPRESSED };
 
 Keyboard::Keyboard()
 {
 }
 
-bool
+Keyboard::PressState
 Keyboard::is_pressed(Key key)
 {
 	return (s_states[key]);
@@ -27,5 +27,13 @@ Keyboard::is_pressed(Key key)
 void
 Keyboard::set_pressed(Key key, bool state)
 {
-	s_states[key] = state;
+	s_states[key] = state ? Keyboard::JUST_PRESSED : Keyboard::UNPRESSED;
+}
+
+void
+Keyboard::increment()
+{
+	for (unsigned index = 0; index < UCHAR_MAX; ++index)
+		if (s_states[index] == Keyboard::JUST_PRESSED)
+			s_states[index] = Keyboard::PRESSED;
 }

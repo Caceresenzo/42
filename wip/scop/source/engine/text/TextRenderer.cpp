@@ -13,18 +13,20 @@
 #include <engine/application/Window.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/opengl.hpp>
+#include <engine/shader/Uniform.hpp>
+#include <engine/text/Font.hpp>
+#include <engine/text/TextMesh.hpp>
 #include <engine/text/TextRenderer.hpp>
+#include <engine/text/TextShader.hpp>
 #include <engine/texture/Texture.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <lang/reference/SharedReference.hpp>
 
-std::string TextRenderer::NAME = "text-renderer";
-
-TextRenderer::TextRenderer(GameObject &parent) :
-		Component(parent, NAME),
-		shader(),
-		font()
+TextRenderer::TextRenderer(SharedReference<TextShader> &shader, SharedReference<Font> &font) :
+	shader(shader),
+	font(font)
 {
 }
 
@@ -33,45 +35,36 @@ TextRenderer::~TextRenderer()
 }
 
 void
-TextRenderer::render()
+TextRenderer::render(TextMesh &mesh)
 {
-	if (!text || !shader || !font)
-		return;
-
-	if (updater)
-		text->set(updater->get());
-
-	if (text->is_invalidated())
-		text->build();
-
 	shader->use();
-	font->atlas().set_active(0);
-	font->atlas().bind();
+	font->atlas->set_active(0);
+	font->atlas->bind();
 
 	Vector<2, int> size = Window::current().size();
 	shader->window_size.set(size);
 	shader->texture_sampler.set(0);
 
-	text->vertex_array().bind(false);
+	mesh.vertex_array().bind(false);
 
 	shader->position.enable();
-	text->vertex_buffer().bind();
+	mesh.vertex_buffer().bind();
 	shader->position.link();
 
 	shader->uv.enable();
-	text->uv_buffer().bind();
+	mesh.uv_buffer().bind();
 	shader->uv.link();
 
 	glDepthRange(0, 0.01);
-	glDrawArrays(GL_TRIANGLES, 0, text->get().size() * 6);
+	glDrawArrays(GL_TRIANGLES, 0, mesh.get().size() * 6);
 	glDepthRange(0, 1.0);
 
 	shader->position.disable();
 	shader->uv.disable();
 
-	text->vertex_array().unbind();
-	text->vertex_buffer().unbind();
-	text->uv_buffer().unbind();
+	mesh.vertex_array().unbind();
+	mesh.vertex_buffer().unbind();
+	mesh.uv_buffer().unbind();
 
-	font->atlas().unbind();
+	font->atlas->unbind();
 }

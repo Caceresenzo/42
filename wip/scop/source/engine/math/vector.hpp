@@ -113,6 +113,7 @@ template<typename T>
 		public:
 			static const int SIZE = 3;
 			static const Vector ZERO;
+			static const Vector ONE;
 
 		public:
 			T x;
