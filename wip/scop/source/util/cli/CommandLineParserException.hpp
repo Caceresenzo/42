@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   OptionParserException.hpp                          :+:      :+:    :+:   */
+/*   CommandLineParserException.hpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alicetetu <alicetetu@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,25 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPTIONPARSEREXCEPTION_HPP_
-# define OPTIONPARSEREXCEPTION_HPP_
+#ifndef COMMANDLINEPARSEREXCEPTION_HPP_
+# define COMMANDLINEPARSEREXCEPTION_HPP_
 
 #include <lang/Exception.hpp>
 #include <string>
 
-class OptionParserException :
+class CommandLineParserException :
 		public Exception
 {
 	public:
-		OptionParserException(void);
-		OptionParserException(const std::string &message);
-		OptionParserException(const OptionParserException &other);
+		CommandLineParserException(void);
+		CommandLineParserException(const std::string &message);
+		CommandLineParserException(const CommandLineParserException &other);
 
 		virtual
-		~OptionParserException() throw ();
+		~CommandLineParserException() throw ();
 
-		OptionParserException&
-		operator=(const OptionParserException &other);
+		CommandLineParserException&
+		operator=(const CommandLineParserException &other);
 };
 
 #endif /* PARSEREXCEPTION_HPP_ */

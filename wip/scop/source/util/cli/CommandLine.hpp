@@ -18,56 +18,54 @@
 #include <string>
 
 class Option;
+class Argument;
 
 class CommandLine
 {
 	public:
-		typedef std::map<char, std::list<std::string> > map;
-		typedef map::const_iterator iterator;
+		typedef std::map<char, std::list<std::string> > option_map;
+		typedef option_map::const_iterator option_iterator;
+		typedef std::map<std::string, std::list<std::string> > argument_map;
+		typedef argument_map::const_iterator argument_iterator;
 
 	private:
-		map m_storage;
+		option_map m_options;
+		argument_map m_arguments;
 
 	public:
 		CommandLine();
-		CommandLine(map storage);
+		CommandLine(option_map options, argument_map arguments);
 		CommandLine(const CommandLine &other);
 
 		virtual
 		~CommandLine();
 
 		CommandLine&
-		operator =(const CommandLine &other);
+		operator=(const CommandLine &other);
 
 		bool
 		has(const Option &option) const;
 
-		bool
-		has(char short_name) const;
-
 		const std::list<std::string>&
 		get(const Option &option) const;
-
-		const std::list<std::string>&
-		get(char short_name) const;
 
 		const std::string&
 		first(const Option &option) const;
 
-		const std::string&
-		first(char short_name) const;
-
-		const std::string&
-		last(const Option &option) const;
-
-		const std::string&
-		last(char short_name) const;
-
-		iterator
+		option_iterator
 		find(const Option &option) const;
 
-		iterator
-		find(char short_name) const;
+		bool
+		has(const Argument &argument) const;
+
+		const std::list<std::string>&
+		get(const Argument &argument) const;
+
+		const std::string&
+		first(const Argument &argument) const;
+
+		argument_iterator
+		find(const Argument &argument) const;
 };
 
 #endif /* COMMANDLINE_HPP_ */

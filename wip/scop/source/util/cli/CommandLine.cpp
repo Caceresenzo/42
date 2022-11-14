@@ -10,21 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <util/option/CommandLine.hpp>
-#include <util/option/Option.hpp>
+#include <util/cli/Argument.hpp>
+#include <util/cli/CommandLine.hpp>
+#include <util/cli/Option.hpp>
 
 CommandLine::CommandLine() :
-		m_storage()
+	m_options(),
+	m_arguments()
 {
 }
 
-CommandLine::CommandLine(map storage) :
-		m_storage(storage)
+CommandLine::CommandLine(option_map options, argument_map arguments) :
+	m_options(options),
+	m_arguments(arguments)
 {
 }
 
 CommandLine::CommandLine(const CommandLine &other) :
-		m_storage(other.m_storage)
+	m_options(other.m_options),
+	m_arguments(other.m_arguments)
 {
 }
 
@@ -33,10 +37,13 @@ CommandLine::~CommandLine()
 }
 
 CommandLine&
-CommandLine::operator =(const CommandLine &other)
+CommandLine::operator=(const CommandLine &other)
 {
 	if (this != &other)
-		m_storage = other.m_storage;
+	{
+		m_options = other.m_options;
+		m_arguments = other.m_arguments;
+	}
 
 	return (*this);
 }
@@ -44,59 +51,48 @@ CommandLine::operator =(const CommandLine &other)
 bool
 CommandLine::has(const Option &option) const
 {
-	return (has(option.short_name()));
-}
-
-bool
-CommandLine::has(char short_name) const
-{
-	return (find(short_name) != m_storage.end());
+	return (find(option) != m_options.end());
 }
 
 const std::list<std::string>&
 CommandLine::get(const Option &option) const
 {
-	return (get(option.short_name()));
-}
-
-const std::list<std::string>&
-CommandLine::get(char short_name) const
-{
-	return (find(short_name)->second);
+	return (find(option)->second);
 }
 
 const std::string&
 CommandLine::first(const Option &option) const
 {
-	return (first(option.short_name()));
+	return (get(option).front());
 }
 
-const std::string&
-CommandLine::first(char short_name) const
-{
-	return (get(short_name).front());
-}
-
-const std::string&
-CommandLine::last(const Option &option) const
-{
-	return (last(option.short_name()));
-}
-
-const std::string&
-CommandLine::last(char short_name) const
-{
-	return (get(short_name).back());
-}
-
-CommandLine::iterator
+CommandLine::option_iterator
 CommandLine::find(const Option &option) const
 {
-	return (find(option.short_name()));
+	return (m_options.find(option.short_name()));
 }
 
-CommandLine::iterator
-CommandLine::find(char short_name) const
+bool
+CommandLine::has(const Argument &option) const
 {
-	return (m_storage.find(short_name));
+	return (find(option) != m_arguments.end());
 }
+
+const std::list<std::string>&
+CommandLine::get(const Argument &option) const
+{
+	return (find(option)->second);
+}
+
+const std::string&
+CommandLine::first(const Argument &option) const
+{
+	return (get(option).front());
+}
+
+CommandLine::argument_iterator
+CommandLine::find(const Argument &option) const
+{
+	return (m_arguments.find(option.name()));
+}
+

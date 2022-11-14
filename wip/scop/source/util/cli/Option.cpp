@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <lang/IllegalArgumentException.hpp>
-#include <util/option/Option.hpp>
+#include <util/cli/Option.hpp>
 
 Option::Option(char short_name, const std::string &long_name, const std::string &description) :
 		m_short(short_name),
@@ -33,34 +33,4 @@ Option::Option(char short_name, const std::string &long_name, const std::string 
 
 Option::~Option(void)
 {
-}
-
-char
-Option::short_name(void) const
-{
-	return (m_short);
-}
-
-const std::string&
-Option::long_name(void) const
-{
-	return (m_long);
-}
-
-const std::string&
-Option::description(void) const
-{
-	return (m_description);
-}
-
-bool
-Option::has_argument(void) const
-{
-	return (!m_argument_name.empty());
-}
-
-const std::string&
-Option::argument_name(void) const
-{
-	return (m_argument_name);
 }

@@ -1,6 +1,7 @@
 #include <engine/application/Application.hpp>
 #include <engine/application/Window.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
+#include <engine/control/Keyboard.hpp>
 #include <engine/math/Transform.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/mesh/Mesh.hpp>
@@ -27,10 +28,11 @@
 #include <lang/Number.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <lang/reference/WeakReference.hpp>
+#include <util/cli/Argument.hpp>
+#include <util/cli/CommandLine.hpp>
+#include <util/cli/CommandLineParser.hpp>
+#include <util/cli/Option.hpp>
 #include <util/function/Supplier.hpp>
-#include <util/option/CommandLine.hpp>
-#include <util/option/Option.hpp>
-#include <util/option/OptionParser.hpp>
 #include <cstdio>
 #include <cstdlib>
 #include <cwchar>
@@ -49,8 +51,8 @@ const Option OPT_HIDE_DEBUG('d', "hide-debug", "hide debug info");
 const Option OPT_FULLSCREEN('f', "fullscreen", "enable fullscreen on opening");
 const Option OPT_WIDTH('w', "width", "set window's width", "width");
 const Option OPT_HEIGHT('h', "height", "set window's height", "height");
-const Option OPT_OBJECT('o', "object", "specify object", "file");
-const Option OPT_TEXTURE('t', "texture", "specify texture", "file");
+const Argument ARG_OBJECT("object", false, "specify object");
+const Argument ARG_TEXTURE("texture", true, "specify texture");
 
 struct Options
 {
@@ -71,21 +73,23 @@ int cli(int argc, char **argv, Options &options)
 {
 	options.program = argv[0];
 
-	std::list<const Option*> lst;
-	lst.push_back(&OPT_HELP);
-	lst.push_back(&OPT_VERSION);
-	lst.push_back(&OPT_LOG_LEVEL);
-	lst.push_back(&OPT_NO_GRID);
-	lst.push_back(&OPT_NO_ARROWS);
-	lst.push_back(&OPT_HIDE_INSTRUCTIONS);
-	lst.push_back(&OPT_HIDE_DEBUG);
-	lst.push_back(&OPT_FULLSCREEN);
-	lst.push_back(&OPT_WIDTH);
-	lst.push_back(&OPT_HEIGHT);
-	lst.push_back(&OPT_OBJECT);
-	lst.push_back(&OPT_TEXTURE);
+	std::vector<const Option*> option_list;
+	option_list.push_back(&OPT_HELP);
+	option_list.push_back(&OPT_VERSION);
+	option_list.push_back(&OPT_LOG_LEVEL);
+	option_list.push_back(&OPT_NO_GRID);
+	option_list.push_back(&OPT_NO_ARROWS);
+	option_list.push_back(&OPT_HIDE_INSTRUCTIONS);
+	option_list.push_back(&OPT_HIDE_DEBUG);
+	option_list.push_back(&OPT_FULLSCREEN);
+	option_list.push_back(&OPT_WIDTH);
+	option_list.push_back(&OPT_HEIGHT);
 
-	OptionParser parser(lst);
+	std::vector<const Argument*> argument_list;
+	argument_list.push_back(&ARG_OBJECT);
+	argument_list.push_back(&ARG_TEXTURE);
+
+	CommandLineParser parser(option_list, argument_list);
 
 	try
 	{
@@ -127,11 +131,11 @@ int cli(int argc, char **argv, Options &options)
 		if (command_line.has(OPT_HEIGHT))
 			options.height = Number::parse<int>(command_line.first(OPT_HEIGHT));
 
-		if (command_line.has(OPT_OBJECT))
-			options.object_file = command_line.first(OPT_OBJECT);
+		if (command_line.has(ARG_OBJECT))
+			options.object_file = command_line.first(ARG_OBJECT);
 
-		if (command_line.has(OPT_TEXTURE))
-			options.texture_file = command_line.first(OPT_TEXTURE);
+		if (command_line.has(ARG_TEXTURE))
+			options.texture_file = command_line.first(ARG_TEXTURE);
 	}
 	catch (Exception &exception)
 	{
@@ -148,6 +152,22 @@ int cli(int argc, char **argv, Options &options)
 
 	if (options.texture_file.empty())
 		std::cerr << "no texture file specified" << std::endl;
+
+
+#define DUMP_LINE(key) std::cout << "OPTION: " << #key << ": " << options.key << std::endl;
+
+	DUMP_LINE(program);
+	DUMP_LINE(no_grid);
+	DUMP_LINE(no_arrows);
+	DUMP_LINE(fullscreen);
+	DUMP_LINE(width);
+	DUMP_LINE(height);
+	DUMP_LINE(object_file);
+	DUMP_LINE(texture_file);
+	DUMP_LINE(hide_instructions);
+	DUMP_LINE(hide_debug);
+
+#undef DUMP_LINE
 
 	return (true);
 }

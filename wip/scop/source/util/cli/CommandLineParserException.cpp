@@ -10,29 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <util/option/OptionParserException.hpp>
+#include <util/cli/CommandLineParserException.hpp>
 
-OptionParserException::OptionParserException() :
+CommandLineParserException::CommandLineParserException() :
 		Exception()
 {
 }
 
-OptionParserException::OptionParserException(const std::string &message) :
+CommandLineParserException::CommandLineParserException(const std::string &message) :
 		Exception(message)
 {
 }
 
-OptionParserException::OptionParserException(const OptionParserException &other) :
+CommandLineParserException::CommandLineParserException(const CommandLineParserException &other) :
 		Exception(other)
 {
 }
 
-OptionParserException::~OptionParserException() throw ()
+CommandLineParserException::~CommandLineParserException() throw ()
 {
 }
 
-OptionParserException&
-OptionParserException::operator =(const OptionParserException &other)
+CommandLineParserException&
+CommandLineParserException::operator =(const CommandLineParserException &other)
 {
 	Exception::operator =(other);
 

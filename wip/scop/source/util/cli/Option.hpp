@@ -37,20 +37,35 @@ class Option
 		virtual
 		~Option(void);
 
-		char
-		short_name(void) const;
+		inline char
+		short_name(void) const
+		{
+			return (m_short);
+		}
 
-		const std::string&
-		long_name(void) const;
+		inline const std::string&
+		long_name(void) const
+		{
+			return (m_long);
+		}
 
-		const std::string&
-		description(void) const;
+		inline const std::string&
+		description(void) const
+		{
+			return (m_description);
+		}
 
-		bool
-		has_argument(void) const;
+		inline bool
+		has_argument(void) const
+		{
+			return (!m_argument_name.empty());
+		}
 
-		const std::string&
-		argument_name(void) const;
+		inline const std::string&
+		argument_name(void) const
+		{
+			return (m_argument_name);
+		}
 };
 
 #endif /* OPTION_HPP_ */

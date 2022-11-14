@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   OptionParser.hpp                                   :+:      :+:    :+:   */
+/*   CommandLineParser.hpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alicetetu <alicetetu@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,36 +10,37 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef OPTIONPARSER_HPP_
-# define OPTIONPARSER_HPP_
+#ifndef COMMANDLINEPARSER_HPP_
+# define COMMANDLINEPARSER_HPP_
 
-#include <util/option/Option.hpp>
-#include <util/option/CommandLine.hpp>
-#include <util/option/OptionParserException.hpp>
-#include <vector>
+#include <util/cli/Argument.hpp>
+#include <util/cli/CommandLine.hpp>
+#include <util/cli/CommandLineParserException.hpp>
+#include <util/cli/Option.hpp>
 #include <list>
+#include <string>
+#include <vector>
 
-class OptionParser
+class CommandLine;
+
+class CommandLineParser
 {
 	public:
-		typedef std::list<const Option*> list;
-		typedef list::const_iterator iterator;
+		typedef std::vector<const Option*> option_list;
+		typedef std::vector<const Argument*> argument_list;
+		typedef option_list::const_iterator option_iterator;
+		typedef argument_list::const_iterator argument_iterator;
 
 	private:
-		list m_options;
-
-	private:
-		OptionParser();
-		OptionParser(const OptionParser &other);
-
-		OptionParser&
-		operator=(const OptionParser &other);
+		option_list m_options;
+		argument_list m_arguments;
 
 	public:
-		OptionParser(list options);
+		CommandLineParser(option_list options);
+		CommandLineParser(option_list options, argument_list arguments);
 
 		virtual
-		~OptionParser(void);
+		~CommandLineParser(void);
 
 		CommandLine
 		parse(int argc, char **argv);
@@ -48,4 +49,4 @@ class OptionParser
 		help(const std::string &program, const std::string &description, const std::vector<std::string> &authors) const;
 };
 
-#endif /* OPTIONPARSER_HPP_ */
+#endif /* COMMANDLINEPARSER_HPP_ */
