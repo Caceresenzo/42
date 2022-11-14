@@ -418,12 +418,19 @@ bool game(Options &options)
 int
 main(int argc, char **argv)
 {
-	Options options;
-	if (!cli(argc, argv, options))
-		return (EXIT_FAILURE);
+	try {
+		Options options;
+		if (!cli(argc, argv, options))
+			return (EXIT_FAILURE);
 
-	if (!game(options))
-		return (EXIT_FAILURE);
+		if (!game(options))
+			return (EXIT_FAILURE);
 
-	return (EXIT_SUCCESS);
+		return (EXIT_SUCCESS);
+	} catch (std::exception &exception) {
+		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << "The application could not be started!" << std::endl;
+		std::cout << "Error: " << exception.what() << std::endl;
+	}
 }

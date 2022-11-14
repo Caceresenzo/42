@@ -28,40 +28,47 @@
 static void
 compile_shader(GLuint shader_id, const std::string &path)
 {
-	std::ifstream stream(path.c_str());
-	if (!stream.good())
-		throw IOException(path, errno);
-
-	std::stringstream buffer;
-	buffer << stream.rdbuf();
-	if (!stream.good())
-		throw IOException(path, errno);
-
-	std::cout << "Compiling: " << path << std::endl << std::flush;
-
-	std::string code = buffer.str();
-	const char *code_raw = code.c_str();
-
-	glShaderSource(shader_id, 1, &code_raw, NULL);
-	glCompileShader(shader_id);
-
-	GLint result = GL_FALSE;
-	GLint info_log_length = 0;
-	glGetShaderiv(shader_id, GL_COMPILE_STATUS, &result);
-	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &info_log_length);
-
-	if (info_log_length > 0)
+	try
 	{
-		printf("%d\n", info_log_length);
+		std::ifstream stream(path.c_str());
+		if (!stream)
+			throw IOException(path, errno);
 
-		char err[info_log_length + 1];
-		std::memset(err, '?', info_log_length);
-		glGetShaderInfoLog(shader_id, info_log_length, NULL, err);
-		err[info_log_length] = '\0';
-		write(1, err, info_log_length);
+		std::stringstream buffer;
+		buffer << stream.rdbuf();
+		if (!stream)
+			throw IOException(path, errno);
 
-		if (!result)
-			throw RuntimeException(std::string("could not compile: ") + err);
+		std::cout << "INFO: Compiling: " << path << std::endl << std::flush;
+
+		std::string code = buffer.str();
+		const char *code_raw = code.c_str();
+
+		glShaderSource(shader_id, 1, &code_raw, NULL);
+		glCompileShader(shader_id);
+
+		GLint result = GL_FALSE;
+		GLint info_log_length = 0;
+		glGetShaderiv(shader_id, GL_COMPILE_STATUS, &result);
+		glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &info_log_length);
+
+		if (info_log_length > 0)
+		{
+			printf("%d\n", info_log_length);
+
+			char err[info_log_length + 1];
+			std::memset(err, '?', info_log_length);
+			glGetShaderInfoLog(shader_id, info_log_length, NULL, err);
+			err[info_log_length] = '\0';
+			write(1, err, info_log_length);
+
+			if (!result)
+				throw RuntimeException(err);
+		}
+	}
+	catch (Exception &exception)
+	{
+		throw RuntimeException("could not compile '" + path + "': " + exception.message());
 	}
 }
 

@@ -38,7 +38,7 @@ MeshLoader::load(const std::string &path)
 {
 	std::ifstream file(path.c_str());
 	if (!file)
-		throw IOException(path);
+		throw IOException(path, errno);
 
 	std::vector<Vector<3, float> > vertices;
 	std::vector<Vector<2, float> > textures;
