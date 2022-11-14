@@ -51,7 +51,7 @@ WhiteRenderer::render(SharedReference<Model> &model)
 
 	model->vertex_buffer_array->bind(true);
 
-	model->vertex_buffer_array->get(1).bind();
+	model->vertex_buffer_array->get(1)->bind();
 	shader->positions.link();
 	shader->positions.enable();
 

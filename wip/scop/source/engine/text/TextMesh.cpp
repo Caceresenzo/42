@@ -15,27 +15,20 @@
 #include <vector>
 
 TextMesh::TextMesh(SharedReference<Font> &font, const std::string &initial, const Vector<2, float> &position, float size) :
-	m_font(font),
-	m_value(initial),
-	m_position(position),
-	m_size(size),
-	m_invalidated(true),
-	m_vertex_array(),
-	m_vertex_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW),
-	m_uv_buffer(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)
+	font(font),
+	value(initial),
+	position(position),
+	size(size),
+	vertex_array(*new VertexArrayObject()),
+	vertex_buffer(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)),
+	uv_buffer(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW))
 {
-	m_vertex_array.add(m_vertex_buffer, false);
-	m_vertex_array.add(m_uv_buffer, false);
+	vertex_array->add(vertex_buffer);
+	vertex_array->add(uv_buffer);
 }
 
 TextMesh::~TextMesh()
 {
-}
-
-void
-TextMesh::invalidate()
-{
-	m_invalidated = true;
 }
 
 void
@@ -44,19 +37,19 @@ TextMesh::build()
 	std::vector<Vector<2, float> > vertices;
 	std::vector<Vector<2, float> > uvs;
 
-	size_t estimated = m_value.length() * (3 + 3);
+	size_t estimated = value.length() * (3 + 3);
 	vertices.reserve(estimated);
 	uvs.reserve(estimated);
 
 	Vector<2, int> screen(0, 0);
 
-	for (size_t index = 0; index < m_value.length(); index++)
-		if (m_value[index] == '\n')
+	for (size_t index = 0; index < value.length(); index++)
+		if (value[index] == '\n')
 			screen.y += 1;
 
-	for (size_t index = 0; index < m_value.length(); index++)
+	for (size_t index = 0; index < value.length(); index++)
 	{
-		char character = m_value[index];
+		char character = value[index];
 
 		if (character == '\n')
 		{
@@ -71,12 +64,12 @@ TextMesh::build()
 			continue;
 		}
 
-		int start_x = m_position.x + (screen.x * m_size * m_font->character_dimension.x);
-		int start_y = m_position.y + (screen.y * m_size * m_font->character_dimension.y);
+		int start_x = position.x + (screen.x * size * font->character_dimension.x);
+		int start_y = position.y + (screen.y * size * font->character_dimension.y);
 
-		Vector<2, float> vertex_up_left(start_x, start_y + m_size);
-		Vector<2, float> vertex_up_right(start_x + m_size, start_y + m_size);
-		Vector<2, float> vertex_down_right(start_x + m_size, start_y);
+		Vector<2, float> vertex_up_left(start_x, start_y + size);
+		Vector<2, float> vertex_up_right(start_x + size, start_y + size);
+		Vector<2, float> vertex_down_right(start_x + size, start_y);
 		Vector<2, float> vertex_down_left(start_x, start_y);
 
 		vertices.push_back(vertex_up_left);
@@ -106,26 +99,13 @@ TextMesh::build()
 		screen.x += 1;
 	}
 
-	m_vertex_buffer.store(vertices);
-	m_uv_buffer.store(uvs);
-
-	m_invalidated = false;
+	vertex_buffer->store(vertices);
+	uv_buffer->store(uvs);
 }
 
 void
 TextMesh::set(const std::string &value)
 {
-	if (m_value == value)
-		return;
-
-	m_value = value;
-	invalidate();
-}
-void
-TextMesh::set_and_build(const std::string &value)
-{
-	set(value);
-
-	if (is_invalidated())
-		build();
+	this->value = value;
+	build();
 }

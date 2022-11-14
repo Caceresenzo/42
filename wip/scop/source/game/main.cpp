@@ -289,9 +289,9 @@ bool game(Options &options)
 
 	SharedReference<TextShader> text_shader = *TextShader::basic();
 	SharedReference<TextRenderer> text_renderer = *new TextRenderer(text_shader);
-	TextMesh fps_text_mesh(font, "", Vector<2, float>(0, 0), 20);
-	TextMesh controls_text_mesh(font, CONTROLS_TEXT, Vector<2, float>(0, 180));
-	controls_text_mesh.build();
+	SharedReference<TextMesh> fps_text_mesh = *new TextMesh(font, "", Vector<2, float>(0, 0), 20);
+	SharedReference<TextMesh> controls_text_mesh = *new TextMesh(font, CONTROLS_TEXT, Vector<2, float>(0, 180));
+	controls_text_mesh->build();
 
 	SharedReference<Model> grid;
 	{
@@ -430,7 +430,7 @@ bool game(Options &options)
 
 		if (!options.hide_debug)
 		{
-			fps_text_mesh.set_and_build(get_info_string(high_frame_counter, frame_counter, camera));
+			fps_text_mesh->set(get_info_string(high_frame_counter, frame_counter, camera));
 			text_renderer->render(fps_text_mesh);
 		}
 

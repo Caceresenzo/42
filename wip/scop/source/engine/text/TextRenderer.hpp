@@ -34,7 +34,7 @@ class TextRenderer
 
 	public:
 		void
-		render(TextMesh &mesh);
+		render(SharedReference<TextMesh> &mesh);
 };
 
 #endif /* TEXTRENDERER_HPP_ */

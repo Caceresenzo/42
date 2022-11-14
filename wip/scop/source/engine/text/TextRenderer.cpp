@@ -34,41 +34,39 @@ TextRenderer::~TextRenderer()
 }
 
 void
-TextRenderer::render(TextMesh &mesh)
+TextRenderer::render(SharedReference<TextMesh> &mesh)
 {
-	SharedReference<Font> font = mesh.font();
-
 	shader->use();
-	font->atlas->set_active(0);
-	font->atlas->bind();
+	mesh->font->atlas->set_active(0);
+	mesh->font->atlas->bind();
 
 	Vector<2, int> size = Window::current().size();
 	shader->window_size.set(size);
 	shader->texture_sampler.set(0);
 
-	mesh.vertex_array().bind(false);
+	mesh->vertex_array->bind(false);
 
 	shader->position.enable();
-	mesh.vertex_buffer().bind();
+	mesh->vertex_buffer->bind();
 	shader->position.link();
 
 	shader->uv.enable();
-	mesh.uv_buffer().bind();
+	mesh->uv_buffer->bind();
 	shader->uv.link();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthRange(0, 0.01);
-	glDrawArrays(GL_TRIANGLES, 0, mesh.get().size() * 6);
+	glDrawArrays(GL_TRIANGLES, 0, mesh->value.size() * 6);
 	glDepthRange(0, 1.0);
 	glDisable(GL_BLEND);
 
 	shader->position.disable();
 	shader->uv.disable();
 
-	mesh.vertex_array().unbind();
-	mesh.vertex_buffer().unbind();
-	mesh.uv_buffer().unbind();
+	mesh->vertex_array->unbind();
+	mesh->vertex_buffer->unbind();
+	mesh->uv_buffer->unbind();
 
-	font->atlas->unbind();
+	mesh->font->atlas->unbind();
 }

@@ -11,10 +11,11 @@
 /* ************************************************************************** */
 
 #include <engine/vertex/VertexArrayObject.hpp>
+#include <lang/reference/SharedReference.hpp>
 
 VertexArrayObject::VertexArrayObject() :
-		m_id(-1),
-		m_attached()
+	m_id(-1),
+	m_attached()
 {
 	glGenVertexArrays(1, &m_id);
 }
@@ -22,32 +23,28 @@ VertexArrayObject::VertexArrayObject() :
 VertexArrayObject::~VertexArrayObject()
 {
 	glDeleteVertexArrays(1, &m_id);
-
-	for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-		if (iterator->second)
-			delete iterator->first;
 }
 
 bool
-VertexArrayObject::add(VertexBufferObject &object, bool auto_delete)
+VertexArrayObject::add(SharedReference<VertexBufferObject> &object)
 {
 	/* vector lookup is bad :/ */
-	for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-		if (iterator->first == &object)
+	for (iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
+		if (iterator->value() == object.value())
 			return (false);
 
 	bind();
-	object.bind();
+	object->bind();
 
-	m_attached.push_back(std::make_pair(&object, auto_delete));
+	m_attached.push_back(object);
 
 	return (true);
 }
 
-VertexBufferObject&
+SharedReference<VertexBufferObject>
 VertexArrayObject::get(size_t index)
 {
-	return (*m_attached.at(index).first);
+	return (m_attached.at(index));
 }
 
 void
@@ -56,8 +53,8 @@ VertexArrayObject::bind(bool with_attached)
 	glBindVertexArray(m_id);
 
 	if (with_attached)
-		for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-			iterator->first->bind();
+		for (iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
+			(*iterator)->bind();
 }
 
 void
@@ -66,6 +63,6 @@ VertexArrayObject::unbind(bool with_attached)
 	glBindVertexArray(0);
 
 	if (with_attached)
-		for (const_iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-			iterator->first->unbind();
+		for (iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
+			(*iterator)->unbind();
 }

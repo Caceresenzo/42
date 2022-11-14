@@ -55,7 +55,7 @@ ScopRenderer::render(SharedReference<Model> &model)
 
 	model->vertex_buffer_array->bind(true);
 
-	model->vertex_buffer_array->get(1).bind();
+	model->vertex_buffer_array->get(1)->bind();
 	shader->positions.link();
 	shader->positions.enable();
 
@@ -63,7 +63,7 @@ ScopRenderer::render(SharedReference<Model> &model)
 	{
 		shader->use_texture.set(true);
 
-		model->vertex_buffer_array->get(2).bind();
+		model->vertex_buffer_array->get(2)->bind();
 		shader->texture_positions.link();
 		shader->texture_positions.enable();
 

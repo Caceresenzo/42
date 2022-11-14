@@ -16,17 +16,19 @@
 #include <engine/opengl.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <GL/glew.h>
+#include <lang/reference/SharedReference.hpp>
 #include <utility>
 #include <vector>
 
 class VertexArrayObject
 {
 	private:
-		typedef typename std::vector<std::pair<VertexBufferObject*, bool> >::const_iterator const_iterator;
+		typedef std::vector<SharedReference<VertexBufferObject>> vector;
+		typedef typename vector::iterator iterator;
 
 	private:
 		GLuint m_id;
-		std::vector<std::pair<VertexBufferObject*, bool> > m_attached;
+		vector m_attached;
 
 	public:
 		VertexArrayObject();
@@ -36,9 +38,9 @@ class VertexArrayObject
 
 	public:
 		bool
-		add(VertexBufferObject &object, bool auto_delete = false);
+		add(SharedReference<VertexBufferObject> &object);
 
-		VertexBufferObject&
+		SharedReference<VertexBufferObject>
 		get(size_t index);
 
 		void
