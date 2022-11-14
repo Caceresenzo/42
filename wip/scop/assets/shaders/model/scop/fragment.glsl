@@ -14,7 +14,7 @@ void main()
 		out_FragColor = texture(textureSampler, pass_TextureCoordinates);
    	else
    	{
-        float grey = (gl_PrimitiveID % 10) / 10f;
+        float grey = (gl_PrimitiveID % 12) / 10f;
         out_FragColor = vec4(grey, grey, grey, 1.0);
    	}
 }
