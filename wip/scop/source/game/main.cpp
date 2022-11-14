@@ -199,7 +199,7 @@ Application& create_application(Options &options)
 	}
 	catch (Exception &exception)
 	{
-		throw new Exception("Could not start application: " + exception.message());
+		throw Exception("Could not start application: " + exception.message());
 	}
 }
 
@@ -224,7 +224,7 @@ Window& create_window(Options &options, SharedReference<PerspectiveCamera> &came
 	}
 	catch (Exception &exception)
 	{
-		throw new Exception("Could not create window: " + exception.message());
+		throw Exception("Could not create window: " + exception.message());
 	}
 }
 
