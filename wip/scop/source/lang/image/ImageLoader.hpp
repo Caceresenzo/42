@@ -13,6 +13,8 @@
 #ifndef IMAGELOADER_HPP_
 # define IMAGELOADER_HPP_
 
+#include <lang/image/ImageData.hpp>
+#include <lang/reference/SharedReference.hpp>
 #include <string>
 
 class ImageData;
@@ -29,7 +31,7 @@ class ImageLoader
 		ImageLoader&
 		operator=(const ImageLoader &other);
 
-		virtual ImageData*
+		virtual SharedReference<ImageData>
 		load(const std::string &path) = 0;
 };
 

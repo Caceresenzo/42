@@ -42,6 +42,9 @@ OpenGL::message_callback(GLenum source, GLenum type, GLuint, GLenum severity, GL
 		_debug_types[GL_DEBUG_TYPE_MARKER] = "MARKER";
 		_debug_types[GL_DEBUG_TYPE_POP_GROUP] = "POP_GROUP";
 		_debug_types[GL_DEBUG_SEVERITY_NOTIFICATION] = "NOTIFICATION";
+		_debug_types[GL_DEBUG_SEVERITY_HIGH] = "HIGH";
+		_debug_types[GL_DEBUG_SEVERITY_MEDIUM] = "MEDIUM";
+		_debug_types[GL_DEBUG_SEVERITY_LOW] = "LOW";
 	}
 
 	if (GL_DEBUG_TYPE_OTHER == type)

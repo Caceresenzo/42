@@ -13,7 +13,9 @@
 #ifndef BMPIMAGELOADER_HPP_
 # define BMPIMAGELOADER_HPP_
 
+#include <lang/image/ImageData.hpp>
 #include <lang/image/ImageLoader.hpp>
+#include <lang/reference/SharedReference.hpp>
 #include <string>
 
 class BMPImageLoader :
@@ -25,7 +27,7 @@ class BMPImageLoader :
 		virtual
 		~BMPImageLoader();
 
-		virtual ImageData*
+		virtual SharedReference<ImageData>
 		load(const std::string &path);
 };
 

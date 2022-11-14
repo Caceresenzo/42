@@ -16,6 +16,7 @@
 #include <engine/opengl.hpp>
 #include <GL/glew.h>
 #include <lang/image/ImageData.hpp>
+#include <lang/reference/SharedReference.hpp>
 
 class Texture
 {
@@ -39,8 +40,8 @@ class Texture
 		unbind();
 
 	public:
-		static Texture*
-		from_image(ImageData *image_data);
+		static SharedReference<Texture>
+		from_image(SharedReference<ImageData> image_data);
 
 	private:
 		static GLint

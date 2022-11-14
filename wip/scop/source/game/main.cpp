@@ -2,6 +2,7 @@
 #include <engine/application/Window.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/control/Keyboard.hpp>
+#include <engine/math/Box.hpp>
 #include <engine/math/Transform.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/mesh/Mesh.hpp>
@@ -294,6 +295,7 @@ bool game(Options &options)
 
 	SharedReference<Model> grid;
 	{
+		std::cout << "INFO: Creating grid mesh" << std::endl;
 		SharedReference<Mesh> mesh = *Grid::of(10, true);
 
 		grid = *new Model(mesh);
@@ -302,14 +304,28 @@ bool game(Options &options)
 
 	SharedReference<Model> arrows;
 	{
+		std::cout << "INFO: Creating arrows mesh" << std::endl;
 		SharedReference<Mesh> mesh = *Arrow::of(2);
 
 		arrows = *new Model(mesh);
 		arrows->transform.scaling = Vector<3, float>(0.02);
 	}
 
+	SharedReference<Texture> texture;
+	if (!options.texture_file.empty())
+	{
+		std::cout << "INFO: Loading texture" << std::endl;
+
+		BMPImageLoader image_loader;
+		SharedReference<ImageData> image_data = image_loader.load(options.texture_file);
+
+		texture = Texture::from_image(image_data);
+	}
+
 	SharedReference<Model> model;
 	{
+		std::cout << "INFO: Loading model" << std::endl;
+
 		MeshLoader mesh_loader;
 		SharedReference<Mesh> mesh = *mesh_loader.load(options.object_file);
 
@@ -326,8 +342,18 @@ bool game(Options &options)
 			mesh->align(center);
 		}
 
+		if (mesh->textures.empty())
+		{
+
+		}
+
 		model = *new Model(mesh);
+
+		if (texture)
+			model->textures.push_back(texture);
 	}
+
+	std::cout << "INFO: Application ready!" << std::endl;
 
 	high_frame_counter.reset();
 
@@ -352,6 +378,14 @@ bool game(Options &options)
 		{
 			arrows->transform.translation = camera->position() + camera->front();
 			white_renderer->render(arrows);
+		}
+
+		if (Keyboard::is_pressed(Keyboard::R) == Keyboard::JUST_PRESSED && texture)
+		{
+			if (model->textures.empty())
+				model->textures.push_back(texture);
+			else
+				model->textures.clear();
 		}
 
 		if (Keyboard::is_pressed(Keyboard::O))
@@ -418,19 +452,22 @@ bool game(Options &options)
 int
 main(int argc, char **argv)
 {
-	try {
-		Options options;
-		if (!cli(argc, argv, options))
-			return (EXIT_FAILURE);
+//	try
+//	{
+	Options options;
+	if (!cli(argc, argv, options))
+		return (EXIT_FAILURE);
 
-		if (!game(options))
-			return (EXIT_FAILURE);
+	if (!game(options))
+		return (EXIT_FAILURE);
 
-		return (EXIT_SUCCESS);
-	} catch (std::exception &exception) {
-		std::cout << std::endl;
-		std::cout << std::endl;
-		std::cout << "The application could not be started!" << std::endl;
-		std::cout << "Error: " << exception.what() << std::endl;
-	}
+	return (EXIT_SUCCESS);
+//	}
+//	catch (std::exception &exception)
+//	{
+//		std::cout << std::endl;
+//		std::cout << std::endl;
+//		std::cout << "The application could not be started!" << std::endl;
+//		std::cout << "Error: " << exception.what() << std::endl;
+//	}
 }

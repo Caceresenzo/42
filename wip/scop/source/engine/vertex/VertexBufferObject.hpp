@@ -57,7 +57,10 @@ class VertexBufferObject
 			void
 			store(const std::vector<T> &data, bool and_unbind = true)
 			{
-				store(data.size() * sizeof(T), data.data(), and_unbind);
+				if (data.empty())
+					store(0, NULL, and_unbind);
+				else
+					store(data.size() * sizeof(T), data.data(), and_unbind);
 			}
 
 	public:

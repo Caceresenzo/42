@@ -10,9 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lang/IllegalArgumentException.hpp>
-#include <lang/image/ImageData.hpp>
 #include <engine/texture/Texture.hpp>
+#include <lang/image/ImageData.hpp>
+#include <lang/IllegalArgumentException.hpp>
+#include <lang/reference/SharedReference.hpp>
 #include <map>
 #include <vector>
 
@@ -51,8 +52,8 @@ Texture::unbind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Texture*
-Texture::from_image(ImageData *image_data)
+SharedReference<Texture>
+Texture::from_image(SharedReference<ImageData> image_data)
 {
 	Texture *texture = new Texture();
 	texture->bind();
@@ -71,7 +72,7 @@ Texture::from_image(ImageData *image_data)
 
 	texture->unbind();
 
-	return (texture);
+	return (*texture);
 }
 
 GLint

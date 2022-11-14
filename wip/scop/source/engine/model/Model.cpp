@@ -35,16 +35,13 @@ Model::Model(SharedReference<Mesh> mesh, std::vector<SharedReference<Texture>> t
 		vertex_buffer.bind();
 		vertex_buffer.store(mesh->vertices, false);
 
-		if (!mesh->textures.empty())
-		{
-			VertexBufferObject &texture_buffer = *new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
-			vertex_buffer_array->add(texture_buffer, true);
+		VertexBufferObject &texture_buffer = *new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
+		vertex_buffer_array->add(texture_buffer, true);
 
-			texture_buffer.bind();
-			texture_buffer.store(mesh->textures, false);
-		}
+		texture_buffer.bind();
+		texture_buffer.store(mesh->textures, false);
 
-		this->vertex_buffer_array->unbind();
+		vertex_buffer_array->unbind();
 	}
 	catch (...)
 	{

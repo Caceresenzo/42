@@ -84,6 +84,7 @@ ScopRenderer::render(SharedReference<Model> &model)
 
 		texture->set_active(0);
 		texture->unbind();
+		shader->texture_positions.disable();
 	}
 
 	model->vertex_buffer_array->unbind(true);

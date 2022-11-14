@@ -25,33 +25,18 @@ Font::~Font()
 {
 }
 
-Font&
+SharedReference<Font>
 Font::load(const std::string &path, const Vector<2, float> &character_dimension)
 {
-	ImageData *image_data = NULL;
+	BMPImageLoader loader;
+	SharedReference<ImageData> image_data = loader.load(path);
 
-	try
-	{
-		BMPImageLoader loader;
-		image_data = loader.load(path);
+	SharedReference<Texture> atlas = Texture::from_image(image_data);
 
-		SharedReference<Texture> atlas = *Texture::from_image(image_data);
-
-		delete image_data;
-		image_data = NULL;
-
-		return (*new Font(atlas, character_dimension));
-	}
-	catch (...)
-	{
-		if (image_data)
-			delete image_data;
-
-		throw;
-	}
+	return (*new Font(atlas, character_dimension));
 }
 
-Font&
+SharedReference<Font>
 Font::consolas()
 {
 	return (load("assets/fonts/consolas.bmp", Vector<2, float>(0.6, 1.0)));

@@ -14,7 +14,9 @@
 #include <lang/image/bmp/BMPImageLoader.hpp>
 #include <lang/image/ImageData.hpp>
 #include <lang/image/ImageException.hpp>
+#include <lang/reference/SharedReference.hpp>
 #include <cstdio>
+#include <cwchar>
 #include <vector>
 
 BMPImageLoader::BMPImageLoader()
@@ -25,7 +27,7 @@ BMPImageLoader::~BMPImageLoader()
 {
 }
 
-ImageData*
+SharedReference<ImageData>
 BMPImageLoader::load(const std::string &path)
 {
 	FILE *file = fopen(path.c_str(), "rb");
@@ -77,5 +79,5 @@ BMPImageLoader::load(const std::string &path)
 
 	fclose(file);
 
-	return (new ImageData(ImageData::BGR, width, height, pixels));
+	return (*new ImageData(ImageData::BGR, width, height, pixels));
 }

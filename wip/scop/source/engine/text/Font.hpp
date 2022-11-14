@@ -32,11 +32,11 @@ class Font
 		~Font();
 
 	public:
-		static Font&
+		static SharedReference<Font>
 		load(const std::string &path, const Vector<2, float> &character_dimension);
 
 	public:
-		static Font&
+		static SharedReference<Font>
 		consolas();
 };
 
