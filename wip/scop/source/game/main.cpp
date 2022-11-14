@@ -6,11 +6,12 @@
 #include <engine/math/vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/MeshLoader.hpp>
-#include <engine/mesh/MeshRenderer.hpp>
-#include <engine/mesh/MeshShader.hpp>
 #include <engine/mesh/simple/Arrow.hpp>
 #include <engine/mesh/simple/Grid.hpp>
+#include <engine/model/Model.hpp>
 #include <engine/opengl.hpp>
+#include <engine/render/WhiteRenderer.hpp>
+#include <engine/render/WhiteShader.hpp>
 #include <engine/text/Font.hpp>
 #include <engine/text/TextMesh.hpp>
 #include <engine/text/TextRenderer.hpp>
@@ -21,6 +22,8 @@
 #include <game/game.hpp>
 #include <game/listener/KeyboardListener.hpp>
 #include <game/listener/MouseListener.hpp>
+#include <game/render/ScopRenderer.hpp>
+#include <game/render/ScopShader.hpp>
 #include <GL/glew.h>
 #include <lang/Exception.hpp>
 #include <lang/image/bmp/BMPImageLoader.hpp>
@@ -270,8 +273,11 @@ bool game(Options &options)
 
 	SharedReference<Font> font = Font::consolas();
 
-	SharedReference<MeshShader> mesh_shader = *MeshShader::basic();
-	SharedReference<MeshRenderer> mesh_renderer = *new MeshRenderer(mesh_shader, camera);
+	SharedReference<WhiteShader> white_shader = *WhiteShader::from_assets();
+	SharedReference<WhiteRenderer> white_renderer = *new WhiteRenderer(white_shader, camera);
+
+	SharedReference<ScopShader> scop_shader = *ScopShader::from_assets();
+	SharedReference<ScopRenderer> scop_renderer = *new ScopRenderer(scop_shader, camera);
 
 	SharedReference<TextShader> text_shader = *TextShader::basic();
 	SharedReference<TextRenderer> text_renderer = *new TextRenderer(text_shader);
@@ -279,17 +285,35 @@ bool game(Options &options)
 	TextMesh controls_text_mesh(font, CONTROLS_TEXT, Vector<2, float>(0, 180));
 	controls_text_mesh.build();
 
-	SharedReference<Mesh> grid_mesh = *Grid::of(10, true);
-	Transform<float> grid_transform;
-	grid_transform.scaling = Vector<3, float>(25, 0, 25);
+	SharedReference<Model> grid;
+	{
+		SharedReference<Mesh> mesh = *Grid::of(10, true);
 
-	SharedReference<Mesh> arrows_mesh = *Arrow::of(2);
-	Transform<float> arrows_transform;
-	arrows_transform.scaling = Vector<3, float>(0.02);
+		grid = *new Model(mesh);
+		grid->transform.scaling = Vector<3, float>(25, 0, 25);
+	}
 
-	MeshLoader mesh_loader;
-	SharedReference<Mesh> mesh = *mesh_loader.load(options.object_file);
-	Transform<float> transform;
+	SharedReference<Model> arrows;
+	{
+		SharedReference<Mesh> mesh = *Arrow::of(2);
+
+		arrows = *new Model(mesh);
+		arrows->transform.scaling = Vector<3, float>(0.02);
+	}
+
+	SharedReference<Model> model;
+	{
+		MeshLoader mesh_loader;
+		SharedReference<Mesh> mesh = *mesh_loader.load(options.object_file);
+
+		BoundingBox<3, float> bounding_box = mesh->compute_bounding_box();
+		Vector<3, float> center = bounding_box.center();
+
+		center.y = bounding_box.min.y;
+		mesh->align(center);
+
+		model = *new Model(mesh);
+	}
 
 	high_frame_counter.reset();
 
@@ -308,21 +332,19 @@ bool game(Options &options)
 		double delta_time = high_frame_counter.delta_time();
 
 		if (!options.no_grid)
-		{
-			mesh_renderer->render(grid_transform, *grid_mesh.value());
-		}
+			white_renderer->render(grid);
 
 		if (!options.no_arrows)
 		{
-			arrows_transform.translation = camera->position() + camera->front();
-			mesh_renderer->render(arrows_transform, *arrows_mesh.value());
+			arrows->transform.translation = camera->position() + camera->front();
+			white_renderer->render(arrows);
 		}
 
 		if (Keyboard::is_pressed(Keyboard::O))
-			transform.scaling -= 0.02f;
+			model->transform.scaling -= 0.02f;
 
 		if (Keyboard::is_pressed(Keyboard::P))
-			transform.scaling += 0.02f;
+			model->transform.scaling += 0.02f;
 
 		if (Keyboard::is_pressed(Keyboard::X) == Keyboard::JUST_PRESSED)
 			options.no_grid = !options.no_grid;
@@ -346,9 +368,9 @@ bool game(Options &options)
 				options.polygon_mode = GL_POINT;
 		}
 
-		transform.rotation += Vector<3, float>(0, 1, 0) * delta_time;
+		model->transform.rotation += Vector<3, float>(0, 1, 0) * delta_time;
 
-		mesh_renderer->render(transform, *mesh.value());
+		scop_renderer->render(model);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

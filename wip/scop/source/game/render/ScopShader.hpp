@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MESHSHADER_HPP_
-# define MESHSHADER_HPP_
+#ifndef SCOPSHADER_HPP_
+# define SCOPSHADER_HPP_
 
 #include <engine/math/vector.hpp>
 #include <engine/math/matrix.hpp>
@@ -20,27 +20,27 @@
 #include <engine/shader/Uniform.hpp>
 #include <string>
 
-class MeshShader :
+class ScopShader :
 		public Program
 {
 	public:
+		Attribute<Vector<3, float>> positions;
+		Attribute<Vector<2, float>> texture_positions;
 		Uniform<Matrix<4, 4, float>> model;
 		Uniform<Matrix<4, 4, float>> view;
 		Uniform<Matrix<4, 4, float>> projection;
 		Uniform<bool> use_texture;
 		Uniform<int> texture_sampler;
-		Attribute<Vector<2, float>> texture_positions;
-		Attribute<Vector<3, float>> positions;
 
 	public:
-		MeshShader(const std::string &vertex_file, const std::string &fragment_file);
+		ScopShader(const std::string &vertex_file, const std::string &fragment_file);
 
 		virtual
-		~MeshShader();
+		~ScopShader();
 
 	public:
-		static MeshShader*
-		basic();
+		static ScopShader*
+		from_assets();
 };
 
-#endif /* MESHSHADER_HPP_ */
+#endif /* SCOPSHADER_HPP_ */

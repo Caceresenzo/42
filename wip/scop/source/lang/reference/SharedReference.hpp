@@ -84,13 +84,25 @@ template<typename T>
 				return (*m_value);
 			}
 
+			const T&
+			operator*() const
+			{
+				return (*m_value);
+			}
+
 			T*
 			operator->()
 			{
 				return (m_value);
 			}
 
-			operator bool()
+			const T*
+			operator->() const
+			{
+				return (m_value);
+			}
+
+			operator bool() const
 			{
 				return (!!m_value);
 			}
@@ -98,6 +110,12 @@ template<typename T>
 		public:
 			T*
 			value()
+			{
+				return (m_value);
+			}
+
+			const T*
+			value() const
 			{
 				return (m_value);
 			}

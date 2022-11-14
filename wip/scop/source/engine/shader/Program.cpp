@@ -12,9 +12,10 @@
 
 #include <engine/shader/Program.hpp>
 #include <engine/shader/Variable.hpp>
+#include <GL/glew.h>
+#include <io/IOException.hpp>
 #include <lang/IllegalStateException.hpp>
 #include <lang/RuntimeException.hpp>
-#include <GL/glew.h>
 #include <sys/unistd.h>
 #include <unistd.h>
 #include <cstdio>
@@ -28,8 +29,13 @@ static void
 compile_shader(GLuint shader_id, const std::string &path)
 {
 	std::ifstream stream(path.c_str());
+	if (!stream.good())
+		throw IOException(path, errno);
+
 	std::stringstream buffer;
 	buffer << stream.rdbuf();
+	if (!stream.good())
+		throw IOException(path, errno);
 
 	std::cout << "Compiling: " << path << std::endl << std::flush;
 
@@ -86,9 +92,9 @@ const GLuint Program::UNDEFINED_VALUE = GLuint(-1);
 
 Program::Program(const std::string &vertex_file, const std::string &fragment_file)
 {
-	GLuint vertex_shader_id = -1;
-	GLuint fragment_shader_id = -1;
-	GLuint program_id = -1;
+	GLuint vertex_shader_id = UNDEFINED_VALUE;
+	GLuint fragment_shader_id = UNDEFINED_VALUE;
+	GLuint program_id = UNDEFINED_VALUE;
 
 	try
 	{
@@ -105,10 +111,10 @@ Program::Program(const std::string &vertex_file, const std::string &fragment_fil
 		glDetachShader(program_id, fragment_shader_id);
 
 		glDeleteShader(vertex_shader_id);
-		vertex_shader_id = -1;
+		vertex_shader_id = UNDEFINED_VALUE;
 
 		glDeleteShader(fragment_shader_id);
-		fragment_shader_id = -1;
+		fragment_shader_id = UNDEFINED_VALUE;
 
 		this->m_id = program_id;
 	}

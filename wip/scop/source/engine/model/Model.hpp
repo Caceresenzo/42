@@ -1,41 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   MeshRenderer.hpp                                   :+:      :+:    :+:   */
+/*   Model.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/13 01:53:33 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/03/13 01:53:33 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/11/14 16:08:20 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/11/14 16:08:20 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MESHRENDERER_HPP_
-# define MESHRENDERER_HPP_
+#ifndef MODEL_HPP_
+# define MODEL_HPP_
 
-#include <engine/camera/PerspectiveCamera.hpp>
-#include <engine/mesh/MeshShader.hpp>
 #include <engine/math/Transform.hpp>
 #include <engine/mesh/Mesh.hpp>
+#include <engine/texture/Texture.hpp>
+#include <engine/vertex/VertexArrayObject.hpp>
 #include <lang/reference/SharedReference.hpp>
-#include <string>
+#include <vector>
 
-class MeshRenderer
+class Model
 {
 	public:
-		SharedReference<MeshShader> shader;
-		SharedReference<PerspectiveCamera> camera;
-		bool no_depth;
+		Transform<float> transform;
+		SharedReference<Mesh> mesh;
+		std::vector<SharedReference<Texture>> textures;
+		SharedReference<VertexArrayObject> vertex_buffer_array;
 
 	public:
-		MeshRenderer(SharedReference<MeshShader> &shader, SharedReference<PerspectiveCamera> &camera);
+		Model(SharedReference<Mesh> mesh, std::vector<SharedReference<Texture> > textures = std::vector<SharedReference<Texture> >());
 
 		virtual
-		~MeshRenderer();
-
-	public:
-		void
-		render(const Transform<float> &transform, const Mesh &mesh);
+		~Model();
 };
 
-#endif /* MESHRENDERER_HPP_ */
+#endif /* MODEL_HPP_ */

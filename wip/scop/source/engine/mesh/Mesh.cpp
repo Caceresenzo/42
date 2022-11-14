@@ -11,110 +11,56 @@
 /* ************************************************************************** */
 
 #include <engine/mesh/Mesh.hpp>
-#include <engine/mesh/MeshShader.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
 #include <stddef.h>
 #include <queue>
 #include <utility>
 
 Mesh::Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<Vector<2, float> > &textures, const std::vector<unsigned int> &indices, Mode mode) :
-		m_vertices(vertices),
-		m_textures(textures),
-		m_indices(indices),
-		m_mode(mode),
-		m_vertex_buffer_array(NULL),
-		m_texture(std::make_pair((Texture*)NULL, false))
+	vertices(vertices),
+	textures(textures),
+	indices(indices),
+	mode(mode)
 {
-	try
-	{
-		m_vertex_buffer_array = new VertexArrayObject();
-		m_vertex_buffer_array->bind();
-
-		VertexBufferObject &element_buffer = *new VertexBufferObject(VertexBufferObject::ELEMENT_ARRAY, VertexBufferObject::STATIC_DRAW);
-		m_vertex_buffer_array->add(element_buffer, true);
-
-		element_buffer.bind();
-		element_buffer.store(indices, false);
-
-		VertexBufferObject &vertex_buffer = *new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
-		m_vertex_buffer_array->add(vertex_buffer, true);
-
-		vertex_buffer.bind();
-		vertex_buffer.store(vertices, false);
-
-		if (!m_textures.empty())
-		{
-			VertexBufferObject &texture_buffer = *new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW);
-			m_vertex_buffer_array->add(texture_buffer, true);
-
-			texture_buffer.bind();
-			texture_buffer.store(textures, false);
-		}
-
-		m_vertex_buffer_array->unbind();
-	}
-	catch (...)
-	{
-		if (m_vertex_buffer_array)
-			delete m_vertex_buffer_array;
-	}
 }
 
 Mesh::~Mesh()
 {
-	delete m_vertex_buffer_array;
-
-	if (m_texture.second)
-		delete m_texture.first;
 }
 
 void
-Mesh::set_texture(Texture &texture, bool auto_manage)
+Mesh::align(Vector<3, float> center)
 {
-	m_texture = std::make_pair(&texture, auto_manage);
+	if (center == Vector<3, float>::ZERO)
+		return;
+
+	typedef std::vector<Vector<3, float> >::iterator iterator;
+	for (iterator it = vertices.begin(); it < vertices.end(); ++it)
+		*it -= center;
 }
 
-void
-Mesh::remove_texture(void)
+BoundingBox<3, float>
+Mesh::compute_bounding_box() const
 {
-	m_texture = std::make_pair((Texture*)NULL, false);
-}
+	if (vertices.empty())
+		return (BoundingBox<3, float>(0, 0));
 
-void
-Mesh::render(MeshShader &shader) const
-{
-	m_vertex_buffer_array->bind(true);
+	Vector<3, float> lower(std::numeric_limits<float>::max());
+	Vector<3, float> higher(std::numeric_limits<float>::min());
 
-	m_vertex_buffer_array->get(1).bind();
-	shader.positions.link();
-	shader.positions.enable();
-
-	shader.use_texture.set(m_texture.first);
-
-	if (!m_textures.empty() && m_texture.first)
+	typedef std::vector<Vector<3, float> >::const_iterator iterator;
+	for (iterator it = vertices.begin(); it < vertices.end(); ++it)
 	{
-		m_vertex_buffer_array->get(2).bind();
-		shader.texture_positions.link();
-		shader.texture_positions.enable();
+		const Vector<3, float> &vector = *it;
 
-		Texture &texture = *m_texture.first;
+		lower.x = Math::min(lower.x, vector.x);
+		lower.y = Math::min(lower.y, vector.y);
+		lower.z = Math::min(lower.z, vector.z);
 
-		texture.set_active(0);
-		texture.bind();
-		shader.texture_sampler.set(0);
+		higher.x = Math::max(higher.x, vector.x);
+		higher.y = Math::max(higher.y, vector.y);
+		higher.z = Math::max(higher.z, vector.z);
 	}
 
-	glDrawElements(m_mode, m_indices.size(), GL_UNSIGNED_INT, NULL);
-
-	if (!m_textures.empty() && m_texture.first)
-	{
-		Texture &texture = *m_texture.first;
-
-		texture.set_active(0);
-		texture.unbind();
-	}
-
-	m_vertex_buffer_array->unbind(true);
-
-	shader.positions.disable();
+	return (BoundingBox<3, float>(lower, higher));
 }

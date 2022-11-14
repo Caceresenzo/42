@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <io/IOException.hpp>
-#include <lang/Math.hpp>
 #include <engine/math/vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/MeshException.hpp>
 #include <engine/mesh/MeshLoader.hpp>
+#include <io/IOException.hpp>
+#include <lang/Math.hpp>
 #include <stddef.h>
 #include <cstdio>
 #include <fstream>
@@ -142,29 +142,6 @@ MeshLoader::load(const std::string &path)
 		}
 
 		++line_number;
-	}
-
-	{
-		Vector<3, float> lower(std::numeric_limits<float>::max());
-		Vector<3, float> higher(std::numeric_limits<float>::min());
-
-		for (std::vector<Vector<3, float> >::const_iterator iterator = vertices.begin(); iterator < vertices.end(); ++iterator)
-		{
-			const Vector<3, float> &vector = *iterator;
-
-			lower.x = Math::min(lower.x, vector.x);
-			lower.y = Math::min(lower.y, vector.y);
-			lower.z = Math::min(lower.z, vector.z);
-
-			higher.x = Math::max(higher.x, vector.x);
-			higher.y = Math::max(higher.y, vector.y);
-			higher.z = Math::max(higher.z, vector.z);
-		}
-
-		Vector<3, float> center = ::abs((lower + higher) / 2.0f);
-		if (center != Vector<3, float>(0))
-			for (std::vector<Vector<3, float> >::iterator iterator = vertices.begin(); iterator < vertices.end(); ++iterator)
-				*iterator -= center;
 	}
 
 	return (new Mesh(vertices, textures, indices));
