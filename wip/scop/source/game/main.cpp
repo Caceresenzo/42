@@ -41,6 +41,9 @@
 #include <string>
 #include <vector>
 
+#define DEFAULT_WIDTH 800
+#define DEFAULT_HEIGHT 800
+
 const Option OPT_HELP('h', "help", "display this help message");
 const Option OPT_VERSION('v', "version", "display application's version");
 const Option OPT_LOG_LEVEL('l', "log-level", "change the log-level", "level");
@@ -51,6 +54,7 @@ const Option OPT_HIDE_DEBUG('d', "hide-debug", "hide debug info");
 const Option OPT_FULLSCREEN('f', "fullscreen", "enable fullscreen on opening");
 const Option OPT_WIDTH('w', "width", "set window's width", "width");
 const Option OPT_HEIGHT('h', "height", "set window's height", "height");
+const Option OPT_POLYGON_MODE('p', "polygon-mode", "set polygon mode (default: `line`)", "mode");
 const Argument ARG_OBJECT("object", false, "specify object");
 const Argument ARG_TEXTURE("texture", true, "specify texture");
 
@@ -61,12 +65,13 @@ struct Options
 		bool no_grid = false;
 		bool no_arrows = false;
 		bool fullscreen = false;
-		int width = 800;
-		int height = 800;
+		int width = DEFAULT_WIDTH;
+		int height = DEFAULT_HEIGHT;
 		std::string object_file = "";
 		std::string texture_file = "";
 		bool hide_instructions = false;
 		bool hide_debug = false;
+		GLenum polygon_mode = GL_FILL;
 };
 
 int cli(int argc, char **argv, Options &options)
@@ -84,6 +89,7 @@ int cli(int argc, char **argv, Options &options)
 	option_list.push_back(&OPT_FULLSCREEN);
 	option_list.push_back(&OPT_WIDTH);
 	option_list.push_back(&OPT_HEIGHT);
+	option_list.push_back(&OPT_POLYGON_MODE);
 
 	std::vector<const Argument*> argument_list;
 	argument_list.push_back(&ARG_OBJECT);
@@ -131,6 +137,20 @@ int cli(int argc, char **argv, Options &options)
 		if (command_line.has(OPT_HEIGHT))
 			options.height = Number::parse<int>(command_line.first(OPT_HEIGHT));
 
+		if (command_line.has(OPT_POLYGON_MODE))
+		{
+			const std::string mode = command_line.first(OPT_POLYGON_MODE);
+
+			if (mode == "point")
+				options.polygon_mode = GL_POINT;
+			else if (mode == "line")
+				options.polygon_mode = GL_LINE;
+			else if (mode == "fill")
+				options.polygon_mode = GL_FILL;
+			else
+				throw Exception("invalid polygon mode '" + mode + "', only 'point', 'line' or 'fill' is accepted");
+		}
+
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
 
@@ -152,7 +172,6 @@ int cli(int argc, char **argv, Options &options)
 
 	if (options.texture_file.empty())
 		std::cerr << "no texture file specified" << std::endl;
-
 
 #define DUMP_LINE(key) std::cout << "OPTION: " << #key << ": " << options.key << std::endl;
 
@@ -227,13 +246,16 @@ std::string get_info_string(HighFrameCounter &high_frame_counter, FrameCounter &
 }
 
 #define CONTROLS_TEXT "" \
-	" move   ZQSD\n" \
-	"   up   SPACE\n" \
-	" down   A\n" \
-	"speed   scroll\n" \
-	" size   O/P\n" \
-	" grid   X\n" \
-	" arrows C" \
+	" move      ZQSD\n" \
+	"   up      SPACE\n" \
+	" down      A\n" \
+	"speed      scroll\n" \
+	" size      O/P\n" \
+	" grid      X\n" \
+	" arrows    C\n" \
+	" hid ins   V\n" \
+	" hid dbg   B\n" \
+	" poly mode N\n" \
 
 bool game(Options &options)
 {
@@ -271,7 +293,6 @@ bool game(Options &options)
 
 	high_frame_counter.reset();
 
-//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	while (!window->is_should_be_closed())
 	{
 		high_frame_counter.start();
@@ -281,6 +302,8 @@ bool game(Options &options)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
+
+		glPolygonMode(GL_FRONT_AND_BACK, options.polygon_mode);
 
 		double delta_time = high_frame_counter.delta_time();
 
@@ -313,11 +336,22 @@ bool game(Options &options)
 		if (Keyboard::is_pressed(Keyboard::B) == Keyboard::JUST_PRESSED)
 			options.hide_debug = !options.hide_debug;
 
+		if (Keyboard::is_pressed(Keyboard::N) == Keyboard::JUST_PRESSED)
+		{
+			if (options.polygon_mode == GL_POINT)
+				options.polygon_mode = GL_LINE;
+			else if (options.polygon_mode == GL_LINE)
+				options.polygon_mode = GL_FILL;
+			else
+				options.polygon_mode = GL_POINT;
+		}
+
 		transform.rotation += Vector<3, float>(0, 1, 0) * delta_time;
 
 		mesh_renderer->render(transform, *mesh.value());
 
 		glClear(GL_DEPTH_BUFFER_BIT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		if (!options.hide_instructions)
 		{

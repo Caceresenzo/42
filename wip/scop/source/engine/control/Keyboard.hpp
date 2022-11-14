@@ -37,6 +37,7 @@ class Keyboard
 			J = 'j',
 			K = 'k',
 			L = 'l',
+			N = 'n',
 			O = 'o',
 			P = 'p',
 			Q = 'q',
