@@ -58,6 +58,7 @@ const Option OPT_FULLSCREEN('f', "fullscreen", "enable fullscreen on opening");
 const Option OPT_WIDTH('w', "width", "set window's width", "width");
 const Option OPT_HEIGHT('h', "height", "set window's height", "height");
 const Option OPT_POLYGON_MODE('p', "polygon-mode", "set polygon mode (default: `line`)", "mode");
+const Option OPT_NO_CENTER('c', "no-center", "disable model centering");
 const Argument ARG_OBJECT("object", false, "specify object");
 const Argument ARG_TEXTURE("texture", true, "specify texture");
 
@@ -75,6 +76,7 @@ struct Options
 		bool hide_instructions = false;
 		bool hide_debug = false;
 		GLenum polygon_mode = GL_FILL;
+		bool no_center = false;
 };
 
 int cli(int argc, char **argv, Options &options)
@@ -93,6 +95,7 @@ int cli(int argc, char **argv, Options &options)
 	option_list.push_back(&OPT_WIDTH);
 	option_list.push_back(&OPT_HEIGHT);
 	option_list.push_back(&OPT_POLYGON_MODE);
+	option_list.push_back(&OPT_NO_CENTER);
 
 	std::vector<const Argument*> argument_list;
 	argument_list.push_back(&ARG_OBJECT);
@@ -154,6 +157,9 @@ int cli(int argc, char **argv, Options &options)
 				throw Exception("invalid polygon mode '" + mode + "', only 'point', 'line' or 'fill' is accepted");
 		}
 
+		if (command_line.has(OPT_NO_CENTER))
+			options.no_center = true;
+
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
 
@@ -188,6 +194,7 @@ int cli(int argc, char **argv, Options &options)
 	DUMP_LINE(texture_file);
 	DUMP_LINE(hide_instructions);
 	DUMP_LINE(hide_debug);
+	DUMP_LINE(no_center);
 
 #undef DUMP_LINE
 
@@ -306,11 +313,18 @@ bool game(Options &options)
 		MeshLoader mesh_loader;
 		SharedReference<Mesh> mesh = *mesh_loader.load(options.object_file);
 
-		BoundingBox<3, float> bounding_box = mesh->compute_bounding_box();
-		Vector<3, float> center = bounding_box.center();
+		if (!options.no_center)
+		{
+			BoundingBox<3, float> bounding_box = mesh->compute_bounding_box();
 
-		center.y = bounding_box.min.y;
-		mesh->align(center);
+			Vector<3, float> center = bounding_box.center();
+			std::cout << "INFO: center=" << center << std::endl;
+
+			center.y = bounding_box.min.y;
+			std::cout << "INFO: align=" << center << std::endl;
+
+			mesh->align(center);
+		}
 
 		model = *new Model(mesh);
 	}
