@@ -13,6 +13,7 @@
 #ifndef FONT_HPP_
 # define FONT_HPP_
 
+#include <engine/math/vector.hpp>
 #include <engine/texture/Texture.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <string>
@@ -21,9 +22,10 @@ class Font
 {
 	public:
 		SharedReference<Texture> atlas;
+		Vector<2, float> character_dimension;
 
 	public:
-		Font(SharedReference<Texture> &atlas);
+		Font(SharedReference<Texture> &atlas, const Vector<2, float> &character_dimension);
 
 	public:
 		virtual
@@ -31,7 +33,7 @@ class Font
 
 	public:
 		static Font&
-		load(const std::string &path);
+		load(const std::string &path, const Vector<2, float> &character_dimension);
 
 	public:
 		static Font&

@@ -15,8 +15,9 @@
 #include <lang/image/ImageData.hpp>
 #include <string>
 
-Font::Font(SharedReference<Texture> &atlas) :
-	atlas(atlas)
+Font::Font(SharedReference<Texture> &atlas, const Vector<2, float> &character_dimension) :
+	atlas(atlas),
+	character_dimension(character_dimension)
 {
 }
 
@@ -25,7 +26,7 @@ Font::~Font()
 }
 
 Font&
-Font::load(const std::string &path)
+Font::load(const std::string &path, const Vector<2, float> &character_dimension)
 {
 	ImageData *image_data = NULL;
 
@@ -39,7 +40,7 @@ Font::load(const std::string &path)
 		delete image_data;
 		image_data = NULL;
 
-		return (*new Font(atlas));
+		return (*new Font(atlas, character_dimension));
 	}
 	catch (...)
 	{
@@ -53,5 +54,5 @@ Font::load(const std::string &path)
 Font&
 Font::consolas()
 {
-	return (load("assets/fonts/consolas.bmp"));
+	return (load("assets/fonts/consolas.bmp", Vector<2, float>(0.6, 1.0)));
 }

@@ -274,9 +274,9 @@ bool game(Options &options)
 	SharedReference<MeshRenderer> mesh_renderer = *new MeshRenderer(mesh_shader, camera);
 
 	SharedReference<TextShader> text_shader = *TextShader::basic();
-	SharedReference<TextRenderer> text_renderer = *new TextRenderer(text_shader, font);
-	TextMesh fps_text_mesh("", Vector<2, float>(0, 0), 20);
-	TextMesh controls_text_mesh(CONTROLS_TEXT, Vector<2, float>(0, 180));
+	SharedReference<TextRenderer> text_renderer = *new TextRenderer(text_shader);
+	TextMesh fps_text_mesh(font, "", Vector<2, float>(0, 0), 20);
+	TextMesh controls_text_mesh(font, CONTROLS_TEXT, Vector<2, float>(0, 180));
 	controls_text_mesh.build();
 
 	SharedReference<Mesh> grid_mesh = *Grid::of(10, true);

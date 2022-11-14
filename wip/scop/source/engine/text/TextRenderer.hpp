@@ -25,10 +25,9 @@ class TextRenderer
 {
 	public:
 		SharedReference<TextShader> shader;
-		SharedReference<Font> font;
 
 	public:
-		TextRenderer(SharedReference<TextShader> &shader, SharedReference<Font> &font);
+		TextRenderer(SharedReference<TextShader> &shader);
 
 		virtual
 		~TextRenderer();

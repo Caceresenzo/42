@@ -24,9 +24,8 @@
 #include <GLFW/glfw3.h>
 #include <lang/reference/SharedReference.hpp>
 
-TextRenderer::TextRenderer(SharedReference<TextShader> &shader, SharedReference<Font> &font) :
-	shader(shader),
-	font(font)
+TextRenderer::TextRenderer(SharedReference<TextShader> &shader) :
+	shader(shader)
 {
 }
 
@@ -37,6 +36,8 @@ TextRenderer::~TextRenderer()
 void
 TextRenderer::render(TextMesh &mesh)
 {
+	SharedReference<Font> font = mesh.font();
+
 	shader->use();
 	font->atlas->set_active(0);
 	font->atlas->bind();
@@ -55,9 +56,12 @@ TextRenderer::render(TextMesh &mesh)
 	mesh.uv_buffer().bind();
 	shader->uv.link();
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthRange(0, 0.01);
 	glDrawArrays(GL_TRIANGLES, 0, mesh.get().size() * 6);
 	glDepthRange(0, 1.0);
+	glDisable(GL_BLEND);
 
 	shader->position.disable();
 	shader->uv.disable();

@@ -14,7 +14,8 @@
 #include <stddef.h>
 #include <vector>
 
-TextMesh::TextMesh(const std::string &initial, const Vector<2, float> &position, float size) :
+TextMesh::TextMesh(SharedReference<Font> &font, const std::string &initial, const Vector<2, float> &position, float size) :
+	m_font(font),
 	m_value(initial),
 	m_position(position),
 	m_size(size),
@@ -64,8 +65,14 @@ TextMesh::build()
 			continue;
 		}
 
-		int start_x = m_position.x + (screen.x * m_size);
-		int start_y = m_position.y + (screen.y * m_size);
+		if (character == ' ')
+		{
+			screen.x += 1;
+			continue;
+		}
+
+		int start_x = m_position.x + (screen.x * m_size * m_font->character_dimension.x);
+		int start_y = m_position.y + (screen.y * m_size * m_font->character_dimension.y);
 
 		Vector<2, float> vertex_up_left(start_x, start_y + m_size);
 		Vector<2, float> vertex_up_right(start_x + m_size, start_y + m_size);

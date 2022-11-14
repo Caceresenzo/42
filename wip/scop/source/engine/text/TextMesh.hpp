@@ -14,13 +14,16 @@
 # define TEXTMESH_HPP_
 
 #include <engine/math/vector.hpp>
+#include <engine/text/Font.hpp>
 #include <engine/vertex/VertexArrayObject.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
+#include <lang/reference/SharedReference.hpp>
 #include <string>
 
 class TextMesh
 {
 	private:
+		SharedReference<Font> m_font;
 		std::string m_value;
 		Vector<2, float> m_position;
 		float m_size;
@@ -30,7 +33,7 @@ class TextMesh
 		VertexBufferObject m_uv_buffer;
 
 	public:
-		TextMesh(const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);
+		TextMesh(SharedReference<Font> &font, const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);
 
 		virtual
 		~TextMesh();
@@ -58,6 +61,12 @@ class TextMesh
 		get() const
 		{
 			return (m_value);
+		}
+
+		inline SharedReference<Font>
+		font()
+		{
+			return (m_font);
 		}
 
 		inline VertexArrayObject&
