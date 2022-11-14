@@ -12,9 +12,9 @@ void main()
 {
 	if (useTexture)
 		out_FragColor = texture(textureSampler, pass_TextureCoordinates);
-   	else
-   	{
-        float grey = (gl_PrimitiveID % 12) / 10f;
-        out_FragColor = vec4(grey, grey, grey, 1.0);
-   	}
+	else
+	{
+		float grey = (gl_PrimitiveID % 12) / 10.0;
+		out_FragColor = vec4(grey, grey, grey, 1.0);
+	}
 }
