@@ -374,12 +374,6 @@ bool game(Options &options)
 		if (!options.no_grid)
 			white_renderer->render(grid);
 
-		if (!options.no_arrows)
-		{
-			arrows->transform.translation = camera->position() + camera->front();
-			white_renderer->render(arrows);
-		}
-
 		if (Keyboard::is_pressed(Keyboard::R) == Keyboard::JUST_PRESSED && texture)
 		{
 			if (model->textures.empty())
@@ -423,10 +417,14 @@ bool game(Options &options)
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		if (!options.hide_instructions)
+		if (!options.no_arrows)
 		{
-			text_renderer->render(controls_text_mesh);
+			arrows->transform.translation = camera->position() + camera->front();
+			white_renderer->render(arrows);
 		}
+
+		if (!options.hide_instructions)
+			text_renderer->render(controls_text_mesh);
 
 		if (!options.hide_debug)
 		{
