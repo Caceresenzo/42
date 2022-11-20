@@ -45,6 +45,9 @@
 #include <string>
 #include <vector>
 
+#define STRINGIFY(x) #x
+#define STRINGIFY_VALUE(x) STRINGIFY(x)
+
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 800
 
@@ -56,8 +59,8 @@ const Option OPT_NO_ARROWS('a', "no-arrows", "disable axis arrows");
 const Option OPT_HIDE_INSTRUCTIONS('i', "hide-instructions", "hide key/mouse instructions");
 const Option OPT_HIDE_DEBUG('d', "hide-debug", "hide debug info");
 const Option OPT_FULLSCREEN('f', "fullscreen", "enable fullscreen on opening");
-const Option OPT_WIDTH('w', "width", "set window's width", "width");
-const Option OPT_HEIGHT('h', "height", "set window's height", "height");
+const Option OPT_WIDTH('w', "width", "set window's width (default: " STRINGIFY_VALUE(DEFAULT_WIDTH) ")", "width");
+const Option OPT_HEIGHT('h', "height", "set window's height (default: " STRINGIFY_VALUE(DEFAULT_HEIGHT) ")", "height");
 const Option OPT_POLYGON_MODE('p', "polygon-mode", "set polygon mode (default: `line`)", "mode");
 const Option OPT_NO_CENTER('c', "no-center", "disable model centering");
 const Argument ARG_OBJECT("object", false, "specify object");
