@@ -23,6 +23,7 @@
 #include <game/game.hpp>
 #include <game/listener/KeyboardListener.hpp>
 #include <game/listener/MouseListener.hpp>
+#include <game/render/Interpolator.hpp>
 #include <game/render/ScopRenderer.hpp>
 #include <game/render/ScopShader.hpp>
 #include <GL/glew.h>
@@ -356,6 +357,8 @@ bool game(Options &options)
 			model = *new Model(mesh);
 	}
 
+	Interpolator<float> interpolation(0, 1, 1.0, 0);
+
 	std::cout << "INFO: Application ready!" << std::endl;
 
 	high_frame_counter.reset();
@@ -377,13 +380,8 @@ bool game(Options &options)
 		if (!options.no_grid)
 			white_renderer->render(grid);
 
-		if (Keyboard::is_pressed(Keyboard::R) == Keyboard::JUST_PRESSED && texture)
-		{
-			if (model->texture)
-				model->texture.release();
-			else
-				model->texture = texture;
-		}
+		if (Keyboard::is_pressed(Keyboard::R) == Keyboard::JUST_PRESSED)
+			interpolation.reverse();
 
 		if (Keyboard::is_pressed(Keyboard::O))
 			model->transform.scaling -= 0.02f;
@@ -415,7 +413,8 @@ bool game(Options &options)
 
 		model->transform.rotation += Vector<3, float>(0, options.rotation_speed, 0) * delta_time;
 
-		scop_renderer->render(model);
+		interpolation.tick(delta_time);
+		scop_renderer->render(model, interpolation);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

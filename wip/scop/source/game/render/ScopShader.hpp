@@ -31,6 +31,7 @@ class ScopShader :
 		Uniform<Matrix<4, 4, float>> projection;
 		Uniform<bool> use_texture;
 		Uniform<int> texture_sampler;
+		Uniform<float> transition;
 
 	public:
 		ScopShader(const std::string &vertex_file, const std::string &fragment_file);

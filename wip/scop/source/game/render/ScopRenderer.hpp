@@ -17,6 +17,7 @@
 #include <engine/math/Transform.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/model/Model.hpp>
+#include <game/render/Interpolator.hpp>
 #include <game/render/ScopShader.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <string>
@@ -37,7 +38,7 @@ class ScopRenderer
 
 	public:
 		void
-		render(SharedReference<Model> &model);
+		render(SharedReference<Model> &model, Interpolator<float> &interpolation);
 };
 
 #endif /* SCOPRENDERER_HPP_ */

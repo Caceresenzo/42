@@ -20,7 +20,8 @@ ScopShader::ScopShader(const std::string &vertex_file, const std::string &fragme
 	view("view"),
 	projection("projection"),
 	use_texture("useTexture"),
-	texture_sampler("textureSampler")
+	texture_sampler("textureSampler"),
+	transition("transition")
 {
 	locate(positions);
 	locate(textures);
@@ -29,6 +30,7 @@ ScopShader::ScopShader(const std::string &vertex_file, const std::string &fragme
 	locate(projection);
 	locate(use_texture);
 	locate(texture_sampler);
+	locate(transition);
 }
 
 ScopShader::~ScopShader()

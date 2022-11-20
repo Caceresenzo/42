@@ -25,6 +25,15 @@ template<>
 
 template<>
 	void
+	Uniform<float>::set(const float &value) const
+	{
+//		std::cout << name() << ":" << __PRETTY_FUNCTION__ << value << std::endl;
+		glUniform1f(location(), value);
+		OpenGL::check_error();
+	}
+
+template<>
+	void
 	Uniform<int>::set(const int &value) const
 	{
 //		std::cout << name() << ":" << __PRETTY_FUNCTION__ << value << std::endl;

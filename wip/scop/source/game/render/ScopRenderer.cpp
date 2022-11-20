@@ -39,7 +39,7 @@ ScopRenderer::~ScopRenderer()
 }
 
 void
-ScopRenderer::render(SharedReference<Model> &model)
+ScopRenderer::render(SharedReference<Model> &model, Interpolator<float> &interpolation)
 {
 	if (!shader || !camera)
 		return;
@@ -62,6 +62,8 @@ ScopRenderer::render(SharedReference<Model> &model)
 
 	shader->textures.enable();
 	shader->textures.link(sizeof(Vertex<3> ), (void*)offsetof(Vertex<3>, texture));
+
+	shader->transition.set(interpolation.value);
 
 	if (model->texture)
 	{
@@ -86,55 +88,4 @@ ScopRenderer::render(SharedReference<Model> &model)
 	model->mesh->vertex_array_object->unbind();
 
 	shader->unuse();
-
-//	model->vertex_buffer_array->bind(false);
-//
-////	model->vertex_buffer_array->
-//
-////	shader->use();
-//
-//	shader->projection.set(projection);
-//	shader->view.set(camera->view_matrix());
-//	shader->model.set(model->transform.model());
-//
-//	model->vertex_buffer_array->bind(true);
-//
-//	model->vertex_buffer_array->get(1)->bind();
-//	shader->positions.link();
-//	shader->positions.enable();
-//
-//	if (!model->textures.empty())
-//	{
-//		shader->use_texture.set(true);
-//
-//		model->vertex_buffer_array->get(2)->bind();
-//		shader->texture_positions.link();
-//		shader->texture_positions.enable();
-//
-//		SharedReference<Texture> &texture = model->textures.front();
-//
-//		texture->set_active(0);
-//		texture->bind();
-//		shader->texture_sampler.set(0);
-//	}
-//	else
-//		shader->use_texture.set(false);
-//
-//	glDrawElements(model->mesh->mode, model->mesh->indices.size(), GL_UNSIGNED_INT, NULL);
-//	OpenGL::check_error();
-//
-//	if (!model->textures.empty())
-//	{
-//		SharedReference<Texture> &texture = model->textures.front();
-//
-//		texture->set_active(0);
-//		texture->unbind();
-//		shader->texture_positions.disable();
-//	}
-//
-//	model->vertex_buffer_array->unbind(true);
-//
-//	shader->positions.disable();
-//
-//	shader->unuse();
 }
