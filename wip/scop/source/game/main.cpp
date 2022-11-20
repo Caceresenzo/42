@@ -248,34 +248,36 @@ Window& create_window(Options &options, SharedReference<PerspectiveCamera> &came
 	}
 }
 
-std::string get_info_string(HighFrameCounter &high_frame_counter, FrameCounter &frame_counter, SharedReference<PerspectiveCamera> camera)
+std::string get_info_string(HighFrameCounter &high_frame_counter, FrameCounter &frame_counter, SharedReference<PerspectiveCamera> camera, Interpolator<float> &interpolation)
 {
 	char text[255] = { 0 };
 
 	const char *format = ""
-		"   frame %d (%d)\n"
-		"position %4.4f %4.4f %4.4f\n"
-		"     yaw %4.4f\n"
-		"   pitch %4.4f\n"
-		"   speed %4.4f"
+		"frame      %4.d - %d\n"
+		"position   %4.4f %4.4f %4.4f\n"
+		"yaw        %4.4f\n"
+		"pitch      %4.4f\n"
+		"speed      %4.4f\n"
+		"transition %4.1f"
 		"";
 
-	sprintf(text, format, high_frame_counter.frame(), frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch(), camera->speed());
+	sprintf(text, format, high_frame_counter.frame(), frame_counter.frame(), camera->position().x, camera->position().y, camera->position().z, camera->yaw(), camera->pitch(), camera->speed(), interpolation.value * 100);
 
 	return (text);
 }
 
 #define CONTROLS_TEXT "" \
-	" move      ZQSD\n" \
-	"   up      SPACE\n" \
-	" down      A\n" \
-	"speed      scroll\n" \
-	" size      O/P\n" \
-	" grid      X\n" \
-	" arrows    C\n" \
-	" hid ins   V\n" \
-	" hid dbg   B\n" \
-	" poly mode N\n" \
+	"move        ZQSD\n" \
+	"up          SPACE\n" \
+	"down        A\n" \
+	"speed       scroll\n" \
+	"size        O/P\n" \
+	"grid        X\n" \
+	"arrows      C\n" \
+	"instruction V\n" \
+	"debug       B\n" \
+	"poly mode   N\n" \
+	"transition  R" \
 
 bool game(Options &options)
 {
@@ -430,7 +432,7 @@ bool game(Options &options)
 
 		if (!options.hide_debug)
 		{
-			fps_text_mesh->set(get_info_string(high_frame_counter, frame_counter, camera));
+			fps_text_mesh->set(get_info_string(high_frame_counter, frame_counter, camera, interpolation));
 			text_renderer->render(fps_text_mesh);
 		}
 
