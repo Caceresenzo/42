@@ -13,6 +13,7 @@
 #include <engine/math/vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/simple/Grid.hpp>
+#include <engine/mesh/Vertex.hpp>
 #include <vector>
 
 Mesh*
@@ -51,5 +52,5 @@ Grid::of(int slices, bool centered)
 		indices.push_back(vertex_count - rows + j);
 	}
 
-	return (new Mesh(vertices, std::vector<Vector<2, float> >(), indices, Mesh::LINE));
+	return (new Mesh(Vertex<3>::convert(vertices), indices, Mesh::LINE));
 }

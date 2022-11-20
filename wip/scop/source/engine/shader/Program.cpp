@@ -24,6 +24,8 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <typeinfo>
+#include <cxxabi.h>
 
 static void
 compile_shader(GLuint shader_id, const std::string &path)
@@ -161,6 +163,13 @@ void
 Program::locate(Variable &variable) const
 {
 	variable.locate(*this);
+
+	std::cout << "--- "
+		<< "holder=" << abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL)
+		<< " type=" << abi::__cxa_demangle(typeid(variable).name(), NULL, NULL, NULL)
+		<< " name=" << variable.name()
+		<< " location=" << variable.location()
+		<< std::endl;
 }
 
 GLuint

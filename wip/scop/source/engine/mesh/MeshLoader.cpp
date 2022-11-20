@@ -14,6 +14,7 @@
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/MeshException.hpp>
 #include <engine/mesh/MeshLoader.hpp>
+#include <engine/mesh/Vertex.hpp>
 #include <io/IOException.hpp>
 #include <lang/Math.hpp>
 #include <stddef.h>
@@ -144,5 +145,5 @@ MeshLoader::load(const std::string &path)
 		++line_number;
 	}
 
-	return (new Mesh(vertices, textures, indices));
+	return (new Mesh(Vertex<3>::convert(vertices, textures), indices));
 }

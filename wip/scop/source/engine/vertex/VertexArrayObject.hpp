@@ -23,12 +23,7 @@
 class VertexArrayObject
 {
 	private:
-		typedef std::vector<SharedReference<VertexBufferObject>> vector;
-		typedef typename vector::iterator iterator;
-
-	private:
 		GLuint m_id;
-		vector m_attached;
 
 	public:
 		VertexArrayObject();
@@ -37,17 +32,14 @@ class VertexArrayObject
 		~VertexArrayObject();
 
 	public:
-		bool
+		void
+		bind();
+
+		void
+		unbind();
+
+		void
 		add(SharedReference<VertexBufferObject> &object);
-
-		SharedReference<VertexBufferObject>
-		get(size_t index);
-
-		void
-		bind(bool with_attached = false);
-
-		void
-		unbind(bool with_attached = false);
 };
 
 #endif /* VERTEXARRAYOBJECT_HPP_ */

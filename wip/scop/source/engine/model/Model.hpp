@@ -25,11 +25,11 @@ class Model
 	public:
 		Transform<float> transform;
 		SharedReference<Mesh> mesh;
-		std::vector<SharedReference<Texture>> textures;
-		SharedReference<VertexArrayObject> vertex_buffer_array;
+		SharedReference<Texture> texture;
 
 	public:
-		Model(SharedReference<Mesh> mesh, std::vector<SharedReference<Texture> > textures = std::vector<SharedReference<Texture> >());
+		Model(SharedReference<Mesh> mesh);
+		Model(SharedReference<Mesh> mesh, SharedReference<Texture> texture);
 
 		virtual
 		~Model();

@@ -14,6 +14,7 @@
 # define TEXTMESH_HPP_
 
 #include <engine/math/vector.hpp>
+#include <engine/mesh/Mesh.hpp>
 #include <engine/text/Font.hpp>
 #include <engine/vertex/VertexArrayObject.hpp>
 #include <engine/vertex/VertexBufferObject.hpp>
@@ -27,9 +28,9 @@ class TextMesh
 		std::string value;
 		Vector<2, float> position;
 		float size;
-		SharedReference<VertexArrayObject> vertex_array;
-		SharedReference<VertexBufferObject> vertex_buffer;
-		SharedReference<VertexBufferObject> uv_buffer;
+		SharedReference<Mesh> mesh;
+		SharedReference<VertexArrayObject> vertex_array_object;
+		SharedReference<VertexBufferObject> vertex_buffer_object;
 
 	public:
 		TextMesh(SharedReference<Font> &font, const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);

@@ -17,8 +17,9 @@
 #include <map>
 #include <vector>
 
-Texture::Texture() :
-		m_id(-1)
+Texture::Texture(const std::string &name) :
+	name(name),
+	m_id(-1)
 {
 	glGenTextures(1, &m_id);
 }
@@ -38,6 +39,7 @@ Texture::set_active(int unit)
 		throw IllegalArgumentException("unit > 31");
 
 	glActiveTexture(GL_TEXTURE0 + unit);
+	bind();
 }
 
 void
@@ -53,9 +55,9 @@ Texture::unbind()
 }
 
 SharedReference<Texture>
-Texture::from_image(SharedReference<ImageData> image_data)
+Texture::from_image(const std::string &name, SharedReference<ImageData> image_data)
 {
-	Texture *texture = new Texture();
+	Texture *texture = new Texture(name);
 	texture->bind();
 
 	GLint internal_format = to_internal_format(image_data->format());
@@ -81,19 +83,19 @@ Texture::to_format(ImageData::Format format)
 	switch (format)
 	{
 		case ImageData::RGB:
-			return (GL_RGB);
+		return (GL_RGB);
 
 		case ImageData::BGR:
-			return (GL_BGR);
+		return (GL_BGR);
 
 		case ImageData::RGBA:
-			return (GL_RGBA);
+		return (GL_RGBA);
 
 		case ImageData::BGRA:
-			return (GL_BGRA);
+		return (GL_BGRA);
 
 		default:
-			throw IllegalArgumentException("unknown format");
+		throw IllegalArgumentException("unknown format");
 	}
 }
 
@@ -104,14 +106,14 @@ Texture::to_internal_format(ImageData::Format format)
 	{
 		case ImageData::RGB:
 		case ImageData::BGR:
-			return (GL_RGB);
+		return (GL_RGB);
 
 		case ImageData::RGBA:
 		case ImageData::BGRA:
-			return (GL_RGBA);
+		return (GL_RGBA);
 
 		default:
-			throw IllegalArgumentException("unknown format");
+		throw IllegalArgumentException("unknown format");
 	}
 }
 

@@ -17,6 +17,9 @@
 #include <engine/math/MathObject.hpp>
 #include <engine/shader/Variable.hpp>
 #include <string>
+#include <typeinfo>
+#include <string>
+#include <cxxabi.h>
 
 template<typename T>
 	class Attribute :
@@ -53,23 +56,48 @@ template<typename T>
 			inline void
 			enable()
 			{
+//				std::cout << abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL)
+//					<< " glEnableVertexAttribArray("
+//					<< "location=" << location()
+//					<< "): " << std::flush;
+
 				glEnableVertexAttribArray(location());
 				OpenGL::check_error();
+
+//				std::cout << "void" << std::endl;
 			}
 
 			inline void
 			disable()
 			{
+//				std::cout << abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL)
+//					<< " glDisableVertexAttribArray("
+//					<< "location=" << location()
+//					<< "): " << std::flush;
+
 				glDisableVertexAttribArray(location());
 				OpenGL::check_error();
+
+//				std::cout << "void" << std::endl;
 			}
 
 			inline void
 			link(GLsizei stride = 0, const void *pointer = NULL)
 			{
-//				std::cout << name() << ":" << __PRETTY_FUNCTION__ << std::endl;
+//				std::cout << abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL)
+//					<< " glVertexAttribPointer("
+//					<< "location=" << location()
+//					<< ", m_size=" << m_size
+//					<< ", m_data_type=" << m_data_type
+//					<< ", m_normalized=" << (int)m_normalized
+//					<< ", stride=" << stride
+//					<< ", pointer=" << pointer
+//					<< "): " << std::flush;
+
 				glVertexAttribPointer(location(), m_size, m_data_type, m_normalized, stride, pointer);
 				OpenGL::check_error();
+
+//				std::cout << "void" << std::endl;
 			}
 
 		protected:

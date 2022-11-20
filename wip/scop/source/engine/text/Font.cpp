@@ -31,7 +31,7 @@ Font::load(const std::string &path, const Vector<2, float> &character_dimension)
 	BMPImageLoader loader;
 	SharedReference<ImageData> image_data = loader.load(path);
 
-	SharedReference<Texture> atlas = Texture::from_image(image_data);
+	SharedReference<Texture> atlas = Texture::from_image("atlas", image_data);
 
 	return (*new Font(atlas, character_dimension));
 }

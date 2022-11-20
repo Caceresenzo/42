@@ -319,7 +319,7 @@ bool game(Options &options)
 		BMPImageLoader image_loader;
 		SharedReference<ImageData> image_data = image_loader.load(options.texture_file);
 
-		texture = Texture::from_image(image_data);
+		texture = Texture::from_image("texture", image_data);
 	}
 
 	SharedReference<Model> model;
@@ -342,15 +342,10 @@ bool game(Options &options)
 			mesh->align(center);
 		}
 
-		if (mesh->textures.empty())
-		{
-
-		}
-
-		model = *new Model(mesh);
-
 		if (texture)
-			model->textures.push_back(texture);
+			model = *new Model(mesh, texture);
+		else
+			model = *new Model(mesh);
 	}
 
 	std::cout << "INFO: Application ready!" << std::endl;
@@ -376,10 +371,10 @@ bool game(Options &options)
 
 		if (Keyboard::is_pressed(Keyboard::R) == Keyboard::JUST_PRESSED && texture)
 		{
-			if (model->textures.empty())
-				model->textures.push_back(texture);
+			if (model->texture)
+				model->texture.release();
 			else
-				model->textures.clear();
+				model->texture = texture;
 		}
 
 		if (Keyboard::is_pressed(Keyboard::O))
@@ -442,6 +437,8 @@ bool game(Options &options)
 		application->poll_events();
 
 		high_frame_counter.end();
+
+//		break;
 	}
 
 	return (true);

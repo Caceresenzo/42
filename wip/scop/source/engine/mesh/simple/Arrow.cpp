@@ -13,6 +13,7 @@
 #include <engine/math/vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/simple/Arrow.hpp>
+#include <engine/mesh/Vertex.hpp>
 #include <vector>
 
 Mesh*
@@ -72,5 +73,5 @@ Arrow::of(float length)
 	indices.push_back(vertices.size());
 	vertices.push_back(Vector<3, float>(0.0, -length * 0.25f, length * 0.75f));
 
-	return (new Mesh(vertices, std::vector<Vector<2, float> >(), indices, Mesh::LINE));
+	return (new Mesh(Vertex<3>::convert(vertices), indices, Mesh::LINE));
 }

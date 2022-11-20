@@ -53,24 +53,21 @@ ScopRenderer::render(SharedReference<Model> &model)
 	shader->view.set(camera->view_matrix());
 	shader->model.set(model->transform.model());
 
-	model->vertex_buffer_array->bind(true);
+	model->mesh->vertex_array_object->bind();
+	model->mesh->vertex_buffer_object->bind();
+	model->mesh->element_buffer_object->bind();
 
-	model->vertex_buffer_array->get(1)->bind();
-	shader->positions.link();
 	shader->positions.enable();
+	shader->positions.link(sizeof(Vertex<3> ), (void*)offsetof(Vertex<3>, position));
 
-	if (!model->textures.empty())
+	shader->textures.enable();
+	shader->textures.link(sizeof(Vertex<3> ), (void*)offsetof(Vertex<3>, texture));
+
+	if (model->texture)
 	{
 		shader->use_texture.set(true);
 
-		model->vertex_buffer_array->get(2)->bind();
-		shader->texture_positions.link();
-		shader->texture_positions.enable();
-
-		SharedReference<Texture> &texture = model->textures.front();
-
-		texture->set_active(0);
-		texture->bind();
+		model->texture->set_active(0);
 		shader->texture_sampler.set(0);
 	}
 	else
@@ -78,18 +75,66 @@ ScopRenderer::render(SharedReference<Model> &model)
 
 	glDrawElements(model->mesh->mode, model->mesh->indices.size(), GL_UNSIGNED_INT, NULL);
 
-	if (!model->textures.empty())
-	{
-		SharedReference<Texture> &texture = model->textures.front();
+	if (model->texture)
+		model->texture->unbind();
 
-		texture->set_active(0);
-		texture->unbind();
-		shader->texture_positions.disable();
-	}
-
-	model->vertex_buffer_array->unbind(true);
-
+	shader->textures.disable();
 	shader->positions.disable();
 
+	model->mesh->element_buffer_object->unbind();
+	model->mesh->vertex_buffer_object->unbind();
+	model->mesh->vertex_array_object->unbind();
+
 	shader->unuse();
+
+//	model->vertex_buffer_array->bind(false);
+//
+////	model->vertex_buffer_array->
+//
+////	shader->use();
+//
+//	shader->projection.set(projection);
+//	shader->view.set(camera->view_matrix());
+//	shader->model.set(model->transform.model());
+//
+//	model->vertex_buffer_array->bind(true);
+//
+//	model->vertex_buffer_array->get(1)->bind();
+//	shader->positions.link();
+//	shader->positions.enable();
+//
+//	if (!model->textures.empty())
+//	{
+//		shader->use_texture.set(true);
+//
+//		model->vertex_buffer_array->get(2)->bind();
+//		shader->texture_positions.link();
+//		shader->texture_positions.enable();
+//
+//		SharedReference<Texture> &texture = model->textures.front();
+//
+//		texture->set_active(0);
+//		texture->bind();
+//		shader->texture_sampler.set(0);
+//	}
+//	else
+//		shader->use_texture.set(false);
+//
+//	glDrawElements(model->mesh->mode, model->mesh->indices.size(), GL_UNSIGNED_INT, NULL);
+//	OpenGL::check_error();
+//
+//	if (!model->textures.empty())
+//	{
+//		SharedReference<Texture> &texture = model->textures.front();
+//
+//		texture->set_active(0);
+//		texture->unbind();
+//		shader->texture_positions.disable();
+//	}
+//
+//	model->vertex_buffer_array->unbind(true);
+//
+//	shader->positions.disable();
+//
+//	shader->unuse();
 }

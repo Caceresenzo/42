@@ -15,7 +15,7 @@
 ScopShader::ScopShader(const std::string &vertex_file, const std::string &fragment_file) :
 	Program(vertex_file, fragment_file),
 	positions("in_Positions"),
-	texture_positions("in_TextureCoordinates"),
+	textures("in_TextureCoordinates"),
 	model("model"),
 	view("view"),
 	projection("projection"),
@@ -23,7 +23,7 @@ ScopShader::ScopShader(const std::string &vertex_file, const std::string &fragme
 	texture_sampler("textureSampler")
 {
 	locate(positions);
-	locate(texture_positions);
+	locate(textures);
 	locate(model);
 	locate(view);
 	locate(projection);

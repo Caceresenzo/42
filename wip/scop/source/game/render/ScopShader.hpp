@@ -25,7 +25,7 @@ class ScopShader :
 {
 	public:
 		Attribute<Vector<3, float>> positions;
-		Attribute<Vector<2, float>> texture_positions;
+		Attribute<Vector<2, float>> textures;
 		Uniform<Matrix<4, 4, float>> model;
 		Uniform<Matrix<4, 4, float>> view;
 		Uniform<Matrix<4, 4, float>> projection;

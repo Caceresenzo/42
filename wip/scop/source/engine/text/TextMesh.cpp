@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <engine/mesh/Vertex.hpp>
 #include <engine/text/TextMesh.hpp>
 #include <stddef.h>
 #include <vector>
@@ -19,12 +20,10 @@ TextMesh::TextMesh(SharedReference<Font> &font, const std::string &initial, cons
 	value(initial),
 	position(position),
 	size(size),
-	vertex_array(*new VertexArrayObject()),
-	vertex_buffer(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)),
-	uv_buffer(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW))
+	vertex_array_object(*new VertexArrayObject()),
+	vertex_buffer_object(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW))
 {
-	vertex_array->add(vertex_buffer);
-	vertex_array->add(uv_buffer);
+	vertex_array_object->add(vertex_buffer_object);
 }
 
 TextMesh::~TextMesh()
@@ -99,8 +98,8 @@ TextMesh::build()
 		screen.x += 1;
 	}
 
-	vertex_buffer->store(vertices);
-	uv_buffer->store(uvs);
+	std::vector<Vertex<2> > vertexes = Vertex<2>::convert(vertices, uvs);
+	vertex_buffer_object->store(vertexes);
 }
 
 void

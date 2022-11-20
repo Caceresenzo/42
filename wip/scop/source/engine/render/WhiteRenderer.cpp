@@ -49,17 +49,20 @@ WhiteRenderer::render(SharedReference<Model> &model)
 	shader->view.set(camera->view_matrix());
 	shader->model.set(model->transform.model());
 
-	model->vertex_buffer_array->bind(true);
+	model->mesh->vertex_array_object->bind();
+	model->mesh->vertex_buffer_object->bind();
+	model->mesh->element_buffer_object->bind();
 
-	model->vertex_buffer_array->get(1)->bind();
-	shader->positions.link();
 	shader->positions.enable();
+	shader->positions.link(sizeof(Vertex<3>), (void*)offsetof(Vertex<3>, position));
 
 	glDrawElements(model->mesh->mode, model->mesh->indices.size(), GL_UNSIGNED_INT, NULL);
 
-	model->vertex_buffer_array->unbind(true);
-
 	shader->positions.disable();
+
+	model->mesh->element_buffer_object->unbind();
+	model->mesh->vertex_buffer_object->unbind();
+	model->mesh->vertex_array_object->unbind();
 
 	shader->unuse();
 }

@@ -14,55 +14,43 @@
 #include <lang/reference/SharedReference.hpp>
 
 VertexArrayObject::VertexArrayObject() :
-	m_id(-1),
-	m_attached()
+	m_id(-1)
 {
+//	std::cout << "VertexArrayObject glGenVertexArrays(1, ...): ";
 	glGenVertexArrays(1, &m_id);
+	OpenGL::check_error();
+//	std::cout << m_id << std::endl;
 }
 
 VertexArrayObject::~VertexArrayObject()
 {
+//	std::cout << "VertexArrayObject glDeleteVertexArrays(1, id=" << m_id << "): ";
 	glDeleteVertexArrays(1, &m_id);
+	OpenGL::check_error();
+//	std::cout << "void" << std::endl;
 }
 
-bool
+void
+VertexArrayObject::bind()
+{
+//	std::cout << "VertexArrayObject glBindVertexArray(id=" << m_id << "): ";
+	glBindVertexArray(m_id);
+	OpenGL::check_error();
+//	std::cout << "void" << std::endl;
+}
+
+void
+VertexArrayObject::unbind()
+{
+//	std::cout << "VertexArrayObject glBindVertexArray(id=" << 0 << "): ";
+	glBindVertexArray(0);
+	OpenGL::check_error();
+//	std::cout << "void" << std::endl;
+}
+
+void
 VertexArrayObject::add(SharedReference<VertexBufferObject> &object)
 {
-	/* vector lookup is bad :/ */
-	for (iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-		if (iterator->value() == object.value())
-			return (false);
-
 	bind();
 	object->bind();
-
-	m_attached.push_back(object);
-
-	return (true);
-}
-
-SharedReference<VertexBufferObject>
-VertexArrayObject::get(size_t index)
-{
-	return (m_attached.at(index));
-}
-
-void
-VertexArrayObject::bind(bool with_attached)
-{
-	glBindVertexArray(m_id);
-
-	if (with_attached)
-		for (iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-			(*iterator)->bind();
-}
-
-void
-VertexArrayObject::unbind(bool with_attached)
-{
-	glBindVertexArray(0);
-
-	if (with_attached)
-		for (iterator iterator = m_attached.begin(); iterator != m_attached.end(); ++iterator)
-			(*iterator)->unbind();
 }

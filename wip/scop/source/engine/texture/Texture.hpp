@@ -20,11 +20,14 @@
 
 class Texture
 {
+	public:
+		std::string name;
+
 	private:
 		GLuint m_id;
 
 	public:
-		Texture();
+		Texture(const std::string &name);
 
 		virtual
 		~Texture();
@@ -41,7 +44,7 @@ class Texture
 
 	public:
 		static SharedReference<Texture>
-		from_image(SharedReference<ImageData> image_data);
+		from_image(const std::string &name, SharedReference<ImageData> image_data);
 
 	private:
 		static GLint

@@ -38,21 +38,19 @@ TextRenderer::render(SharedReference<TextMesh> &mesh)
 {
 	shader->use();
 	mesh->font->atlas->set_active(0);
-	mesh->font->atlas->bind();
 
 	Vector<2, int> size = Window::current().size();
 	shader->window_size.set(size);
 	shader->texture_sampler.set(0);
 
-	mesh->vertex_array->bind(false);
+	mesh->vertex_array_object->bind();
+	mesh->vertex_buffer_object->bind();
 
 	shader->position.enable();
-	mesh->vertex_buffer->bind();
-	shader->position.link();
+	shader->position.link(sizeof(Vertex<2> ), 0);
 
 	shader->uv.enable();
-	mesh->uv_buffer->bind();
-	shader->uv.link();
+	shader->uv.link(sizeof(Vertex<2> ), (void*)offsetof(Vertex<2>, texture));
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -61,12 +59,11 @@ TextRenderer::render(SharedReference<TextMesh> &mesh)
 	glDepthRange(0, 1.0);
 	glDisable(GL_BLEND);
 
-	shader->position.disable();
 	shader->uv.disable();
+	shader->position.disable();
 
-	mesh->vertex_array->unbind();
-	mesh->vertex_buffer->unbind();
-	mesh->uv_buffer->unbind();
+	mesh->vertex_buffer_object->unbind();
+	mesh->vertex_array_object->unbind();
 
 	mesh->font->atlas->unbind();
 }

@@ -15,8 +15,11 @@
 
 #include <engine/math/Box.hpp>
 #include <engine/math/vector.hpp>
+#include <engine/mesh/Vertex.hpp>
+#include <engine/shader/Attribute.hpp>
 #include <engine/texture/Texture.hpp>
 #include <engine/vertex/VertexArrayObject.hpp>
+#include <engine/vertex/VertexBufferObject.hpp>
 #include <GL/glew.h>
 #include <lang/reference/SharedReference.hpp>
 #include <utility>
@@ -35,13 +38,15 @@ class Mesh
 		};
 
 	public:
-		std::vector<Vector<3, float> > vertices;
-		std::vector<Vector<2, float> > textures;
+		std::vector<Vertex<3> > vertices;
 		std::vector<unsigned int> indices;
 		Mode mode;
+		SharedReference<VertexArrayObject> vertex_array_object;
+		SharedReference<VertexBufferObject> vertex_buffer_object;
+		SharedReference<VertexBufferObject> element_buffer_object;
 
 	public:
-		Mesh(const std::vector<Vector<3, float> > &vertices, const std::vector<Vector<2, float> > &textures, const std::vector<unsigned int> &indices, Mode mode = TRIANGLE);
+		Mesh(const std::vector<Vertex<3> > &vertices, const std::vector<unsigned int> &indices, Mode mode = TRIANGLE);
 
 		virtual
 		~Mesh();
