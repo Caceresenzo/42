@@ -53,7 +53,6 @@
 
 const Option OPT_HELP('h', "help", "display this help message");
 const Option OPT_VERSION('v', "version", "display application's version");
-const Option OPT_LOG_LEVEL('l', "log-level", "change the log-level", "level");
 const Option OPT_NO_GRID('g', "no-grid", "disable world grid");
 const Option OPT_NO_ARROWS('a', "no-arrows", "disable axis arrows");
 const Option OPT_HIDE_INSTRUCTIONS('i', "hide-instructions", "hide key/mouse instructions");
@@ -90,7 +89,6 @@ int cli(int argc, char **argv, Options &options)
 	std::vector<const Option*> option_list;
 	option_list.push_back(&OPT_HELP);
 	option_list.push_back(&OPT_VERSION);
-	option_list.push_back(&OPT_LOG_LEVEL);
 	option_list.push_back(&OPT_NO_GRID);
 	option_list.push_back(&OPT_NO_ARROWS);
 	option_list.push_back(&OPT_HIDE_INSTRUCTIONS);
