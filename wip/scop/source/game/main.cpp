@@ -235,7 +235,12 @@ Application& create_application(Options &options)
 
 PerspectiveCamera& create_camera()
 {
-	return (*new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f)));
+	PerspectiveCamera &camera = *new PerspectiveCamera(Vector<3, float>(0.0f, 0.0f, 8.0f));
+
+	camera.teleport(make_vector<float>(0.0, 7.5, 16.0));
+	camera.orient(270.0, -20.0);
+
+	return (camera);
 }
 
 Window& create_window(Options &options, SharedReference<PerspectiveCamera> &camera)

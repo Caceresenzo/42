@@ -43,6 +43,12 @@ class PerspectiveCamera
 		void
 		look(const Vector<2, int> &offset);
 
+		void
+		teleport(const Vector<3, float> &position);
+
+		void
+		orient(float yaw, float pitch);
+
 		inline const Vector<3, float>&
 		position() const
 		{

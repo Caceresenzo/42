@@ -18,16 +18,16 @@
 #include <iostream>
 
 PerspectiveCamera::PerspectiveCamera(const Vector<3, float> &position, float yaw, float pitch) :
-		m_position(position),
-		m_front(/* will be computed*/),
-		m_up(/* will be computed*/),
-		m_right(/* will be computed*/),
-		m_world_up(0.0f, 1.0f, 0.0f),
-		m_yaw(yaw),
-		m_pitch(pitch),
-		m_speed(2.5f),
-		m_sensitivity(0.1f),
-		m_view_matrix(/* will be computed*/)
+	m_position(position),
+	m_front(/* will be computed*/),
+	m_up(/* will be computed*/),
+	m_right(/* will be computed*/),
+	m_world_up(0.0f, 1.0f, 0.0f),
+	m_yaw(yaw),
+	m_pitch(pitch),
+	m_speed(2.5f),
+	m_sensitivity(0.1f),
+	m_view_matrix(/* will be computed*/)
 {
 	compute_vectors();
 }
@@ -124,14 +124,31 @@ PerspectiveCamera::move(double delta_time)
 void
 PerspectiveCamera::look(const Vector<2, int> &offset)
 {
-	m_yaw += m_sensitivity * offset.x;
-	m_pitch += m_sensitivity * offset.y;
+	float yaw = m_yaw + m_sensitivity * offset.x;
+	float pitch = m_pitch + m_sensitivity * offset.y;
 
-	m_pitch = Math::clamp(m_pitch, -89.0f, 89.0f);
-	if (m_yaw < 0)
-		m_yaw = 360 - Math::floating_modulo(-m_yaw, 360.0f);
-	if (m_yaw > 360)
-		m_yaw = 0 + Math::floating_modulo(m_yaw, 360.0f);
+	orient(yaw, pitch);
+}
+
+void PerspectiveCamera::teleport(const Vector<3, float> &position)
+{
+	m_position = position;
+
+	compute_vectors();
+}
+
+void PerspectiveCamera::orient(float yaw, float pitch)
+{
+	pitch = Math::clamp(pitch, -89.0f, 89.0f);
+
+	if (yaw < 0)
+		yaw = 360 - Math::floating_modulo(-yaw, 360.0f);
+
+	if (yaw > 360)
+		yaw = 0 + Math::floating_modulo(yaw, 360.0f);
+
+	m_yaw = yaw;
+	m_pitch = pitch;
 
 	compute_vectors();
 }
