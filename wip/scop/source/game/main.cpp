@@ -215,6 +215,8 @@ int cli(int argc, char **argv, Options &options)
 	DUMP_LINE(hide_instructions);
 	DUMP_LINE(hide_debug);
 	DUMP_LINE(no_center);
+	DUMP_LINE(rotation_speed);
+	DUMP_LINE(transition_speed);
 
 #undef DUMP_LINE
 
