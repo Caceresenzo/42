@@ -468,4 +468,22 @@ template<int N, typename T>
 		return (stream << ");");
 	}
 
+template<typename T>
+	Vector<2, T> make_vector(const T &x, const T &y)
+	{
+		return (Vector<2, T>(x, y));
+	}
+
+template<typename T>
+	Vector<3, T> make_vector(const T &x, const T &y, const T &z)
+	{
+		return (Vector<3, T>(x, y, z));
+	}
+
+template<typename T>
+	Vector<4, T> make_vector(const T &x, const T &y, const T &z, const T &w)
+	{
+		return (Vector<4, T>(x, y, z, w));
+	}
+
 #endif /* VECTOR_HPP_ */

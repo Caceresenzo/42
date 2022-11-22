@@ -20,9 +20,10 @@
 #include <queue>
 #include <utility>
 
-Mesh::Mesh(const std::vector<Vertex<3> > &vertices, const std::vector<unsigned int> &indices, Mode mode) :
+Mesh::Mesh(const std::vector<Vertex<3> > &vertices, const std::vector<unsigned int> &indices, bool has_texture, Mode mode) :
 	vertices(vertices),
 	indices(indices),
+	has_texture(has_texture),
 	mode(mode),
 	vertex_array_object(*new VertexArrayObject()),
 	vertex_buffer_object(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::STATIC_DRAW)),
@@ -37,6 +38,12 @@ Mesh::Mesh(const std::vector<Vertex<3> > &vertices, const std::vector<unsigned i
 
 Mesh::~Mesh()
 {
+}
+
+void
+Mesh::store()
+{
+	vertex_buffer_object->store(vertices);
 }
 
 void

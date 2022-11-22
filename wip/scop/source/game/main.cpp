@@ -9,6 +9,7 @@
 #include <engine/mesh/MeshLoader.hpp>
 #include <engine/mesh/simple/Arrow.hpp>
 #include <engine/mesh/simple/Grid.hpp>
+#include <engine/mesh/Vertex.hpp>
 #include <engine/model/Model.hpp>
 #include <engine/opengl.hpp>
 #include <engine/render/WhiteRenderer.hpp>
@@ -38,10 +39,12 @@
 #include <util/cli/CommandLineParser.hpp>
 #include <util/cli/Option.hpp>
 #include <util/function/Supplier.hpp>
+#include <util/math/MinMaxScaler.hpp>
 #include <cstdio>
 #include <cstdlib>
 #include <cwchar>
 #include <iostream>
+#include <iterator>
 #include <list>
 #include <string>
 #include <vector>
@@ -333,17 +336,17 @@ bool game(Options &options)
 		texture = Texture::from_image("texture", image_data);
 	}
 
-	SharedReference<Model> model;
+	SharedReference<Mesh> mesh;
 	{
-		std::cout << "INFO: Loading model" << std::endl;
+		std::cout << "INFO: Loading mesh" << std::endl;
 
 		MeshLoader mesh_loader;
-		SharedReference<Mesh> mesh = *mesh_loader.load(options.object_file);
+		mesh = *mesh_loader.load(options.object_file);
+
+		BoundingBox<3, float> bounding_box = mesh->compute_bounding_box();
 
 		if (!options.no_center)
 		{
-			BoundingBox<3, float> bounding_box = mesh->compute_bounding_box();
-
 			Vector<3, float> center = bounding_box.center();
 			std::cout << "INFO: center=" << center << std::endl;
 
@@ -353,6 +356,32 @@ bool game(Options &options)
 			mesh->align(center);
 		}
 
+		if (!mesh->has_texture)
+		{
+			MinMaxScaler<float> y_scaler;
+			MinMaxScaler<float> z_scaler;
+
+			typedef std::vector<Vertex<3> >::iterator iterator;
+			for (iterator it = mesh->vertices.begin(); it != mesh->vertices.end(); ++it)
+			{
+				y_scaler.fit(it->position.y);
+				z_scaler.fit(it->position.z);
+			}
+
+			for (iterator it = mesh->vertices.begin(); it != mesh->vertices.end(); ++it)
+			{
+				float x = z_scaler.scale(it->position.z);
+				float y = y_scaler.scale(it->position.y);
+
+				it->texture = make_vector(x, y);
+			}
+
+			mesh->store();
+		}
+	}
+
+	SharedReference<Model> model;
+	{
 		if (texture)
 			model = *new Model(mesh, texture);
 		else

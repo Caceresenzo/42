@@ -145,5 +145,6 @@ MeshLoader::load(const std::string &path)
 		++line_number;
 	}
 
-	return (new Mesh(Vertex<3>::convert(vertices, textures), indices));
+	bool has_texture = !textures.empty();
+	return (new Mesh(Vertex<3>::convert(vertices, textures), indices, has_texture));
 }

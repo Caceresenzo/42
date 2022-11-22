@@ -1,40 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Box.hpp                                            :+:      :+:    :+:   */
+/*   MinMaxScaler.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/14 16:12:25 by ecaceres          #+#    #+#             */
-/*   Updated: 2022/11/14 16:12:25 by ecaceres         ###   ########.fr       */
+/*   Created: 2022/11/22 18:31:52 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/11/22 18:31:52 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BOX_HPP_
-# define BOX_HPP_
+#ifndef MINMAXSCALER_HPP_
+# define MINMAXSCALER_HPP_
 
-#include <engine/math/vector.hpp>
+#include <lang/Math.hpp>
+#include <limits>
 
-template<int N, typename T>
-	struct BoundingBox
+template<typename T>
+	struct MinMaxScaler
 	{
 		public:
-			Vector<N, T> min;
-			Vector<N, T> max;
+			T min;
+			T max;
 
 		public:
-			BoundingBox(Vector<N, T> min, Vector<N, T> max) :
+			MinMaxScaler(const T &min = std::numeric_limits<float>::max(), const T &max = std::numeric_limits<float>::min()) :
 				min(min),
 				max(max)
 			{
 			}
 
 		public:
-			Vector<N, T>
-			center() const
+			void
+			fit(const T &value)
 			{
-				return (::abs((min + max) / 2.0f));
+				min = Math::min(min, value);
+				max = Math::max(max, value);
+			}
+
+			T
+			scale(const T &value)
+			{
+				return ((value - min) / (max - min));
 			}
 	};
 
-#endif /* BOX_HPP_ */
+#endif /* MINMAXSCALER_HPP_ */

@@ -40,18 +40,22 @@ class Mesh
 	public:
 		std::vector<Vertex<3> > vertices;
 		std::vector<unsigned int> indices;
+		bool has_texture;
 		Mode mode;
 		SharedReference<VertexArrayObject> vertex_array_object;
 		SharedReference<VertexBufferObject> vertex_buffer_object;
 		SharedReference<VertexBufferObject> element_buffer_object;
 
 	public:
-		Mesh(const std::vector<Vertex<3> > &vertices, const std::vector<unsigned int> &indices, Mode mode = TRIANGLE);
+		Mesh(const std::vector<Vertex<3> > &vertices, const std::vector<unsigned int> &indices, bool has_texture, Mode mode = TRIANGLE);
 
 		virtual
 		~Mesh();
 
 	public:
+		void
+		store();
+
 		void
 		align(Vector<3, float> center);
 

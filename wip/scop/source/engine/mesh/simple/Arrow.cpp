@@ -73,5 +73,5 @@ Arrow::of(float length)
 	indices.push_back(vertices.size());
 	vertices.push_back(Vector<3, float>(0.0, -length * 0.25f, length * 0.75f));
 
-	return (new Mesh(Vertex<3>::convert(vertices), indices, Mesh::LINE));
+	return (new Mesh(Vertex<3>::convert(vertices), indices, false, Mesh::LINE));
 }

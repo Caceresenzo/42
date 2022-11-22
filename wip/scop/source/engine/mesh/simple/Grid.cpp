@@ -52,5 +52,5 @@ Grid::of(int slices, bool centered)
 		indices.push_back(vertex_count - rows + j);
 	}
 
-	return (new Mesh(Vertex<3>::convert(vertices), indices, Mesh::LINE));
+	return (new Mesh(Vertex<3>::convert(vertices), indices, false, Mesh::LINE));
 }
