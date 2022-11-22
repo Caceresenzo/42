@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include <engine/application/Window.hpp>
-#include <engine/math/matrix.hpp>
+#include <engine/math/Matrix.hpp>
 #include <engine/math/Transform.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/model/Model.hpp>
 #include <engine/render/WhiteShader.hpp>

@@ -12,7 +12,7 @@
 
 #include <engine/camera/PerspectiveCamera.hpp>
 #include <engine/control/Keyboard.hpp>
-#include <engine/math/matrix.hpp>
+#include <engine/math/Matrix.hpp>
 #include <lang/Math.hpp>
 #include <cmath>
 #include <iostream>

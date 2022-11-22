@@ -4,7 +4,7 @@
 #include <engine/control/Keyboard.hpp>
 #include <engine/math/Box.hpp>
 #include <engine/math/Transform.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/MeshLoader.hpp>
 #include <engine/mesh/simple/Arrow.hpp>

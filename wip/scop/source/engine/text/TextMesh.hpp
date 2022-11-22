@@ -13,7 +13,7 @@
 #ifndef TEXTMESH_HPP_
 # define TEXTMESH_HPP_
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/text/Font.hpp>
 #include <engine/vertex/VertexArrayObject.hpp>

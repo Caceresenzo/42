@@ -13,8 +13,8 @@
 #ifndef MATHOBJECT_HPP_
 # define MATHOBJECT_HPP_
 
-#include <engine/math/vector.hpp>
-#include <engine/math/matrix.hpp>
+#include <engine/math/Matrix.hpp>
+#include <engine/math/Vector.hpp>
 
 template<typename T>
 	struct MathObject

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 
 template<>
 	const Vector<2, int> Vector<2, int>::ZERO(0);

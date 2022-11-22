@@ -13,8 +13,8 @@
 #ifndef MATRIX_HPP_
 # define MATRIX_HPP_
 
+#include <engine/math/Vector.hpp>
 #include <lang/Math.hpp>
-#include <engine/math/vector.hpp>
 #include <cassert>
 #include <cmath>
 #include <cstdio>

@@ -13,7 +13,7 @@
 #ifndef BOX_HPP_
 # define BOX_HPP_
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 
 template<int N, typename T>
 	struct BoundingBox

@@ -15,7 +15,7 @@
 
 #include <engine/application/listener/WindowMouseListener.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <lang/reference/SharedReference.hpp>
 
 class Window;

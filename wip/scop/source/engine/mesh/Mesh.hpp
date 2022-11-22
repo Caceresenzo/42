@@ -14,7 +14,7 @@
 # define MESH_HPP_
 
 #include <engine/math/Box.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/mesh/Vertex.hpp>
 #include <engine/shader/Attribute.hpp>
 #include <engine/texture/Texture.hpp>

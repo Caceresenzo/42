@@ -13,8 +13,8 @@
 #ifndef SCOPSHADER_HPP_
 # define SCOPSHADER_HPP_
 
-#include <engine/math/vector.hpp>
-#include <engine/math/matrix.hpp>
+#include <engine/math/Matrix.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/shader/Attribute.hpp>
 #include <engine/shader/Program.hpp>
 #include <engine/shader/Uniform.hpp>

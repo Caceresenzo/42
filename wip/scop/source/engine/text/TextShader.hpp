@@ -13,7 +13,7 @@
 #ifndef TEXTSHADER_HPP_
 # define TEXTSHADER_HPP_
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/shader/Attribute.hpp>
 #include <engine/shader/Program.hpp>
 #include <engine/shader/Uniform.hpp>

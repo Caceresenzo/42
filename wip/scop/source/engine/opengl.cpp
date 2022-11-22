@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <engine/math/Vector.hpp>
 #include <engine/opengl.hpp>
 #include <lang/RuntimeException.hpp>
-#include <engine/math/vector.hpp>
 #include <cstdio>
 #include <map>
 #include <string>

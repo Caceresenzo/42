@@ -13,8 +13,8 @@
 #ifndef TRANSFORM_HPP_
 # define TRANSFORM_HPP_
 
-#include <engine/math/matrix.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Matrix.hpp>
+#include <engine/math/Vector.hpp>
 
 template<typename T = float>
 	class Transform

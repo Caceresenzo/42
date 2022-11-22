@@ -16,7 +16,7 @@
 #include <engine/application/listener/WindowKeyboardListener.hpp>
 #include <engine/application/listener/WindowMouseListener.hpp>
 #include <engine/control/Keyboard.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <string>
 #include <vector>

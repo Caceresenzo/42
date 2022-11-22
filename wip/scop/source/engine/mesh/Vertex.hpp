@@ -13,7 +13,7 @@
 #ifndef VERTEX_HPP_
 # define VERTEX_HPP_
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <iterator>
 #include <vector>
 

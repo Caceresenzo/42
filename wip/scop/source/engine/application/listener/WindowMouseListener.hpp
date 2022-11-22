@@ -13,7 +13,7 @@
 #ifndef WINDOWMOUSELISTENER_HPP_
 # define WINDOWMOUSELISTENER_HPP_
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 
 class Window;
 

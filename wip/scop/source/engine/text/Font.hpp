@@ -13,7 +13,7 @@
 #ifndef FONT_HPP_
 # define FONT_HPP_
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/texture/Texture.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <string>

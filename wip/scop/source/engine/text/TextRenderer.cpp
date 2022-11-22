@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include <engine/application/Window.hpp>
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/opengl.hpp>
 #include <engine/shader/Uniform.hpp>
 #include <engine/text/Font.hpp>

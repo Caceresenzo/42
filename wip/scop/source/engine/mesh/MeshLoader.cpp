@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <engine/math/vector.hpp>
+#include <engine/math/Vector.hpp>
 #include <engine/mesh/Mesh.hpp>
 #include <engine/mesh/MeshException.hpp>
 #include <engine/mesh/MeshLoader.hpp>
