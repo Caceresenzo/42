@@ -43,13 +43,15 @@ template<typename T>
 
 		public:
 			void
-			tick(double delta_time = 1.0)
+			tick(T delta_time = 1.0, T speed = 1.0)
 			{
+				T increment = step * speed * delta_time;
+
 				/* decrement */
 				if (start > end)
 				{
 					if (value > end)
-						value -= step * delta_time;
+						value -= increment;
 					else
 						value = end;
 				}
@@ -58,7 +60,7 @@ template<typename T>
 				else if (start < end)
 				{
 					if (value < end)
-						value += step * delta_time;
+						value += increment;
 					else
 						value = end;
 				}

@@ -55,6 +55,7 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 800
 #define DEFAULT_ROTATION_SPEED 1.0
+#define DEFAULT_TRANSITION_SPEED 1.0
 
 const Option OPT_HELP('h', "help", "display this help message");
 const Option OPT_VERSION('v', "version", "display application's version");
@@ -67,7 +68,8 @@ const Option OPT_WIDTH('w', "width", "set window's width (default: " STRINGIFY_V
 const Option OPT_HEIGHT('h', "height", "set window's height (default: " STRINGIFY_VALUE(DEFAULT_HEIGHT) ")", "height");
 const Option OPT_POLYGON_MODE('p', "polygon-mode", "set polygon mode (default: `line`)", "mode");
 const Option OPT_NO_CENTER('c', "no-center", "disable model centering");
-const Option OPT_ROTATION_SPEED('r', "rotation-speed", "change rotation speed (default: " STRINGIFY_VALUE(DEFAULT_ROTATION_SPEED) ")");
+const Option OPT_ROTATION_SPEED('r', "rotation-speed", "change rotation speed (default: " STRINGIFY_VALUE(DEFAULT_ROTATION_SPEED) ")", "speed");
+const Option OPT_TRANSITION_SPEED('t', "transition-speed", "change transition speed (default: " STRINGIFY_VALUE(DEFAULT_TRANSITION_SPEED) ")", "speed");
 const Argument ARG_OBJECT("object", false, "specify object");
 const Argument ARG_TEXTURE("texture", true, "specify texture");
 
@@ -87,6 +89,7 @@ struct Options
 		GLenum polygon_mode = GL_FILL;
 		bool no_center = false;
 		float rotation_speed = DEFAULT_ROTATION_SPEED;
+		float transition_speed = DEFAULT_TRANSITION_SPEED;
 };
 
 int cli(int argc, char **argv, Options &options)
@@ -106,6 +109,7 @@ int cli(int argc, char **argv, Options &options)
 	option_list.push_back(&OPT_POLYGON_MODE);
 	option_list.push_back(&OPT_NO_CENTER);
 	option_list.push_back(&OPT_ROTATION_SPEED);
+	option_list.push_back(&OPT_TRANSITION_SPEED);
 
 	std::vector<const Argument*> argument_list;
 	argument_list.push_back(&ARG_OBJECT);
@@ -172,6 +176,9 @@ int cli(int argc, char **argv, Options &options)
 
 		if (command_line.has(OPT_ROTATION_SPEED))
 			options.rotation_speed = Number::parse<float>(command_line.first(OPT_ROTATION_SPEED));
+
+		if (command_line.has(OPT_TRANSITION_SPEED))
+			options.transition_speed = Number::parse<float>(command_line.first(OPT_TRANSITION_SPEED));
 
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
@@ -444,7 +451,7 @@ bool game(Options &options)
 
 		model->transform.rotation += Vector<3, float>(0, options.rotation_speed, 0) * delta_time;
 
-		interpolation.tick(delta_time);
+		interpolation.tick(delta_time, options.transition_speed);
 		scop_renderer->render(model, interpolation);
 
 		glClear(GL_DEPTH_BUFFER_BIT);
