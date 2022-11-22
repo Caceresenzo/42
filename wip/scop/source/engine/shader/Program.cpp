@@ -164,12 +164,12 @@ Program::locate(Variable &variable) const
 {
 	variable.locate(*this);
 
-	std::cout << "--- "
-		<< "holder=" << abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL)
-		<< " type=" << abi::__cxa_demangle(typeid(variable).name(), NULL, NULL, NULL)
-		<< " name=" << variable.name()
-		<< " location=" << variable.location()
-		<< std::endl;
+//	std::cout << "--- "
+//		<< "holder=" << abi::__cxa_demangle(typeid(*this).name(), NULL, NULL, NULL)
+//		<< " type=" << abi::__cxa_demangle(typeid(variable).name(), NULL, NULL, NULL)
+//		<< " name=" << variable.name()
+//		<< " location=" << variable.location()
+//		<< std::endl;
 }
 
 GLuint
