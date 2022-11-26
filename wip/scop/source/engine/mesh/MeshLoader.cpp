@@ -145,6 +145,9 @@ MeshLoader::load(const std::string &path)
 		++line_number;
 	}
 
+	if (vertices.empty())
+		throw MeshException("no vertice found");
+
 	bool has_texture = !textures.empty();
 	return (new Mesh(Vertex<3>::convert(vertices, textures), indices, has_texture));
 }

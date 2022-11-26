@@ -195,12 +195,12 @@ int cli(int argc, char **argv, Options &options)
 
 	if (options.object_file.empty())
 	{
-		std::cerr << "no object file specified" << std::endl;
+		std::cerr << "ERROR: no object file specified" << std::endl;
 		return (false);
 	}
 
 	if (options.texture_file.empty())
-		std::cerr << "no texture file specified" << std::endl;
+		std::cerr << "WARNING: no texture file specified" << std::endl;
 
 #define DUMP_LINE(key) std::cout << "OPTION: " << #key << ": " << options.key << std::endl;
 
@@ -489,8 +489,6 @@ bool game(Options &options)
 		application->poll_events();
 
 		high_frame_counter.end();
-
-//		break;
 	}
 
 	return (true);
@@ -502,22 +500,22 @@ main(int argc, char **argv)
 	setbuf(stdout, 0);
 	setbuf(stderr, 0);
 
-//	try
-//	{
-	Options options;
-	if (!cli(argc, argv, options))
-		return (EXIT_FAILURE);
+	try
+	{
+		Options options;
+		if (!cli(argc, argv, options))
+			return (EXIT_FAILURE);
 
-	if (!game(options))
-		return (EXIT_FAILURE);
+		if (!game(options))
+			return (EXIT_FAILURE);
 
-	return (EXIT_SUCCESS);
-//	}
-//	catch (std::exception &exception)
-//	{
-//		std::cout << std::endl;
-//		std::cout << std::endl;
-//		std::cout << "The application could not be started!" << std::endl;
-//		std::cout << "Error: " << exception.what() << std::endl;
-//	}
+		return (EXIT_SUCCESS);
+	}
+	catch (std::exception &exception)
+	{
+		std::cout << std::endl;
+		std::cout << std::endl;
+		std::cout << "The application could not be started!" << std::endl;
+		std::cout << "Error: " << exception.what() << std::endl;
+	}
 }
