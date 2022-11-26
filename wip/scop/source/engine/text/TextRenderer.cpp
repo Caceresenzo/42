@@ -47,7 +47,7 @@ TextRenderer::render(SharedReference<TextMesh> &mesh)
 	mesh->vertex_buffer_object->bind();
 
 	shader->position.enable();
-	shader->position.link(sizeof(Vertex<2> ), 0);
+	shader->position.link(sizeof(Vertex<2> ), (void*)offsetof(Vertex<2>, position));
 
 	shader->uv.enable();
 	shader->uv.link(sizeof(Vertex<2> ), (void*)offsetof(Vertex<2>, texture));
@@ -55,7 +55,7 @@ TextRenderer::render(SharedReference<TextMesh> &mesh)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthRange(0, 0.01);
-	glDrawArrays(GL_TRIANGLES, 0, mesh->value.size() * 6);
+	glDrawArrays(GL_TRIANGLES, 0, mesh->triangle_count);
 	glDepthRange(0, 1.0);
 	glDisable(GL_BLEND);
 

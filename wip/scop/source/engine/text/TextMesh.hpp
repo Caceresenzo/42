@@ -31,6 +31,7 @@ class TextMesh
 		SharedReference<Mesh> mesh;
 		SharedReference<VertexArrayObject> vertex_array_object;
 		SharedReference<VertexBufferObject> vertex_buffer_object;
+		int triangle_count;
 
 	public:
 		TextMesh(SharedReference<Font> &font, const std::string &initial = "", const Vector<2, float> &position = Vector<2, float>(), float size = 28);

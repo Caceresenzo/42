@@ -21,7 +21,8 @@ TextMesh::TextMesh(SharedReference<Font> &font, const std::string &initial, cons
 	position(position),
 	size(size),
 	vertex_array_object(*new VertexArrayObject()),
-	vertex_buffer_object(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW))
+	vertex_buffer_object(*new VertexBufferObject(VertexBufferObject::ARRAY, VertexBufferObject::DYNAMIC_DRAW)),
+	triangle_count(0)
 {
 	vertex_array_object->add(vertex_buffer_object);
 }
@@ -100,6 +101,8 @@ TextMesh::build()
 
 	std::vector<Vertex<2> > vertexes = Vertex<2>::convert(vertices, uvs);
 	vertex_buffer_object->store(vertexes);
+
+	triangle_count = vertexes.size();
 }
 
 void
