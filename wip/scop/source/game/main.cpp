@@ -55,6 +55,7 @@
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 800
 #define DEFAULT_ROTATION_SPEED 1.0
+#define DEFAULT_MOVEMENT_SPEED 1.0
 #define DEFAULT_TRANSITION_SPEED 1.0
 
 const Option OPT_HELP('h', "help", "display this help message");
@@ -69,6 +70,7 @@ const Option OPT_HEIGHT('h', "height", "set window's height (default: " STRINGIF
 const Option OPT_POLYGON_MODE('p', "polygon-mode", "set polygon mode (default: `line`)", "mode");
 const Option OPT_NO_CENTER('c', "no-center", "disable model centering");
 const Option OPT_ROTATION_SPEED('r', "rotation-speed", "change rotation speed (default: " STRINGIFY_VALUE(DEFAULT_ROTATION_SPEED) ")", "speed");
+const Option OPT_MOVEMENT_SPEED('m', "movement-speed", "change movement speed (default: " STRINGIFY_VALUE(DEFAULT_MOVEMENT_SPEED) ")", "speed");
 const Option OPT_TRANSITION_SPEED('t', "transition-speed", "change transition speed (default: " STRINGIFY_VALUE(DEFAULT_TRANSITION_SPEED) ")", "speed");
 const Argument ARG_OBJECT("object", false, "specify object");
 const Argument ARG_TEXTURE("texture", true, "specify texture");
@@ -89,6 +91,7 @@ struct Options
 		GLenum polygon_mode = GL_FILL;
 		bool no_center = false;
 		float rotation_speed = DEFAULT_ROTATION_SPEED;
+		float movement_speed = DEFAULT_MOVEMENT_SPEED;
 		float transition_speed = DEFAULT_TRANSITION_SPEED;
 };
 
@@ -109,6 +112,7 @@ int cli(int argc, char **argv, Options &options)
 	option_list.push_back(&OPT_POLYGON_MODE);
 	option_list.push_back(&OPT_NO_CENTER);
 	option_list.push_back(&OPT_ROTATION_SPEED);
+	option_list.push_back(&OPT_MOVEMENT_SPEED);
 	option_list.push_back(&OPT_TRANSITION_SPEED);
 
 	std::vector<const Argument*> argument_list;
@@ -177,6 +181,9 @@ int cli(int argc, char **argv, Options &options)
 		if (command_line.has(OPT_ROTATION_SPEED))
 			options.rotation_speed = Number::parse_floating<float>(command_line.first(OPT_ROTATION_SPEED));
 
+		if (command_line.has(OPT_MOVEMENT_SPEED))
+			options.movement_speed = Number::parse_floating<float>(command_line.first(OPT_MOVEMENT_SPEED));
+
 		if (command_line.has(OPT_TRANSITION_SPEED))
 			options.transition_speed = Number::parse_floating<float>(command_line.first(OPT_TRANSITION_SPEED));
 
@@ -216,6 +223,7 @@ int cli(int argc, char **argv, Options &options)
 	DUMP_LINE(hide_debug);
 	DUMP_LINE(no_center);
 	DUMP_LINE(rotation_speed);
+	DUMP_LINE(movement_speed);
 	DUMP_LINE(transition_speed);
 
 #undef DUMP_LINE
@@ -426,12 +434,6 @@ bool game(Options &options)
 		if (Keyboard::is_pressed(Keyboard::R) == Keyboard::JUST_PRESSED)
 			interpolation.reverse();
 
-		if (Keyboard::is_pressed(Keyboard::O))
-			model->transform.scaling -= 0.02f;
-
-		if (Keyboard::is_pressed(Keyboard::P))
-			model->transform.scaling += 0.02f;
-
 		if (Keyboard::is_pressed(Keyboard::X) == Keyboard::JUST_PRESSED)
 			options.no_grid = !options.no_grid;
 
@@ -456,23 +458,29 @@ bool game(Options &options)
 
 		model->transform.rotation += Vector<3, float>(0, options.rotation_speed, 0) * delta_time;
 
+		if (Keyboard::is_pressed(Keyboard::O))
+			model->transform.scaling -= delta_time * options.movement_speed;
+
+		if (Keyboard::is_pressed(Keyboard::P))
+			model->transform.scaling += delta_time * options.movement_speed;
+
 		if (Keyboard::is_pressed(Keyboard::RIGHT))
-			model->transform.translation.x += delta_time * options.rotation_speed;
+			model->transform.translation.x += delta_time * options.movement_speed;
 
 		if (Keyboard::is_pressed(Keyboard::LEFT))
-			model->transform.translation.x -= delta_time * options.rotation_speed;
+			model->transform.translation.x -= delta_time * options.movement_speed;
 
 		if (Keyboard::is_pressed(Keyboard::DOWN))
-			model->transform.translation.z += delta_time * options.rotation_speed;
+			model->transform.translation.z += delta_time * options.movement_speed;
 
 		if (Keyboard::is_pressed(Keyboard::UP))
-			model->transform.translation.z -= delta_time * options.rotation_speed;
+			model->transform.translation.z -= delta_time * options.movement_speed;
 
 		if (Keyboard::is_pressed(Keyboard::RIGHT_SHIFT))
-			model->transform.translation.y += delta_time * options.rotation_speed;
+			model->transform.translation.y += delta_time * options.movement_speed;
 
 		if (Keyboard::is_pressed(Keyboard::RIGHT_CONTROL))
-			model->transform.translation.y -= delta_time * options.rotation_speed;
+			model->transform.translation.y -= delta_time * options.movement_speed;
 
 		interpolation.tick(delta_time, options.transition_speed);
 		scop_renderer->render(model, interpolation);
