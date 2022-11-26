@@ -31,6 +31,7 @@
 #include <lang/Exception.hpp>
 #include <lang/image/bmp/BMPImageLoader.hpp>
 #include <lang/image/ImageData.hpp>
+#include <lang/Math.hpp>
 #include <lang/Number.hpp>
 #include <lang/reference/SharedReference.hpp>
 #include <lang/reference/WeakReference.hpp>
@@ -434,6 +435,9 @@ bool game(Options &options)
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 
 		glPolygonMode(GL_FRONT_AND_BACK, options.polygon_mode);
 
