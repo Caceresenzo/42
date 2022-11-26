@@ -74,6 +74,7 @@ const Option OPT_ROTATION_SPEED('r', "rotation-speed", "change rotation speed (d
 const Option OPT_MOVEMENT_SPEED('m', "movement-speed", "change movement speed (default: " STRINGIFY_VALUE(DEFAULT_MOVEMENT_SPEED) ")", "speed");
 const Option OPT_TRANSITION_SPEED('t', "transition-speed", "change transition speed (default: " STRINGIFY_VALUE(DEFAULT_TRANSITION_SPEED) ")", "speed");
 const Option OPT_INITIAL_ROTATION('o', "initial-rotation", "change the initial rotation", "angle");
+const Option OPT_NO_CULLING(0, "no-culling", "disable culling");
 const Argument ARG_OBJECT("object", false, "specify object");
 const Argument ARG_TEXTURE("texture", true, "specify texture");
 
@@ -96,6 +97,7 @@ struct Options
 		float movement_speed = DEFAULT_MOVEMENT_SPEED;
 		float transition_speed = DEFAULT_TRANSITION_SPEED;
 		float initial_rotation = 0.0f;
+		bool no_culling = true;
 };
 
 int cli(int argc, char **argv, Options &options)
@@ -118,6 +120,7 @@ int cli(int argc, char **argv, Options &options)
 	option_list.push_back(&OPT_MOVEMENT_SPEED);
 	option_list.push_back(&OPT_TRANSITION_SPEED);
 	option_list.push_back(&OPT_INITIAL_ROTATION);
+	option_list.push_back(&OPT_NO_CULLING);
 
 	std::vector<const Argument*> argument_list;
 	argument_list.push_back(&ARG_OBJECT);
@@ -194,6 +197,9 @@ int cli(int argc, char **argv, Options &options)
 		if (command_line.has(OPT_INITIAL_ROTATION))
 			options.initial_rotation = Number::parse_floating<float>(command_line.first(OPT_INITIAL_ROTATION));
 
+		if (command_line.has(OPT_NO_CULLING))
+			options.no_culling = true;
+
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
 
@@ -233,6 +239,7 @@ int cli(int argc, char **argv, Options &options)
 	DUMP_LINE(movement_speed);
 	DUMP_LINE(transition_speed);
 	DUMP_LINE(initial_rotation);
+	DUMP_LINE(no_culling);
 
 #undef DUMP_LINE
 
@@ -436,8 +443,11 @@ bool game(Options &options)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
+		if (!options.no_culling)
+		{
+			glEnable(GL_CULL_FACE);
+			glCullFace(GL_BACK);
+		}
 
 		glPolygonMode(GL_FRONT_AND_BACK, options.polygon_mode);
 
