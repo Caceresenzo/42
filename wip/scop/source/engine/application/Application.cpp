@@ -21,13 +21,13 @@
 static void
 error_callback(int, const char *description)
 {
-	fprintf(stderr, "Error: %s\n", description);
+	fprintf(stderr, "ERROR: GLFW: %s\n", description);
 }
 
 Application *Application::m_instance = NULL;
 
 Application::Application(const std::string &name) :
-		m_name(name)
+	m_name(name)
 {
 	if (m_instance)
 		throw IllegalStateException("already created");
@@ -37,7 +37,17 @@ Application::Application(const std::string &name) :
 	glfwSetErrorCallback(error_callback);
 
 	if (!glfwInit())
-		throw RuntimeException("could not initialize backend");
+	{
+		const char *error = NULL;
+		glfwGetError(&error);
+
+		std::string message = "could not initialize backend";
+
+		if (error)
+			message = message + ": " + error;
+
+		throw RuntimeException(message);
+	}
 }
 
 Application::~Application()
