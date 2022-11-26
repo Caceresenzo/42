@@ -284,17 +284,15 @@ std::string get_info_string(HighFrameCounter &high_frame_counter, FrameCounter &
 }
 
 #define CONTROLS_TEXT "" \
-	"move        ZQSD\n" \
-	"up          SPACE\n" \
-	"down        A\n" \
-	"speed       scroll\n" \
 	"size        O/P\n" \
 	"grid        X\n" \
 	"arrows      C\n" \
 	"instruction V\n" \
 	"debug       B\n" \
 	"poly mode   N\n" \
-	"transition  R" \
+	"transition  R\n" \
+	"camera      ZQSD + SPACE + A + scroll\n" \
+	"move        \x18\x19\x1a\x1b + RSHIFT + RCONTROL\n" \
 
 bool game(Options &options)
 {
@@ -457,6 +455,24 @@ bool game(Options &options)
 		}
 
 		model->transform.rotation += Vector<3, float>(0, options.rotation_speed, 0) * delta_time;
+
+		if (Keyboard::is_pressed(Keyboard::RIGHT))
+			model->transform.translation.x += delta_time * options.rotation_speed;
+
+		if (Keyboard::is_pressed(Keyboard::LEFT))
+			model->transform.translation.x -= delta_time * options.rotation_speed;
+
+		if (Keyboard::is_pressed(Keyboard::DOWN))
+			model->transform.translation.z += delta_time * options.rotation_speed;
+
+		if (Keyboard::is_pressed(Keyboard::UP))
+			model->transform.translation.z -= delta_time * options.rotation_speed;
+
+		if (Keyboard::is_pressed(Keyboard::RIGHT_SHIFT))
+			model->transform.translation.y += delta_time * options.rotation_speed;
+
+		if (Keyboard::is_pressed(Keyboard::RIGHT_CONTROL))
+			model->transform.translation.y -= delta_time * options.rotation_speed;
 
 		interpolation.tick(delta_time, options.transition_speed);
 		scop_renderer->render(model, interpolation);

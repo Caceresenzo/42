@@ -49,9 +49,15 @@ key_callback(GLFWwindow *raw_window, int key, int, int action, int)
 		mapping[GLFW_KEY_Y] = Keyboard::Y;
 		mapping[GLFW_KEY_Z] = Keyboard::Z;
 		mapping[GLFW_KEY_ESCAPE] = Keyboard::ESCAPE;
-		mapping[GLFW_KEY_RIGHT_SHIFT] = Keyboard::SHIFT;
-		mapping[GLFW_KEY_LEFT_SHIFT] = Keyboard::SHIFT;
+		mapping[GLFW_KEY_RIGHT_SHIFT] = Keyboard::RIGHT_SHIFT;
+		mapping[GLFW_KEY_LEFT_SHIFT] = Keyboard::LEFT_SHIFT;
+		mapping[GLFW_KEY_RIGHT_CONTROL] = Keyboard::RIGHT_CONTROL;
+		mapping[GLFW_KEY_LEFT_CONTROL] = Keyboard::LEFT_CONTROL;
 		mapping[GLFW_KEY_SPACE] = Keyboard::SPACE;
+		mapping[GLFW_KEY_RIGHT] = Keyboard::RIGHT;
+		mapping[GLFW_KEY_LEFT] = Keyboard::LEFT;
+		mapping[GLFW_KEY_DOWN] = Keyboard::DOWN;
+		mapping[GLFW_KEY_UP] = Keyboard::UP;
 	}
 
 	Window &window = Window::ensure_resolve(raw_window);

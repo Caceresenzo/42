@@ -42,7 +42,7 @@ PerspectiveCamera::move(double delta_time)
 	bool updated = false;
 	float velocity = m_speed * delta_time;
 
-	if (Keyboard::is_pressed(Keyboard::SHIFT))
+	if (Keyboard::is_pressed(Keyboard::LEFT_SHIFT))
 		velocity *= 5;
 
 	Vector<3, float> up(0, 1, 0);

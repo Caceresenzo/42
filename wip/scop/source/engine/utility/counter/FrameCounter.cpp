@@ -61,7 +61,7 @@ FrameCounter::count()
 
 			m_last_per_seconds = m_frame;
 
-			std::cout << m_frame << " frame(s) in " << took << " s (or ~" << average << "s/frame)" << std::endl << std::flush;
+			std::cout << "INFO: " << m_frame << " frame(s) in " << took << " s (or ~" << average << "s/frame)" << std::endl << std::flush;
 		}
 
 		m_frame = 0;

@@ -50,7 +50,14 @@ class Keyboard
 			Z = 'z',
 			SPACE = ' ',
 			ESCAPE = 27,
-			SHIFT = 254,
+			LEFT_SHIFT = 254,
+			RIGHT_SHIFT,
+			LEFT_CONTROL,
+			RIGHT_CONTROL,
+			RIGHT,
+			LEFT,
+			DOWN,
+			UP,
 		};
 
 	private:
