@@ -11,7 +11,7 @@ uniform float transition;
 
 void main()
 {
-	float greyIntensity = (gl_PrimitiveID % 12) / 10.0;
+	float greyIntensity = (gl_PrimitiveID % 12) / 20.0;
 	vec4 grey = vec4(greyIntensity, greyIntensity, greyIntensity, 1.0);
 	
 	if (useTexture)
