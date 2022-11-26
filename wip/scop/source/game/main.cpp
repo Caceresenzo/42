@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/19 20:19:08 by ecaceres          #+#    #+#             */
+/*   Updated: 2022/03/19 20:19:08 by ecaceres         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <engine/application/Application.hpp>
 #include <engine/application/Window.hpp>
 #include <engine/camera/PerspectiveCamera.hpp>
