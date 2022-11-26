@@ -1,11 +1,12 @@
 package ft.app.matcha;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,10 @@ import ft.framework.mvc.handler.resolve.impl.ParameterHandlerMethodArgumentResol
 import ft.framework.mvc.handler.resolve.impl.QueryHandlerMethodArgumentResolver;
 import ft.framework.mvc.handler.resolve.impl.RequestHandlerMethodArgumentResolver;
 import ft.framework.mvc.handler.resolve.impl.ResponseHandlerMethodArgumentResolver;
+import ft.framework.validation.ValidationException;
+import ft.framework.validation.Validator;
+import ft.framework.validation.annotation.Valid;
+import ft.framework.validation.constraint.ConstraintViolation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import spark.Request;
@@ -38,7 +43,11 @@ public class Matcha {
 		registerMappings(container);
 		
 		Spark.exception(Exception.class, (exception, request, response) -> {
-			response.body(exception.getMessage());
+			response.body(ExceptionUtils.getStackTrace(exception));
+			
+			if (!(exception instanceof ValidationException)) {
+				exception.printStackTrace();
+			}
 		});
 	}
 	
@@ -63,7 +72,7 @@ public class Matcha {
 	}
 	
 	@SneakyThrows
-	public static <T extends Annotation> void registerMappings(Object container) {
+	public static void registerMappings(Object container) {
 		final var objectMapper = new ObjectMapper();
 		
 		final var root = extractRoot(container);
@@ -76,6 +85,7 @@ public class Matcha {
 		resolvers.add(new BodyHandlerMethodArgumentResolver(objectMapper));
 		
 		final var conversionService = new SimpleConvertionService();
+		final var validator = new Validator();
 		
 		for (final var method : container.getClass().getDeclaredMethods()) {
 			for (final var annotation : method.getDeclaredAnnotations()) {
@@ -131,6 +141,20 @@ public class Matcha {
 							}
 							
 							arguments[index] = resolved;
+						}
+						
+						final var violations = new LinkedHashSet<ConstraintViolation<?>>();
+						for (var index = 0; index < requestExtractors.length; ++index) {
+							final var parameter = parameters[index];
+							final var value = arguments[index];
+							
+							if (parameter.getAnnotation(Valid.class) != null) {
+								violations.addAll(validator.validate(value));
+							}
+						}
+						
+						if (!violations.isEmpty()) {
+							throw new ValidationException(violations);
 						}
 						
 						final var returnValue = method.invoke(container, arguments);

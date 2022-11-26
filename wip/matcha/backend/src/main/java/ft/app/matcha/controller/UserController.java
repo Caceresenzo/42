@@ -14,6 +14,9 @@ import ft.framework.mvc.annotation.PostMapping;
 import ft.framework.mvc.annotation.Query;
 import ft.framework.mvc.annotation.ResponseStatus;
 import ft.framework.mvc.annotation.RestController;
+import ft.framework.validation.annotation.Valid;
+import ft.framework.validation.constraint.annotation.NotBlank;
+import ft.framework.validation.constraint.annotation.Positive;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -38,7 +41,7 @@ public class UserController {
 	
 	@PostMapping
 	public User create(
-		@Body UserCreateForm body
+		@Body @Valid UserCreateForm body
 	) {
 		return new User()
 			.setName(body.getName())
@@ -77,7 +80,10 @@ public class UserController {
 	@Accessors(chain = true)
 	public static class UserCreateForm {
 		
+		@NotBlank
 		private String name;
+		
+		@Positive
 		private int age;
 		
 	}
