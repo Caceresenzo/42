@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import ft.framework.convert.converter.Converter;
+import ft.framework.convert.converter.impl.StringToBooleanConverter;
 import ft.framework.convert.converter.impl.StringToNumberConverter;
 import ft.framework.convert.converter.impl.StringToUUIDConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +27,9 @@ public class SimpleConvertionService implements ConvertionService {
 	
 	private void loadDefaults() {
 		register(new StringToUUIDConverter());
-		
-		final var stringToLongConverter = new StringToNumberConverter(Long::parseLong);
-		register(long.class, stringToLongConverter);
-		register(Long.class, stringToLongConverter);
-		
-		final var stringToIntConverter = new StringToNumberConverter(Integer::parseInt);
-		register(int.class, stringToIntConverter);
-		register(Integer.class, stringToIntConverter);
+		register(new StringToBooleanConverter());
+		register(Long.class, new StringToNumberConverter(Long::parseLong));
+		register(Integer.class, new StringToNumberConverter(Integer::parseInt));
 	}
 	
 	public void register(Converter<?, ?> converter) {
@@ -52,6 +49,18 @@ public class SimpleConvertionService implements ConvertionService {
 	}
 	
 	public void register(Class<?> sourceType, Class<?> targetType, Converter<?, ?> converter) {
+		addToConvertersMap(sourceType, targetType, converter);
+		
+		if (ClassUtils.isPrimitiveWrapper(sourceType)) {
+			register(ClassUtils.wrapperToPrimitive(sourceType), targetType, converter);
+		}
+
+		if (ClassUtils.isPrimitiveWrapper(targetType)) {
+			addToConvertersMap(sourceType, ClassUtils.wrapperToPrimitive(targetType), converter);
+		}
+	}
+	
+	private void addToConvertersMap(Class<?> sourceType, Class<?> targetType, Converter<?, ?> converter) {
 		log.info("Registered converter: {} to {}", sourceType.getSimpleName(), targetType.getSimpleName());
 		
 		converters
