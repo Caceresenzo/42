@@ -72,6 +72,7 @@ const Option OPT_NO_CENTER('c', "no-center", "disable model centering");
 const Option OPT_ROTATION_SPEED('r', "rotation-speed", "change rotation speed (default: " STRINGIFY_VALUE(DEFAULT_ROTATION_SPEED) ")", "speed");
 const Option OPT_MOVEMENT_SPEED('m', "movement-speed", "change movement speed (default: " STRINGIFY_VALUE(DEFAULT_MOVEMENT_SPEED) ")", "speed");
 const Option OPT_TRANSITION_SPEED('t', "transition-speed", "change transition speed (default: " STRINGIFY_VALUE(DEFAULT_TRANSITION_SPEED) ")", "speed");
+const Option OPT_INITIAL_ROTATION('o', "initial-rotation", "change the initial rotation", "angle");
 const Argument ARG_OBJECT("object", false, "specify object");
 const Argument ARG_TEXTURE("texture", true, "specify texture");
 
@@ -93,6 +94,7 @@ struct Options
 		float rotation_speed = DEFAULT_ROTATION_SPEED;
 		float movement_speed = DEFAULT_MOVEMENT_SPEED;
 		float transition_speed = DEFAULT_TRANSITION_SPEED;
+		float initial_rotation = 0.0f;
 };
 
 int cli(int argc, char **argv, Options &options)
@@ -114,6 +116,7 @@ int cli(int argc, char **argv, Options &options)
 	option_list.push_back(&OPT_ROTATION_SPEED);
 	option_list.push_back(&OPT_MOVEMENT_SPEED);
 	option_list.push_back(&OPT_TRANSITION_SPEED);
+	option_list.push_back(&OPT_INITIAL_ROTATION);
 
 	std::vector<const Argument*> argument_list;
 	argument_list.push_back(&ARG_OBJECT);
@@ -187,6 +190,9 @@ int cli(int argc, char **argv, Options &options)
 		if (command_line.has(OPT_TRANSITION_SPEED))
 			options.transition_speed = Number::parse_floating<float>(command_line.first(OPT_TRANSITION_SPEED));
 
+		if (command_line.has(OPT_INITIAL_ROTATION))
+			options.initial_rotation = Number::parse_floating<float>(command_line.first(OPT_INITIAL_ROTATION));
+
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
 
@@ -225,6 +231,7 @@ int cli(int argc, char **argv, Options &options)
 	DUMP_LINE(rotation_speed);
 	DUMP_LINE(movement_speed);
 	DUMP_LINE(transition_speed);
+	DUMP_LINE(initial_rotation);
 
 #undef DUMP_LINE
 
@@ -398,6 +405,7 @@ bool game(Options &options)
 
 			mesh->store();
 		}
+
 	}
 
 	SharedReference<Model> model;
@@ -406,6 +414,9 @@ bool game(Options &options)
 			model = *new Model(mesh, texture);
 		else
 			model = *new Model(mesh);
+
+		if (options.initial_rotation)
+			model->transform.rotation.y = Math::radians(options.initial_rotation);
 	}
 
 	Interpolator<float> interpolation(0, 1, 1.0, 0);
@@ -456,7 +467,7 @@ bool game(Options &options)
 				options.polygon_mode = GL_POINT;
 		}
 
-		model->transform.rotation += Vector<3, float>(0, options.rotation_speed, 0) * delta_time;
+		model->transform.rotation.y += options.rotation_speed * delta_time;
 
 		if (Keyboard::is_pressed(Keyboard::O))
 			model->transform.scaling -= delta_time * options.movement_speed;
