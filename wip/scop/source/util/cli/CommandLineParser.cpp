@@ -70,7 +70,7 @@ CommandLineParser::parse(int argc, char **argv)
 					break;
 				}
 
-				if (!considered_as_long && name.at(0) == option->short_name())
+				if (!considered_as_long && option->short_name() != 0 && name.at(0) == option->short_name())
 				{
 					found = option;
 					break;
@@ -131,8 +131,12 @@ CommandLineParser::help(const std::string &program, const std::string &descripti
 		{
 			const Option *option = *it;
 
-			stream << "  -" << option->short_name();
-			stream << ", --" << std::setw(longest_long) << std::left;
+			if (option->short_name())
+				stream << "  -" << option->short_name() << ',';
+			else
+				stream << "     ";
+
+			stream << " --" << std::setw(longest_long) << std::left;
 
 			if (option->has_argument())
 				stream << option->long_name() + (" <" + option->argument_name() + ">");
