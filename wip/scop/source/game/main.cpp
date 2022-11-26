@@ -515,7 +515,9 @@ main(int argc, char **argv)
 	{
 		std::cout << std::endl;
 		std::cout << std::endl;
+		std::cout << std::endl;
 		std::cout << "The application could not be started!" << std::endl;
+		std::cout << "-------------------------------------" << std::endl;
 		std::cout << "Error: " << exception.what() << std::endl;
 	}
 }
