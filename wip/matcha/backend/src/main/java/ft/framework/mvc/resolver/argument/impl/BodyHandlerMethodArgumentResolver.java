@@ -1,4 +1,4 @@
-package ft.framework.mvc.handler.resolve.impl;
+package ft.framework.mvc.resolver.argument.impl;
 
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ft.framework.mvc.annotation.Body;
-import ft.framework.mvc.handler.resolve.HandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import spark.Request;
 import spark.Response;

@@ -1,4 +1,4 @@
-package ft.framework.mvc.handler.resolve;
+package ft.framework.mvc.resolver.argument;
 
 import java.lang.reflect.Parameter;
 

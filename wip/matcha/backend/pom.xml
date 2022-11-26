@@ -7,9 +7,15 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<problem.version>0.27.1</problem.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.zalando</groupId>
+			<artifactId>jackson-datatype-problem</artifactId>
+			<version>${problem.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>

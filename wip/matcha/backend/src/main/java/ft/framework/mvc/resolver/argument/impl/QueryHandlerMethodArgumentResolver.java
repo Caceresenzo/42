@@ -1,9 +1,9 @@
-package ft.framework.mvc.handler.resolve.impl;
+package ft.framework.mvc.resolver.argument.impl;
 
 import java.lang.reflect.Parameter;
 
 import ft.framework.mvc.annotation.Query;
-import ft.framework.mvc.handler.resolve.HandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
 import spark.Request;
 import spark.Response;
 

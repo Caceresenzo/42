@@ -2,6 +2,7 @@ package ft.app.matcha.controller;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 import org.eclipse.jetty.http.HttpStatus;
@@ -12,12 +13,14 @@ import ft.framework.mvc.annotation.Parameter;
 import ft.framework.mvc.annotation.PatchMapping;
 import ft.framework.mvc.annotation.PostMapping;
 import ft.framework.mvc.annotation.Query;
+import ft.framework.mvc.annotation.ResponseErrorProperty;
 import ft.framework.mvc.annotation.ResponseStatus;
 import ft.framework.mvc.annotation.RestController;
 import ft.framework.validation.annotation.Valid;
 import ft.framework.validation.constraint.annotation.NotBlank;
 import ft.framework.validation.constraint.annotation.Positive;
 import lombok.Data;
+import lombok.Getter;
 import lombok.experimental.Accessors;
 
 @RestController(path = "/users")
@@ -52,10 +55,14 @@ public class UserController {
 	public User show(
 		@Parameter(name = "id") UUID id
 	) {
+		if (ThreadLocalRandom.current().nextBoolean()) {
+			throw new UserNotFoundException(id);
+		}
+		
 		return new User().setId(id);
 	}
 	
-	@ResponseStatus(HttpStatus.Code.GONE)
+	@ResponseStatus(HttpStatus.GONE_410)
 	@GetMapping(path = "/x")
 	public String indexX() {
 		return "hello world x";
@@ -88,4 +95,19 @@ public class UserController {
 		
 	}
 	
+	@SuppressWarnings("serial")
+	@ResponseStatus(HttpStatus.NOT_FOUND_404)
+	public static class UserNotFoundException extends RuntimeException {
+		
+		@Getter
+		@ResponseErrorProperty
+		private final UUID id;
+		
+		public UserNotFoundException(UUID id) {
+			super("user not found");
+			
+			this.id = id;
+		}
+		
+	}
 }

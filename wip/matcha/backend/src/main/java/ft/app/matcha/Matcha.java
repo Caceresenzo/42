@@ -1,13 +1,14 @@
 package ft.app.matcha;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.eclipse.jetty.http.HttpStatus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,18 +16,20 @@ import ft.app.matcha.controller.UserController;
 import ft.framework.convert.service.SimpleConvertionService;
 import ft.framework.mvc.annotation.ResponseStatus;
 import ft.framework.mvc.annotation.RestController;
-import ft.framework.mvc.handler.resolve.HandlerMethodArgumentResolver;
-import ft.framework.mvc.handler.resolve.impl.BodyHandlerMethodArgumentResolver;
-import ft.framework.mvc.handler.resolve.impl.ParameterHandlerMethodArgumentResolver;
-import ft.framework.mvc.handler.resolve.impl.QueryHandlerMethodArgumentResolver;
-import ft.framework.mvc.handler.resolve.impl.RequestHandlerMethodArgumentResolver;
-import ft.framework.mvc.handler.resolve.impl.ResponseHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.BodyHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.ParameterHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.QueryHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.RequestHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.ResponseHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.exception.DefaultHandlerExceptionResolver;
 import ft.framework.validation.ValidationException;
 import ft.framework.validation.Validator;
 import ft.framework.validation.annotation.Valid;
 import ft.framework.validation.constraint.ConstraintViolation;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import spark.ExceptionHandler;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -38,16 +41,34 @@ public class Matcha {
 	
 	@SneakyThrows
 	public static void main(String[] args) {
+		final var objectMapper = new ObjectMapper();
+		
+		final var exceptionResolver = new DefaultHandlerExceptionResolver();
 		final var container = new UserController();
 		
 		registerMappings(container);
 		
-		Spark.exception(Exception.class, (exception, request, response) -> {
-			response.body(ExceptionUtils.getStackTrace(exception));
+		Spark.exception(Exception.class, new ExceptionHandler<Exception>() {
 			
-			if (!(exception instanceof ValidationException)) {
-				exception.printStackTrace();
+			@SneakyThrows
+			@Override
+			public void handle(Exception exception, Request request, Response response) {
+				final var problem = exceptionResolver.resolveException(request.raw(), response.raw(), exception);
+				
+				final var status = problem.getStatus();
+				if (status != null) {
+					response.status(status);
+				} else {
+					response.status(HttpStatus.INTERNAL_SERVER_ERROR_500);
+				}
+				
+				response.body(objectMapper.writeValueAsString(problem));
+				
+				if (response.status() == HttpStatus.INTERNAL_SERVER_ERROR_500) {
+					log.error("Could not process request", exception);
+				}
 			}
+			
 		});
 	}
 	
@@ -68,7 +89,7 @@ public class Matcha {
 		}
 		
 		final var status = annotation.value();
-		return Optional.of((response) -> response.status(status.getCode()));
+		return Optional.of((response) -> response.status(status));
 	}
 	
 	@SneakyThrows
@@ -157,7 +178,13 @@ public class Matcha {
 							throw new ValidationException(violations);
 						}
 						
-						final var returnValue = method.invoke(container, arguments);
+						Object returnValue;
+						try {
+							returnValue = method.invoke(container, arguments);
+						} catch (InvocationTargetException exception) {
+							throw exception.getCause();
+						}
+						
 						return objectMapper.writeValueAsString(returnValue);
 					}
 					
