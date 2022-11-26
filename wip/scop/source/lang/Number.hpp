@@ -40,7 +40,7 @@ class Number
 	public:
 		template<typename T>
 			static T
-			parse(const std::string &text, const std::string &alphabet = DECIMAL, typename std::enable_if<std::is_floating_point<T>::value, bool>::type _ = true)
+			parse_floating(const std::string &text)
 			{
 				std::stringstream stream;
 				stream << text;
@@ -54,7 +54,7 @@ class Number
 
 		template<typename T>
 			static T
-			parse(const std::string &text, const std::string &alphabet = DECIMAL, typename std::enable_if<!std::is_floating_point<T>::value, bool>::type _ = true)
+			parse_integer(const std::string &text, const std::string &alphabet = DECIMAL)
 			{
 				if (alphabet.length() <= 1)
 					throw IllegalArgumentException("alphabet's length <= 1");

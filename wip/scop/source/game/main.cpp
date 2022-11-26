@@ -152,10 +152,10 @@ int cli(int argc, char **argv, Options &options)
 			options.fullscreen = true;
 
 		if (command_line.has(OPT_WIDTH))
-			options.width = Number::parse<int>(command_line.first(OPT_WIDTH));
+			options.width = Number::parse_integer<int>(command_line.first(OPT_WIDTH));
 
 		if (command_line.has(OPT_HEIGHT))
-			options.height = Number::parse<int>(command_line.first(OPT_HEIGHT));
+			options.height = Number::parse_integer<int>(command_line.first(OPT_HEIGHT));
 
 		if (command_line.has(OPT_POLYGON_MODE))
 		{
@@ -175,10 +175,10 @@ int cli(int argc, char **argv, Options &options)
 			options.no_center = true;
 
 		if (command_line.has(OPT_ROTATION_SPEED))
-			options.rotation_speed = Number::parse<float>(command_line.first(OPT_ROTATION_SPEED));
+			options.rotation_speed = Number::parse_floating<float>(command_line.first(OPT_ROTATION_SPEED));
 
 		if (command_line.has(OPT_TRANSITION_SPEED))
-			options.transition_speed = Number::parse<float>(command_line.first(OPT_TRANSITION_SPEED));
+			options.transition_speed = Number::parse_floating<float>(command_line.first(OPT_TRANSITION_SPEED));
 
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
