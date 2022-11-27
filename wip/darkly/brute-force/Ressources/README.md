@@ -23,5 +23,10 @@ The flag is : ...
 
 ## Possible Fix
 
-- Use a more complex password.
+- Use a more complex password. Specifically:
+  * check that it is not on a leaked password list such as [rockyou.txt](https://www.kaggle.com/datasets/wjburns/common-password-list-rockyoutxthuu). One can use [;--have i been pwned?](https://haveibeenpwned.com/Passwords) by security expert Troy Hunt.
+  * check that your password strength is high with tools such as [`zxcvbn`](https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation).
+  * use password rules such as in [born2beroot](https://cdn.intra.42.fr/pdf/pdf/57308/en.subject.pdf).
+  Make them more complex though because a password such as `Abandon1ng` is deemed 'very weak' by [`zxcvbn`](https://dropbox.tech/security/zxcvbn-realistic-password-strength-estimation).
+  To be safe, make it random and at least [14-character long](https://images.ctfassets.net/7rncvj1f8mw7/6dWQBFgA3yRnkhF3QoK0Bt/3b48cc7fad6eb90f86c8de5d092bbc22/pw-strength-test-chart.png?w=1117&h=1200).
 - Use a multiple-factor system.

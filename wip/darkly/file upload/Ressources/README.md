@@ -27,6 +27,28 @@ $ curl \
 ...
 ```
 
+## Why it is dangerous
+
+If the user can upload an executable file on the server, they can execute it just by browsing to its url if it is exposed to the internet.
+
+In this case, they can do:
+* everything PHP as a language can do
+* that is permitted to the user executing the PHP binary.
+
+**Example 1:** if `/etc/passwd` is `-rw-r--r--`, the following script can print it to the screen:
+```php
+<?php
+$fh = fopen('/etc/passwd','r');
+while ($line = fgets($fh)) {
+  echo($line);
+}
+fclose($fh);
+?>
+```
+
+**Example 2:** one can [get a shell](https://gtfobins.github.io/gtfobins/php/) through this script.
+
 ## Possible Fix
 
 - Check the file magic.
+- Restrict the permissions the users executing `php` has.

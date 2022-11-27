@@ -22,7 +22,7 @@ $ wget -e robots=off -r -np http://darkly/.hidden/
 
 Once everything is downloaded, a simple grep is enough to find the flag: [[run]](http://darkly/.hidden/whtccjokayshttvxycsvykxcfm/igeemtxnvexvxezqwntmzjltkt/lmpanswobhwcozdqixbowvbrhw/README)
 ```bash
-$ grep -Rn flag
+$ grep -Rni flag
 darkly/.hidden/whtccjokayshttvxycsvykxcfm/igeemtxnvexvxezqwntmzjltkt/lmpanswobhwcozdqixbowvbrhw/README:1:Hey, here is your flag : ...
 ```
 

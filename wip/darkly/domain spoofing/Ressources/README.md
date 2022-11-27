@@ -28,7 +28,9 @@ curl \
 
 We can see the flag:
 ```html
+...
 <h2> The flag is : ...</h2>
+...
 ```
 
 ## Possible Fix

@@ -23,3 +23,4 @@ So by settings the `I_am_admin` cookie value as `md5('true')` a.k.a `b326b5062b2
 ## Possible Fix
 
 - Use an opaque PHP session to store this information.
+- Use a structured token (e.g. a JWT) for authentication and authorization.

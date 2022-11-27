@@ -11,6 +11,7 @@ You have an error in your SQL syntax; check the manual that corresponds to your 
 ```
 
 That means that an SQL Injection is possible.
+It also tells us that we have a MariaDB (which might guide us as to [which syntax is possible](https://book.hacktricks.xyz/pentesting-web/sql-injection#identifying-back-end)).
 We can verify it by doing a simple query: [[run]](<http://darkly/index.php?page=member&id=1+OR+true&Submit=Submit#>)
 ```sql
 1 OR true
@@ -97,4 +98,4 @@ sha256(lower('FortyTwo'))
 
 ## Possible Fix
 
-- Use parameterized query.
+- Use prepared statements.

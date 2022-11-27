@@ -26,3 +26,9 @@ The flag is : ...
 
 - Disable the listing.
 - Disable the serving of this file.
+- Hide the htpasswd in the nginx settings. For example, rename it `.htpasswd` and write in the nginx config:
+```
+location ~ /\. {
+  deny all;
+}
+```

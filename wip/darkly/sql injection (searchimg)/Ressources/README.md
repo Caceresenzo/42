@@ -92,4 +92,4 @@ sha256(lower('albatroz'))
 
 ## Possible Fix
 
-- Use parameterized query.
+- Use prepared statements.

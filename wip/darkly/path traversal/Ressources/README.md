@@ -13,4 +13,6 @@ Congratulaton!! The flag is : ...
 
 ## Possible Fix
 
-- Restrict the files that can be opened.
+- Restrict the paths that can be accessed (with conditions in the code).
+- Add strict permissions for the user executing `nginx` and the user executing `php`.
+
