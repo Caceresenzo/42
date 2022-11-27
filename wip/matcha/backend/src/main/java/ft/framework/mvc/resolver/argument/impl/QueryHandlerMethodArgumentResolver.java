@@ -2,6 +2,8 @@ package ft.framework.mvc.resolver.argument.impl;
 
 import java.lang.reflect.Parameter;
 
+import org.apache.commons.lang3.StringUtils;
+
 import ft.framework.mvc.annotation.Query;
 import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
 import spark.Request;
@@ -18,7 +20,11 @@ public class QueryHandlerMethodArgumentResolver implements HandlerMethodArgument
 	public Object resolveArgument(Parameter parameter, Request request, Response response) throws Exception {
 		final var annotation = parameter.getDeclaredAnnotation(Query.class);
 		
-		final var name = annotation.name();
+		var name = annotation.name();
+		if (StringUtils.isEmpty(name)) {
+			name = parameter.getName();
+		}
+		
 		final var required = annotation.required();
 		
 		final var value = request.queryParams(name);

@@ -29,7 +29,7 @@ public class UserController {
 	
 	@GetMapping
 	public List<User> index(
-		@Query(name = "name", required = false) String name
+		@Query(required = false) String name
 	) {
 		return IntStream.range(0, 10)
 			.mapToObj((x) -> new User())
@@ -54,7 +54,7 @@ public class UserController {
 	
 	@GetMapping(path = "/:id")
 	public User show(
-		@Parameter(name = "id") UUID id
+		@Parameter UUID id
 	) {
 		if (ThreadLocalRandom.current().nextBoolean()) {
 			throw new UserNotFoundException(id);
