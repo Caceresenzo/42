@@ -18,6 +18,7 @@ import ft.framework.mvc.annotation.ResponseStatus;
 import ft.framework.mvc.annotation.RestController;
 import ft.framework.validation.annotation.Valid;
 import ft.framework.validation.constraint.annotation.NotBlank;
+import ft.framework.validation.constraint.annotation.NotNull;
 import ft.framework.validation.constraint.annotation.Positive;
 import lombok.Data;
 import lombok.Getter;
@@ -87,6 +88,7 @@ public class UserController {
 	@Accessors(chain = true)
 	public static class UserCreateForm {
 		
+		@NotNull
 		@NotBlank
 		private String name;
 		

@@ -108,19 +108,15 @@ public class Matcha {
 		final var conversionService = new SimpleConvertionService();
 		final var validator = new Validator();
 		
-		for (final var method : container.getClass().getDeclaredMethods()) {
-			for (final var annotation : method.getDeclaredAnnotations()) {
-				final var mappingAnnotation = annotation.annotationType().getDeclaredAnnotation(RestController.class);
+		for (final var method : container.getClass().getMethods()) {
+			for (final var annotation : method.getAnnotations()) {
+				final var mappingAnnotation = annotation.annotationType().getAnnotation(RestController.class);
 				if (mappingAnnotation == null) {
 					continue;
 				}
-				
-				final var pathMethod = MethodUtils.getAccessibleMethod(annotation.annotationType(), "path");
-				if (pathMethod == null) {
-					continue;
-				}
-				
-				String path = (String) pathMethod.invoke(annotation);
+
+				final var httpMethod = mappingAnnotation.method();
+				final var path = (String) MethodUtils.invokeExactMethod(annotation, "path");
 				
 				final var fullPath = String.format("%s/%s", root, path)
 					.replaceAll("\\/\\/+", "/")
@@ -178,19 +174,16 @@ public class Matcha {
 							throw new ValidationException(violations);
 						}
 						
-						Object returnValue;
 						try {
-							returnValue = method.invoke(container, arguments);
+							final var returnValue = method.invoke(container, arguments);
+							return objectMapper.writeValueAsString(returnValue);
 						} catch (InvocationTargetException exception) {
 							throw exception.getCause();
 						}
 						
-						return objectMapper.writeValueAsString(returnValue);
 					}
 					
 				};
-				
-				final var httpMethod = mappingAnnotation.method();
 				
 				if (HttpMethod.get.equals(httpMethod)) {
 					Spark.get(fullPath, route);
