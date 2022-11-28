@@ -3,6 +3,7 @@ package ft.app.matcha;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -11,8 +12,12 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.eclipse.jetty.http.HttpStatus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
 import ft.app.matcha.controller.UserController;
+import ft.app.matcha.entity.Like;
+import ft.app.matcha.entity.Notification;
+import ft.app.matcha.entity.User;
 import ft.framework.convert.service.SimpleConvertionService;
 import ft.framework.mvc.annotation.ResponseStatus;
 import ft.framework.mvc.annotation.RestController;
@@ -23,6 +28,9 @@ import ft.framework.mvc.resolver.argument.impl.QueryHandlerMethodArgumentResolve
 import ft.framework.mvc.resolver.argument.impl.RequestHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.ResponseHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.exception.DefaultHandlerExceptionResolver;
+import ft.framework.orm.EntityManager;
+import ft.framework.orm.dialect.MySQLDialect;
+import ft.framework.orm.mapping.MappingBuilder;
 import ft.framework.validation.ValidationException;
 import ft.framework.validation.Validator;
 import ft.framework.validation.annotation.Valid;
@@ -39,8 +47,71 @@ import spark.route.HttpMethod;
 @Slf4j
 public class Matcha {
 	
+	public <T> void save(T instance) {
+		
+	}
+	
 	@SneakyThrows
 	public static void main(String[] args) {
+		final var dataSource = new MysqlConnectionPoolDataSource();
+		dataSource.setServerName("localhost");
+		dataSource.setUser("root");
+		dataSource.setPassword("password");
+		dataSource.setDatabaseName("matchax");
+		dataSource.setAutoReconnect(true);
+		dataSource.setAutoReconnectForPools(true);
+		
+		final var dialect = new MySQLDialect();
+		
+		// dataSource.getPooledConnection()
+		
+		final var mappingBuilder = new MappingBuilder();
+		Arrays.asList(User.class, Notification.class, Like.class)
+			.stream()
+			.forEach(mappingBuilder::analyze);
+		
+		final var entityManager = new EntityManager(dataSource, mappingBuilder);
+		final var entities = entityManager.getEntities();
+		
+		System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(entities));
+		
+		for (final var entity : entities) {
+			System.out.println(dialect.buildCreateTableStatement(entity.getTable()));
+		}
+		
+		for (final var entity : entities) {
+			final var table = entity.getTable();
+			
+			for (final var manyToOne : table.getManyToOnes()) {
+				System.out.println(dialect.buildAlterTableAddForeignKeyStatement(table, manyToOne));
+			}
+		}
+		
+		final var user = new User()
+			.setName("Enzo");
+		entityManager.persist(user);
+		
+		//
+		// try (final var connection = dataSource.getConnection()) {
+		// try (final var statement = connection.prepareStatement("show tables;")) {
+		// try (final var resultSet = statement.executeQuery()) {
+		// final var metadata = resultSet.getMetaData();
+		//
+		// while (resultSet.next()) {
+		// for (var columnIndex = 0; columnIndex < metadata.getColumnCount(); ++columnIndex) {
+		// final var name = metadata.getColumnName(columnIndex + 1);
+		// final var value = resultSet.getObject(columnIndex + 1);
+		//
+		// System.out.printf("%s %s%n", name, value);
+		// }
+		// }
+		// }
+		// }
+		// }
+	}
+	
+	@SneakyThrows
+	public static void main2(String[] args) {
 		final var objectMapper = new ObjectMapper();
 		
 		final var exceptionResolver = new DefaultHandlerExceptionResolver();
@@ -114,7 +185,7 @@ public class Matcha {
 				if (mappingAnnotation == null) {
 					continue;
 				}
-
+				
 				final var httpMethod = mappingAnnotation.method();
 				final var path = (String) MethodUtils.invokeExactMethod(annotation, "path");
 				
