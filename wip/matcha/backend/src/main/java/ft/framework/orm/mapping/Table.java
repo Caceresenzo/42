@@ -29,4 +29,16 @@ public class Table {
 		return list;
 	}
 	
+	@JsonIgnore
+	public List<Column> getAllColumnsWithoutId() {
+		final var list = getAllColumns();
+		
+		if (!list.remove(idColumn)) {
+			throw new IllegalStateException("id column was not removed");
+		}
+		
+		return list;
+	}
+	
+	
 }

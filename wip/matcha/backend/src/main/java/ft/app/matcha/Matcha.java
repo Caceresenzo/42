@@ -2,6 +2,7 @@ package ft.app.matcha;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -57,7 +58,7 @@ public class Matcha {
 		dataSource.setServerName("localhost");
 		dataSource.setUser("root");
 		dataSource.setPassword("password");
-		dataSource.setDatabaseName("matchax");
+		dataSource.setDatabaseName("matcha");
 		dataSource.setAutoReconnect(true);
 		dataSource.setAutoReconnectForPools(true);
 		
@@ -70,7 +71,7 @@ public class Matcha {
 			.stream()
 			.forEach(mappingBuilder::analyze);
 		
-		final var entityManager = new EntityManager(dataSource, mappingBuilder);
+		final var entityManager = new EntityManager(dataSource, dialect, mappingBuilder);
 		final var entities = entityManager.getEntities();
 		
 		System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(entities));
@@ -87,27 +88,15 @@ public class Matcha {
 			}
 		}
 		
-		final var user = new User()
-			.setName("Enzo");
+		final var user = new User().setName("Enzo");
 		entityManager.persist(user);
 		
-		//
-		// try (final var connection = dataSource.getConnection()) {
-		// try (final var statement = connection.prepareStatement("show tables;")) {
-		// try (final var resultSet = statement.executeQuery()) {
-		// final var metadata = resultSet.getMetaData();
-		//
-		// while (resultSet.next()) {
-		// for (var columnIndex = 0; columnIndex < metadata.getColumnCount(); ++columnIndex) {
-		// final var name = metadata.getColumnName(columnIndex + 1);
-		// final var value = resultSet.getObject(columnIndex + 1);
-		//
-		// System.out.printf("%s %s%n", name, value);
-		// }
-		// }
-		// }
-		// }
-		// }
+		System.out.println(user);
+		
+		final var notification = new Notification().setContent("Welcome").setUser(user).setCreatedAt(LocalDateTime.now());
+		entityManager.persist(notification);
+		
+		System.out.println(notification);
 	}
 	
 	@SneakyThrows

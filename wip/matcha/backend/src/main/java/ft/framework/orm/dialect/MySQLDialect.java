@@ -4,10 +4,12 @@ import java.sql.SQLType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.mysql.cj.MysqlType;
 
+import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
 import ft.framework.orm.mapping.relationship.Relationship;
@@ -68,6 +70,10 @@ public class MySQLDialect implements Dialect {
 				sql.append(" NOT NULL");
 			}
 			
+			if (table.getIdColumn().equals(column)) {
+				sql.append(" AUTO_INCREMENT");
+			}
+			
 			sql.append(",\n");
 		}
 		
@@ -90,6 +96,39 @@ public class MySQLDialect implements Dialect {
 		
 		sql.append("ADD CONSTRAINT `").append(keyName).append("` FOREIGN KEY (`").append(relationship.getName()).append("`)")
 			.append(" REFERENCES `").append(targetTable.getName()).append("`(`").append(idColumn.getName()).append("`);");
+		
+		return sql.toString();
+	}
+	
+	@Override
+	public String buildInsertStatement(Table table, List<Column> columns) {
+		final var sql = new StringBuilder();
+		
+		sql.append("INSERT INTO `").append(table.getName()).append("`(");
+		
+		final var iterator = columns.iterator();
+		while (iterator.hasNext()) {
+			final var column = iterator.next();
+			
+			sql.append("`").append(column.getName()).append("`");
+			
+			if (iterator.hasNext()) {
+				sql.append(", ");
+			}
+		}
+		
+		sql.append(") VALUES (");
+		
+		final var columnCount = columns.size();
+		for (int index = 0; index < columnCount; ++index) {
+			sql.append("?");
+			
+			if (index != columnCount - 1) {
+				sql.append(", ");
+			}
+		}
+		
+		sql.append(");");
 		
 		return sql.toString();
 	}
