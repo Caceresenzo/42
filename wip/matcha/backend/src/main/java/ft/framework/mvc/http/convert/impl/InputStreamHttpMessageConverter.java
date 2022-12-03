@@ -39,7 +39,9 @@ public class InputStreamHttpMessageConverter implements HttpMessageConverter<Inp
 	@SneakyThrows
 	@Override
 	public void write(InputStream value, String contentType, OutputStream outputStream) {
-		value.transferTo(outputStream);
+		try (value) {
+			value.transferTo(outputStream);
+		}
 	}
 	
 }

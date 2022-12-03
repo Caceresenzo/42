@@ -3,7 +3,9 @@ package ft.app.matcha;
 import java.util.Arrays;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
+import ft.app.matcha.controller.PictureController;
 import ft.app.matcha.controller.UserController;
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.http.convert.SimpleHttpMessageConversionService;
@@ -73,14 +75,15 @@ public class Matcha {
 	
 	@SneakyThrows
 	public static void main(String[] args) {
-		final var objectMapper = new ObjectMapper();
+		final var objectMapper = new ObjectMapper()
+			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		
 		final var mvcConfiguration = MvcConfiguration.builder()
 			.objectMapper(objectMapper)
 			.httpMessageConversionService(
 				SimpleHttpMessageConversionService.builder()
-					.converter(new JacksonHttpMessageConverter(objectMapper))
 					.converter(new InputStreamHttpMessageConverter())
+					.converter(new JacksonHttpMessageConverter(objectMapper, true))
 					.build())
 			.methodArgumentResolvers(Arrays.asList(
 				new ParameterHandlerMethodArgumentResolver(),
@@ -92,8 +95,9 @@ public class Matcha {
 		
 		final var routeRegistry = new RouteRegistry(mvcConfiguration);
 		
-		final var userController = routeRegistry.add(new UserController());
-
+		routeRegistry.add(new PictureController());
+		routeRegistry.add(new UserController());
+		
 		routeRegistry.markReady();
 	}
 	

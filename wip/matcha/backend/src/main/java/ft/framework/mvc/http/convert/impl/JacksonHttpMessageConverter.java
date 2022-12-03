@@ -19,6 +19,7 @@ public class JacksonHttpMessageConverter implements HttpMessageConverter<Object>
 	public static final List<String> SUPPORTED = Collections.singletonList(JSON);
 	
 	private final ObjectMapper objectMapper;
+	private final boolean buffered;
 
 	@Override
 	public boolean canRead(Class<?> clazz, String mediaType) {
@@ -44,7 +45,12 @@ public class JacksonHttpMessageConverter implements HttpMessageConverter<Object>
 	@SneakyThrows
 	@Override
 	public void write(Object value, String contentType, OutputStream outputStream) {
-		objectMapper.writeValue(outputStream, value);
+		if (buffered) {
+			final var bytes = objectMapper.writeValueAsBytes(value);
+			outputStream.write(bytes);
+		} else {
+			objectMapper.writeValue(outputStream, value);
+		}
 	}
 	
 }

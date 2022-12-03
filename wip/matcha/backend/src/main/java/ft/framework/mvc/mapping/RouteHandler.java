@@ -73,6 +73,8 @@ public class RouteHandler implements spark.Route {
 	}
 	
 	public void applyCustomizations(Response response) {
+		response.type(route.getProduce());
+		
 		responseCustomizers.forEach((consumer) -> consumer.accept(response));
 	}
 	
