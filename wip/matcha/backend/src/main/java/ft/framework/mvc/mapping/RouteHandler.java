@@ -8,8 +8,13 @@ import java.util.function.Consumer;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections4.iterators.ReverseListIterator;
+
 import ft.framework.mvc.MvcConfiguration;
+import ft.framework.mvc.exception.AuthenticationRequiredException;
+import ft.framework.mvc.filter.Filter;
 import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
+import ft.framework.mvc.security.AuthenticationFilter;
 import ft.framework.validation.ValidationException;
 import ft.framework.validation.annotation.Valid;
 import ft.framework.validation.constraint.ConstraintViolation;
@@ -28,13 +33,39 @@ public class RouteHandler implements spark.Route {
 	
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
-		final var arguments = resolveAndValidateArguments(request, response);
-		
-		final var returnValue = invokeMethod(arguments);
-		
 		applyCustomizations(response);
+		runPreFilters(mvcConfiguration.getFilters(), request, response);
+		authorize(request);
 		
-		return convertResponse(response, returnValue);
+		final var arguments = resolveAndValidateArguments(request, response);
+		final var returnValue = invokeMethod(arguments);
+		final var converted = convertResponse(response, returnValue);
+		
+		runPostFilters(mvcConfiguration.getFilters(), request, response);
+		
+		return converted;
+	}
+	
+	private void authorize(Request request) {
+		if (!route.isAuthenticated()) {
+			return;
+		}
+		
+		final var authentication = AuthenticationFilter.getAuthentication(request);
+		if (authentication == null || !authentication.isAuthenticated()) {
+			throw new AuthenticationRequiredException();
+		}
+	}
+	
+	public void runPreFilters(List<Filter> filters, Request request, Response response) {
+		filters.forEach((filter) -> filter.preProcess(request, response));
+	}
+	
+	public void runPostFilters(List<Filter> filters, Request request, Response response) {
+		final Iterable<Filter> reversed = () -> new ReverseListIterator<Filter>(filters);
+		for (final var filter : reversed) {
+			filter.postProcess(request, response);
+		}
 	}
 	
 	@SneakyThrows

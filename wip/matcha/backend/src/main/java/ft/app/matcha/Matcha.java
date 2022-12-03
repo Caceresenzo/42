@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import ft.app.matcha.controller.PictureController;
 import ft.app.matcha.controller.UserController;
+import ft.app.matcha.security.JwtAuthenticationFilter;
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.http.convert.SimpleHttpMessageConversionService;
 import ft.framework.mvc.http.convert.impl.InputStreamHttpMessageConverter;
@@ -17,6 +18,7 @@ import ft.framework.mvc.resolver.argument.impl.ParameterHandlerMethodArgumentRes
 import ft.framework.mvc.resolver.argument.impl.QueryHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.RequestHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.ResponseHandlerMethodArgumentResolver;
+import ft.framework.trace.filter.LoggingFilter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -91,6 +93,8 @@ public class Matcha {
 				new RequestHandlerMethodArgumentResolver(),
 				new ResponseHandlerMethodArgumentResolver(),
 				new BodyHandlerMethodArgumentResolver(objectMapper)))
+			.filter(new JwtAuthenticationFilter())
+			.filter(new LoggingFilter())
 			.build();
 		
 		final var routeRegistry = new RouteRegistry(mvcConfiguration);

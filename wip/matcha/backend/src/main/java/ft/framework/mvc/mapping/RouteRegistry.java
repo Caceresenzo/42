@@ -10,6 +10,7 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.eclipse.jetty.http.HttpStatus;
 
 import ft.framework.mvc.MvcConfiguration;
+import ft.framework.mvc.annotation.Authenticated;
 import ft.framework.mvc.annotation.GetMapping;
 import ft.framework.mvc.annotation.ResponseStatus;
 import ft.framework.mvc.annotation.RestController;
@@ -37,6 +38,7 @@ public class RouteRegistry {
 		var root = "/";
 		var consume = MediaTypes.JSON;
 		var produce = MediaTypes.JSON;
+		var authenticated = container.getClass().isAnnotationPresent(Authenticated.class);
 		
 		final var rootMappingAnnotation = container.getClass().getAnnotation(RestController.class);
 		if (rootMappingAnnotation != null) {
@@ -52,6 +54,8 @@ public class RouteRegistry {
 					continue;
 				}
 				
+				final var routeAuthenticated = authenticated || method.isAnnotationPresent(Authenticated.class);
+				
 				final var httpMethod = mappingAnnotation.method();
 				final var path = (String) MethodUtils.invokeExactMethod(annotation, "path");
 				
@@ -66,6 +70,7 @@ public class RouteRegistry {
 					.method(method)
 					.consume(consume)
 					.produce(produce)
+					.authenticated(routeAuthenticated)
 					.build();
 				
 				routes.add(route);

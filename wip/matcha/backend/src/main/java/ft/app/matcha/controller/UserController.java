@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import org.eclipse.jetty.http.HttpStatus;
 
+import ft.framework.mvc.annotation.Authenticated;
 import ft.framework.mvc.annotation.Body;
 import ft.framework.mvc.annotation.GetMapping;
 import ft.framework.mvc.annotation.Parameter;
@@ -28,6 +29,7 @@ import lombok.experimental.Accessors;
 public class UserController {
 	
 	@GetMapping
+	@Authenticated
 	public List<User> index(
 		@Query(required = false) String name
 	) {

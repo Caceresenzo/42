@@ -20,6 +20,7 @@ public class Route {
 	private final Method method;
 	private final String consume;
 	private final String produce;
+	private final boolean authenticated;
 	
 	@Getter(lazy = true)
 	private final List<Parameter> parameters = Arrays.asList(method.getParameters());

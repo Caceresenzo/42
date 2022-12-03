@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ft.framework.convert.service.ConvertionService;
 import ft.framework.convert.service.SimpleConvertionService;
+import ft.framework.mvc.filter.Filter;
 import ft.framework.mvc.http.convert.HttpMessageConversionService;
 import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.exception.DefaultHandlerExceptionResolver;
@@ -42,5 +43,8 @@ public class MvcConfiguration {
 	@NonNull
 	@Builder.Default
 	private HandlerExceptionResolver exceptionResolver = new DefaultHandlerExceptionResolver();
+	
+	@Singular
+	private final List<Filter> filters;
 	
 }
