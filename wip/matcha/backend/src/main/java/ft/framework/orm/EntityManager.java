@@ -19,7 +19,7 @@ import com.mysql.cj.MysqlType;
 import ft.framework.orm.dialect.Dialect;
 import ft.framework.orm.mapping.Entity;
 import ft.framework.orm.mapping.MappingBuilder;
-import ft.framework.orm.mapping.relationship.Relationship;
+import ft.framework.orm.mapping.relationship.ManyToOne;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -43,9 +43,40 @@ public class EntityManager {
 			return update(instance);
 		}
 	}
-	
+
+	@SneakyThrows
 	public <T> T update(T instance) {
-		return instance; // TODO
+		final var entity = getEntity(instance);
+		final var table = entity.getTable();
+		final var columns = table.getAllColumnsWithoutId();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildUpdateByIdStatement(table, columns);
+			System.out.println(sql);
+			
+			try (final var statement = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS)) {
+				var index = 1;
+				for (final var column : columns) {
+					var value = FieldUtils.readField(column.getField(), instance, true);
+					if (column instanceof ManyToOne manyToOne) {
+						final Entity target = manyToOne.getTarget();
+						value = target.getTable().getIdColumn().read(value);
+					}
+					
+					statement.setObject(index++, value, MysqlType.VARCHAR /* TODO */);
+				}
+
+				final var id = table.getIdColumn().read(instance);
+				statement.setObject(index++, id, MysqlType.VARCHAR /* TODO */);
+				
+				final var affectedRows = statement.executeUpdate();
+				if (affectedRows == 0) {
+					throw new SQLException("Updating failed, no rows affected.");
+				}
+			}
+		}
+		
+		return instance;
 	}
 	
 	@SneakyThrows
@@ -57,13 +88,12 @@ public class EntityManager {
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var sql = dialect.buildInsertStatement(table, columns);
 			
-			System.out.println(sql.toString());
 			try (final var statement = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS)) {
 				var index = 1;
 				for (final var column : columns) {
 					var value = FieldUtils.readField(column.getField(), instance, true);
-					if (column instanceof Relationship relationship) {
-						final Entity target = relationship.getTarget();
+					if (column instanceof ManyToOne manyToOne) {
+						final Entity target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
 					}
 					

@@ -96,6 +96,9 @@ public class Matcha {
 		final var notification = new Notification().setContent("Welcome").setUser(user).setCreatedAt(LocalDateTime.now());
 		entityManager.persist(notification);
 		
+		notification.setContent("Nice");
+		entityManager.persist(notification);
+		
 		System.out.println(notification);
 	}
 	

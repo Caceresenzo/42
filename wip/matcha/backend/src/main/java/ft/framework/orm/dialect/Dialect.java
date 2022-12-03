@@ -17,4 +17,6 @@ public interface Dialect {
 
 	public String buildInsertStatement(Table table, List<Column> columns);
 	
+	public String buildUpdateByIdStatement(Table table, List<Column> columns);
+	
 }

@@ -133,6 +133,28 @@ public class MySQLDialect implements Dialect {
 		return sql.toString();
 	}
 	
+	@Override
+	public String buildUpdateByIdStatement(Table table, List<Column> columns) {
+		final var sql = new StringBuilder();
+		
+		sql.append("UPDATE `").append(table.getName()).append("` SET ");
+		
+		final var iterator = columns.iterator();
+		while (iterator.hasNext()) {
+			final var column = iterator.next();
+			
+			sql.append("`").append(column.getName()).append("` = ?");
+			
+			if (iterator.hasNext()) {
+				sql.append(", ");
+			}
+		}
+		
+		sql.append(" WHERE `").append(table.getIdColumn().getName()).append("` = ?");
+		
+		return sql.toString();
+	}
+	
 	public static Map<Class<?>, SQLType> createSimpleTypesMapping() {
 		final var mapping = new HashMap<Class<?>, SQLType>();
 		
