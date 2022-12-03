@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ft.framework.util.MediaTypes;
 import spark.route.HttpMethod;
 
 @Inherited
@@ -16,5 +17,9 @@ public @interface RestController {
 	HttpMethod method() default HttpMethod.unsupported;
 	
 	String path() default "/";
+	
+	String consume() default MediaTypes.JSON;
+	
+	String produce() default MediaTypes.JSON;
 	
 }

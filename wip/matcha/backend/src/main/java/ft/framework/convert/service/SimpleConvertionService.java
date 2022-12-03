@@ -88,7 +88,7 @@ public class SimpleConvertionService implements ConvertionService {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public Object convert(Object value, Class<?> sourceType, Class<?> targetType) {
-		if (sourceType.equals(targetType)) {
+		if (targetType.isAssignableFrom(sourceType)) {
 			return value;
 		}
 		
