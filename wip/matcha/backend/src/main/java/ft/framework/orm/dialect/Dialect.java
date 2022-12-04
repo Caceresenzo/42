@@ -19,4 +19,8 @@ public interface Dialect {
 	
 	public String buildUpdateByIdStatement(Table table, List<Column> columns);
 	
+	public String buildSelectByIdStatement(Table table, List<Column> columns);
+	
+	public String buildSelectStatement(Table table, List<Column> columns);
+	
 }

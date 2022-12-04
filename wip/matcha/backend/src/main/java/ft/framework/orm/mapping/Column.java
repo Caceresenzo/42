@@ -22,7 +22,12 @@ public class Column {
 	
 	@SneakyThrows
 	public Object read(Object instance) {
-		return FieldUtils.readField(field, instance);
+		return FieldUtils.readField(field, instance, true);
+	}
+
+	@SneakyThrows
+	public void write(Object instance, Object value) {
+		FieldUtils.writeField(field, instance, value, true);
 	}
 	
 }

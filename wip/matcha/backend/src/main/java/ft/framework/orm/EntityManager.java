@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -43,7 +44,7 @@ public class EntityManager {
 			return update(instance);
 		}
 	}
-
+	
 	@SneakyThrows
 	public <T> T update(T instance) {
 		final var entity = getEntity(instance);
@@ -54,7 +55,7 @@ public class EntityManager {
 			final var sql = dialect.buildUpdateByIdStatement(table, columns);
 			System.out.println(sql);
 			
-			try (final var statement = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS)) {
+			try (final var statement = connection.prepareStatement(sql.toString())) {
 				var index = 1;
 				for (final var column : columns) {
 					var value = FieldUtils.readField(column.getField(), instance, true);
@@ -65,7 +66,7 @@ public class EntityManager {
 					
 					statement.setObject(index++, value, MysqlType.VARCHAR /* TODO */);
 				}
-
+				
 				final var id = table.getIdColumn().read(instance);
 				statement.setObject(index++, id, MysqlType.VARCHAR /* TODO */);
 				
@@ -120,6 +121,84 @@ public class EntityManager {
 		return instance;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	public <T> Optional<T> find(Class<T> clazz, Object id) {
+		final var entity = getEntity(clazz);
+		final var table = entity.getTable();
+		final var columns = table.getAllColumnsWithoutId();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildSelectByIdStatement(table, columns);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				statement.setObject(1, id, MysqlType.VARCHAR /* TODO */);
+				
+				try (ResultSet resultSet = statement.executeQuery()) {
+					while (resultSet.next()) {
+						final var instance = entity.instantiate(id);
+						
+						int index = 1;
+						for (final var column : columns) {
+							var value = resultSet.getObject(index++);
+							if (column instanceof ManyToOne manyToOne) {
+								final Entity target = manyToOne.getTarget();
+								
+								// TODO Use proxy
+								value = target.instantiate(value);
+							}
+							
+							column.write(instance, value);
+						}
+						
+						return Optional.of((T) instance);
+					}
+					
+					return Optional.empty();
+				}
+			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	public <T> List<T> findAll(Class<T> clazz) {
+		final var entity = getEntity(clazz);
+		final var table = entity.getTable();
+		final var columns = table.getAllColumns();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildSelectStatement(table, columns);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				try (ResultSet resultSet = statement.executeQuery()) {
+					final var instances = new ArrayList<T>();
+					
+					while (resultSet.next()) {
+						final var instance = entity.instantiate();
+						
+						int index = 1;
+						for (final var column : columns) {
+							var value = resultSet.getObject(index++);
+							if (column instanceof ManyToOne manyToOne) {
+								final Entity target = manyToOne.getTarget();
+								
+								// TODO Use proxy
+								value = target.instantiate(value);
+							}
+							
+							column.write(instance, value);
+						}
+						
+						instances.add((T) instance);
+					}
+					
+					return instances;
+				}
+			}
+		}
+	}
+	
 	@SneakyThrows
 	public boolean isNew(Object instance) {
 		final var id = getId(instance);
@@ -142,13 +221,17 @@ public class EntityManager {
 		return FieldUtils.readField(entity.getTable().getIdColumn().getField(), instance, true);
 	}
 	
-	public Entity getEntity(Object instance) {
-		Objects.requireNonNull(instance);
-		
-		final var entity = entities.get(instance.getClass());
+	public Entity getEntity(Class<?> clazz) {
+		final var entity = entities.get(clazz);
 		Objects.requireNonNull(entity, "the instance is not an entity");
 		
 		return entity;
+	}
+	
+	public Entity getEntity(Object instance) {
+		Objects.requireNonNull(instance);
+		
+		return getEntity(instance.getClass());
 	}
 	
 	public List<Entity> getEntities() {

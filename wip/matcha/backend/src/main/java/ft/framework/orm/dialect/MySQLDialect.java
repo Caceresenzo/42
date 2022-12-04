@@ -155,6 +155,42 @@ public class MySQLDialect implements Dialect {
 		return sql.toString();
 	}
 	
+	@Override
+	public String buildSelectByIdStatement(Table table, List<Column> columns) {
+		return buildIncompleteSelectStatement(table, columns)
+			.append(" WHERE `").append(table.getIdColumn().getName()).append("` = ?")
+			.append(";")
+			.toString();
+	}
+	
+	@Override
+	public String buildSelectStatement(Table table, List<Column> columns) {
+		return buildIncompleteSelectStatement(table, columns)
+			.append(";")
+			.toString();
+	}
+	
+	private StringBuilder buildIncompleteSelectStatement(Table table, List<Column> columns) {
+		final var sql = new StringBuilder();
+		
+		sql.append("SELECT ");
+		
+		final var iterator = columns.iterator();
+		while (iterator.hasNext()) {
+			final var column = iterator.next();
+			
+			sql.append("`").append(column.getName()).append("`");
+			
+			if (iterator.hasNext()) {
+				sql.append(", ");
+			}
+		}
+		
+		sql.append(" FROM `").append(table.getName()).append("`");
+		
+		return sql;
+	}
+	
 	public static Map<Class<?>, SQLType> createSimpleTypesMapping() {
 		final var mapping = new HashMap<Class<?>, SQLType>();
 		
