@@ -6,14 +6,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import ft.framework.util.MediaTypes;
 import spark.route.HttpMethod;
 
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.METHOD })
-@RestController(method = HttpMethod.patch)
+@RequestMapping(method = HttpMethod.patch)
 public @interface PatchMapping {
 	
 	String path() default "/";
+	
+	String consume() default MediaTypes.JSON;
+	
+	String produce() default MediaTypes.JSON;
 	
 }

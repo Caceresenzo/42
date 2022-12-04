@@ -1,19 +1,21 @@
 package ft.framework.mvc.mapping;
 
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.eclipse.jetty.http.HttpStatus;
 
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.annotation.Authenticated;
+import ft.framework.mvc.annotation.Controller;
 import ft.framework.mvc.annotation.GetMapping;
+import ft.framework.mvc.annotation.RequestMapping;
+import ft.framework.mvc.annotation.ResponseBody;
 import ft.framework.mvc.annotation.ResponseStatus;
-import ft.framework.mvc.annotation.RestController;
 import ft.framework.mvc.exception.RouteNotFoundException;
 import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
 import ft.framework.util.MediaTypes;
@@ -32,37 +34,64 @@ public class RouteRegistry {
 	private final MvcConfiguration configuration;
 	private final List<Route> routes = new ArrayList<>();
 	
+	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	public static <T> Optional<T> getValueOrParent(String methodName, Annotation annotation, Annotation parent) {
+		try {
+			return Optional.of((T) MethodUtils.invokeMethod(annotation, true, methodName));
+		} catch (NoSuchMethodException exception) {
+			if (parent != null) {
+				try {
+					return Optional.of((T) MethodUtils.invokeMethod(parent, true, methodName));
+				} catch (NoSuchMethodException exception2) {
+				}
+			}
+		}
+		
+		return Optional.empty();
+	}
+	
+	public static String extractRoot(Object container) {
+		final var restMapping = container.getClass().getAnnotation(RequestMapping.class);
+		if (restMapping == null) {
+			return "/";
+		}
+		
+		return restMapping.path();
+	}
+	
 	@SneakyThrows
 	public List<Route> extractRoutes(Object container) {
+		if (!container.getClass().isAnnotationPresent(Controller.class)) {
+			return Collections.emptyList();
+		}
+		
 		final var routes = new ArrayList<Route>();
 		
 		var root = "/";
-		var consume = MediaTypes.JSON;
-		var produce = MediaTypes.JSON;
-		var authenticated = container.getClass().isAnnotationPresent(Authenticated.class);
+		final var authenticated = container.getClass().isAnnotationPresent(Authenticated.class);
 		
-		final var rootMappingAnnotation = container.getClass().getAnnotation(RestController.class);
-		if (rootMappingAnnotation != null) {
-			root = rootMappingAnnotation.path();
-			consume = rootMappingAnnotation.consume();
-			produce = rootMappingAnnotation.produce();
+		final var parentAnnotation = container.getClass().getAnnotation(RequestMapping.class);
+		if (parentAnnotation != null) {
+			root = parentAnnotation.path();
 		}
 		
 		for (final var method : container.getClass().getMethods()) {
 			for (final var annotation : method.getAnnotations()) {
-				final var mappingAnnotation = annotation.annotationType().getAnnotation(RestController.class);
+				final var mappingAnnotation = annotation.annotationType().getAnnotation(RequestMapping.class);
 				if (mappingAnnotation == null) {
 					continue;
 				}
 				
-				final var routeAuthenticated = authenticated || method.isAnnotationPresent(Authenticated.class);
-				
 				final var httpMethod = mappingAnnotation.method();
 				final var path = (String) MethodUtils.invokeExactMethod(annotation, "path");
 				
+				final var consume = RouteRegistry.<String>getValueOrParent("consume", annotation, parentAnnotation).orElse(MediaTypes.JSON);
+				final var produce = RouteRegistry.<String>getValueOrParent("produce", annotation, parentAnnotation).orElse(MediaTypes.JSON);
+				
 				final var fullPath = String.format("%s/%s", root, path)
 					.replaceAll("\\/\\/+", "/")
-					.replaceFirst("\\/$", "");
+					.replaceFirst("(?<!^)\\/$", "");
 				
 				final var route = Route.builder()
 					.path(fullPath)
@@ -70,11 +99,22 @@ public class RouteRegistry {
 					.container(container)
 					.method(method)
 					.consume(consume)
-					.produce(produce)
-					.authenticated(routeAuthenticated)
-					.build();
+					.produce(produce);
 				
-				routes.add(route);
+				if (authenticated || method.isAnnotationPresent(Authenticated.class)) {
+					route.authenticated(true);
+				}
+				
+				if (method.isAnnotationPresent(ResponseBody.class) || method.getAnnotatedReturnType().isAnnotationPresent(ResponseBody.class)) {
+					route.responseBody(true);
+				}
+				
+				final var responseStatus = method.getAnnotation(ResponseStatus.class);
+				if (responseStatus != null) {
+					route.responseStatus(responseStatus.value());
+				}
+				
+				routes.add(route.build());
 			}
 		}
 		
@@ -97,9 +137,8 @@ public class RouteRegistry {
 	
 	public RouteHandler createHandler(Route route) {
 		final var argumentResolvers = getArgumentResolvers(route);
-		final var responseCustomizers = getResponseCustomizers(route);
 		
-		return new RouteHandler(route, argumentResolvers, responseCustomizers, configuration);
+		return new RouteHandler(route, argumentResolvers, configuration);
 	}
 	
 	@SneakyThrows
@@ -119,14 +158,6 @@ public class RouteRegistry {
 		}
 		
 		return argumentResolvers;
-	}
-	
-	public List<Consumer<Response>> getResponseCustomizers(Route route) {
-		final var customizers = new ArrayList<Consumer<Response>>();
-		
-		extractResponseStatus(route.getMethod()).ifPresent(customizers::add);
-		
-		return customizers;
 	}
 	
 	public void markReady() {
@@ -195,27 +226,8 @@ public class RouteRegistry {
 		routes.add(route);
 	}
 	
-	public static Optional<Consumer<Response>> extractResponseStatus(Method method) {
-		final var annotation = method.getAnnotation(ResponseStatus.class);
-		
-		if (annotation == null) {
-			return Optional.empty();
-		}
-		
-		final var status = annotation.value();
-		return Optional.of((response) -> response.status(status));
-	}
-	
-	public static String extractRoot(Object container) {
-		final var restMapping = container.getClass().getAnnotation(RestController.class);
-		if (restMapping == null) {
-			return "/";
-		}
-		
-		return restMapping.path();
-	}
-	
-	@RestController(path = "*")
+	@Controller
+	@RequestMapping(path = "*")
 	public static class FallbackController {
 		
 		@GetMapping

@@ -4,20 +4,21 @@ import java.lang.reflect.Parameter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ft.framework.mvc.annotation.Variable;
 import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
 import spark.Request;
 import spark.Response;
 
-public class ParameterHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
+public class VariableHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	
 	@Override
-	public boolean supportsParameter(Parameter method) {
-		return method.getDeclaredAnnotation(ft.framework.mvc.annotation.Parameter.class) != null;
+	public boolean supportsParameter(Parameter parameter) {
+		return parameter.getDeclaredAnnotation(Variable.class) != null;
 	}
 	
 	@Override
 	public Object resolveArgument(Parameter parameter, Request request, Response response) throws Exception {
-		final var annotation = parameter.getDeclaredAnnotation(ft.framework.mvc.annotation.Parameter.class);
+		final var annotation = parameter.getDeclaredAnnotation(Variable.class);
 		
 		var name = annotation.name();
 		if (StringUtils.isEmpty(name)) {

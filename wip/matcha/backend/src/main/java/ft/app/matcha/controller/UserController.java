@@ -2,17 +2,22 @@ package ft.app.matcha.controller;
 
 import java.util.List;
 
+import ft.app.matcha.dto.UserCreateForm;
 import ft.app.matcha.entity.User;
+import ft.framework.mvc.annotation.Body;
 import ft.framework.mvc.annotation.GetMapping;
-import ft.framework.mvc.annotation.Parameter;
+import ft.framework.mvc.annotation.PostMapping;
+import ft.framework.mvc.annotation.RequestMapping;
 import ft.framework.mvc.annotation.ResponseErrorProperty;
-import ft.framework.mvc.annotation.RestController;
+import ft.framework.mvc.annotation.Controller;
+import ft.framework.mvc.annotation.Variable;
 import ft.framework.orm.EntityManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RestController(path = "/users")
+@Controller
+@RequestMapping(path = "/users")
 public class UserController {
 	
 	private final EntityManager entityManager;
@@ -22,9 +27,18 @@ public class UserController {
 		return entityManager.findAll(User.class);
 	}
 	
+	@PostMapping
+	public User create(
+		@Body UserCreateForm body
+	) {
+		return entityManager.insert(new User()
+			.setName(body.getName())
+			.setBio(body.getBio()));
+	}
+	
 	@GetMapping(path = "{id}")
 	public User show(
-		@Parameter long id
+		@Variable long id
 	) {
 		return entityManager.find(User.class, id)
 			.orElseThrow(() -> new UserNotFoundException(id));

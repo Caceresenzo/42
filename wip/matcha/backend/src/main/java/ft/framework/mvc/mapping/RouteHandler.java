@@ -4,9 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.iterators.ReverseListIterator;
 
@@ -28,12 +25,13 @@ public class RouteHandler implements spark.Route {
 	
 	private final Route route;
 	private final HandlerMethodArgumentResolver[] argumentResolvers;
-	private final List<Consumer<Response>> responseCustomizers;
 	private final MvcConfiguration mvcConfiguration;
 	
 	@Override
 	public Object handle(Request request, Response response) throws Exception {
-		applyCustomizations(response);
+		response.type(route.getProduce());
+		response.status(route.getResponseStatus());
+		
 		runPreFilters(mvcConfiguration.getFilters(), request, response);
 		authorize(request);
 		
@@ -69,18 +67,22 @@ public class RouteHandler implements spark.Route {
 	}
 	
 	@SneakyThrows
-	public HttpServletResponse convertResponse(Response response, Object returnValue) {
-		final var service = mvcConfiguration.getHttpMessageConversionService();
-		
-		final var servletResponse = response.raw();
-		final var outputStream = servletResponse.getOutputStream();
-		
-		service.write(returnValue, route.getMethod().getReturnType(), route.getProduce(), outputStream);
-		
-		outputStream.flush();
-		outputStream.close();
-		
-		return servletResponse;
+	public Object convertResponse(Response response, Object returnValue) {
+		if (route.isResponseBody() && returnValue instanceof String) {
+			return (String) returnValue;
+		} else {
+			final var servletResponse = response.raw();
+			final var outputStream = servletResponse.getOutputStream();
+			
+			final var service = mvcConfiguration.getHttpMessageConversionService();
+			
+			service.write(returnValue, route.getMethod().getReturnType(), route.getProduce(), outputStream);
+			
+			outputStream.flush();
+			outputStream.close();
+			
+			return servletResponse;
+		}
 	}
 	
 	public Object[] resolveAndValidateArguments(Request request, Response response) {
@@ -101,12 +103,6 @@ public class RouteHandler implements spark.Route {
 		} catch (InvocationTargetException exception) {
 			throw exception.getCause();
 		}
-	}
-	
-	public void applyCustomizations(Response response) {
-		response.type(route.getProduce());
-		
-		responseCustomizers.forEach((consumer) -> consumer.accept(response));
 	}
 	
 	@SneakyThrows

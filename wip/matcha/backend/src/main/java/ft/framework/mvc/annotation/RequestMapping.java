@@ -10,13 +10,13 @@ import ft.framework.util.MediaTypes;
 import spark.route.HttpMethod;
 
 @Inherited
-@Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RestController {
+@Target({ ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+public @interface RequestMapping {
 	
 	HttpMethod method() default HttpMethod.unsupported;
 	
-	String path() default "/";
+	String path() default "";
 	
 	String consume() default MediaTypes.JSON;
 	

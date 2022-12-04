@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.PARAMETER })
-public @interface Parameter {
+public @interface Variable {
 	
 	String name() default "";
 	

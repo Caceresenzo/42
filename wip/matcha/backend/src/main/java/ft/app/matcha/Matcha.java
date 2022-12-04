@@ -18,15 +18,19 @@ import ft.framework.mvc.http.convert.impl.InputStreamHttpMessageConverter;
 import ft.framework.mvc.http.convert.impl.JacksonHttpMessageConverter;
 import ft.framework.mvc.mapping.RouteRegistry;
 import ft.framework.mvc.resolver.argument.impl.BodyHandlerMethodArgumentResolver;
-import ft.framework.mvc.resolver.argument.impl.ParameterHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.QueryHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.RequestHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.ResponseHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.VariableHandlerMethodArgumentResolver;
 import ft.framework.orm.EntityManager;
 import ft.framework.orm.OrmConfiguration;
 import ft.framework.orm.dialect.MySQLDialect;
 import ft.framework.orm.mapping.MappingBuilder;
+import ft.framework.swagger.SwaggerBuilder;
+import ft.framework.swagger.controller.SwaggerController;
 import ft.framework.trace.filter.LoggingFilter;
+import io.swagger.models.Info;
+import io.swagger.models.Swagger;
 import lombok.SneakyThrows;
 
 public class Matcha {
@@ -40,6 +44,16 @@ public class Matcha {
 		
 		routeRegistry.add(new PictureController());
 		routeRegistry.add(new UserController(ormConfiguration.getEntityManager()));
+		
+		final var swagger = new Swagger()
+			.info(new Info()
+				.title("Hello")
+				.version("1.0"));
+		
+		SwaggerBuilder.build(swagger, routeRegistry.getRoutes());
+		routeRegistry.add(new SwaggerController(swagger));
+		
+//		System.out.println(new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writerWithDefaultPrettyPrinter().writeValueAsString(swagger));
 		
 		routeRegistry.markReady();
 	}
@@ -79,7 +93,7 @@ public class Matcha {
 					.converter(new JacksonHttpMessageConverter(objectMapper, true))
 					.build())
 			.methodArgumentResolvers(Arrays.asList(
-				new ParameterHandlerMethodArgumentResolver(),
+				new VariableHandlerMethodArgumentResolver(),
 				new QueryHandlerMethodArgumentResolver(),
 				new RequestHandlerMethodArgumentResolver(),
 				new ResponseHandlerMethodArgumentResolver(),
