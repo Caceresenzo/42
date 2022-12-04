@@ -30,6 +30,7 @@ import spark.Spark;
 public class RouteRegistry {
 	
 	private final MvcConfiguration configuration;
+	private final List<Route> routes = new ArrayList<>();
 	
 	@SneakyThrows
 	public List<Route> extractRoutes(Object container) {
@@ -86,7 +87,7 @@ public class RouteRegistry {
 		for (final var route : routes) {
 			final var handler = createHandler(route);
 			
-			registerToSpark(route, handler);
+			add(route, handler);
 			
 			log.info("Registered: {} {} -> {} [{} -> {}]", route.getHttpMethod(), route.getPath(), route.getMethod(), route.getConsume(), route.getProduce());
 		}
@@ -156,9 +157,9 @@ public class RouteRegistry {
 		add(new FallbackController());
 	}
 	
-	public static void registerToSpark(Route route, RouteHandler handler) {
+	public void add(Route route, RouteHandler handler) {
 		final var method = route.getHttpMethod();
-		final var path = route.getPath();
+		final var path = route.getPath().replaceAll("\\{(.+?)\\}", ":$1");
 		
 		switch (method) {
 			case get: {
@@ -190,6 +191,8 @@ public class RouteRegistry {
 				throw new IllegalStateException(String.format("no method for %s", method));
 			}
 		}
+		
+		routes.add(route);
 	}
 	
 	public static Optional<Consumer<Response>> extractResponseStatus(Method method) {

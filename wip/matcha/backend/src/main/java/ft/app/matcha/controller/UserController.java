@@ -22,7 +22,7 @@ public class UserController {
 		return entityManager.findAll(User.class);
 	}
 	
-	@GetMapping(path = ":id")
+	@GetMapping(path = "{id}")
 	public User show(
 		@Parameter long id
 	) {
