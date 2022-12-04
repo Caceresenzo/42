@@ -1,9 +1,7 @@
-package ft.app.matcha.controller;
+package ft.app.matcha.domain.user;
 
 import java.util.List;
 
-import ft.app.matcha.dto.UserCreateForm;
-import ft.app.matcha.entity.User;
 import ft.framework.mvc.annotation.Body;
 import ft.framework.mvc.annotation.Controller;
 import ft.framework.mvc.annotation.GetMapping;

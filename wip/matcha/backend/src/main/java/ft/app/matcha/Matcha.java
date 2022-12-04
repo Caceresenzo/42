@@ -6,11 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
-import ft.app.matcha.controller.PictureController;
-import ft.app.matcha.controller.UserController;
-import ft.app.matcha.entity.Like;
-import ft.app.matcha.entity.Notification;
-import ft.app.matcha.entity.User;
+import ft.app.matcha.domain.like.Like;
+import ft.app.matcha.domain.notification.Notification;
+import ft.app.matcha.domain.picture.PictureController;
+import ft.app.matcha.domain.user.User;
+import ft.app.matcha.domain.user.UserController;
 import ft.app.matcha.security.JwtAuthenticationFilter;
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.http.convert.SimpleHttpMessageConversionService;
@@ -48,13 +48,11 @@ public class Matcha {
 		
 		final var swagger = new Swagger()
 			.info(new Info()
-				.title("Hello")
+				.title("Matcha")
 				.version("1.0"));
 		
 		SwaggerBuilder.build(swagger, routeRegistry.getRoutes());
 		routeRegistry.add(new SwaggerController(swagger));
-		
-		// System.out.println(new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writerWithDefaultPrettyPrinter().writeValueAsString(swagger));
 		
 		routeRegistry.markReady();
 	}

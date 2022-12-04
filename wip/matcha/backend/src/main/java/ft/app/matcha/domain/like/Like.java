@@ -1,4 +1,4 @@
-package ft.app.matcha.entity;
+package ft.app.matcha.domain.like;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import ft.app.matcha.domain.user.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

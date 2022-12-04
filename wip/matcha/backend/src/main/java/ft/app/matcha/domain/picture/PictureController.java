@@ -1,4 +1,4 @@
-package ft.app.matcha.controller;
+package ft.app.matcha.domain.picture;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

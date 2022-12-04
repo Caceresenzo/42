@@ -1,12 +1,16 @@
-package ft.app.matcha.entity;
+package ft.app.matcha.domain.notification;
+
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import ft.app.matcha.domain.user.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -14,16 +18,19 @@ import lombok.experimental.Accessors;
 @Table
 @Data
 @Accessors(chain = true)
-public class User {
+public class Notification {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	@Column(nullable = false)
-	private String name;
+	private String content;
+	
+	@ManyToOne(optional = false)
+	private User user;
 	
 	@Column
-	private String bio;
+	private LocalDateTime createdAt;
 	
 }

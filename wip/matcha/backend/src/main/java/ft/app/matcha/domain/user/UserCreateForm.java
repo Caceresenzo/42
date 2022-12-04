@@ -1,4 +1,4 @@
-package ft.app.matcha.dto;
+package ft.app.matcha.domain.user;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

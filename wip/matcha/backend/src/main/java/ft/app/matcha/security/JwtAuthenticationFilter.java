@@ -1,6 +1,6 @@
 package ft.app.matcha.security;
 
-import ft.app.matcha.entity.User;
+import ft.app.matcha.domain.user.User;
 import ft.framework.mvc.security.Authentication;
 import ft.framework.mvc.security.AuthenticationFilter;
 
