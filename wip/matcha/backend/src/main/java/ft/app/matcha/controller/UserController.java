@@ -5,12 +5,13 @@ import java.util.List;
 import ft.app.matcha.dto.UserCreateForm;
 import ft.app.matcha.entity.User;
 import ft.framework.mvc.annotation.Body;
+import ft.framework.mvc.annotation.Controller;
 import ft.framework.mvc.annotation.GetMapping;
 import ft.framework.mvc.annotation.PostMapping;
 import ft.framework.mvc.annotation.RequestMapping;
 import ft.framework.mvc.annotation.ResponseErrorProperty;
-import ft.framework.mvc.annotation.Controller;
 import ft.framework.mvc.annotation.Variable;
+import ft.framework.mvc.domain.Pageable;
 import ft.framework.orm.EntityManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserController {
 	private final EntityManager entityManager;
 	
 	@GetMapping
-	public List<User> index() {
+	public List<User> index(Pageable pageable) {
 		return entityManager.findAll(User.class);
 	}
 	

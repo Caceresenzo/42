@@ -18,6 +18,7 @@ import ft.framework.mvc.http.convert.impl.InputStreamHttpMessageConverter;
 import ft.framework.mvc.http.convert.impl.JacksonHttpMessageConverter;
 import ft.framework.mvc.mapping.RouteRegistry;
 import ft.framework.mvc.resolver.argument.impl.BodyHandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.impl.PageableHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.QueryHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.RequestHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.ResponseHandlerMethodArgumentResolver;
@@ -53,7 +54,7 @@ public class Matcha {
 		SwaggerBuilder.build(swagger, routeRegistry.getRoutes());
 		routeRegistry.add(new SwaggerController(swagger));
 		
-//		System.out.println(new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writerWithDefaultPrettyPrinter().writeValueAsString(swagger));
+		// System.out.println(new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writerWithDefaultPrettyPrinter().writeValueAsString(swagger));
 		
 		routeRegistry.markReady();
 	}
@@ -97,6 +98,7 @@ public class Matcha {
 				new QueryHandlerMethodArgumentResolver(),
 				new RequestHandlerMethodArgumentResolver(),
 				new ResponseHandlerMethodArgumentResolver(),
+				new PageableHandlerMethodArgumentResolver(),
 				new BodyHandlerMethodArgumentResolver(objectMapper)))
 			.filter(new JwtAuthenticationFilter())
 			.filter(new LoggingFilter())

@@ -40,7 +40,7 @@ public class OperationBuilder {
 		
 		for (final var parameter : route.getParameters()) {
 			ParameterBuilder.build(parameter)
-				.ifPresent(operation::addParameter);
+				.forEach(operation::addParameter);
 		}
 		
 		final var response = new Response();
