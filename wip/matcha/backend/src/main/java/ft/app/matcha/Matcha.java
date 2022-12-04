@@ -23,17 +23,29 @@ import ft.framework.mvc.resolver.argument.impl.QueryHandlerMethodArgumentResolve
 import ft.framework.mvc.resolver.argument.impl.RequestHandlerMethodArgumentResolver;
 import ft.framework.mvc.resolver.argument.impl.ResponseHandlerMethodArgumentResolver;
 import ft.framework.orm.EntityManager;
+import ft.framework.orm.OrmConfiguration;
 import ft.framework.orm.dialect.MySQLDialect;
 import ft.framework.orm.mapping.MappingBuilder;
 import ft.framework.trace.filter.LoggingFilter;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class Matcha {
 	
 	@SneakyThrows
 	public static void main(String[] args) {
+		final var ormConfiguration = configureOrm();
+		final var mvcConfiguration = configureMvc();
+		
+		final var routeRegistry = new RouteRegistry(mvcConfiguration);
+		
+		routeRegistry.add(new PictureController());
+		routeRegistry.add(new UserController(ormConfiguration.getEntityManager()));
+		
+		routeRegistry.markReady();
+	}
+	
+	@SneakyThrows
+	public static OrmConfiguration configureOrm() {
 		final var dataSource = new MysqlConnectionPoolDataSource();
 		dataSource.setServerName("localhost");
 		dataSource.setUser("root");
@@ -49,62 +61,17 @@ public class Matcha {
 			.stream()
 			.forEach(mappingBuilder::analyze);
 		
-		final var entityManager = new EntityManager(dataSource, dialect, mappingBuilder);
-		final var entities = entityManager.getEntities();
-		
-//		System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(entities));
-//		
-//		for (final var entity : entities) {
-//			System.out.println(dialect.buildCreateTableStatement(entity.getTable()));
-//		}
-//		
-//		for (final var entity : entities) {
-//			final var table = entity.getTable();
-//			
-//			for (final var manyToOne : table.getManyToOnes()) {
-//				System.out.println(dialect.buildAlterTableAddForeignKeyStatement(table, manyToOne));
-//			}
-//		}
-//		
-//		final var user = new User().setName("Enzo");
-//		entityManager.persist(user);
-//		
-//		System.out.println(user);
-//		
-//		final var notification = new Notification().setContent("Welcome").setUser(user).setCreatedAt(LocalDateTime.now());
-//		entityManager.persist(notification);
-//		
-//		notification.setContent("Nice");
-//		entityManager.persist(notification);
-//		
-//		System.out.println(notification);
-		
-		final var enzo = entityManager.find(User.class, 1).get();
-		System.out.println(enzo);
-		enzo.setName("dorian");
-		System.out.println(enzo);
-		
-		System.out.println(entityManager.update(enzo));
-		System.out.println(entityManager.update(enzo));
-		
-		System.out.println();
-
-		final var jules = entityManager.persist(new User().setName("jules"));
-		System.out.println(entityManager.update(jules));
-		System.out.println(jules);
-		jules.setName("juju");
-		System.out.println(entityManager.update(jules));
-		
-//		final var notifications = entityManager.findAll(Notification.class);
-//		notifications.forEach(System.out::println);
+		return OrmConfiguration.builder()
+			.entityManager(new EntityManager(dataSource, dialect, mappingBuilder))
+			.build();
 	}
 	
 	@SneakyThrows
-	public static void main2(String[] args) {
+	public static MvcConfiguration configureMvc() {
 		final var objectMapper = new ObjectMapper()
 			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		
-		final var mvcConfiguration = MvcConfiguration.builder()
+		return MvcConfiguration.builder()
 			.objectMapper(objectMapper)
 			.httpMessageConversionService(
 				SimpleHttpMessageConversionService.builder()
@@ -120,13 +87,6 @@ public class Matcha {
 			.filter(new JwtAuthenticationFilter())
 			.filter(new LoggingFilter())
 			.build();
-		
-		final var routeRegistry = new RouteRegistry(mvcConfiguration);
-		
-		routeRegistry.add(new PictureController());
-		routeRegistry.add(new UserController());
-		
-		routeRegistry.markReady();
 	}
 	
 }
