@@ -13,6 +13,18 @@ import ft.framework.orm.mapping.naming.LowerCaseNamingStrategy;
 import ft.framework.orm.mapping.naming.NamingStrategy;
 import ft.framework.orm.mapping.naming.PluralNamingStrategy;
 import ft.framework.orm.mapping.relationship.ManyToOne;
+import ft.framework.orm.proxy.EntityHandler;
+import ft.framework.orm.proxy.EntityHandlerInterceptor;
+import ft.framework.orm.proxy.ProxiedEntity;
+import lombok.SneakyThrows;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.subclass.ConstructorStrategy;
+import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.MethodCall;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
 
 public class MappingBuilder {
 	
@@ -46,8 +58,27 @@ public class MappingBuilder {
 		return Entity.builder()
 			.name(name)
 			.clazz(clazz)
+			.proxyClass(createProxyClass(clazz))
 			.table(buildTable(clazz, name))
 			.build();
+	}
+	
+	@SneakyThrows
+	public Class<?> createProxyClass(Class<?> clazz) {
+		return new ByteBuddy()
+			.subclass(clazz, ConstructorStrategy.Default.NO_CONSTRUCTORS)
+			.defineConstructor(Visibility.PUBLIC)
+			.withParameter(EntityHandler.class)
+			.intercept(MethodCall.invoke(clazz.getDeclaredConstructor())
+				.andThen(FieldAccessor.ofField(ProxiedEntity.HANDLER_FIELD).setsArgumentAt(0)))
+			.defineField(ProxiedEntity.HANDLER_FIELD, EntityHandler.class, Visibility.PUBLIC)
+			.implement(ProxiedEntity.class)
+			.intercept(FieldAccessor.ofField(ProxiedEntity.HANDLER_FIELD))
+			.method(ElementMatchers.isDeclaredBy(clazz))
+			.intercept(MethodDelegation.to(EntityHandlerInterceptor.class))
+			.make()
+			.load(clazz.getClassLoader(), ClassLoadingStrategy.Default.WRAPPER)
+			.getLoaded();
 	}
 	
 	public String getTableName(javax.persistence.Table annotation, String entityName) {

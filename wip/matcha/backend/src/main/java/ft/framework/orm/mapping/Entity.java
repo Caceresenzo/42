@@ -12,6 +12,7 @@ public class Entity {
 	
 	private final String name;
 	private final @JsonIgnore Class<?> clazz;
+	private final @JsonIgnore Class<?> proxyClass;
 	private final Table table;
 	
 	@SneakyThrows

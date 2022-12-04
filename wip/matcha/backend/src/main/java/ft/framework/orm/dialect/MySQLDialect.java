@@ -3,8 +3,8 @@ package ft.framework.orm.dialect;
 import java.sql.SQLType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.mysql.cj.MysqlType;
@@ -101,7 +101,7 @@ public class MySQLDialect implements Dialect {
 	}
 	
 	@Override
-	public String buildInsertStatement(Table table, List<Column> columns) {
+	public String buildInsertStatement(Table table, Collection<Column> columns) {
 		final var sql = new StringBuilder();
 		
 		sql.append("INSERT INTO `").append(table.getName()).append("`(");
@@ -134,7 +134,7 @@ public class MySQLDialect implements Dialect {
 	}
 	
 	@Override
-	public String buildUpdateByIdStatement(Table table, List<Column> columns) {
+	public String buildUpdateByIdStatement(Table table, Collection<Column> columns) {
 		final var sql = new StringBuilder();
 		
 		sql.append("UPDATE `").append(table.getName()).append("` SET ");
@@ -156,7 +156,7 @@ public class MySQLDialect implements Dialect {
 	}
 	
 	@Override
-	public String buildSelectByIdStatement(Table table, List<Column> columns) {
+	public String buildSelectByIdStatement(Table table, Collection<Column> columns) {
 		return buildIncompleteSelectStatement(table, columns)
 			.append(" WHERE `").append(table.getIdColumn().getName()).append("` = ?")
 			.append(";")
@@ -164,13 +164,13 @@ public class MySQLDialect implements Dialect {
 	}
 	
 	@Override
-	public String buildSelectStatement(Table table, List<Column> columns) {
+	public String buildSelectStatement(Table table, Collection<Column> columns) {
 		return buildIncompleteSelectStatement(table, columns)
 			.append(";")
 			.toString();
 	}
 	
-	private StringBuilder buildIncompleteSelectStatement(Table table, List<Column> columns) {
+	private StringBuilder buildIncompleteSelectStatement(Table table, Collection<Column> columns) {
 		final var sql = new StringBuilder();
 		
 		sql.append("SELECT ");

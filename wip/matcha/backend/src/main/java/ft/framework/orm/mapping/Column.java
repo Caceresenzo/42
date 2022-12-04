@@ -29,5 +29,9 @@ public class Column {
 	public void write(Object instance, Object value) {
 		FieldUtils.writeField(field, instance, value, true);
 	}
+
+	public boolean isMatching(String name) {
+		return this.name.equalsIgnoreCase(name) || field.getName().equalsIgnoreCase(name);
+	}
 	
 }

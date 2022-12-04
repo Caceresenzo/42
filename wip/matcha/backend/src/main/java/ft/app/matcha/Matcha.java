@@ -79,11 +79,24 @@ public class Matcha {
 //		
 //		System.out.println(notification);
 		
-		final var enzo = entityManager.find(User.class, 1);
+		final var enzo = entityManager.find(User.class, 1).get();
+		System.out.println(enzo);
+		enzo.setName("dorian");
 		System.out.println(enzo);
 		
-		final var notifications = entityManager.findAll(Notification.class);
-		notifications.forEach(System.out::println);
+		System.out.println(entityManager.update(enzo));
+		System.out.println(entityManager.update(enzo));
+		
+		System.out.println();
+
+		final var jules = entityManager.persist(new User().setName("jules"));
+		System.out.println(entityManager.update(jules));
+		System.out.println(jules);
+		jules.setName("juju");
+		System.out.println(entityManager.update(jules));
+		
+//		final var notifications = entityManager.findAll(Notification.class);
+//		notifications.forEach(System.out::println);
 	}
 	
 	@SneakyThrows

@@ -1,6 +1,6 @@
 package ft.framework.orm.dialect;
 
-import java.util.List;
+import java.util.Collection;
 
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
@@ -15,12 +15,12 @@ public interface Dialect {
 	
 	public String buildAlterTableAddForeignKeyStatement(Table table, Relationship relationship);
 
-	public String buildInsertStatement(Table table, List<Column> columns);
+	public String buildInsertStatement(Table table, Collection<Column> columns);
 	
-	public String buildUpdateByIdStatement(Table table, List<Column> columns);
+	public String buildUpdateByIdStatement(Table table, Collection<Column> columns);
 	
-	public String buildSelectByIdStatement(Table table, List<Column> columns);
+	public String buildSelectByIdStatement(Table table, Collection<Column> columns);
 	
-	public String buildSelectStatement(Table table, List<Column> columns);
+	public String buildSelectStatement(Table table, Collection<Column> columns);
 	
 }

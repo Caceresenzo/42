@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -18,9 +19,14 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import com.mysql.cj.MysqlType;
 
 import ft.framework.orm.dialect.Dialect;
+import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.Entity;
 import ft.framework.orm.mapping.MappingBuilder;
 import ft.framework.orm.mapping.relationship.ManyToOne;
+import ft.framework.orm.proxy.EntityHandler;
+import ft.framework.orm.proxy.ProxiedEntity;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
 
@@ -41,24 +47,41 @@ public class EntityManager {
 		if (isNew(instance)) {
 			return insert(instance);
 		} else {
-			return update(instance);
+			return update(instance).getInstance();
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@SneakyThrows
-	public <T> T update(T instance) {
+	public <T> Result<T> update(T instance) {
 		final var entity = getEntity(instance);
 		final var table = entity.getTable();
-		final var columns = table.getAllColumnsWithoutId();
+		
+		Collection<Column> columns;
+		if (instance instanceof ProxiedEntity proxied) {
+			columns = proxied.getEntityHandler().getModifiedColumns();
+			
+			if (columns.isEmpty()) {
+				return new Result<T>(instance, 0, true);
+			}
+		} else {
+			columns = table.getAllColumnsWithoutId();
+		}
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var sql = dialect.buildUpdateByIdStatement(table, columns);
+			
 			System.out.println(sql);
 			
 			try (final var statement = connection.prepareStatement(sql.toString())) {
+				T original = instance;
+				if (instance instanceof ProxiedEntity proxied) {
+					original = (T) proxied.getEntityHandler().getOriginal();
+				}
+				
 				var index = 1;
 				for (final var column : columns) {
-					var value = FieldUtils.readField(column.getField(), instance, true);
+					var value = FieldUtils.readField(column.getField(), original, true);
 					if (column instanceof ManyToOne manyToOne) {
 						final Entity target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
@@ -67,17 +90,20 @@ public class EntityManager {
 					statement.setObject(index++, value, MysqlType.VARCHAR /* TODO */);
 				}
 				
-				final var id = table.getIdColumn().read(instance);
+				final var id = table.getIdColumn().read(original);
 				statement.setObject(index++, id, MysqlType.VARCHAR /* TODO */);
 				
 				final var affectedRows = statement.executeUpdate();
-				if (affectedRows == 0) {
-					throw new SQLException("Updating failed, no rows affected.");
+				
+				if (instance instanceof ProxiedEntity proxied) {
+					proxied.getEntityHandler().reset();
+					return new Result<T>(instance, affectedRows, false);
+				} else {
+					final var converted = convert(entity, instance);
+					return new Result<T>(converted, affectedRows, false);
 				}
 			}
 		}
-		
-		return instance;
 	}
 	
 	@SneakyThrows
@@ -118,7 +144,7 @@ public class EntityManager {
 			}
 		}
 		
-		return instance;
+		return convert(entity, instance);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -136,22 +162,10 @@ public class EntityManager {
 				
 				try (ResultSet resultSet = statement.executeQuery()) {
 					while (resultSet.next()) {
-						final var instance = entity.instantiate(id);
+						final T instance = read((T) entity.instantiate(id), resultSet, columns);
+						final T converted = convert(entity, instance);
 						
-						int index = 1;
-						for (final var column : columns) {
-							var value = resultSet.getObject(index++);
-							if (column instanceof ManyToOne manyToOne) {
-								final Entity target = manyToOne.getTarget();
-								
-								// TODO Use proxy
-								value = target.instantiate(value);
-							}
-							
-							column.write(instance, value);
-						}
-						
-						return Optional.of((T) instance);
+						return Optional.of(converted);
 					}
 					
 					return Optional.empty();
@@ -175,22 +189,10 @@ public class EntityManager {
 					final var instances = new ArrayList<T>();
 					
 					while (resultSet.next()) {
-						final var instance = entity.instantiate();
+						final T instance = read((T) entity.instantiate(), resultSet, columns);
+						final T converted = convert(entity, instance);
 						
-						int index = 1;
-						for (final var column : columns) {
-							var value = resultSet.getObject(index++);
-							if (column instanceof ManyToOne manyToOne) {
-								final Entity target = manyToOne.getTarget();
-								
-								// TODO Use proxy
-								value = target.instantiate(value);
-							}
-							
-							column.write(instance, value);
-						}
-						
-						instances.add((T) instance);
+						instances.add(converted);
 					}
 					
 					return instances;
@@ -200,7 +202,39 @@ public class EntityManager {
 	}
 	
 	@SneakyThrows
+	public <T> T read(T instance, ResultSet resultSet, List<Column> columns) {
+		int index = 1;
+		for (final var column : columns) {
+			var value = resultSet.getObject(index++);
+			if (column instanceof ManyToOne manyToOne) {
+				final Entity target = manyToOne.getTarget();
+				
+				// TODO Use proxy
+				value = target.instantiate(value);
+			}
+			
+			column.write(instance, value);
+		}
+		
+		return instance;
+	}
+	
+	@SneakyThrows
+	public <T> T convert(Entity entity, T instance) {
+		final var handler = new EntityHandler(entity, instance);
+		final var proxy = entity.getProxyClass()
+			.getDeclaredConstructor(EntityHandler.class)
+			.newInstance(handler);
+		
+		return (T) proxy;
+	}
+	
+	@SneakyThrows
 	public boolean isNew(Object instance) {
+		if (instance instanceof ProxiedEntity) {
+			return false;
+		}
+		
 		final var id = getId(instance);
 		
 		if (id == null) {
@@ -231,11 +265,25 @@ public class EntityManager {
 	public Entity getEntity(Object instance) {
 		Objects.requireNonNull(instance);
 		
+		if (instance instanceof ProxiedEntity proxied) {
+			return proxied.getEntityHandler().getEntity();
+		}
+		
 		return getEntity(instance.getClass());
 	}
 	
 	public List<Entity> getEntities() {
 		return new ArrayList<>(entities.values());
+	}
+	
+	@Builder
+	@Data
+	public static class Result<T> {
+		
+		private final T instance;
+		private final long affectedRows;
+		private final boolean ignored;
+		
 	}
 	
 }

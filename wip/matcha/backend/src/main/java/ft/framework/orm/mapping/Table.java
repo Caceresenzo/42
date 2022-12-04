@@ -39,5 +39,9 @@ public class Table {
 		
 		return list;
 	}
+
+	public int getColumnCount() {
+		return columns.size() + manyToOnes.size();
+	}
 	
 }
