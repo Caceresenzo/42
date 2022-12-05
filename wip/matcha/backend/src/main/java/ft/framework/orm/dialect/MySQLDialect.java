@@ -1,5 +1,6 @@
 package ft.framework.orm.dialect;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.SQLType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -8,11 +9,13 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.mysql.cj.MysqlType;
 
 import ft.framework.mvc.domain.Pageable;
+import ft.framework.orm.error.DuplicateValueException;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
@@ -24,9 +27,10 @@ import ft.framework.orm.mapping.relationship.Relationship;
 import ft.framework.orm.predicate.Branch;
 import ft.framework.orm.predicate.Comparison;
 import ft.framework.orm.predicate.Predicate;
-import spark.utils.StringUtils;
 
 public class MySQLDialect implements Dialect {
+	
+	public static final Pattern DUPLICATE_VALUE_PATTERN = Pattern.compile("^Duplicate entry '(.*?)' for key '(.*?)'$");
 	
 	private static final Map<Class<?>, SQLType> simpleTypes = new HashMap<>();
 	private static final Map<Branch.Type, String> branchToCode = new EnumMap<>(Branch.Type.class);
@@ -65,6 +69,45 @@ public class MySQLDialect implements Dialect {
 		comparisonToCode.put(Comparison.Type.LESS_THAN_EQUALS, "<=");
 		comparisonToCode.put(Comparison.Type.GREATER_THAN, ">");
 		comparisonToCode.put(Comparison.Type.GREATER_THAN_EQUALS, ">=");
+	}
+	
+	@Override
+	public Exception translate(Table table, SQLIntegrityConstraintViolationException exception) {
+		final var message = exception.getMessage();
+		
+		var matcher = DUPLICATE_VALUE_PATTERN.matcher(message);
+		if (matcher.find()) {
+			final var value = matcher.group(1);
+			final var constraint = findConstraintByName(table, matcher.group(2));
+			
+			return new DuplicateValueException(value, constraint, exception);
+		}
+		
+		return exception;
+	}
+	
+	private Constraint findConstraintByName(Table table, String name) {
+		final var index = findNamed(table.getIndexes(), name);
+		if (index != null) {
+			return index;
+		}
+		
+		final var unique = findNamed(table.getUniques(), name);
+		if (unique != null) {
+			return unique;
+		}
+		
+		return null;
+	}
+	
+	public <T extends Named> T findNamed(List<T> list, String name) {
+		for (final var named : list) {
+			if (named.getName().equalsIgnoreCase(name)) {
+				return named;
+			}
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -155,11 +198,9 @@ public class MySQLDialect implements Dialect {
 			sql.append("UNIQUE ");
 		}
 		
-		final var name = toName(table, index);
-		
 		return sql
 			.append("INDEX ")
-			.append(quote(name))
+			.append(quote(index))
 			.append(' ')
 			.append("ON ")
 			.append(quote(table))
@@ -172,13 +213,11 @@ public class MySQLDialect implements Dialect {
 	public String buildAlterTableAddUniqueStatement(Table table, Unique unique) {
 		final var sql = new StringBuilder();
 		
-		final var name = toName(table, unique);
-		
 		return sql
 			.append("ALTER TABLE ")
 			.append(quote(table))
 			.append(" ADD CONSTRAINT ")
-			.append(quote(name))
+			.append(quote(unique))
 			.append(" UNIQUE ")
 			.append(quote(unique.getColumns(), true))
 			.append(';')
@@ -381,27 +420,6 @@ public class MySQLDialect implements Dialect {
 	
 	public String quote(String name) {
 		return String.format("`%s`", name);
-	}
-	
-	public String toName(Table table, Unique unique) {
-		return toName(table, "uk", unique);
-	}
-	
-	public String toName(Table table, Index index) {
-		return toName(table, "idx", index);
-	}
-	
-	public String toName(Table table, String type, Constraint constraint) {
-		final var name = constraint.getName();
-		if (StringUtils.isNotBlank(name)) {
-			return name;
-		}
-		
-		final var joined = constraint.getColumns().stream()
-			.map(Column::getName)
-			.collect(Collectors.joining("-"));
-		
-		return "%s-%s-%s".formatted(type, table.getName(), joined);
 	}
 	
 }

@@ -2,9 +2,11 @@ package ft.framework.orm.mapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.persistence.Lob;
 import javax.persistence.UniqueConstraint;
@@ -125,9 +127,10 @@ public class MappingBuilder {
 					throw new IllegalStateException("many to one cannot be the table id");
 				}
 				
+				final var keyName = columnNamingStrategy.convertIdNameIfEmpty(columnName, field.getName());
 				final var manyToOne = ManyToOne.builder()
 					.field(field)
-					.name(columnNamingStrategy.convertIdNameIfEmpty(columnName, field.getName()));
+					.name(keyName);
 				
 				if (manyToOneAnnotation != null) {
 					manyToOne.nullable(manyToOneAnnotation.optional());
@@ -143,6 +146,7 @@ public class MappingBuilder {
 				
 				manyToOne
 					.target(targetEntity)
+					.foreignKeyName(formatForeignKeyName(keyName, name))
 					.dataType(targetEntity.getTable().getIdColumn().getDataType());
 				
 				table.manyToOne(manyToOne.build());
@@ -190,7 +194,7 @@ public class MappingBuilder {
 				
 				if (columnAnnotation != null && columnAnnotation.unique()) {
 					table.unique(Unique.builder()
-						.name("")
+						.name(formatUniqueName(columnAnnotation.name(), name, Collections.singletonList(column)))
 						.column(column)
 						.build());
 				}
@@ -207,11 +211,11 @@ public class MappingBuilder {
 		}
 		
 		for (final var indexAnnotation : annotation.indexes()) {
-			table.index(buildIndex(indexAnnotation, columns));
+			table.index(buildIndex(indexAnnotation, name, columns));
 		}
 		
 		for (final var uniqueAnnotation : annotation.uniqueConstraints()) {
-			table.unique(buildUnique(uniqueAnnotation, columns));
+			table.unique(buildUnique(uniqueAnnotation, name, columns));
 		}
 		
 		if (!idSet) {
@@ -223,27 +227,27 @@ public class MappingBuilder {
 			.build();
 	}
 	
-	private Index buildIndex(javax.persistence.Index annotation, List<Column> columns) {
+	private Index buildIndex(javax.persistence.Index annotation, String tableName, List<Column> columns) {
 		final var filteredColumns = getColumnsByNames(columns, annotation.columnList().split(","));
 		if (filteredColumns.isEmpty()) {
 			throw new IllegalArgumentException("@Index must have at least one column");
 		}
 		
 		return Index.builder()
-			.name(annotation.name())
+			.name(formatIndexName(annotation.name(), tableName, columns))
 			.columns(columns)
 			.unique(annotation.unique())
 			.build();
 	}
 	
-	private Unique buildUnique(UniqueConstraint annotation, List<Column> columns) {
+	private Unique buildUnique(UniqueConstraint annotation, String tableName, List<Column> columns) {
 		final var filteredColumns = getColumnsByNames(columns, annotation.columnNames());
 		if (filteredColumns.isEmpty()) {
 			throw new IllegalArgumentException("@UniqueConstraint must have at least one column");
 		}
 		
 		return Unique.builder()
-			.name(annotation.name())
+			.name(formatUniqueName(annotation.name(), tableName, columns))
 			.columns(columns)
 			.build();
 	}
@@ -262,6 +266,31 @@ public class MappingBuilder {
 		}
 		
 		throw new NoSuchElementException("no column with name: " + name);
+	}
+	
+	public String formatIndexName(String currentName, String tableName, List<Column> columns) {
+		return formatName(currentName, "idx", tableName, columns);
+	}
+	
+	public String formatUniqueName(String currentName, String tableName, List<Column> columns) {
+		return formatName(currentName, "uk", tableName, columns);
+	}
+	
+	public String formatForeignKeyName(String currentName, String tableName) {
+		return "%s-%s-%s".formatted("fk", tableName, currentName);
+	}
+	
+	public String formatName(String currentName, String type, String tableName, List<Column> columns) {
+		
+		if (StringUtils.isNotBlank(currentName)) {
+			return currentName;
+		}
+		
+		final var joined = columns.stream()
+			.map(Column::getName)
+			.collect(Collectors.joining("-"));
+		
+		return "%s-%s-%s".formatted(type, tableName, joined);
 	}
 	
 	@SuppressWarnings("unchecked")

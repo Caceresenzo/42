@@ -1,10 +1,11 @@
 package ft.framework.orm.mapping.relationship;
 
 import ft.framework.orm.mapping.Entity;
+import ft.framework.orm.mapping.naming.Named;
 
-public interface Relationship {
+public interface Relationship extends Named {
 	
-	String getName();
+	String getForeignKeyName();
 	
 	Entity<?> getTarget();
 	

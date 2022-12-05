@@ -3,6 +3,7 @@ package ft.framework.orm;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -101,7 +102,13 @@ public class EntityManager {
 				final var id = table.getIdColumn().read(original);
 				statement.setObject(index++, id, MysqlType.VARCHAR /* TODO */);
 				
-				final var affectedRows = statement.executeUpdate();
+				long affectedRows;
+				
+				try {
+					affectedRows = statement.executeUpdate();
+				} catch (SQLIntegrityConstraintViolationException exception) {
+					throw dialect.translate(table, exception);
+				}
 				
 				if (instance instanceof ProxiedEntity proxied) {
 					proxied.getEntityHandler().reset();
@@ -144,7 +151,13 @@ public class EntityManager {
 					statement.setObject(index++, value, MysqlType.VARCHAR /* TODO */);
 				}
 				
-				final var affectedRows = statement.executeUpdate();
+				long affectedRows;
+				try {
+					affectedRows = statement.executeUpdate();
+				} catch (SQLIntegrityConstraintViolationException exception) {
+					throw dialect.translate(table, exception);
+				}
+				
 				if (affectedRows == 0) {
 					throw new SQLException("Creating failed, no rows affected.");
 				}

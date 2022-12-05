@@ -1,5 +1,6 @@
 package ft.framework.orm.dialect;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 
 import ft.framework.mvc.domain.Pageable;
@@ -12,6 +13,8 @@ import ft.framework.orm.mapping.relationship.Relationship;
 import ft.framework.orm.predicate.Predicate;
 
 public interface Dialect {
+	
+	public Exception translate(Table table, SQLIntegrityConstraintViolationException exception);
 	
 	public String translate(DataType dataType);
 	

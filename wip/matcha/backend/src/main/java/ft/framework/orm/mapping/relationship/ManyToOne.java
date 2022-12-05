@@ -14,5 +14,6 @@ import lombok.experimental.SuperBuilder;
 public class ManyToOne extends Column implements Relationship {
 	
 	private final Entity<?> target;
+	private final String foreignKeyName;
 	
 }
