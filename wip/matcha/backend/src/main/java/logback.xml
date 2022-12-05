@@ -1,0 +1,13 @@
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} %-5p [%10.10t] %-35.35logger{34}: %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="ft" level="TRACE" />
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+	</root>
+</configuration>
