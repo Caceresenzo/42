@@ -31,7 +31,7 @@ public class UserController {
 		@Body UserCreateForm body
 	) {
 		return repository.save(new User()
-			.setName(body.getName())
+			.setLogin(body.getName())
 			.setBio(body.getBio()));
 	}
 	

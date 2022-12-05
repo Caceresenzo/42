@@ -79,6 +79,8 @@ public class EntityManager {
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var sql = dialect.buildUpdateByIdStatement(table, columns);
 			
+			log.trace("update: {}", sql);
+			
 			try (final var statement = connection.prepareStatement(sql.toString())) {
 				T original = instance;
 				if (instance instanceof ProxiedEntity proxied) {
@@ -112,6 +114,7 @@ public class EntityManager {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> T insert(T instance) {
 		final Entity<T> entity = getEntity(instance);
@@ -121,15 +124,23 @@ public class EntityManager {
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var sql = dialect.buildInsertStatement(table, columns);
 			
+			log.trace("insert: {}", sql);
+			
 			try (final var statement = connection.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS)) {
+				T original = instance;
+				if (instance instanceof ProxiedEntity proxied) {
+					original = (T) proxied.getEntityHandler().getOriginal();
+				}
+				
 				var index = 1;
 				for (final var column : columns) {
-					var value = FieldUtils.readField(column.getField(), instance, true);
+					var value = FieldUtils.readField(column.getField(), original, true);
 					if (column instanceof ManyToOne manyToOne) {
 						final Entity<?> target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
 					}
 					
+					// System.out.println("binding %s=%s".formatted(index, value));
 					statement.setObject(index++, value, MysqlType.VARCHAR /* TODO */);
 				}
 				
@@ -271,7 +282,6 @@ public class EntityManager {
 					applyPredicate(statement, predicate);
 					
 					try (ResultSet resultSet = statement.executeQuery()) {
-						
 						while (resultSet.next()) {
 							final T instance = read((T) entity.instantiate(), resultSet, columns);
 							final T converted = convert(entity, instance);
@@ -325,6 +335,10 @@ public class EntityManager {
 		final var proxy = entity.getProxyClass()
 			.getDeclaredConstructor(EntityHandler.class)
 			.newInstance(handler);
+		
+		final var idColumn = entity.getTable().getIdColumn();
+		final var id = idColumn.read(instance);
+		idColumn.write(proxy, id);
 		
 		return proxy;
 	}
