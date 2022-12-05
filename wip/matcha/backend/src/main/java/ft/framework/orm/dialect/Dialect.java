@@ -25,7 +25,11 @@ public interface Dialect {
 	
 	public String buildInsertStatement(Table table, Collection<Column> columns);
 	
+	public Object buildDeleteStatement(Table table, Predicate<?> predicate);
+	
 	public String buildUpdateByIdStatement(Table table, Collection<Column> columns);
+	
+	public String buildDeleteByIdStatement(Table table);
 	
 	public String buildSelectStatement(Table table, Collection<Column> columns);
 	

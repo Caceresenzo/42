@@ -54,6 +54,10 @@ public class Repository<T, ID> {
 		return entityManager.update(instance).getInstance();
 	}
 	
+	public boolean delete(T instance) {
+		return entityManager.delete(instance);
+	}
+	
 	protected Optional<T> findBy(Predicate<T> predicate) {
 		return entityManager.findBy(entity, predicate);
 	}
@@ -64,6 +68,10 @@ public class Repository<T, ID> {
 	
 	protected Page<T> findAllBy(Predicate<T> predicate, Pageable pageable) {
 		return entityManager.findAllBy(entity, predicate, pageable);
+	}
+	
+	protected long deleteAllBy(Predicate<T> predicate) {
+		return entityManager.deleteAllBy(entity, predicate);
 	}
 	
 }

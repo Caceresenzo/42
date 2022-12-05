@@ -52,6 +52,22 @@ public class PredicateBuilder<T> {
 		return compare(Comparison.Type.IS_NOT, property, null);
 	}
 	
+	public Comparison<T> lessThan(String property, Object value) {
+		return compare(Comparison.Type.LESS_THAN, property, value);
+	}
+	
+	public Comparison<T> lessThanEquals(String property, Object value) {
+		return compare(Comparison.Type.LESS_THAN_EQUALS, property, value);
+	}
+	
+	public Comparison<T> greaterThan(String property, Object value) {
+		return compare(Comparison.Type.GREATER_THAN, property, value);
+	}
+	
+	public Comparison<T> greaterThanEquals(String property, Object value) {
+		return compare(Comparison.Type.GREATER_THAN_EQUALS, property, value);
+	}
+	
 	public Branch<T> branch(Branch.Type type, List<Predicate<T>> predicates) {
 		return new Branch<>(type, predicates);
 	}

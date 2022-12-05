@@ -10,11 +10,11 @@ import lombok.Data;
 @Data
 public class EntityHandler {
 	
-	private final Entity entity;
+	private final Entity<?> entity;
 	private final Object original;
 	private final Set<Column> modifiedColumns;
 	
-	public EntityHandler(Entity entity, Object original) {
+	public EntityHandler(Entity<?> entity, Object original) {
 		this.entity = entity;
 		this.original = original;
 		this.modifiedColumns = new HashSet<>(entity.getTable().getColumnCount());

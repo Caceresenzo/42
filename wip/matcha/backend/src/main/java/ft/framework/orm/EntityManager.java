@@ -153,6 +153,43 @@ public class EntityManager {
 		return convert(entity, instance);
 	}
 	
+	@SneakyThrows
+	public <T> boolean delete(T instance) {
+		final Entity<T> entity = getEntity(instance);
+		final var table = entity.getTable();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildDeleteByIdStatement(table);
+			
+			log.trace("delete: {}", sql);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				final var id = table.getIdColumn().read(instance);
+				
+				statement.setObject(1, id, MysqlType.VARCHAR /* TODO */);
+				
+				return statement.executeUpdate() != 0;
+			}
+		}
+	}
+	
+	@SneakyThrows
+	public <T> long deleteAllBy(Entity<T> entity, Predicate<T> predicate) {
+		final var table = entity.getTable();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildDeleteStatement(table, predicate);
+			
+			log.trace("deleteAllBy: {}", sql);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				applyPredicate(statement, predicate);
+				
+				return statement.executeLargeUpdate();
+			}
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> Optional<T> findBy(Entity<T> entity, Predicate<T> predicate) {
@@ -331,7 +368,7 @@ public class EntityManager {
 		Objects.requireNonNull(instance);
 		
 		if (instance instanceof ProxiedEntity proxied) {
-			return proxied.getEntityHandler().getEntity();
+			return (Entity<T>) proxied.getEntityHandler().getEntity();
 		}
 		
 		return (Entity<T>) getEntity(instance.getClass());

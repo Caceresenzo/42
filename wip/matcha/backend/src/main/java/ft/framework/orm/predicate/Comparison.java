@@ -18,6 +18,10 @@ public final class Comparison<T> implements Predicate<T> {
 		NOT_EQUALS,
 		IS,
 		IS_NOT,
+		LESS_THAN,
+		LESS_THAN_EQUALS,
+		GREATER_THAN,
+		GREATER_THAN_EQUALS,
 		// TODO Add more
 		;
 		

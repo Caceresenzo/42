@@ -61,6 +61,10 @@ public class MySQLDialect implements Dialect {
 		comparisonToCode.put(Comparison.Type.NOT_EQUALS, "!=");
 		comparisonToCode.put(Comparison.Type.IS, "IS");
 		comparisonToCode.put(Comparison.Type.IS_NOT, "IS NOT");
+		comparisonToCode.put(Comparison.Type.LESS_THAN, "<");
+		comparisonToCode.put(Comparison.Type.LESS_THAN_EQUALS, "<=");
+		comparisonToCode.put(Comparison.Type.GREATER_THAN, ">");
+		comparisonToCode.put(Comparison.Type.GREATER_THAN_EQUALS, ">=");
 	}
 	
 	@Override
@@ -234,6 +238,28 @@ public class MySQLDialect implements Dialect {
 		sql.append(" WHERE `").append(table.getIdColumn().getName()).append("` = ?");
 		
 		return sql.toString();
+	}
+	
+	@Override
+	public Object buildDeleteStatement(Table table, Predicate<?> predicate) {
+		return new StringBuilder()
+			.append("DELETE FROM ")
+			.append(quote(table))
+			.append(buildWhere(predicate))
+			.append(';')
+			.toString();
+	}
+	
+	@Override
+	public String buildDeleteByIdStatement(Table table) {
+		return new StringBuilder()
+			.append("DELETE FROM ")
+			.append(quote(table))
+			.append(" WHERE ")
+			.append(quote(table.getIdColumn()))
+			.append(" = ?")
+			.append(';')
+			.toString();
 	}
 	
 	@Override
