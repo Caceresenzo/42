@@ -2,7 +2,6 @@ package ft.framework.swagger.part;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -38,11 +37,6 @@ public class OperationBuilder {
 			if (StringUtils.isNotBlank(summary)) {
 				operation.setSummary(summary);
 			}
-			
-			final var tags = annotation.tags();
-			if (tags.length != 0) {
-				operation.setTags(Arrays.asList(tags));
-			}
 		}
 		
 		for (final var parameter : route.getParameters()) {
@@ -72,6 +66,9 @@ public class OperationBuilder {
 		operation.responses(responses);
 		
 		responses.addApiResponse(String.valueOf(route.getResponseStatus()), buildDefaultResponse(swagger, route));
+		
+		TagBuilder.build(swagger, route)
+			.ifPresent((tag) -> operation.tags(Collections.singletonList(tag.getName())));
 		
 		return Optional.of(operation);
 	}

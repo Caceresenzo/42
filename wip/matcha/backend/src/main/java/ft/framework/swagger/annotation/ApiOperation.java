@@ -13,6 +13,4 @@ public @interface ApiOperation {
 	
 	String summary() default "";
 	
-	String[] tags() default {};
-	
 }
