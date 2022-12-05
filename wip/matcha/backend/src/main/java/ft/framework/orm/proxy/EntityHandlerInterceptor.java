@@ -20,7 +20,7 @@ public class EntityHandlerInterceptor {
 	@RuntimeType
 	public static Object intercept(
 		@This Object self,
-		@FieldValue("$handler") EntityHandler handler,
+		@FieldValue(ProxiedEntity.HANDLER_FIELD) EntityHandler handler,
 		@AllArguments Object[] arguments,
 		@Origin Method method
 	) throws Exception {
@@ -32,7 +32,7 @@ public class EntityHandlerInterceptor {
 			if (!handler.markModified(fieldName)) {
 				handler.markAllModified();
 			}
-		} else if (!methodName.startsWith("get") && !EXCLUDED.contains(methodName)) {
+		} else if (!methodName.startsWith("get") && !methodName.startsWith("is") && !EXCLUDED.contains(methodName)) {
 			handler.markAllModified();
 		}
 		
