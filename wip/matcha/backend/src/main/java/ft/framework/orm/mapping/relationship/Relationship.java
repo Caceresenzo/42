@@ -6,6 +6,6 @@ public interface Relationship {
 	
 	String getName();
 	
-	Entity getTarget();
+	Entity<?> getTarget();
 	
 }
