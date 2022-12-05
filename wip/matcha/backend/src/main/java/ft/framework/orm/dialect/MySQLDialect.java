@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,10 +16,15 @@ import ft.framework.mvc.domain.Pageable;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
+import ft.framework.orm.mapping.contraint.Constraint;
+import ft.framework.orm.mapping.contraint.Index;
+import ft.framework.orm.mapping.contraint.Unique;
+import ft.framework.orm.mapping.naming.Named;
 import ft.framework.orm.mapping.relationship.Relationship;
 import ft.framework.orm.predicate.Branch;
 import ft.framework.orm.predicate.Comparison;
 import ft.framework.orm.predicate.Predicate;
+import spark.utils.StringUtils;
 
 public class MySQLDialect implements Dialect {
 	
@@ -133,6 +139,46 @@ public class MySQLDialect implements Dialect {
 			.append(" REFERENCES `").append(targetTable.getName()).append("`(`").append(idColumn.getName()).append("`);");
 		
 		return sql.toString();
+	}
+	
+	@Override
+	public String buildCreateIndexStatement(Table table, Index index) {
+		final var sql = new StringBuilder();
+		
+		sql.append("CREATE ");
+		
+		if (index.isUnique()) {
+			sql.append("UNIQUE ");
+		}
+		
+		final var name = toName(table, index);
+		
+		return sql
+			.append("INDEX ")
+			.append(quote(name))
+			.append(' ')
+			.append("ON ")
+			.append(quote(table))
+			.append(quote(index.getColumns(), true))
+			.append(";")
+			.toString();
+	}
+	
+	@Override
+	public String buildAlterTableAddUniqueStatement(Table table, Unique unique) {
+		final var sql = new StringBuilder();
+		
+		final var name = toName(table, unique);
+		
+		return sql
+			.append("ALTER TABLE ")
+			.append(quote(table))
+			.append(" ADD CONSTRAINT ")
+			.append(quote(name))
+			.append(" UNIQUE ")
+			.append(quote(unique.getColumns(), true))
+			.append(';')
+			.toString();
 	}
 	
 	@Override
@@ -289,6 +335,47 @@ public class MySQLDialect implements Dialect {
 		final var code = comparisonToCode.get(comparison.getType());
 		
 		return "`%s` %s ?".formatted(comparison.getColumn().getName(), code);
+	}
+	
+	public String quote(List<? extends Named> nameds, boolean addParentheses) {
+		final var quoted = nameds.stream()
+			.map(this::quote)
+			.collect(Collectors.joining(", "));
+		
+		if (addParentheses) {
+			return "(%s)".formatted(quoted);
+		}
+		
+		return quoted;
+	}
+	
+	public String quote(Named named) {
+		return quote(named.getName());
+	}
+	
+	public String quote(String name) {
+		return String.format("`%s`", name);
+	}
+	
+	public String toName(Table table, Unique unique) {
+		return toName(table, "uk", unique);
+	}
+	
+	public String toName(Table table, Index index) {
+		return toName(table, "idx", index);
+	}
+	
+	public String toName(Table table, String type, Constraint constraint) {
+		final var name = constraint.getName();
+		if (StringUtils.isNotBlank(name)) {
+			return name;
+		}
+		
+		final var joined = constraint.getColumns().stream()
+			.map(Column::getName)
+			.collect(Collectors.joining("-"));
+		
+		return "%s-%s-%s".formatted(type, table.getName(), joined);
 	}
 	
 }

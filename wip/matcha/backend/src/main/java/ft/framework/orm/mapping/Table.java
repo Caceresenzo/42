@@ -6,6 +6,9 @@ import java.util.NoSuchElementException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ft.framework.orm.mapping.contraint.Index;
+import ft.framework.orm.mapping.contraint.Unique;
+import ft.framework.orm.mapping.naming.Named;
 import ft.framework.orm.mapping.relationship.ManyToOne;
 import lombok.Builder;
 import lombok.Data;
@@ -13,12 +16,14 @@ import lombok.Singular;
 
 @Data
 @Builder
-public class Table {
+public class Table implements Named {
 	
 	private final String name;
 	private final Column idColumn;
 	private final @Singular List<Column> columns;
 	private final @Singular List<ManyToOne> manyToOnes;
+	private final @Singular("index") List<Index> indexes;
+	private final @Singular List<Unique> uniques;
 	
 	@JsonIgnore
 	public List<Column> getAllColumns() {

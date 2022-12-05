@@ -1,14 +1,19 @@
 package ft.framework.orm.mapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 import javax.persistence.Lob;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import ft.framework.orm.mapping.contraint.Index;
+import ft.framework.orm.mapping.contraint.Unique;
 import ft.framework.orm.mapping.naming.LowerCaseNamingStrategy;
 import ft.framework.orm.mapping.naming.NamingStrategy;
 import ft.framework.orm.mapping.naming.PluralNamingStrategy;
@@ -93,6 +98,8 @@ public class MappingBuilder {
 	public Table buildTable(Class<?> clazz, String entityName) {
 		final var annotation = clazz.getAnnotation(javax.persistence.Table.class);
 		final var name = getTableName(annotation, entityName);
+		
+		final var columns = new ArrayList<Column>();
 		
 		final var table = Table.builder()
 			.name(name);
@@ -179,7 +186,14 @@ public class MappingBuilder {
 				}
 				
 				final var column = columnBuilder.build();
-				table.column(column);
+				columns.add(column);
+				
+				if (columnAnnotation != null && columnAnnotation.unique()) {
+					table.unique(Unique.builder()
+						.name("")
+						.column(column)
+						.build());
+				}
 				
 				if (idAnnotation != null) {
 					if (idSet) {
@@ -192,11 +206,62 @@ public class MappingBuilder {
 			}
 		}
 		
+		for (final var indexAnnotation : annotation.indexes()) {
+			table.index(buildIndex(indexAnnotation, columns));
+		}
+		
+		for (final var uniqueAnnotation : annotation.uniqueConstraints()) {
+			table.unique(buildUnique(uniqueAnnotation, columns));
+		}
+		
 		if (!idSet) {
 			throw new IllegalArgumentException("no id found");
 		}
 		
-		return table.build();
+		return table
+			.columns(columns)
+			.build();
+	}
+	
+	private Index buildIndex(javax.persistence.Index annotation, List<Column> columns) {
+		final var filteredColumns = getColumnsByNames(columns, annotation.columnList().split(","));
+		if (filteredColumns.isEmpty()) {
+			throw new IllegalArgumentException("@Index must have at least one column");
+		}
+		
+		return Index.builder()
+			.name(annotation.name())
+			.columns(columns)
+			.unique(annotation.unique())
+			.build();
+	}
+	
+	private Unique buildUnique(UniqueConstraint annotation, List<Column> columns) {
+		final var filteredColumns = getColumnsByNames(columns, annotation.columnNames());
+		if (filteredColumns.isEmpty()) {
+			throw new IllegalArgumentException("@UniqueConstraint must have at least one column");
+		}
+		
+		return Unique.builder()
+			.name(annotation.name())
+			.columns(columns)
+			.build();
+	}
+	
+	public List<Column> getColumnsByNames(List<Column> columns, String[] names) {
+		return Arrays.stream(names)
+			.map((column) -> getColumnByName(columns, column))
+			.toList();
+	}
+	
+	public Column getColumnByName(List<Column> columns, String name) {
+		for (final var column : columns) {
+			if (column.getField().getName().equals(name)) {
+				return column;
+			}
+		}
+		
+		throw new NoSuchElementException("no column with name: " + name);
 	}
 	
 	@SuppressWarnings("unchecked")

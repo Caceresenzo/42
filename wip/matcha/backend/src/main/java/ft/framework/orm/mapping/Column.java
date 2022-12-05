@@ -6,6 +6,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import ft.framework.orm.mapping.naming.Named;
 import lombok.Builder;
 import lombok.Data;
 import lombok.SneakyThrows;
@@ -13,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 
 @Data
 @SuperBuilder
-public class Column {
+public class Column implements Named {
 	
 	private final String name;
 	private final DataType dataType;
