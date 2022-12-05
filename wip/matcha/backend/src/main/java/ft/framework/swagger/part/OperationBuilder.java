@@ -3,6 +3,7 @@ package ft.framework.swagger.part;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 import ft.framework.mvc.annotation.Body;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import spark.utils.StringUtils;
 
 public class OperationBuilder {
@@ -52,6 +54,17 @@ public class OperationBuilder {
 			if (parameter.isAnnotationPresent(Body.class)) {
 				operation.requestBody(buildRequestBody(swagger, route, parameter));
 				break;
+			}
+		}
+		
+		if (route.isAuthenticated()) {
+			final var securitySchemes = swagger.getComponents().getSecuritySchemes();
+			
+			if (!securitySchemes.isEmpty()) {
+				final var first = securitySchemes.keySet().iterator().next();
+				
+				operation.addSecurityItem(new SecurityRequirement()
+					.addList(first, Collections.emptyList()));
 			}
 		}
 		

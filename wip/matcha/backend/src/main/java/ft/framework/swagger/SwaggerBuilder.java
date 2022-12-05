@@ -18,8 +18,13 @@ public class SwaggerBuilder {
 	
 	public static OpenAPI build(OpenAPI swagger, List<Route> routes) {
 		swagger.setPaths(new Paths());
-		swagger.setComponents(new Components()
-			.schemas(new TreeMap<>(Comparator.naturalOrder())));
+		
+		if (swagger.getComponents() == null) {
+			swagger.setComponents(new Components());
+		}
+		
+		swagger.getComponents()
+			.schemas(new TreeMap<>(Comparator.naturalOrder()));
 		
 		routes.stream()
 			.sorted()
