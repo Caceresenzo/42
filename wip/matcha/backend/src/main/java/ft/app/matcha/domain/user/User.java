@@ -20,6 +20,9 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 public class User {
 	
+	public static final int LOGIN_MIN_LENGTH = 3;
+	public static final int LOGIN_MAX_LENGTH = 48;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
