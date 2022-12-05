@@ -2,6 +2,7 @@ package ft.framework.orm.mapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,9 +40,34 @@ public class Table {
 		
 		return list;
 	}
-
+	
 	public int getColumnCount() {
 		return columns.size() + manyToOnes.size();
+	}
+	
+	// TODO Use lookup table
+	public Column getColumnByFieldName(String name) {
+		var column = getColumnByFieldName(name, columns);
+		if (column != null) {
+			return column;
+		}
+		
+		column = getColumnByFieldName(name, manyToOnes);
+		if (column != null) {
+			return column;
+		}
+		
+		throw new NoSuchElementException("no column with field name: " + name);
+	}
+	
+	private static Column getColumnByFieldName(String name, List<? extends Column> columns) {
+		for (final var column : columns) {
+			if (column.getField().getName().equals(name)) {
+				return column;
+			}
+		}
+		
+		return null;
 	}
 	
 }

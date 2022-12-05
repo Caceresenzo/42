@@ -11,6 +11,7 @@ import ft.app.matcha.domain.notification.Notification;
 import ft.app.matcha.domain.picture.PictureController;
 import ft.app.matcha.domain.user.User;
 import ft.app.matcha.domain.user.UserController;
+import ft.app.matcha.domain.user.UserRepository;
 import ft.app.matcha.security.JwtAuthenticationFilter;
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.http.convert.SimpleHttpMessageConversionService;
@@ -33,7 +34,9 @@ import ft.framework.trace.filter.LoggingFilter;
 import io.swagger.models.Info;
 import io.swagger.models.Swagger;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class Matcha {
 	
 	@SneakyThrows
@@ -41,10 +44,12 @@ public class Matcha {
 		final var ormConfiguration = configureOrm();
 		final var mvcConfiguration = configureMvc();
 		
+		final var userRepository = new UserRepository(ormConfiguration.getEntityManager());
+		
 		final var routeRegistry = new RouteRegistry(mvcConfiguration);
 		
 		routeRegistry.add(new PictureController());
-		routeRegistry.add(new UserController(ormConfiguration.getEntityManager()));
+		routeRegistry.add(new UserController(userRepository));
 		
 		final var swagger = new Swagger()
 			.info(new Info()
@@ -81,6 +86,8 @@ public class Matcha {
 	
 	@SneakyThrows
 	public static MvcConfiguration configureMvc() {
+		log.info("Waking up");
+		
 		final var objectMapper = new ObjectMapper()
 			.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 		

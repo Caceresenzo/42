@@ -1,5 +1,6 @@
 package ft.framework.orm;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,19 +24,24 @@ import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.Entity;
 import ft.framework.orm.mapping.MappingBuilder;
 import ft.framework.orm.mapping.relationship.ManyToOne;
+import ft.framework.orm.predicate.Branch;
+import ft.framework.orm.predicate.Comparison;
+import ft.framework.orm.predicate.Predicate;
 import ft.framework.orm.proxy.EntityHandler;
 import ft.framework.orm.proxy.ProxiedEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EntityManager {
 	
 	@Getter
 	private final ConnectionPoolDataSource dataSource;
 	private final Dialect dialect;
-	private final Map<Class<?>, Entity> entities;
+	private final Map<Class<?>, Entity<?>> entities;
 	
 	public EntityManager(ConnectionPoolDataSource dataSource, Dialect dialect, MappingBuilder mappingBuilder) {
 		this.dataSource = dataSource;
@@ -54,7 +60,7 @@ public class EntityManager {
 	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> Result<T> update(T instance) {
-		final var entity = getEntity(instance);
+		final Entity<T> entity = getEntity(instance);
 		final var table = entity.getTable();
 		
 		Collection<Column> columns;
@@ -71,8 +77,6 @@ public class EntityManager {
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var sql = dialect.buildUpdateByIdStatement(table, columns);
 			
-			System.out.println(sql);
-			
 			try (final var statement = connection.prepareStatement(sql.toString())) {
 				T original = instance;
 				if (instance instanceof ProxiedEntity proxied) {
@@ -83,7 +87,7 @@ public class EntityManager {
 				for (final var column : columns) {
 					var value = FieldUtils.readField(column.getField(), original, true);
 					if (column instanceof ManyToOne manyToOne) {
-						final Entity target = manyToOne.getTarget();
+						final Entity<?> target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
 					}
 					
@@ -108,7 +112,7 @@ public class EntityManager {
 	
 	@SneakyThrows
 	public <T> T insert(T instance) {
-		final var entity = getEntity(instance);
+		final Entity<T> entity = getEntity(instance);
 		final var table = entity.getTable();
 		final var columns = table.getAllColumnsWithoutId();
 		
@@ -120,7 +124,7 @@ public class EntityManager {
 				for (final var column : columns) {
 					var value = FieldUtils.readField(column.getField(), instance, true);
 					if (column instanceof ManyToOne manyToOne) {
-						final Entity target = manyToOne.getTarget();
+						final Entity<?> target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
 					}
 					
@@ -147,23 +151,33 @@ public class EntityManager {
 		return convert(entity, instance);
 	}
 	
+	@SneakyThrows
+	public <T> Optional<T> findBy(Class<T> clazz, Predicate<T> predicate) {
+		return findBy(getEntity(clazz), predicate);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@SneakyThrows
-	public <T> Optional<T> find(Class<T> clazz, Object id) {
-		final var entity = getEntity(clazz);
+	public <T> Optional<T> findBy(Entity<T> entity, Predicate<T> predicate) {
 		final var table = entity.getTable();
-		final var columns = table.getAllColumnsWithoutId();
+		final var columns = table.getAllColumns();
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
-			final var sql = dialect.buildSelectByIdStatement(table, columns);
+			final var sql = dialect.buildSelectStatement(table, columns, predicate);
+			
+			log.trace("findBy: {}", sql);
 			
 			try (final var statement = connection.prepareStatement(sql.toString())) {
-				statement.setObject(1, id, MysqlType.VARCHAR /* TODO */);
+				applyPredicate(statement, predicate);
 				
 				try (ResultSet resultSet = statement.executeQuery()) {
 					while (resultSet.next()) {
-						final T instance = read((T) entity.instantiate(id), resultSet, columns);
+						final T instance = read((T) entity.instantiate(), resultSet, columns);
 						final T converted = convert(entity, instance);
+						
+						if (resultSet.next()) {
+							throw new IllegalStateException("more item are available");
+						}
 						
 						return Optional.of(converted);
 					}
@@ -174,17 +188,35 @@ public class EntityManager {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> List<T> findAll(Class<T> clazz) {
-		final var entity = getEntity(clazz);
+		return findAllBy(clazz, null);
+	}
+	
+	@SneakyThrows
+	public <T> List<T> findAll(Entity<T> entity) {
+		return findAllBy(entity, null);
+	}
+	
+	@SneakyThrows
+	public <T> List<T> findAllBy(Class<T> clazz, Predicate<T> predicate) {
+		return findAllBy(getEntity(clazz), predicate);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	public <T> List<T> findAllBy(Entity<T> entity, Predicate<T> predicate) {
 		final var table = entity.getTable();
 		final var columns = table.getAllColumns();
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
-			final var sql = dialect.buildSelectStatement(table, columns);
+			final var sql = dialect.buildSelectStatement(table, columns, predicate);
+			
+			log.trace("findAllBy: {}", sql);
 			
 			try (final var statement = connection.prepareStatement(sql.toString())) {
+				applyPredicate(statement, predicate);
+				
 				try (ResultSet resultSet = statement.executeQuery()) {
 					final var instances = new ArrayList<T>();
 					
@@ -207,9 +239,8 @@ public class EntityManager {
 		for (final var column : columns) {
 			var value = resultSet.getObject(index++);
 			if (column instanceof ManyToOne manyToOne) {
-				final Entity target = manyToOne.getTarget();
+				final Entity<?> target = manyToOne.getTarget();
 				
-				// TODO Use proxy
 				value = target.instantiate(value);
 			}
 			
@@ -220,13 +251,13 @@ public class EntityManager {
 	}
 	
 	@SneakyThrows
-	public <T> T convert(Entity entity, T instance) {
+	public <T> T convert(Entity<T> entity, T instance) {
 		final var handler = new EntityHandler(entity, instance);
 		final var proxy = entity.getProxyClass()
 			.getDeclaredConstructor(EntityHandler.class)
 			.newInstance(handler);
 		
-		return (T) proxy;
+		return proxy;
 	}
 	
 	@SneakyThrows
@@ -252,28 +283,46 @@ public class EntityManager {
 	public Object getId(Object instance) {
 		final var entity = getEntity(instance);
 		
-		return FieldUtils.readField(entity.getTable().getIdColumn().getField(), instance, true);
+		return entity.getTable().getIdColumn().read(instance);
 	}
 	
-	public Entity getEntity(Class<?> clazz) {
-		final var entity = entities.get(clazz);
+	@SuppressWarnings("unchecked")
+	public <T> Entity<T> getEntity(Class<T> clazz) {
+		final Entity<T> entity = (Entity<T>) entities.get(clazz);
 		Objects.requireNonNull(entity, "the instance is not an entity");
 		
 		return entity;
 	}
 	
-	public Entity getEntity(Object instance) {
+	@SuppressWarnings("unchecked")
+	public <T> Entity<T> getEntity(Object instance) {
 		Objects.requireNonNull(instance);
 		
 		if (instance instanceof ProxiedEntity proxied) {
 			return proxied.getEntityHandler().getEntity();
 		}
 		
-		return getEntity(instance.getClass());
+		return (Entity<T>) getEntity(instance.getClass());
 	}
 	
-	public List<Entity> getEntities() {
+	public List<Entity<?>> getEntities() {
 		return new ArrayList<>(entities.values());
+	}
+	
+	public void applyPredicate(PreparedStatement statement, Predicate<?> predicate) {
+		int[] index = { 1 };
+		applyPredicate(statement, predicate, index);
+	}
+	
+	@SneakyThrows
+	public void applyPredicate(PreparedStatement statement, Predicate<?> predicate, int[] index) {
+		if (predicate instanceof Comparison<?> comparison) {
+			statement.setObject(index[0]++, comparison.getValue(), MysqlType.VARCHAR /* TODO */);
+		} else if (predicate instanceof Branch<?> branch) {
+			for (final Predicate<?> child : branch.getPredicates()) {
+				applyPredicate(statement, child, index);
+			}
+		}
 	}
 	
 	@Builder

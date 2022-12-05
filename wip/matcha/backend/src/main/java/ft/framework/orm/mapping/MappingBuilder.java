@@ -30,9 +30,9 @@ public class MappingBuilder {
 	
 	private NamingStrategy tableNamingStrategy = new PluralNamingStrategy(LowerCaseNamingStrategy.INSTANCE);
 	private NamingStrategy columnNamingStrategy = LowerCaseNamingStrategy.INSTANCE;
-	private List<Entity> entities = new ArrayList<>();
+	private List<Entity<?>> entities = new ArrayList<>();
 	
-	public Entity analyze(Class<?> clazz) {
+	public <T> Entity<T> analyze(Class<T> clazz) {
 		var entity = getByClass(clazz);
 		if (entity != null) {
 			return entity;
@@ -44,7 +44,7 @@ public class MappingBuilder {
 		return entity;
 	}
 	
-	public Entity buildEntity(Class<?> clazz) {
+	public <T> Entity<T> buildEntity(Class<T> clazz) {
 		final var annotation = clazz.getAnnotation(javax.persistence.Entity.class);
 		if (annotation == null) {
 			return null;
@@ -55,7 +55,7 @@ public class MappingBuilder {
 			name = clazz.getSimpleName();
 		}
 		
-		return Entity.builder()
+		return Entity.<T>builder()
 			.name(name)
 			.clazz(clazz)
 			.proxyClass(createProxyClass(clazz))
@@ -64,7 +64,7 @@ public class MappingBuilder {
 	}
 	
 	@SneakyThrows
-	public Class<?> createProxyClass(Class<?> clazz) {
+	public <T> Class<? extends T> createProxyClass(Class<T> clazz) {
 		return new ByteBuddy()
 			.subclass(clazz, ConstructorStrategy.Default.NO_CONSTRUCTORS)
 			.defineConstructor(Visibility.PUBLIC)
@@ -89,6 +89,7 @@ public class MappingBuilder {
 		return tableNamingStrategy.convertName(entityName);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Table buildTable(Class<?> clazz, String entityName) {
 		final var annotation = clazz.getAnnotation(javax.persistence.Table.class);
 		final var name = getTableName(annotation, entityName);
@@ -198,17 +199,18 @@ public class MappingBuilder {
 		return table.build();
 	}
 	
-	public Entity getByClass(Class<?> clazz) {
+	@SuppressWarnings("unchecked")
+	public <T> Entity<T> getByClass(Class<T> clazz) {
 		for (final var entity : entities) {
 			if (entity.getClazz().equals(clazz)) {
-				return entity;
+				return (Entity<T>) entity;
 			}
 		}
 		
 		return null;
 	}
 	
-	public List<Entity> getEntities() {
+	public List<Entity<?>> getEntities() {
 		return new ArrayList<>(entities);
 	}
 	

@@ -6,6 +6,7 @@ import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
 import ft.framework.orm.mapping.relationship.Relationship;
+import ft.framework.orm.predicate.Predicate;
 
 public interface Dialect {
 	
@@ -22,5 +23,7 @@ public interface Dialect {
 	public String buildSelectByIdStatement(Table table, Collection<Column> columns);
 	
 	public String buildSelectStatement(Table table, Collection<Column> columns);
+	
+	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate);
 	
 }

@@ -4,8 +4,10 @@ import java.sql.SQLType;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.mysql.cj.MysqlType;
 
@@ -13,13 +15,44 @@ import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
 import ft.framework.orm.mapping.relationship.Relationship;
+import ft.framework.orm.predicate.Branch;
+import ft.framework.orm.predicate.Comparison;
+import ft.framework.orm.predicate.Predicate;
 
 public class MySQLDialect implements Dialect {
 	
-	private final Map<Class<?>, SQLType> simpleTypes;
+	private static final Map<Class<?>, SQLType> simpleTypes = new HashMap<>();
+	private static final Map<Branch.Type, String> branchToCode = new EnumMap<>(Branch.Type.class);
+	private static final Map<Comparison.Type, String> comparisonToCode = new EnumMap<>(Comparison.Type.class);
 	
-	public MySQLDialect() {
-		this.simpleTypes = createSimpleTypesMapping();
+	static {
+		simpleTypes.put(long.class, MysqlType.BIGINT);
+		simpleTypes.put(Long.class, MysqlType.BIGINT);
+		simpleTypes.put(int.class, MysqlType.INT);
+		simpleTypes.put(Integer.class, MysqlType.INT);
+		simpleTypes.put(short.class, MysqlType.SMALLINT);
+		simpleTypes.put(Short.class, MysqlType.SMALLINT);
+		simpleTypes.put(char.class, MysqlType.TINYINT);
+		simpleTypes.put(Character.class, MysqlType.TINYINT);
+		simpleTypes.put(boolean.class, MysqlType.BIT);
+		simpleTypes.put(Boolean.class, MysqlType.TINYINT);
+		simpleTypes.put(Boolean.class, MysqlType.TINYINT);
+		simpleTypes.put(double.class, MysqlType.DOUBLE);
+		simpleTypes.put(Double.class, MysqlType.DOUBLE);
+		simpleTypes.put(float.class, MysqlType.DOUBLE);
+		simpleTypes.put(Float.class, MysqlType.FLOAT);
+		
+		simpleTypes.put(LocalDate.class, MysqlType.DATE);
+		simpleTypes.put(LocalDateTime.class, MysqlType.DATETIME);
+	}
+	
+	static {
+		branchToCode.put(Branch.Type.AND, "AND");
+		branchToCode.put(Branch.Type.OR, "OR");
+		
+		comparisonToCode.put(Comparison.Type.EQUALS, "=");
+		comparisonToCode.put(Comparison.Type.NOT_EQUALS, "!=");
+		comparisonToCode.put(Comparison.Type.IS, "IS");
 	}
 	
 	@Override
@@ -170,6 +203,50 @@ public class MySQLDialect implements Dialect {
 			.toString();
 	}
 	
+	@Override
+	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate) {
+		return buildIncompleteSelectStatement(table, columns)
+			.append(buildWhere(predicate))
+			.append(";")
+			.toString();
+	}
+	
+	public String buildWhere(Predicate<?> predicate) {
+		if (predicate == null) {
+			return "";
+		}
+		
+		return " WHERE %s".formatted(buildPredicate(predicate));
+	}
+	
+	private String buildPredicate(Predicate<?> predicate) {
+		if (predicate instanceof Branch<?> branch) {
+			return buildBranch(branch);
+		}
+		
+		if (predicate instanceof Comparison<?> comparison) {
+			return buildComparison(comparison);
+		}
+		
+		throw new IllegalArgumentException("unsupported predicate: " + predicate);
+	}
+	
+	private String buildBranch(Branch<?> branch) {
+		final var code = branchToCode.get(branch.getType());
+		final var withSpace = " %s ".formatted(code);
+		
+		return branch.getPredicates()
+			.stream()
+			.map(this::buildPredicate)
+			.collect(Collectors.joining(withSpace, "(", ")"));
+	}
+	
+	private String buildComparison(Comparison<?> comparison) {
+		final var code = comparisonToCode.get(comparison.getType());
+		
+		return "`%s` %s ?".formatted(comparison.getColumn().getName(), code);
+	}
+	
 	private StringBuilder buildIncompleteSelectStatement(Table table, Collection<Column> columns) {
 		final var sql = new StringBuilder();
 		
@@ -189,31 +266,6 @@ public class MySQLDialect implements Dialect {
 		sql.append(" FROM `").append(table.getName()).append("`");
 		
 		return sql;
-	}
-	
-	public static Map<Class<?>, SQLType> createSimpleTypesMapping() {
-		final var mapping = new HashMap<Class<?>, SQLType>();
-		
-		mapping.put(long.class, MysqlType.BIGINT);
-		mapping.put(Long.class, MysqlType.BIGINT);
-		mapping.put(int.class, MysqlType.INT);
-		mapping.put(Integer.class, MysqlType.INT);
-		mapping.put(short.class, MysqlType.SMALLINT);
-		mapping.put(Short.class, MysqlType.SMALLINT);
-		mapping.put(char.class, MysqlType.TINYINT);
-		mapping.put(Character.class, MysqlType.TINYINT);
-		mapping.put(boolean.class, MysqlType.BIT);
-		mapping.put(Boolean.class, MysqlType.TINYINT);
-		mapping.put(Boolean.class, MysqlType.TINYINT);
-		mapping.put(double.class, MysqlType.DOUBLE);
-		mapping.put(Double.class, MysqlType.DOUBLE);
-		mapping.put(float.class, MysqlType.DOUBLE);
-		mapping.put(Float.class, MysqlType.FLOAT);
-		
-		mapping.put(LocalDate.class, MysqlType.DATE);
-		mapping.put(LocalDateTime.class, MysqlType.DATETIME);
-		
-		return mapping;
 	}
 	
 }

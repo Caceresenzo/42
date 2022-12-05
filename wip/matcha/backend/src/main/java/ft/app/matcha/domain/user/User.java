@@ -9,11 +9,13 @@ import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 @Entity
 @Table
 @Data
 @Accessors(chain = true)
+@FieldNameConstants
 public class User {
 	
 	@Id

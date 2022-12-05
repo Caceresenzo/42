@@ -13,6 +13,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class ManyToOne extends Column implements Relationship {
 	
-	private final Entity target;
+	private final Entity<?> target;
 	
 }

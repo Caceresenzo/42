@@ -10,7 +10,6 @@ import ft.framework.mvc.annotation.RequestMapping;
 import ft.framework.mvc.annotation.ResponseErrorProperty;
 import ft.framework.mvc.annotation.Variable;
 import ft.framework.mvc.domain.Pageable;
-import ft.framework.orm.EntityManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,18 +18,18 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping(path = "/users")
 public class UserController {
 	
-	private final EntityManager entityManager;
+	private final UserRepository repository;
 	
 	@GetMapping
 	public List<User> index(Pageable pageable) {
-		return entityManager.findAll(User.class);
+		return repository.findAll();
 	}
 	
 	@PostMapping
 	public User create(
 		@Body UserCreateForm body
 	) {
-		return entityManager.insert(new User()
+		return repository.save(new User()
 			.setName(body.getName())
 			.setBio(body.getBio()));
 	}
@@ -39,8 +38,15 @@ public class UserController {
 	public User show(
 		@Variable long id
 	) {
-		return entityManager.find(User.class, id)
+		return repository.findById(id)
 			.orElseThrow(() -> new UserNotFoundException(id));
+	}
+	
+	@GetMapping(path = "/name/{name}")
+	public List<User> show(
+		@Variable String name
+	) {
+		return repository.findAllByName(name);
 	}
 	
 	@SuppressWarnings("serial")

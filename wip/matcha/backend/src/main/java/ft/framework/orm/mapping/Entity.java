@@ -8,11 +8,11 @@ import lombok.SneakyThrows;
 
 @Data
 @Builder
-public class Entity {
+public class Entity<T> {
 	
 	private final String name;
-	private final @JsonIgnore Class<?> clazz;
-	private final @JsonIgnore Class<?> proxyClass;
+	private final @JsonIgnore Class<T> clazz;
+	private final @JsonIgnore Class<? extends T> proxyClass;
 	private final Table table;
 	
 	@SneakyThrows
