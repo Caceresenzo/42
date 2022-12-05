@@ -34,7 +34,6 @@ public class AuthService {
 	}
 	
 	public Tokens refresh(RefreshForm form) {
-		System.out.println(form);
 		final var refreshToken = refreshTokenService.refresh(form.getRefreshToken());
 		
 		return refreshToken.map(this::createTokens)

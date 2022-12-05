@@ -1,19 +1,26 @@
 package ft.framework.swagger.part;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.Optional;
 
+import ft.framework.mvc.annotation.Body;
 import ft.framework.mvc.mapping.Route;
 import ft.framework.swagger.annotation.ApiHidden;
 import ft.framework.swagger.annotation.ApiOperation;
-import io.swagger.models.Operation;
-import io.swagger.models.Response;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.media.Content;
+import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.responses.ApiResponses;
 import spark.utils.StringUtils;
 
 public class OperationBuilder {
 	
-	public static Optional<Operation> build(Route route) {
+	public static Optional<Operation> build(OpenAPI swagger, Route route) {
 		if (route.getMethod().isAnnotationPresent(ApiHidden.class)) {
 			return Optional.empty();
 		}
@@ -21,8 +28,6 @@ public class OperationBuilder {
 		final var operation = new Operation();
 		
 		operation.setOperationId("%s-%s".formatted(route.getMethod().getDeclaringClass().getSimpleName(), route.getMethod().getName()));
-		operation.addConsumes(route.getConsume());
-		operation.addProduces(route.getProduce());
 		operation.setDeprecated(hasAnnotationOrParent(route, Deprecated.class));
 		
 		final var annotation = route.getMethod().getAnnotation(ApiOperation.class);
@@ -39,23 +44,56 @@ public class OperationBuilder {
 		}
 		
 		for (final var parameter : route.getParameters()) {
-			ParameterBuilder.build(parameter)
-				.forEach(operation::addParameter);
+			ParameterBuilder.build(swagger, parameter)
+				.forEach(operation::addParametersItem);
 		}
 		
-		final var response = new Response();
-		response.setDescription("Default");
+		for (final var parameter : route.getParameters()) {
+			if (parameter.isAnnotationPresent(Body.class)) {
+				operation.requestBody(buildRequestBody(swagger, route, parameter));
+				break;
+			}
+		}
 		
-		PropertyBuilder.build(route.getMethod().getGenericReturnType())
-			.ifPresent(response::setSchema);
+		final var responses = new ApiResponses();
+		operation.responses(responses);
 		
-		operation.response(route.getResponseStatus(), response);
+		responses.addApiResponse(String.valueOf(route.getResponseStatus()), buildDefaultResponse(swagger, route));
 		
 		return Optional.of(operation);
 	}
 	
 	public static boolean hasAnnotationOrParent(Route route, Class<? extends Annotation> clazz) {
 		return route.getMethod().isAnnotationPresent(clazz) || route.getMethod().getDeclaringClass().isAnnotationPresent(clazz);
+	}
+	
+	public static ApiResponse buildDefaultResponse(OpenAPI swagger, Route route) {
+		final var mediaType = new MediaType();
+		SchemaBuilder.build(swagger, route.getMethod().getGenericReturnType())
+			.ifPresent(mediaType::schema);
+		
+		final var content = new Content();
+		content.addMediaType(route.getProduce(), mediaType);
+		
+		final var response = new ApiResponse();
+		response.setDescription("Default");
+		response.setContent(content);
+		
+		return response;
+	}
+	
+	public static RequestBody buildRequestBody(OpenAPI swagger, Route route, Parameter parameter) {
+		final var mediaType = new MediaType();
+		SchemaBuilder.build(swagger, parameter.getParameterizedType())
+			.ifPresent(mediaType::setSchema);
+		
+		final var content = new Content();
+		content.addMediaType(route.getConsume(), mediaType);
+		
+		final var requestBody = new RequestBody();
+		requestBody.content(content);
+		
+		return requestBody;
 	}
 	
 }

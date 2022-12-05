@@ -1,13 +1,11 @@
 package ft.framework.swagger.controller;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ft.framework.mvc.annotation.Controller;
 import ft.framework.mvc.annotation.GetMapping;
 import ft.framework.mvc.annotation.ResponseBody;
 import ft.framework.util.MediaTypes;
-import io.swagger.models.Swagger;
+import io.swagger.v3.core.util.Json;
+import io.swagger.v3.oas.models.OpenAPI;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 
@@ -15,7 +13,7 @@ import lombok.SneakyThrows;
 @Controller
 public class SwaggerController {
 	
-	private final Swagger swagger;
+	private final OpenAPI swagger;
 	
 	@GetMapping(path = "spec.json")
 	@ResponseBody
@@ -61,10 +59,8 @@ public class SwaggerController {
 	}
 	
 	@SneakyThrows
-	public static String convertToSpec(Swagger swagger) {
-		return new ObjectMapper()
-			.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-			.writeValueAsString(swagger);
+	public static String convertToSpec(OpenAPI swagger) {
+		return Json.pretty(swagger);
 	}
 	
 }

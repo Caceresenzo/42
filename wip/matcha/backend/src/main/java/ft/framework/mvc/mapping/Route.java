@@ -15,7 +15,7 @@ import spark.route.HttpMethod;
 
 @Data
 @Builder
-public class Route {
+public class Route implements Comparable<Route> {
 	
 	@NonNull
 	private final String path;
@@ -34,7 +34,7 @@ public class Route {
 	
 	@NonNull
 	private final String produce;
-
+	
 	@Builder.Default
 	private final boolean authenticated = false;
 	
@@ -46,5 +46,10 @@ public class Route {
 	
 	@Getter(lazy = true)
 	private final List<Parameter> parameters = Arrays.asList(method.getParameters());
+	
+	@Override
+	public int compareTo(Route other) {
+		return path.compareTo(other.path);
+	}
 	
 }

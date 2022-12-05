@@ -35,7 +35,6 @@ public class RefreshTokenService {
 	
 	public Optional<RefreshToken> refresh(String plain) {
 		final var previous = find(plain);
-		System.out.println(previous);
 		
 		previous.ifPresent(repository::delete);
 		
@@ -46,7 +45,6 @@ public class RefreshTokenService {
 	
 	public Optional<RefreshToken> find(String plain) {
 		final var encoded = encode(plain);
-		System.out.println(encoded);
 		
 		return repository.findByEncoded(encoded);
 	}

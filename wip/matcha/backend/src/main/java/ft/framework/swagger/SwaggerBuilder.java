@@ -6,27 +6,40 @@ import java.util.TreeMap;
 
 import ft.framework.mvc.mapping.Route;
 import ft.framework.swagger.part.OperationBuilder;
-import io.swagger.models.Path;
-import io.swagger.models.Swagger;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.PathItem.HttpMethod;
+import io.swagger.v3.oas.models.Paths;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class SwaggerBuilder {
 	
-	public static Swagger build(Swagger swagger, List<Route> routes) {
-		final var paths = new TreeMap<String, Path>(Comparator.naturalOrder());
-		swagger.setPaths(paths);
+	public static OpenAPI build(OpenAPI swagger, List<Route> routes) {
+		swagger.setPaths(new Paths());
+		swagger.setComponents(new Components()
+			.schemas(new TreeMap<>(Comparator.naturalOrder())));
 		
-		for (final var route : routes) {
-			final var operation = OperationBuilder.build(route);
-			
-			if (operation.isPresent()) {
-				final var path = paths.computeIfAbsent(route.getPath(), (key) -> new Path());
-				path.set(route.getHttpMethod().name().toLowerCase(), operation.get());
-			}
-		}
+		routes.stream()
+			.sorted()
+			.forEach((route) -> {
+				final var operation = OperationBuilder.build(swagger, route);
+				
+				if (operation.isPresent()) {
+					final var path = swagger.getPaths().computeIfAbsent(route.getPath(), (key) -> new PathItem());
+					final var method = convert(route.getHttpMethod());
+					
+					path.operation(method, operation.get());
+				}
+				
+			});
 		
 		return swagger;
+	}
+	
+	public static HttpMethod convert(spark.route.HttpMethod method) {
+		return HttpMethod.valueOf(method.name().toUpperCase());
 	}
 	
 }

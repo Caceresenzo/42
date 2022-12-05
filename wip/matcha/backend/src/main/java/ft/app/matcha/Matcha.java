@@ -41,8 +41,8 @@ import ft.framework.swagger.SwaggerBuilder;
 import ft.framework.swagger.controller.SwaggerController;
 import ft.framework.trace.filter.LoggingFilter;
 import io.jsonwebtoken.security.Keys;
-import io.swagger.models.Info;
-import io.swagger.models.Swagger;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,7 +70,7 @@ public class Matcha {
 		routeRegistry.add(new PictureController());
 		routeRegistry.add(new UserController(userRepository));
 		
-		final var swagger = new Swagger()
+		final var swagger = new OpenAPI()
 			.info(new Info()
 				.title("Matcha")
 				.version("1.0"));
