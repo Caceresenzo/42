@@ -17,6 +17,7 @@ public final class Comparison<T> implements Predicate<T> {
 		EQUALS,
 		NOT_EQUALS,
 		IS,
+		IS_NOT,
 		// TODO Add more
 		;
 		

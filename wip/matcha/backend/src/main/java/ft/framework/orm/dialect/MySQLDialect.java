@@ -54,6 +54,7 @@ public class MySQLDialect implements Dialect {
 		comparisonToCode.put(Comparison.Type.EQUALS, "=");
 		comparisonToCode.put(Comparison.Type.NOT_EQUALS, "!=");
 		comparisonToCode.put(Comparison.Type.IS, "IS");
+		comparisonToCode.put(Comparison.Type.IS_NOT, "IS NOT");
 	}
 	
 	@Override

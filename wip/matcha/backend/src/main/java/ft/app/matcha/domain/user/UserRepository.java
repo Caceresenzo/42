@@ -12,7 +12,12 @@ public class UserRepository extends Repository<User, Long> {
 	}
 	
 	public List<User> findAllByName(String name) {
-		return findAllBy(builder.equals(User.Fields.name, name));
+		return findAllBy(
+			builder.and(
+				builder.equals(User.Fields.name, name),
+				builder.isNotNull(User.Fields.bio)
+			)
+		);
 	}
 	
 }

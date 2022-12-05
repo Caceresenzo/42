@@ -14,17 +14,17 @@ public class PredicateBuilder<T> {
 		this.entity = entity;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Branch<T> and(Predicate<T>... predicates) {
+	@SafeVarargs
+	public final Branch<T> and(Predicate<T>... predicates) {
 		return and(Arrays.asList(predicates));
 	}
 	
 	public Branch<T> and(List<Predicate<T>> predicates) {
 		return branch(Branch.Type.AND, predicates);
 	}
-	
-	@SuppressWarnings("unchecked")
-	public Branch<T> or(Predicate<T>... predicates) {
+
+	@SafeVarargs
+	public final Branch<T> or(Predicate<T>... predicates) {
 		return or(Arrays.asList(predicates));
 	}
 	
@@ -46,6 +46,10 @@ public class PredicateBuilder<T> {
 	
 	public Comparison<T> isNull(String property) {
 		return compare(Comparison.Type.IS, property, null);
+	}
+	
+	public Comparison<T> isNotNull(String property) {
+		return compare(Comparison.Type.IS_NOT, property, null);
 	}
 	
 	public Branch<T> branch(Branch.Type type, List<Predicate<T>> predicates) {
