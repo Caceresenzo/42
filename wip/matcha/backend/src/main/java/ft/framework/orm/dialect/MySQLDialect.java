@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import com.mysql.cj.MysqlType;
 
+import ft.framework.mvc.domain.Pageable;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
@@ -189,33 +190,75 @@ public class MySQLDialect implements Dialect {
 	}
 	
 	@Override
-	public String buildSelectByIdStatement(Table table, Collection<Column> columns) {
-		return buildIncompleteSelectStatement(table, columns)
-			.append(" WHERE `").append(table.getIdColumn().getName()).append("` = ?")
-			.append(";")
-			.toString();
-	}
-	
-	@Override
 	public String buildSelectStatement(Table table, Collection<Column> columns) {
-		return buildIncompleteSelectStatement(table, columns)
-			.append(";")
-			.toString();
+		return buildSelectStatement(table, columns, null, null);
 	}
 	
 	@Override
 	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate) {
-		return buildIncompleteSelectStatement(table, columns)
-			.append(buildWhere(predicate))
-			.append(";")
-			.toString();
+		return buildSelectStatement(table, columns, predicate, null);
+	}
+	
+	@Override
+	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate, Pageable pageable) {
+		final var sql = new StringBuilder();
+		
+		sql.append("SELECT ");
+		
+		final var iterator = columns.iterator();
+		while (iterator.hasNext()) {
+			final var column = iterator.next();
+			
+			sql.append("`").append(column.getName()).append("`");
+			
+			if (iterator.hasNext()) {
+				sql.append(", ");
+			}
+		}
+		
+		sql.append(" FROM `").append(table.getName()).append("`");
+		
+		if (predicate != null) {
+			sql.append(buildWhere(predicate));
+		}
+		
+		if (pageable != null) {
+			sql.append(buildLimitAndOffset(pageable));
+		}
+		
+		sql.append(";");
+		
+		return sql.toString();
+	}
+	
+	@Override
+	public String buildCountStatement(Table table) {
+		return buildCountStatement(table, null);
+	}
+	
+	@Override
+	public String buildCountStatement(Table table, Predicate<?> predicate) {
+		final var sql = new StringBuilder();
+		
+		sql.append("SELECT ").append("COUNT(*)").append(" FROM `").append(table.getName()).append("`");
+		
+		if (predicate != null) {
+			sql.append(buildWhere(predicate));
+		}
+		
+		sql.append(";");
+		
+		return sql.toString();
+	}
+	
+	private Object buildLimitAndOffset(Pageable pageable) {
+		final var limit = pageable.getSize();
+		final var offset = pageable.getPage() * limit;
+		
+		return " LIMIT %s OFFSET %s".formatted(limit, offset);
 	}
 	
 	public String buildWhere(Predicate<?> predicate) {
-		if (predicate == null) {
-			return "";
-		}
-		
 		return " WHERE %s".formatted(buildPredicate(predicate));
 	}
 	
@@ -245,27 +288,6 @@ public class MySQLDialect implements Dialect {
 		final var code = comparisonToCode.get(comparison.getType());
 		
 		return "`%s` %s ?".formatted(comparison.getColumn().getName(), code);
-	}
-	
-	private StringBuilder buildIncompleteSelectStatement(Table table, Collection<Column> columns) {
-		final var sql = new StringBuilder();
-		
-		sql.append("SELECT ");
-		
-		final var iterator = columns.iterator();
-		while (iterator.hasNext()) {
-			final var column = iterator.next();
-			
-			sql.append("`").append(column.getName()).append("`");
-			
-			if (iterator.hasNext()) {
-				sql.append(", ");
-			}
-		}
-		
-		sql.append(" FROM `").append(table.getName()).append("`");
-		
-		return sql;
 	}
 	
 }

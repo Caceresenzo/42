@@ -9,6 +9,7 @@ import ft.framework.mvc.annotation.PostMapping;
 import ft.framework.mvc.annotation.RequestMapping;
 import ft.framework.mvc.annotation.ResponseErrorProperty;
 import ft.framework.mvc.annotation.Variable;
+import ft.framework.mvc.domain.Page;
 import ft.framework.mvc.domain.Pageable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,8 @@ public class UserController {
 	private final UserRepository repository;
 	
 	@GetMapping
-	public List<User> index(Pageable pageable) {
-		return repository.findAll();
+	public Page<User> index(Pageable pageable) {
+		return repository.findAll(pageable);
 	}
 	
 	@PostMapping

@@ -2,6 +2,7 @@ package ft.framework.orm.dialect;
 
 import java.util.Collection;
 
+import ft.framework.mvc.domain.Pageable;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
@@ -20,10 +21,14 @@ public interface Dialect {
 	
 	public String buildUpdateByIdStatement(Table table, Collection<Column> columns);
 	
-	public String buildSelectByIdStatement(Table table, Collection<Column> columns);
-	
 	public String buildSelectStatement(Table table, Collection<Column> columns);
 	
 	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate);
+	
+	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate, Pageable pageable);
+
+	public String buildCountStatement(Table table);
+	
+	public String buildCountStatement(Table table, Predicate<?> predicate);
 	
 }

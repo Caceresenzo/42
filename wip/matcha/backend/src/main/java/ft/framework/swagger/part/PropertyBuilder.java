@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -57,17 +58,32 @@ public class PropertyBuilder {
 		propertyBuilders = Collections.unmodifiableMap(builders);
 	}
 	
-	public static Optional<Property> build(Type type) {
+	// TODO This can only break.... Resolving TypeVariable is super hard!!
+	public static Optional<Property> build(Type type, Type... others) {
+		if (type instanceof TypeVariable<?> typeVariable && others.length != 0) {
+			type = others[0];
+		}
+		
 		if (type instanceof ParameterizedType parameterizedType) {
 			final var raw = parameterizedType.getRawType();
 			
 			if (List.class.equals(raw)) {
 				final var property = new ArrayProperty();
-				build(parameterizedType.getActualTypeArguments()[0])
+				build(parameterizedType.getActualTypeArguments()[0], others)
 					.ifPresent(property::setItems);
 				
 				return Optional.of(property);
 			}
+			
+			others = parameterizedType.getActualTypeArguments();
+			
+			final var property = new ObjectProperty();
+			for (final var field : FieldUtils.getAllFields((Class<?>) raw)) {
+				build(field, field.getName(), field.getGenericType(), others)
+					.ifPresent((property_) -> property.property(field.getName(), property_));
+			}
+			
+			return Optional.of(property);
 		}
 		
 		if (type instanceof Class<?> clazz) {
@@ -90,12 +106,12 @@ public class PropertyBuilder {
 		throw new RuntimeException("cannot convert to property: " + type);
 	}
 	
-	public static Optional<Property> build(AnnotatedElement annotatedElement, String name, Type type) {
+	public static Optional<Property> build(AnnotatedElement annotatedElement, String name, Type type, Type... others) {
 		if (annotatedElement.isAnnotationPresent(JsonIgnore.class)) {
 			return Optional.empty();
 		}
 		
-		return build(type)
+		return build(type, others)
 			.map((property) -> {
 				property.setName(name);
 				return property;

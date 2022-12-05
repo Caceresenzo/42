@@ -19,6 +19,8 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.mysql.cj.MysqlType;
 
+import ft.framework.mvc.domain.Page;
+import ft.framework.mvc.domain.Pageable;
 import ft.framework.orm.dialect.Dialect;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.Entity;
@@ -151,11 +153,6 @@ public class EntityManager {
 		return convert(entity, instance);
 	}
 	
-	@SneakyThrows
-	public <T> Optional<T> findBy(Class<T> clazz, Predicate<T> predicate) {
-		return findBy(getEntity(clazz), predicate);
-	}
-	
 	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> Optional<T> findBy(Entity<T> entity, Predicate<T> predicate) {
@@ -188,21 +185,6 @@ public class EntityManager {
 		}
 	}
 	
-	@SneakyThrows
-	public <T> List<T> findAll(Class<T> clazz) {
-		return findAllBy(clazz, null);
-	}
-	
-	@SneakyThrows
-	public <T> List<T> findAll(Entity<T> entity) {
-		return findAllBy(entity, null);
-	}
-	
-	@SneakyThrows
-	public <T> List<T> findAllBy(Class<T> clazz, Predicate<T> predicate) {
-		return findAllBy(getEntity(clazz), predicate);
-	}
-	
 	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> List<T> findAllBy(Entity<T> entity, Predicate<T> predicate) {
@@ -210,7 +192,7 @@ public class EntityManager {
 		final var columns = table.getAllColumns();
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
-			final var sql = dialect.buildSelectStatement(table, columns, predicate);
+			final var sql = dialect.buildSelectStatement(table, columns, predicate, null);
 			
 			log.trace("findAllBy: {}", sql);
 			
@@ -230,6 +212,56 @@ public class EntityManager {
 					return instances;
 				}
 			}
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	public <T> Page<T> findAllBy(Entity<T> entity, Predicate<T> predicate, Pageable pageable) {
+		final var table = entity.getTable();
+		final var columns = table.getAllColumns();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var content = new ArrayList<T>();
+			var totalElements = 0l;
+			
+			{
+				final var sql = dialect.buildSelectStatement(table, columns, predicate, pageable);
+				
+				log.trace("findAllBy: {}", sql);
+				
+				try (final var statement = connection.prepareStatement(sql.toString())) {
+					applyPredicate(statement, predicate);
+					
+					try (ResultSet resultSet = statement.executeQuery()) {
+						
+						while (resultSet.next()) {
+							final T instance = read((T) entity.instantiate(), resultSet, columns);
+							final T converted = convert(entity, instance);
+							
+							content.add(converted);
+						}
+					}
+				}
+			}
+			
+			{
+				final var sql = dialect.buildCountStatement(table, predicate);
+				
+				log.trace("findAllBy: {}", sql);
+				
+				try (final var statement = connection.prepareStatement(sql.toString())) {
+					applyPredicate(statement, predicate);
+					
+					try (ResultSet resultSet = statement.executeQuery()) {
+						if (resultSet.next()) {
+							totalElements = resultSet.getLong(1);
+						}
+					}
+				}
+			}
+			
+			return new Page<>(content, totalElements, pageable);
 		}
 	}
 	

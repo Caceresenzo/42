@@ -3,6 +3,8 @@ package ft.framework.orm.repository;
 import java.util.List;
 import java.util.Optional;
 
+import ft.framework.mvc.domain.Page;
+import ft.framework.mvc.domain.Pageable;
 import ft.framework.orm.EntityManager;
 import ft.framework.orm.mapping.Entity;
 import ft.framework.orm.predicate.Predicate;
@@ -33,7 +35,11 @@ public class Repository<T, ID> {
 	}
 	
 	public List<T> findAll() {
-		return entityManager.findAll(entity);
+		return findAllBy(null);
+	}
+	
+	public Page<T> findAll(Pageable pageable) {
+		return findAllBy(null, pageable);
 	}
 	
 	public T save(T instance) {
@@ -54,6 +60,10 @@ public class Repository<T, ID> {
 	
 	protected List<T> findAllBy(Predicate<T> predicate) {
 		return entityManager.findAllBy(entity, predicate);
+	}
+	
+	protected Page<T> findAllBy(Predicate<T> predicate, Pageable pageable) {
+		return entityManager.findAllBy(entity, predicate, pageable);
 	}
 	
 }
