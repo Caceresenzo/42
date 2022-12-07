@@ -14,12 +14,15 @@ import ft.app.matcha.domain.auth.RefreshTokenRepository;
 import ft.app.matcha.domain.auth.RefreshTokenService;
 import ft.app.matcha.domain.like.Like;
 import ft.app.matcha.domain.notification.Notification;
+import ft.app.matcha.domain.notification.NotificationRepository;
+import ft.app.matcha.domain.notification.NotificationService;
 import ft.app.matcha.domain.picture.PictureController;
 import ft.app.matcha.domain.user.User;
 import ft.app.matcha.domain.user.UserController;
 import ft.app.matcha.domain.user.UserRepository;
 import ft.app.matcha.domain.user.UserService;
 import ft.app.matcha.security.JwtAuthenticationFilter;
+import ft.framework.event.ApplicationEventPublisher;
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.http.convert.SimpleHttpMessageConversionService;
 import ft.framework.mvc.http.convert.impl.InputStreamHttpMessageConverter;
@@ -56,13 +59,19 @@ public class Matcha {
 		
 		final var ormConfiguration = configureOrm(User.class, RefreshToken.class, Notification.class, Like.class);
 		
+		final var eventPublished = new ApplicationEventPublisher();
+		
 		final var userRepository = new UserRepository(ormConfiguration.getEntityManager());
 		final var refreshTokenRepository = new RefreshTokenRepository(ormConfiguration.getEntityManager());
+		final var notificationRepository = new NotificationRepository(ormConfiguration.getEntityManager());
 		
 		final var userService = new UserService(userRepository);
 		final var jwtService = new JwtService(key, userRepository);
 		final var refreshTokenService = new RefreshTokenService(refreshTokenRepository);
-		final var authService = new AuthService(userService, refreshTokenService, jwtService);
+		final var authService = new AuthService(userService, refreshTokenService, jwtService, eventPublished);
+		final var notificationService = new NotificationService(notificationRepository);
+		
+		eventPublished.scan(notificationService);
 		
 		final var mvcConfiguration = configureMvc(jwtService);
 		final var routeRegistry = new RouteRegistry(mvcConfiguration);
