@@ -30,7 +30,7 @@ public class LengthValidator implements ConstraintValidator<Length, String> {
 			return false;
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public static OptionalInt ifNotDefault(int value) {
