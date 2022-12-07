@@ -23,6 +23,7 @@ import ft.app.matcha.domain.user.UserRepository;
 import ft.app.matcha.domain.user.UserService;
 import ft.app.matcha.security.JwtAuthenticationFilter;
 import ft.framework.event.ApplicationEventPublisher;
+import ft.framework.event.listener.EventListenerFactory;
 import ft.framework.mvc.MvcConfiguration;
 import ft.framework.mvc.http.convert.SimpleHttpMessageConversionService;
 import ft.framework.mvc.http.convert.impl.InputStreamHttpMessageConverter;
@@ -61,7 +62,7 @@ public class Matcha {
 		
 		final var ormConfiguration = configureOrm(User.class, RefreshToken.class, Notification.class, Like.class);
 		
-		final var eventPublished = new ApplicationEventPublisher();
+		final var eventPublisher = new ApplicationEventPublisher();
 		final var taskScheduler = new WispTaskScheduler();
 		
 		final var userRepository = new UserRepository(ormConfiguration.getEntityManager());
@@ -71,7 +72,7 @@ public class Matcha {
 		final var userService = new UserService(userRepository);
 		final var jwtService = new JwtService(key, userRepository);
 		final var refreshTokenService = new RefreshTokenService(refreshTokenRepository);
-		final var authService = new AuthService(userService, refreshTokenService, jwtService, eventPublished);
+		final var authService = new AuthService(userService, refreshTokenService, jwtService, eventPublisher);
 		final var notificationService = new NotificationService(notificationRepository);
 		
 		final var services = Arrays.asList(new Object[] {
@@ -82,7 +83,8 @@ public class Matcha {
 			notificationService,
 		});
 		
-		services.forEach(eventPublished::scan);
+		final var eventListenerFactory = new EventListenerFactory(eventPublisher);
+		services.forEach(eventListenerFactory::scan);
 		
 		final var scheduledFactory = new ScheduledFactory(taskScheduler);
 		services.forEach(scheduledFactory::scan);

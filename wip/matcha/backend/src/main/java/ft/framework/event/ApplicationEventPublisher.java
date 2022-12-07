@@ -3,10 +3,7 @@ package ft.framework.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.MethodUtils;
-
 import ft.framework.event.listener.EventListener;
-import ft.framework.event.listener.MethodEventListener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -36,18 +33,8 @@ public class ApplicationEventPublisher {
 			.toList();
 	}
 	
-	public <T> T scan(T object) {
-		final var methods = MethodUtils.getMethodsListWithAnnotation(object.getClass(), ft.framework.event.annotation.EventListener.class);
-		
-		if (!methods.isEmpty()) {
-			log.info("Found {} listener(s) on {}", methods.size(), object);
-			
-			for (final var method : methods) {
-				listeners.add(new MethodEventListener(object, method));
-			}
-		}
-		
-		return object;
+	public void addListener(EventListener listener) {
+		listeners.add(listener);
 	}
 	
 }
