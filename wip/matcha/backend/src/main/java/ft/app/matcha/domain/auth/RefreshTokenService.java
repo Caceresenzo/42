@@ -51,6 +51,10 @@ public class RefreshTokenService {
 		return repository.findByEncoded(encoded);
 	}
 	
+	public void delete(RefreshToken refreshToken) {
+		repository.delete(refreshToken);
+	}
+	
 	@Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
 	public long deleteExpired() {
 		return repository.deleteAllByExpireAtLessThan(LocalDateTime.now());

@@ -1,11 +1,13 @@
 package ft.app.matcha.domain.auth;
 
 import ft.app.matcha.domain.auth.event.LoginEvent;
+import ft.app.matcha.domain.auth.event.LogoutEvent;
 import ft.app.matcha.domain.auth.event.RefreshEvent;
 import ft.app.matcha.domain.auth.event.RegisterEvent;
 import ft.app.matcha.domain.auth.exception.InvalidRefreshTokenException;
 import ft.app.matcha.domain.auth.exception.WrongLoginOrPasswordException;
 import ft.app.matcha.domain.auth.model.LoginForm;
+import ft.app.matcha.domain.auth.model.LogoutForm;
 import ft.app.matcha.domain.auth.model.RefreshForm;
 import ft.app.matcha.domain.auth.model.RegisterForm;
 import ft.app.matcha.domain.auth.model.Tokens;
@@ -48,6 +50,15 @@ public class AuthService {
 		eventPublisher.publishEvent(new RefreshEvent(this, refreshToken));
 		
 		return createTokens(refreshToken);
+	}
+
+	public void logout(LogoutForm form) {
+		final var refreshToken = refreshTokenService.find(form.getRefreshToken())
+			.orElseThrow(InvalidRefreshTokenException::new);
+		
+		eventPublisher.publishEvent(new LogoutEvent(this, refreshToken));
+		
+		refreshTokenService.delete(refreshToken);
 	}
 	
 	public Tokens createTokens(User user) {

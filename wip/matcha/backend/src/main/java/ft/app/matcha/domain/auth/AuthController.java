@@ -1,6 +1,7 @@
 package ft.app.matcha.domain.auth;
 
 import ft.app.matcha.domain.auth.model.LoginForm;
+import ft.app.matcha.domain.auth.model.LogoutForm;
 import ft.app.matcha.domain.auth.model.RefreshForm;
 import ft.app.matcha.domain.auth.model.RegisterForm;
 import ft.app.matcha.domain.auth.model.Tokens;
@@ -49,6 +50,13 @@ public class AuthController {
 		@Body @Valid RefreshForm form
 	) {
 		return authService.refresh(form);
+	}
+	
+	@PostMapping(path = "/logout")
+	public void logout(
+		@Body @Valid LogoutForm form
+	) {
+		authService.logout(form);
 	}
 	
 }
