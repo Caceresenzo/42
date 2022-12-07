@@ -3,10 +3,12 @@ package ft.app.matcha.domain.auth;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
 import ft.app.matcha.domain.user.User;
+import ft.framework.schedule.annotation.Scheduled;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -49,6 +51,7 @@ public class RefreshTokenService {
 		return repository.findByEncoded(encoded);
 	}
 	
+	@Scheduled(fixedDelay = 60, timeUnit = TimeUnit.SECONDS)
 	public long deleteExpired() {
 		return repository.deleteAllByExpireAtLessThan(LocalDateTime.now());
 	}

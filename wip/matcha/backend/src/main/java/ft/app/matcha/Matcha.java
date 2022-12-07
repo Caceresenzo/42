@@ -40,6 +40,8 @@ import ft.framework.orm.EntityManager;
 import ft.framework.orm.OrmConfiguration;
 import ft.framework.orm.dialect.MySQLDialect;
 import ft.framework.orm.mapping.MappingBuilder;
+import ft.framework.schedule.ScheduledFactory;
+import ft.framework.schedule.impl.WispTaskScheduler;
 import ft.framework.swagger.SwaggerBuilder;
 import ft.framework.swagger.controller.SwaggerController;
 import ft.framework.trace.filter.LoggingFilter;
@@ -60,6 +62,7 @@ public class Matcha {
 		final var ormConfiguration = configureOrm(User.class, RefreshToken.class, Notification.class, Like.class);
 		
 		final var eventPublished = new ApplicationEventPublisher();
+		final var taskScheduler = new WispTaskScheduler();
 		
 		final var userRepository = new UserRepository(ormConfiguration.getEntityManager());
 		final var refreshTokenRepository = new RefreshTokenRepository(ormConfiguration.getEntityManager());
@@ -71,7 +74,18 @@ public class Matcha {
 		final var authService = new AuthService(userService, refreshTokenService, jwtService, eventPublished);
 		final var notificationService = new NotificationService(notificationRepository);
 		
-		eventPublished.scan(notificationService);
+		final var services = Arrays.asList(new Object[] {
+			userService,
+			jwtService,
+			refreshTokenService,
+			authService,
+			notificationService,
+		});
+		
+		services.forEach(eventPublished::scan);
+		
+		final var scheduledFactory = new ScheduledFactory(taskScheduler);
+		services.forEach(scheduledFactory::scan);
 		
 		final var mvcConfiguration = configureMvc(jwtService);
 		final var routeRegistry = new RouteRegistry(mvcConfiguration);

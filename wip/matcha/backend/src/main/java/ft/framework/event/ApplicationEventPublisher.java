@@ -39,10 +39,12 @@ public class ApplicationEventPublisher {
 	public <T> T scan(T object) {
 		final var methods = MethodUtils.getMethodsListWithAnnotation(object.getClass(), ft.framework.event.annotation.EventListener.class);
 		
-		log.info("Found {} listener(s) on {}", methods.size(), object);
-		
-		for (final var method : methods) {
-			listeners.add(new MethodEventListener(object, method));
+		if (!methods.isEmpty()) {
+			log.info("Found {} listener(s) on {}", methods.size(), object);
+			
+			for (final var method : methods) {
+				listeners.add(new MethodEventListener(object, method));
+			}
 		}
 		
 		return object;
