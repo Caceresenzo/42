@@ -9,6 +9,7 @@ import ft.app.matcha.domain.user.User;
 import ft.app.matcha.domain.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,8 @@ public class JwtService {
 			return userRepository.getById(subject);
 		} catch (SignatureException exception) {
 			throw JwtException.badSignature();
+		} catch (MalformedJwtException exception) {
+			throw JwtException.malformed();
 		}
 	}
 	

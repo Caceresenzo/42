@@ -18,4 +18,8 @@ public class JwtException extends RuntimeException {
 		return new JwtException("signature is invalid");
 	}
 	
+	public static JwtException malformed() {
+		return new JwtException("signature is malformed");
+	}
+	
 }
