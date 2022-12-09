@@ -6,6 +6,7 @@
     <h1 v-else>
       {{ otherError }}
     </h1>
+    <pre><code class="d-block">{{ error }}</code></pre>
     <NuxtLink to="/"> Home page </NuxtLink>
   </v-app>
 </template>

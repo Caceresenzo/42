@@ -1,6 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+
+  ssr: false,
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - matcha',
@@ -46,6 +49,8 @@ export default {
     '@nuxtjs/axios',
     // https://github.com/yariksav/vuetify-dialog
     'vuetify-dialog/nuxt',
+    // https://www.npmjs.com/package/@nuxtjs/proxy
+    '@nuxtjs/proxy',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -75,4 +80,12 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+
+  proxy: {
+    '/api/': {
+      changeOrigin: false,
+      pathRewrite: { '^/api/': '/' },
+      target: "http://localhost:4567/",
+    },
+  },
 }

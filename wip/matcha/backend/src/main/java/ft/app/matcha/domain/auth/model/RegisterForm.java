@@ -1,5 +1,7 @@
 package ft.app.matcha.domain.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import ft.app.matcha.domain.user.User;
 import ft.framework.validation.constraint.annotation.Length;
 import ft.framework.validation.constraint.annotation.NotBlank;
@@ -8,6 +10,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RegisterForm {
 	
 	@NotBlank

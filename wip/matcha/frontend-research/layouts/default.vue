@@ -31,6 +31,9 @@
         @click.stop="drawer = !drawer"
       />
       <v-toolbar-title> matcha </v-toolbar-title>
+      <v-spacer />
+      <auth-menu v-if="logged" />
+      <auth-buttons v-else />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -44,20 +47,29 @@
 import {
   computed,
   defineComponent,
+  onBeforeMount,
   PropType,
   ref,
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
+import { useAuthStore } from '~/store'
 export default defineComponent({
   setup() {
     const { $vuetify } = useContext()
+    const authStore = useAuthStore()
+
+    onBeforeMount(() => {
+      authStore.initialize()
+    })
 
     const drawer = ref(true)
+    const logged = computed(() => authStore.logged)
     const mobile = computed(() => $vuetify.breakpoint.mobile)
 
     return {
       drawer,
+      logged,
       mobile,
       items: [
         {
