@@ -34,12 +34,18 @@ export default {
     '@nuxtjs/stylelint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    // https://composition-api.nuxtjs.org/getting-started/setup
+    '@nuxtjs/composition-api/module',
+    // https://pinia.vuejs.org/ssr/nuxt.html#nuxt-2-without-bridge
+    '@pinia/nuxt',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    // https://github.com/yariksav/vuetify-dialog
+    'vuetify-dialog/nuxt',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

@@ -15,12 +15,17 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/composition-api": "^0.33.1",
+    "@pinia/nuxt": "^0.2.1",
     "core-js": "^3.25.3",
     "nuxt": "^2.15.8",
+    "pinia": "^2.0.28",
     "vue": "^2.7.10",
+    "vue-demi": "^0.13.11",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
-    "vuetify": "^2.6.10"
+    "vuetify": "^2.6.10",
+    "vuetify-dialog": "^2.0.17"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",
