@@ -97,8 +97,7 @@ MeshLoader::load(const std::string &path)
 
 			while (stream.peek() == '/')
 			{
-				char c;
-				stream >> c;
+				stream.ignore(1);
 				float x = 0.0f;
 				stream >> x;
 			}
@@ -108,8 +107,7 @@ MeshLoader::load(const std::string &path)
 
 			while (stream.peek() == '/')
 			{
-				char c;
-				stream >> c;
+				stream.ignore(1);
 				float x = 0.0f;
 				stream >> x;
 			}
@@ -119,8 +117,7 @@ MeshLoader::load(const std::string &path)
 
 			while (stream.peek() == '/')
 			{
-				char c;
-				stream >> c;
+				stream.ignore(1);
 				float x = 0.0f;
 				stream >> x;
 			}
