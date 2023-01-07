@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include <engine/control/Keyboard.hpp>
+#include <iostream>
 
-Keyboard::PressState Keyboard::s_states[UCHAR_MAX] = { Keyboard::UNPRESSED };
+Keyboard::PressState Keyboard::s_states[Keyboard::_LENGTH] = { Keyboard::UNPRESSED };
 
 Keyboard::Keyboard()
 {

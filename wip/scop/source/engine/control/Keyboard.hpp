@@ -58,10 +58,11 @@ class Keyboard
 			LEFT,
 			DOWN,
 			UP,
+			_LENGTH
 		};
 
 	private:
-		static PressState s_states[UCHAR_MAX];
+		static PressState s_states[_LENGTH];
 
 	private:
 		Keyboard();
