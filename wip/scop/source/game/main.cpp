@@ -112,6 +112,8 @@ struct Options
 		bool no_culling = true;
 };
 
+#define EXIT_HELP 3
+
 int cli(int argc, char **argv, Options &options)
 {
 	options.program = argv[0];
@@ -150,13 +152,13 @@ int cli(int argc, char **argv, Options &options)
 			authors.push_back("Enzo CACERES <ecaceres@student.42.fr>");
 
 			std::cout << parser.help(options.program, APPLICATION_DESCRIPTION, authors) << std::endl;
-			return (0);
+			return (EXIT_HELP);
 		}
 
 		if (command_line.has(OPT_VERSION))
 		{
 			std::cout << APPLICATION_NAME_AND_VERSION << std::endl;
-			return (0);
+			return (EXIT_HELP);
 		}
 
 		if (command_line.has(OPT_NO_GRID))
@@ -222,13 +224,13 @@ int cli(int argc, char **argv, Options &options)
 	{
 		std::cerr << argv[0] << ": " << exception.what() << std::endl;
 		std::cerr << "Try '" << argv[0] << " --help' for more informations." << std::endl;
-		return (false);
+		return (EXIT_FAILURE);
 	}
 
 	if (options.object_file.empty())
 	{
 		std::cerr << "ERROR: no object file specified" << std::endl;
-		return (false);
+		return (EXIT_FAILURE);
 	}
 
 	if (options.texture_file.empty())
@@ -255,7 +257,7 @@ int cli(int argc, char **argv, Options &options)
 
 #undef DUMP_LINE
 
-	return (true);
+	return (EXIT_SUCCESS);
 }
 
 Application& create_application(Options &options)
@@ -564,8 +566,14 @@ main(int argc, char **argv)
 	try
 	{
 		Options options;
-		if (!cli(argc, argv, options))
-			return (EXIT_FAILURE);
+
+		int code = cli(argc, argv, options);
+
+		if (code == EXIT_FAILURE)
+			return (code);
+
+		if (code == EXIT_HELP)
+			return (EXIT_SUCCESS);
 
 		if (!game(options))
 			return (EXIT_FAILURE);
