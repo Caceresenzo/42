@@ -4,5 +4,5 @@ glew:
 	cd /tmp/glew/auto && make
 	cd /tmp/glew && make
 	mkdir glew
-	cp -r /tmp/glew/bin/* /tmp/glew/lib/* /tmp/glew/includes/* glew
+	cp -r /tmp/glew/bin/* /tmp/glew/lib/* /tmp/glew/include/* glew
 
