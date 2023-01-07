@@ -212,7 +212,7 @@ int cli(int argc, char **argv, Options &options)
 			options.initial_rotation = Number::parse_floating<float>(command_line.first(OPT_INITIAL_ROTATION));
 
 		if (command_line.has(OPT_NO_CULLING))
-			options.no_culling = true;
+			options.no_culling = false;
 
 		if (command_line.has(ARG_OBJECT))
 			options.object_file = command_line.first(ARG_OBJECT);
@@ -457,10 +457,15 @@ bool game(Options &options)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		glEnable(GL_DEPTH_TEST);
 
-		if (!options.no_culling)
+		if (options.no_culling)
 		{
 			glEnable(GL_CULL_FACE);
 			glCullFace(GL_BACK);
+		}
+		else
+		{
+			glDisable(GL_CULL_FACE);
+			glCullFace(GL_FRONT_AND_BACK);
 		}
 
 		glPolygonMode(GL_FRONT_AND_BACK, options.polygon_mode);
