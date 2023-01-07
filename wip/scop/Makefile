@@ -22,10 +22,10 @@ COMPILER				= g++
 FLAGS					= -Wall -Wextra -Werror -g3 -O0 -Isource/ -I./library/glew # -fsanitize=address
 LIBRARIES				= -lGL -lGLU -lglfw -lX11 -lXxf86vm -lXrandr -lpthread ./library/glew/libGLEW.a
 
-.cpp.o: glew
+.cpp.o: library/glew
 	${COMPILER} ${FLAGS} -c $< -o ${<:.cpp=.o}
 
-$(TARGET): glew ${OBJECTS}
+$(TARGET): library/glew ${OBJECTS}
 	${COMPILER} ${FLAGS} $(OBJECTS) $(LIBRARIES) -o $(TARGET)
 
 all: $(TARGET)
@@ -38,7 +38,7 @@ clean:
     
 re: fclean all
 
-glew:
-	cd library && make
+library/glew:
+	cd library && make glew
 
 .PHONY: all clean fclean re .cpp.o
