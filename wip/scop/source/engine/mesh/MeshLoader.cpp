@@ -34,6 +34,20 @@ MeshLoader::~MeshLoader()
 {
 }
 
+void
+MeshLoader::skip_face_remaining(std::istream &stream)
+{
+	while (stream.peek() == '/')
+	{
+		stream.ignore(1);
+		if (stream.peek() != '/')
+		{
+			float x = 0.0f;
+			stream >> x;
+		}
+	}
+}
+
 Mesh*
 MeshLoader::load(const std::string &path)
 {
@@ -95,32 +109,17 @@ MeshLoader::load(const std::string &path)
 			if (!(stream >> indice.x))
 				throw MeshException("face: x: invalid");
 
-			while (stream.peek() == '/')
-			{
-				stream.ignore(1);
-				float x = 0.0f;
-				stream >> x;
-			}
+			skip_face_remaining(stream);
 
 			if (!(stream >> indice.y))
 				throw MeshException("face: y: invalid");
 
-			while (stream.peek() == '/')
-			{
-				stream.ignore(1);
-				float x = 0.0f;
-				stream >> x;
-			}
+			skip_face_remaining(stream);
 
 			if (!(stream >> indice.z))
 				throw MeshException("face: z: invalid");
 
-			while (stream.peek() == '/')
-			{
-				stream.ignore(1);
-				float x = 0.0f;
-				stream >> x;
-			}
+			skip_face_remaining(stream);
 
 			bool square = !!(stream >> indice.w);
 

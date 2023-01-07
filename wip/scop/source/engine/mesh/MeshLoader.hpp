@@ -26,6 +26,10 @@ class MeshLoader
 		~MeshLoader();
 
 	public:
+		void
+		skip_face_remaining(std::istream &stream);
+
+	public:
 		Mesh*
 		load(const std::string &path);
 };
