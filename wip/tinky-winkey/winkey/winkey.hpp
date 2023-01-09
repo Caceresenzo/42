@@ -14,10 +14,12 @@
 #define TINKY_HPP
 
 #include <Windows.h>
-#include <iostream>
 #include <signal.h>
 #include <ctype.h>
 #include <string.h>
+
+#include <iostream>
+#include <fstream>
 
 #define SERVICE_NAME "tinky"
 
