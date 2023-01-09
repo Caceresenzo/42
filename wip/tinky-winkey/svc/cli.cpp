@@ -12,8 +12,6 @@
 
 #include "tinky.hpp"
 
-static char g_binary_path[MAX_PATH] = { 0 };
-
 static int
 Die(const char *function, const char *action)
 {
@@ -61,6 +59,9 @@ Open(SC_HANDLE hSCManager, DWORD dwDesiredAccess)
 static int
 Install(SC_HANDLE hSCManager)
 {
+	char commandLine[MAX_PATH] = { 0 };
+	GetModuleFileName(0, commandLine, MAX_PATH);
+
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-createservicea */
 	SC_HANDLE hService = CreateService(
 		hSCManager,
@@ -70,7 +71,7 @@ Install(SC_HANDLE hSCManager)
 		SERVICE_WIN32_OWN_PROCESS /* ServiceType */,
 		SERVICE_DEMAND_START /* StartType */,
 		SERVICE_ERROR_NORMAL /* ErrorControl */,
-		g_binary_path,
+		commandLine,
 		NULL /* LoadOrderGroup */,
 		NULL /* TagId */,
 		NULL /* Dependencies */,
@@ -91,12 +92,17 @@ Start(SC_HANDLE hSCManager)
 	SC_HANDLE hService = Open(hSCManager, SERVICE_START);
 	if (!hService)
 		return (EXIT_FAILURE);
+	
+	char argument[MAX_PATH] = { 0 };
+	GetFullPathName("winkey.exe", MAX_PATH, argument, 0);
+
+	const char *argumentVector[] = { argument };
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-startservicea */
 	BOOL started = StartService(
 		hService,
-		0 /* NumServiceArgs */,
-		NULL /* ServiceArgVectors */);
+		1 /* NumServiceArgs */,
+		argumentVector /* ServiceArgVectors */);
 
 	if (!started)
 		return (DIE("StartService"));
@@ -181,8 +187,6 @@ int main(int argc, char **argv)
 	const char *program = argv[0];
 	if (argc != 2)
 		return (Usage(program));
-
-	GetModuleFileName(0, g_binary_path, MAX_PATH);
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openscmanagera */
 	SC_HANDLE hSCManager = OpenSCManager(

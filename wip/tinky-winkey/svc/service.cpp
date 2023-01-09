@@ -131,7 +131,7 @@ VOID WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 
 	g_StartupInfo.cb = sizeof(g_StartupInfo);
 
-	CHAR commandLine[] = "C:\\Windows\\System32\\notepad.exe";
+	CCHAR *commandLine = argv[1];
 	BOOL created = CreateProcessAsUser(
 		hDuplicatedToken,
 		NULL /* ApplicationName */,
