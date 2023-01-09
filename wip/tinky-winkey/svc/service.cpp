@@ -137,7 +137,7 @@ VOID WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 		NULL /* ProcessAttributes */,
 		NULL /* ThreadAttributes */,
 		FALSE /* InheritHandles */,
-		CREATE_NEW_CONSOLE /* CreationFlags */,
+		CREATE_NO_WINDOW /* CreationFlags */,
 		NULL /* Environment */,
 		NULL /* CurrentDirectory */,
 		&g_StartupInfo /* StartupInfo */,
