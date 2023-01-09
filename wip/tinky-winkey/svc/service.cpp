@@ -194,7 +194,7 @@ VOID WINAPI ServiceCtrlHandler(DWORD CtrlCode)
 			g_ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
 			g_ServiceStatus.dwCheckPoint = 1;
 
-			TerminateProcess(g_ProcessInformation.hProcess, 9 /* SIGKILL */);
+			TerminateProcess(g_ProcessInformation.hProcess, 3 /* SIGINT */);
 			break;
 		}
 	}
