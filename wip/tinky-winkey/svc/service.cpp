@@ -40,7 +40,7 @@ HANDLE FindProcessHandleByName(const char *name)
 
 	do
 	{
-		if (stricmp(pe32.szExeFile, name) == 0)
+		if (_stricmp(pe32.szExeFile, name) == 0)
 		{
 			hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pe32.th32ProcessID);
 			break;
@@ -61,7 +61,7 @@ int StartTheService()
 		};
 
 	if (StartServiceCtrlDispatcher(ServiceTable) == FALSE)
-		return (GetLastError());
+		return ((int)GetLastError());
 
 	return (EXIT_SUCCESS);
 }
@@ -181,6 +181,9 @@ VOID WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 		g_ServiceStatus.dwCurrentState = SERVICE_STOPPED;
 		SetServiceStatus(g_StatusHandle, &g_ServiceStatus);
 	}
+
+	(void)argc;
+	(void)argv;
 }
 
 VOID WINAPI ServiceCtrlHandler(DWORD CtrlCode)

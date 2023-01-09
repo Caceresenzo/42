@@ -14,9 +14,12 @@
 
 BOOL IsAllPrintable(CHAR *buffer, UINT length)
 {
-	for (UINT index = 0; index < length; ++index)
-		if (!isprint(buffer[index] & 0x7f))
+	for (UINT index = 0; index != length; ++index)
+	{
+		CHAR low = buffer[index] & 0x7f;
+		if (!isprint(low))
 			return (false);
+	}
 
 	return (true);
 }

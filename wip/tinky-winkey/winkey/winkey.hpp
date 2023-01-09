@@ -13,6 +13,9 @@
 #ifndef TINKY_HPP
 #define TINKY_HPP
 
+#pragma warning(disable: 5039)
+#pragma warning(disable: 4668)
+
 #include <Windows.h>
 #include <signal.h>
 #include <ctype.h>

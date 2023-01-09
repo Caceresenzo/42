@@ -46,4 +46,5 @@ void HandleSignal(int sig)
 {
 	std::cout << "HandleSignal" << std::endl;
 	Cleanup();
+	exit(sig);
 }
