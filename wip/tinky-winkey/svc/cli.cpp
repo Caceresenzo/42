@@ -95,7 +95,7 @@ Start(SC_HANDLE hSCManager)
 		return (EXIT_FAILURE);
 	
 	char argument[MAX_PATH] = { 0 };
-	GetFullPathName("winkey.exe", MAX_PATH, argument, 0);
+	GetCurrentDirectory(MAX_PATH, argument);
 
 	const char *argumentVector[] = { argument };
 

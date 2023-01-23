@@ -34,6 +34,22 @@ $(SVC_NAME): $(SVC_OBJECTS)
 $(WINKEY_NAME): $(WINKEY_OBJECTS)
 	link /nologo /out:$(WINKEY_NAME) $(WINKEY_OBJECTS)
 
+install:
+	$(SVC_NAME) install
+
+start:
+	$(SVC_NAME) start
+
+stop:
+	$(SVC_NAME) stop
+
+delete:
+	$(SVC_NAME) delete
+
+query:
+	powershell -c "sc.exe queryex type=service state=all | Select-String \"SERVICE_NAME: tinky\" -Context 0,3"
+	powershell -c "tasklist | Select-String "winkey""
+
 clean:
 	del $(SVC_OBJECTS) $(WINKEY_OBJECTS)
 
@@ -42,4 +58,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re .cpp.obj
+.PHONY: all clean fclean re .cpp.obj install start stop delete query
