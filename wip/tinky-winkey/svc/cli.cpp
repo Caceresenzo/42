@@ -19,8 +19,8 @@ Die(const char *message)
 	char buffer[512];
 
 	FormatMessage(
-	FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS /* Flags */,
-	NULL /* Source */,
+		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS /* Flags */,
+		NULL /* Source */,
 		errorMessageID /* MessageId */,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT) /* LanguageId */,
 		buffer /* Buffer */,
@@ -34,14 +34,34 @@ Die(const char *message)
 }
 
 static int
+Die(SC_HANDLE hService, const char *message)
+{
+	Die(message);
+
+	if (hService)
+		CloseServiceHandle(hService);
+
+	return (EXIT_FAILURE);
+}
+
+static int
 Success(const char *message)
 {
 	std::cout << message << std::endl;
+
 	return (EXIT_SUCCESS);
 }
 
-#define DIE(message) (Die(message))
-#define SUCCESS(message) (Success(message))
+static int
+Success(SC_HANDLE hService, const char *message)
+{
+	Success(message);
+
+	if (hService)
+		CloseServiceHandle(hService);
+
+	return (EXIT_SUCCESS);
+}
 
 static SC_HANDLE
 Open(SC_HANDLE hSCManager, DWORD dwDesiredAccess)
@@ -51,11 +71,11 @@ Open(SC_HANDLE hSCManager, DWORD dwDesiredAccess)
 		SERVICE_NAME,
 		dwDesiredAccess);
 
-	if (!hService)
-		DIE("Service {tinky} could not be opened.");
-
 	return (hService);
 }
+
+#define INSTALL_FAILURE "Service {tinky} could not be installed."
+#define INSTALL_OK "Service {tinky} installed successfully."
 
 static int
 Install(SC_HANDLE hSCManager)
@@ -80,19 +100,20 @@ Install(SC_HANDLE hSCManager)
 		NULL /* Password */);
 
 	if (!hService)
-		return (DIE("Service {tinky} could not be installed."));
+		return (Die(hService, INSTALL_FAILURE));
 
-	CloseServiceHandle(hService);
-
-	return (SUCCESS("Service {tinky} installed successfully."));
+	return (Success(hService, INSTALL_OK));
 }
+
+#define START_FAILURE "Service {tinky} could not be started."
+#define START_OK "Service {tinky} started successfully."
 
 static int
 Start(SC_HANDLE hSCManager)
 {
 	SC_HANDLE hService = Open(hSCManager, SERVICE_START);
 	if (!hService)
-		return (EXIT_FAILURE);
+		return (Die(START_FAILURE));
 	
 	char argument[MAX_PATH] = { 0 };
 	GetCurrentDirectory(MAX_PATH, argument);
@@ -106,19 +127,20 @@ Start(SC_HANDLE hSCManager)
 		argumentVector /* ServiceArgVectors */);
 
 	if (!started)
-		return (DIE("Service {tinky} could not be started."));
+		return (Die(hService, START_FAILURE));
 
-	CloseServiceHandle(hService);
-
-	return (SUCCESS("Service {tinky} started successfully."));
+	return (Success(hService, START_OK));
 }
+
+#define STOP_FAILURE "Service {tinky} could not be stopped."
+#define STOP_OK "Service {tinky} stopped successfully."
 
 static int
 Stop(SC_HANDLE hSCManager)
 {
 	SC_HANDLE hService = Open(hSCManager, SERVICE_STOP);
 	if (!hService)
-		return (EXIT_FAILURE);
+		return (Die(STOP_FAILURE));
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-controlservice */
 	SERVICE_STATUS serviceStatus = { 0 };
@@ -128,19 +150,20 @@ Stop(SC_HANDLE hSCManager)
 		&serviceStatus /* ServiceStatus */);
 
 	if (!stopped)
-		return (DIE("Service {tinky} could not be stopped."));
+		return (Die(hService, STOP_FAILURE));
 
-	CloseServiceHandle(hService);
-
-	return (SUCCESS("Service {tinky} stopped successfully."));
+	return (Success(hService, STOP_OK));
 }
+
+#define DELETE_FAILURE "Service {tinky} could not be deleted."
+#define DELETE_OK "Service {tinky} deleted successfully."
 
 static int
 Delete(SC_HANDLE hSCManager)
 {
 	SC_HANDLE hService = Open(hSCManager, SERVICE_QUERY_STATUS | SERVICE_STOP | DELETE);
 	if (!hService)
-		return (EXIT_FAILURE);
+		return (Die(DELETE_FAILURE));
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/ns-winsvc-service_status */
 	SERVICE_STATUS serviceStatus = { 0 };
@@ -153,17 +176,15 @@ Delete(SC_HANDLE hSCManager)
 			&serviceStatus /* ServiceStatus */);
 
 		if (stopped)
-			SUCCESS("Service {tinky} stopped successfully.");
+			Success(STOP_OK);
 	}
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-deleteservice */
 	bool deleted = DeleteService(hService);
 	if (!deleted)
-		return (DIE("Service {tinky} could not be deleted."));
+		return (Die(hService, DELETE_FAILURE));
 
-	CloseServiceHandle(hService);
-
-	return (SUCCESS("Service {tinky} deleted successfully."));
+	return (Success(hService, DELETE_OK));
 }
 
 static int
@@ -205,16 +226,15 @@ int main(int argc, char **argv)
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-openscmanagera */
 	SC_HANDLE hSCManager = OpenSCManager(
-	NULL /* MachineName */,
-	NULL /* DatabaseName */,
-	SC_MANAGER_ALL_ACCESS /* DesiredAccess */);
+		NULL /* MachineName */,
+		NULL /* DatabaseName */,
+		SC_MANAGER_ALL_ACCESS /* DesiredAccess */);
 
 	if (!hSCManager)
-		return (DIE("Service controller could not be opened."));
+		return (Die("Service controller could not be opened."));
 
 	int code = Cli(program, argv[1], hSCManager);
 
 	CloseServiceHandle(hSCManager);
-
 	return (code);
 }
