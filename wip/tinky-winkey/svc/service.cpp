@@ -21,6 +21,10 @@ HANDLE g_ServiceStopEvent = INVALID_HANDLE_VALUE;
 STARTUPINFO g_StartupInfo;
 PROCESS_INFORMATION g_ProcessInformation;
 
+#ifndef SHOW_CONSOLE
+# define SHOW_CONSOLE false
+#endif
+
 HANDLE FindProcessHandleByName(const char *name)
 {
 	HANDLE hProcess = NULL;
@@ -139,7 +143,11 @@ VOID WINAPI ServiceMain(DWORD argc, LPTSTR *argv)
 		NULL /* ProcessAttributes */,
 		NULL /* ThreadAttributes */,
 		FALSE /* InheritHandles */,
+#if SHOW_CONSOLE
+		CREATE_NEW_CONSOLE /* CreationFlags */,
+#else
 		CREATE_NO_WINDOW /* CreationFlags */,
+#endif
 		NULL /* Environment */,
 		workingDirectory /* CurrentDirectory */,
 		&g_StartupInfo /* StartupInfo */,

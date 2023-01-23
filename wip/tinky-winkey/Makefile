@@ -23,10 +23,12 @@ WINKEY_SOURCES= \
   winkey\winkey.cpp
 WINKEY_OBJECTS=$(WINKEY_SOURCES:.cpp=.obj)
 
+SHOW_CONSOLE = false
+
 all: $(SVC_NAME) $(WINKEY_NAME)
 
 .cpp.obj:
-	cl /c /nologo /EHsc /Wall /WX /Wv:18 /Fo$@ /Tp$<
+	cl /c /nologo /EHsc /Wall /WX /Wv:18 /Fo$@ /Tp$< /D"SHOW_CONSOLE=$(SHOW_CONSOLE)"
 
 $(SVC_NAME): $(SVC_OBJECTS)
 	link /nologo /out:$(SVC_NAME) $(SVC_OBJECTS)
