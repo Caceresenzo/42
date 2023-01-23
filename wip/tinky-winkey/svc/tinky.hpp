@@ -15,6 +15,7 @@
 
 #pragma warning(disable: 5039)
 #pragma warning(disable: 4668)
+#pragma warning(disable: 4820)
 
 #include <Windows.h>
 #include <winsvc.h>

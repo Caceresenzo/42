@@ -12,7 +12,7 @@
 
 #include "winkey.hpp"
 
-BOOL IsAllPrintable(CHAR *buffer, UINT length)
+BOOL IsAllPrintable(CHAR *buffer, size_t length)
 {
 	for (UINT index = 0; index != length; ++index)
 	{

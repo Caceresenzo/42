@@ -26,7 +26,7 @@ WINKEY_OBJECTS=$(WINKEY_SOURCES:.cpp=.obj)
 all: $(SVC_NAME) $(WINKEY_NAME)
 
 .cpp.obj:
-	cl /c /nologo /EHsc /Wall /WX /Fo$@ /Tp$<
+	cl /c /nologo /EHsc /Wall /WX /Wv:18 /Fo$@ /Tp$<
 
 $(SVC_NAME): $(SVC_OBJECTS)
 	link /nologo /out:$(SVC_NAME) $(SVC_OBJECTS)
