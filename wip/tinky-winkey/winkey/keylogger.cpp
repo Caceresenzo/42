@@ -113,7 +113,7 @@ VOID LogWindow()
 	GetTimeFormat(LOCALE_SYSTEM_DEFAULT, TIME_FORCE24HOURFORMAT, &time, "HH':'mm':'ss", timeString, _countof(timeString));
 
 	char dateString[48];
-	GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &time, "yyyy'.'MM'.'dd", dateString, _countof(dateString));
+	GetDateFormat(LOCALE_SYSTEM_DEFAULT, 0, &time, "dd'.'MM'.'yyyy", dateString, _countof(dateString));
 
 	g_Output << "\n[" << dateString << ' ' << timeString << "] - '" << g_WindowTitle << '\'' << std::endl;
 }
