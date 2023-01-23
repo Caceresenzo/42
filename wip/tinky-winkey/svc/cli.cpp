@@ -122,12 +122,12 @@ Stop(SC_HANDLE hSCManager)
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-controlservice */
 	SERVICE_STATUS serviceStatus = { 0 };
-	BOOL started = ControlService(
+	BOOL stopped = ControlService(
 		hService,
 		SERVICE_CONTROL_STOP /* Control */,
 		&serviceStatus /* ServiceStatus */);
 
-	if (!started)
+	if (!stopped)
 		return (DIE("Service {tinky} could not be stopped."));
 
 	CloseServiceHandle(hService);
@@ -138,9 +138,23 @@ Stop(SC_HANDLE hSCManager)
 static int
 Delete(SC_HANDLE hSCManager)
 {
-	SC_HANDLE hService = Open(hSCManager, DELETE);
+	SC_HANDLE hService = Open(hSCManager, SERVICE_QUERY_STATUS | SERVICE_STOP | DELETE);
 	if (!hService)
 		return (EXIT_FAILURE);
+
+	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/ns-winsvc-service_status */
+	SERVICE_STATUS serviceStatus = { 0 };
+	bool queried = QueryServiceStatus(hService, &serviceStatus);
+	if (queried && serviceStatus.dwCurrentState == SERVICE_RUNNING)
+	{
+		bool stopped = ControlService(
+			hService,
+			SERVICE_CONTROL_STOP /* Control */,
+			&serviceStatus /* ServiceStatus */);
+
+		if (stopped)
+			SUCCESS("Service {tinky} stopped successfully.");
+	}
 
 	/* https://learn.microsoft.com/en-us/windows/win32/api/winsvc/nf-winsvc-deleteservice */
 	bool deleted = DeleteService(hService);
