@@ -1,30 +1,41 @@
-all: kfs.iso
+ASM_SOURCE = $(shell find -type f -name \*.s)
+CPP_SOURCE = $(shell find -type f -name \*.cpp)
+OBJECTS = $(ASM_SOURCE:.s=.o) $(CPP_SOURCE:.cpp=.o)
 
-boot.o: boot.s
-	i386-elf-as boot.s -o boot.o
+TARGET_BIN = kfs.bin
+TARGET_ISO = kfs.iso
 
-kernel.o: kernel.cpp
-	i386-elf-g++ -c kernel.cpp -o kernel.o -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti
+AS = i386-elf-as
+CC = i386-elf-g++
+CCFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -fno-rtti -nostdlib -nodefaultlibs -Wfatal-errors
 
-kfs.bin: boot.o kernel.o
-	i386-elf-g++ -T linker.ld -o kfs.bin -ffreestanding -O2 -nostdlib boot.o kernel.o -lgcc
-	grub-file --is-x86-multiboot kfs.bin
+all: kfs.bin
 
-kfs.iso: kfs.bin grub.cfg
-	rm -rf iso/boot/
-	mkdir -p iso/boot/grub
-	cp kfs.bin iso/boot/
-	cp grub.cfg iso/boot/grub/
-	grub-mkrescue -o kfs.iso iso/
+.s.o:
+	$(AS) $< -o $@
 
-run-kernel: kfs.bin
-	qemu-system-i386 -kernel kfs.bin
+.cpp.o:
+	$(CC) -c $< -o $@ -Iinclude $(CCFLAGS)
 
-run-iso: kfs.iso
-	qemu-system-i386 -cdrom kfs.iso
+kfs.bin: $(OBJECTS) boot/linker.ld
+	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(CCFLAGS)
+	grub-file --is-x86-multiboot $(TARGET_BIN)
+
+kfs.iso: $(TARGET_BIN) boot/grub.cfg
+	rm -rf /tmp/iso/boot/
+	mkdir -p /tmp/iso/boot/grub
+	cp $(TARGET_BIN) /tmp/iso/boot/
+	cp boot/grub.cfg /tmp/iso/boot/grub/
+	grub-mkrescue -o $(TARGET_ISO) /tmp/iso/
+
+run-kernel: $(TARGET_BIN)
+	qemu-system-i386 -kernel $(TARGET_BIN)
+
+run-iso: $(TARGET_ISO)
+	qemu-system-i386 -cdrom $(TARGET_ISO)
 
 clean:
-	rm -f boot.o kernel.o
+	rm -rf $(OBJECTS)
 
 fclean: clean
-	rm -f kfs.bin kfs.iso
+	rm -f $(TARGET_BIN) $(TARGET_ISO)

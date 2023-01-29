@@ -75,6 +75,11 @@ _start:
 	C++ features such as global constructors and exceptions will require
 	runtime support to work as well.
 	*/
+	push %esi
+	push %edi
+	call _init
+	pop %edi
+	pop %esi
 
 	/*
 	Enter the high-level kernel. The ABI requires the stack is 16-byte
@@ -84,7 +89,7 @@ _start:
 	stack since (pushed 0 bytes so far), so the alignment has thus been
 	preserved and the call is well defined.
 	*/
-	call kernel_main
+	call kmain
 
 	/*
 	If the system has nothing more to do, put the computer into an
