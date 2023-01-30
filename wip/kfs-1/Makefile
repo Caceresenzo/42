@@ -9,7 +9,8 @@ TARGET_ISO = kfs.iso
 AS = i386-elf-as
 CC = i386-elf-gcc
 CPPC = i386-elf-g++
-CFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -fno-rtti -nostdlib -nodefaultlibs -Wfatal-errors
+CFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -Wfatal-errors
+CPPFLAGS = $(CFLAGS) -fno-rtti
 
 all: kfs.bin
 
@@ -20,7 +21,7 @@ all: kfs.bin
 	$(CC) -c $< -o $@ -Iinclude $(CFLAGS)
 
 .cpp.o:
-	$(CPPC) -c $< -o $@ -Iinclude $(CFLAGS)
+	$(CPPC) -c $< -o $@ -Iinclude $(CPPFLAGS)
 
 kfs.bin: $(OBJECTS) boot/linker.ld
 	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(CFLAGS)

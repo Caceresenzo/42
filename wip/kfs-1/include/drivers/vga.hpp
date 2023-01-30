@@ -28,5 +28,8 @@ namespace kfs::vga
 	void put(char c);
 	void write(const char *data);
 	void write(const void *data, uint32_t size);
+	void scroll(bool down = true);
+	void clear_line(uint32_t line);
+	void test();
 
 }
