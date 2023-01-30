@@ -3,7 +3,13 @@
 
 # include <types.h>
 
-#define countof(arr) (sizeof(arr) / sizeof(arr[0]))
+# ifndef countof
+#  define countof(arr) (sizeof(arr) / sizeof(arr[0]))
+# endif
+
+# ifndef NULL
+#  define NULL (0)
+# endif
 
 #ifdef __cplusplus
 extern "C"

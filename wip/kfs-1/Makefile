@@ -11,6 +11,7 @@ CC = i386-elf-gcc
 CPPC = i386-elf-g++
 CFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -Wfatal-errors
 CPPFLAGS = $(CFLAGS) -fno-rtti
+LINKERFLAGS = $(CPPFLAGS) -lgcc
 
 all: kfs.bin
 
@@ -24,7 +25,7 @@ all: kfs.bin
 	$(CPPC) -c $< -o $@ -Iinclude $(CPPFLAGS)
 
 kfs.bin: $(OBJECTS) boot/linker.ld
-	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(CFLAGS)
+	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(LINKERFLAGS)
 	grub-file --is-x86-multiboot $(TARGET_BIN)
 
 kfs.iso: $(TARGET_BIN) boot/grub.cfg
