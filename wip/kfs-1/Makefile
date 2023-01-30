@@ -1,24 +1,29 @@
 ASM_SOURCE = $(shell find -type f -name \*.s)
+C_SOURCE = $(shell find -type f -name \*.c)
 CPP_SOURCE = $(shell find -type f -name \*.cpp)
-OBJECTS = $(ASM_SOURCE:.s=.o) $(CPP_SOURCE:.cpp=.o)
+OBJECTS = $(ASM_SOURCE:.s=.o) $(C_SOURCE:.c=.o) $(CPP_SOURCE:.cpp=.o)
 
 TARGET_BIN = kfs.bin
 TARGET_ISO = kfs.iso
 
 AS = i386-elf-as
-CC = i386-elf-g++
-CCFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -fno-rtti -nostdlib -nodefaultlibs -Wfatal-errors
+CC = i386-elf-gcc
+CPPC = i386-elf-g++
+CFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -fno-rtti -nostdlib -nodefaultlibs -Wfatal-errors
 
 all: kfs.bin
 
 .s.o:
 	$(AS) $< -o $@
 
+.c.o:
+	$(CC) -c $< -o $@ -Iinclude $(CFLAGS)
+
 .cpp.o:
-	$(CC) -c $< -o $@ -Iinclude $(CCFLAGS)
+	$(CPPC) -c $< -o $@ -Iinclude $(CFLAGS)
 
 kfs.bin: $(OBJECTS) boot/linker.ld
-	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(CCFLAGS)
+	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(CFLAGS)
 	grub-file --is-x86-multiboot $(TARGET_BIN)
 
 kfs.iso: $(TARGET_BIN) boot/grub.cfg
