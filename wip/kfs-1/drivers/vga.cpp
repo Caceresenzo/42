@@ -1,6 +1,7 @@
 #include <types.h>
 #include <string.h>
 #include <drivers/vga.hpp>
+#include <cpu/io.hpp>
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
@@ -12,6 +13,11 @@
 
 #define VGA_DEFAULT_COLOR (VGA_ENTRY_COLOR(COLOR_LIGHT_GREY, COLOR_BLACK))
 #define VGA_ENTRY_EMPTY (VGA_ENTRY(' ', VGA_DEFAULT_COLOR))
+
+# define VGA_COMMAND 0x3D4
+# define VGA_DATA 0x3D5
+# define VGA_DATA_CURSOR_LOCATION_HIGH 14
+# define VGA_DATA_CURSOR_LOCATION_LOW 15
 
 namespace kfs::vga
 {
@@ -50,12 +56,23 @@ namespace kfs::vga
 
 	void put(char c)
 	{
-		if (c != '\n' && c != '\r')
-			set(c, g_color, g_column, g_row);
+		if (c == '\b')
+		{
+			if (g_column != 0)
+				--g_column;
+			return;
+		}
 
 		if (c == '\r')
+		{
 			g_column = 0;
-		else if (++g_column == VGA_WIDTH || c == '\n')
+			return;
+		}
+
+		if (c != '\n')
+			set(c, g_color, g_column, g_row);
+
+		if (++g_column == VGA_WIDTH || c == '\n')
 		{
 			g_column = 0;
 			if (g_row + 1 == VGA_HEIGHT)
@@ -104,6 +121,17 @@ namespace kfs::vga
 	{
 		for (uint32_t x = 0; x < VGA_WIDTH; ++x)
 			set(' ', g_color, x, line);
+	}
+
+	void move_cursor(void)
+	{
+		uint16_t location;
+
+		location = VGA_INDEX(g_column, g_row);
+		kfs::io::outb(VGA_COMMAND, VGA_DATA_CURSOR_LOCATION_HIGH);
+		kfs::io::outb(VGA_DATA, (location >> 8) & 0xFF);
+		kfs::io::outb(VGA_COMMAND, VGA_DATA_CURSOR_LOCATION_LOW);
+		kfs::io::outb(VGA_DATA, location & 0xFF);
 	}
 
 	void test()

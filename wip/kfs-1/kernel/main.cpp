@@ -1,4 +1,6 @@
 #include <drivers/vga.hpp>
+#include <drivers/timer.hpp>
+#include <drivers/keyboard.hpp>
 #include <cpu/gdt.hpp>
 #include <cpu/idt.hpp>
 #include <cpu/pit.hpp>
@@ -106,24 +108,12 @@ multiboot_info_t* multiboot(unsigned long magic, unsigned long addr)
 	return (mbi);
 }
 
-extern "C"
+namespace shell
 {
-	void kmain(unsigned long magic, unsigned long addr)
+	char buffer[32] = { 0 };
+
+	void do_ft()
 	{
-		kfs::io::cli();
-
-		kfs::vga::initialize();
-		kfs::gdt::initialize();
-		kfs::idt::initialize();
-		kfs::interrupt::initialize();
-		kfs::pit::disable();
-
-		multiboot_info_t *mbi = multiboot(magic, addr);
-		if (!mbi)
-			return;
-
-		kfs::io::sti();
-
 		lolwrite("\n"
 			"     d8888   .d8888b.       888       .d888          \n"
 			"    d8P888  d88P  Y88b      888      d88P\"           \n"
@@ -135,8 +125,96 @@ extern "C"
 			"       888  888888888       888  888 888     88888P' \n"
 			"\n"
 			);
+	}
 
-		asm ("int3");
+	void do_tick()
+	{
+		printk("%d\n", kfs::timer::tick_count());
+	}
+
+	void execute(const char *line)
+	{
+		if (strcmp("42", line) == 0 || strcmp("ft", line) == 0)
+			do_ft();
+		if (strcmp("tick", line) == 0)
+			do_tick();
+		else
+			printk("unknown command\n");
+	}
+
+	void prompt()
+	{
+		putstr("$> ");
+	}
+
+	void callback(kfs::keyboard::key_t key)
+	{
+		uint8_t letter = key.letter;
+		if (!letter || !key.state)
+			return;
+
+		uint32_t len = strlen(buffer);
+
+		if (letter == '\r')
+		{
+			putchar('\n');
+
+			if (buffer[0])
+			{
+				execute(buffer);
+				memset(buffer, 0, sizeof(buffer));
+			}
+
+			prompt();
+			return;
+		}
+
+		bool is_backspace = letter == '\b';
+
+		if (!is_backspace && len + 1 != countof(buffer))
+		{
+			buffer[len] = letter;
+			putchar(letter);
+		}
+
+		if (is_backspace && len != 0)
+		{
+			buffer[len - 1] = '\0';
+			putstr("\b \b");
+		}
+
+		kfs::vga::move_cursor();
+	}
+
+	void initialize()
+	{
+		kfs::keyboard::set_callback(&callback);
+		prompt();
+	}
+}
+
+extern "C"
+{
+	void kmain(unsigned long magic, unsigned long addr)
+	{
+		kfs::io::cli();
+
+		kfs::vga::initialize();
+		kfs::gdt::initialize();
+		kfs::idt::initialize();
+		kfs::interrupt::initialize();
+
+		kfs::timer::initialize();
+		kfs::keyboard::initialize();
+
+		multiboot_info_t *mbi = multiboot(magic, addr);
+		if (!mbi)
+			return;
+
+		kfs::io::sti();
+
+		shell::do_ft();
+		shell::initialize();
 
 		while (1)
 			asm ("hlt");

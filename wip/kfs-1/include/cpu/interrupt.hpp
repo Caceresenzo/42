@@ -17,6 +17,24 @@
 
 namespace kfs::interrupt
 {
+	constexpr uint32_t IRQ_OFFSET = 32;
+	constexpr uint32_t IRQ0 = IRQ_OFFSET + 0;
+	constexpr uint32_t IRQ1 = IRQ_OFFSET + 1;
+	constexpr uint32_t IRQ2 = IRQ_OFFSET + 2;
+	constexpr uint32_t IRQ3 = IRQ_OFFSET + 3;
+	constexpr uint32_t IRQ4 = IRQ_OFFSET + 4;
+	constexpr uint32_t IRQ5 = IRQ_OFFSET + 5;
+	constexpr uint32_t IRQ6 = IRQ_OFFSET + 6;
+	constexpr uint32_t IRQ7 = IRQ_OFFSET + 7;
+	constexpr uint32_t IRQ8 = IRQ_OFFSET + 8;
+	constexpr uint32_t IRQ9 = IRQ_OFFSET + 9;
+	constexpr uint32_t IRQ10 = IRQ_OFFSET + 10;
+	constexpr uint32_t IRQ11 = IRQ_OFFSET + 11;
+	constexpr uint32_t IRQ12 = IRQ_OFFSET + 12;
+	constexpr uint32_t IRQ13 = IRQ_OFFSET + 13;
+	constexpr uint32_t IRQ14 = IRQ_OFFSET + 14;
+	constexpr uint32_t IRQ15 = IRQ_OFFSET + 15;
+
 	typedef struct registers
 	{
 			uint32_t ds; // Data segment selector

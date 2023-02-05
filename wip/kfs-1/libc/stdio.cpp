@@ -99,6 +99,13 @@ void printk(const char *format, ...)
 		if (!c)
 			return;
 
+		if (c == 'c')
+		{
+			int32_t i = va_arg(parameters, int32_t);
+			putchar(i);
+			continue;
+		}
+
 		if (c == 'd')
 		{
 			int32_t i = va_arg(parameters, int32_t);

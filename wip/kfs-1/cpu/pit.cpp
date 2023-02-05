@@ -33,11 +33,6 @@
 #define ICW4_BUF_MASTER 0x0C	/* Buffered mode/master */
 #define ICW4_SFNM       0x10	/* Special fully nested (not) */
 
-extern "C"
-{
-	void __asm_kfs_pit_disable(void);
-}
-
 namespace kfs::pit
 {
 	void remap(int offset1, int offset2)
@@ -65,10 +60,5 @@ namespace kfs::pit
 
 		kfs::io::outb(PIC1_DATA, a1); // restore saved masks.
 		kfs::io::outb(PIC2_DATA, a2);
-	}
-
-	void disable(void)
-	{
-		__asm_kfs_pit_disable();
 	}
 }

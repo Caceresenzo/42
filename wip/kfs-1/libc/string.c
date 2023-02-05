@@ -26,6 +26,28 @@ char* strcpy(char *dst, const char *src)
 	return (start);
 }
 
+int strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s2)
+	{
+		if (*s1 != *s2)
+			break;
+		s1++;
+		s2++;
+	}
+
+	return (*(unsigned char*)s1 - *(unsigned char*)s2);
+}
+;
+
+void* memset(void *buf, int c, uint32_t len)
+{
+	unsigned char *ptr = buf;
+	while (len--)
+		*ptr++ = c;
+	return (buf);
+}
+
 void* memmove(void *dst, const void *src, uint32_t len)
 {
 	char step = +1;

@@ -30,6 +30,6 @@ namespace kfs::vga
 	void write(const void *data, uint32_t size);
 	void scroll(bool down = true);
 	void clear_line(uint32_t line);
+	void move_cursor(void);
 	void test();
-
 }
