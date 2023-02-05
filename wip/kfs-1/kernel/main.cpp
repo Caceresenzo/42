@@ -1,5 +1,9 @@
 #include <drivers/vga.hpp>
 #include <cpu/gdt.hpp>
+#include <cpu/idt.hpp>
+#include <cpu/pit.hpp>
+#include <cpu/io.hpp>
+#include <cpu/interrupt.hpp>
 #include <string.h>
 #include <stdio.h>
 #include <multiboot.h>
@@ -89,8 +93,8 @@ multiboot_info_t* multiboot(unsigned long magic, unsigned long addr)
 			(unsigned long)mmap < mbi->mmap_addr + mbi->mmap_length;
 			mmap = (multiboot_memory_map_t*)((unsigned long)mmap
 				+ mmap->size + sizeof(mmap->size)))
-			printk(" size = 0x%x, base_addr = 0x%x%08x,"
-				" length = 0x%x%08x, type = 0x%x\n",
+			printk(" size = 0x%x, base_addr = 0x%x%x,"
+				" length = 0x%x%x, type = 0x%x\n",
 				(unsigned)mmap->size,
 				(unsigned)(mmap->addr >> 32),
 				(unsigned)(mmap->addr & 0xffffffff),
@@ -106,7 +110,19 @@ extern "C"
 {
 	void kmain(unsigned long magic, unsigned long addr)
 	{
+		kfs::io::cli();
+
 		kfs::vga::initialize();
+		kfs::gdt::initialize();
+		kfs::idt::initialize();
+		kfs::interrupt::initialize();
+		kfs::pit::disable();
+
+		multiboot_info_t *mbi = multiboot(magic, addr);
+		if (!mbi)
+			return;
+
+		kfs::io::sti();
 
 		lolwrite("\n"
 			"     d8888   .d8888b.       888       .d888          \n"
@@ -120,10 +136,9 @@ extern "C"
 			"\n"
 			);
 
-		multiboot_info_t *mbi = multiboot(magic, addr);
-		if (!mbi)
-			return;
+		asm ("int3");
 
-		kfs::gdt::initialize();
+		while (1)
+			asm ("hlt");
 	}
 }

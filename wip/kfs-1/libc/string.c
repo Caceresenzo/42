@@ -10,6 +10,22 @@ uint32_t strlen(const char *str)
 	return (str - start);
 }
 
+char* strcpy(char *dst, const char *src)
+{
+	if (dst == NULL && src == NULL)
+		return (NULL);
+
+	char *start = dst;
+	while (*src)
+	{
+		*dst = *src;
+		src++;
+		dst++;
+	}
+
+	return (start);
+}
+
 void* memmove(void *dst, const void *src, uint32_t len)
 {
 	char step = +1;

@@ -10,7 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cpu/gdt.hpp>
+#include <cpu/idt.hpp>
+#include <cpu/io.hpp>
+#include <cpu/pit.hpp>
 #include <stdio.h>
 
 #define NULL_SEGMENT_ACCESS 0
@@ -21,43 +23,44 @@
 
 extern "C"
 {
-	void __asm_kfs_gdt_flush(uint32_t address);
+	void __asm_kfs_idt_flush(uint32_t address);
+	extern void *isr_stub_table[];
 }
 
-namespace kfs::gdt
+namespace kfs::idt
 {
-	static entry_t gdt_entries[5];
-	static ptr_t gdt_ptr;
+	static entry_t idt[256] __attribute__((aligned(0x10))) = { 0 };
+	static idtr_t idtr;
 
 	void initialize()
 	{
-		gdt_ptr.limit = sizeof(gdt_entries) - 1;
-		gdt_ptr.base = (uint32_t)&gdt_entries;
+		idtr.base = (uint32_t)&idt[0];
+		idtr.limit = (uint16_t)(sizeof(idt) - 1);
 
-		set(0, 0, 0, NULL_SEGMENT_ACCESS, 0);
-		set(1, 0, 0xFFFFFFFF, CODE_SEGMENT_ACCESS, 0xCF);
-		set(2, 0, 0xFFFFFFFF, DATA_SEGMENT_ACCESS, 0xCF);
-		set(3, 0, 0xFFFFFFFF, USERM_CODE_SEGMENT_ACCESS, 0xCF);
-		set(4, 0, 0xFFFFFFFF, USERM_DATA_SEGMENT_ACCESS, 0xCF);
+		for (uint8_t id = 0; id < 32; id++)
+			set(id, isr_stub_table[id], 0x8E);
 
-		flush((uint32_t)&gdt_ptr);
+		for (uint8_t id = 32; id < 48; id++)
+			set(id, isr_stub_table[id], 0x8E);
 
-		printk("[gdt]: initialized\n");
+		flush((uint32_t)&idtr);
+
+		kfs::pit::remap(0x20, 0x28);
 	}
 
-	void set(int32_t id, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity)
+	void set(int32_t id, void *isr, uint8_t flags)
 	{
-		gdt_entries[id].base_low = base & 0xFFFF;
-		gdt_entries[id].base_middle = (base >> 16) & 0xFF;
-		gdt_entries[id].base_high = (base >> 24) & 0xFF;
-		gdt_entries[id].limit_low = (limit & 0xFFFF);
-		gdt_entries[id].granularity = (limit >> 16) & 0x0F;
-		gdt_entries[id].granularity |= granularity & 0xF0;
-		gdt_entries[id].access = access;
+		entry_t *descriptor = &idt[id];
+
+		descriptor->isr_low = (uint32_t)isr & 0xFFFF;
+		descriptor->kernel_cs = 0x08; // this value can be whatever offset your kernel code selector is in your GDT
+		descriptor->attributes = flags;
+		descriptor->isr_high = (uint32_t)isr >> 16;
+		descriptor->reserved = 0;
 	}
 
 	void flush(uint32_t address)
 	{
-		__asm_kfs_gdt_flush(address);
+		__asm_kfs_idt_flush(address);
 	}
 }

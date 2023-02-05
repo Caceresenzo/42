@@ -16,8 +16,8 @@ extern "C"
 {
 #endif
 
-
 	uint32_t strlen(const char *str);
+	char* strcpy(char *dest, const char *src);
 	void* memmove(void *dest, const void *src, uint32_t n);
 
 #ifdef __cplusplus
