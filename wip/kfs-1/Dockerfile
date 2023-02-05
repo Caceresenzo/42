@@ -5,7 +5,7 @@ ENV TARGET=i386-elf
 ENV PATH="$PREFIX/bin:$PATH"
 
 RUN apt update && \
-	apt install -y zsh wget curl screen make git tar xz-utils build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev grub2 xorriso qemu-system && \
+	apt install -y zsh wget curl screen make git tar xz-utils build-essential bison flex libgmp3-dev libmpc-dev libmpfr-dev texinfo libisl-dev grub2 xorriso qemu-system nasm && \
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 WORKDIR /opt

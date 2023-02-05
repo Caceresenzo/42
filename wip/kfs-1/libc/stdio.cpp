@@ -115,8 +115,8 @@ void printk(const char *format, ...)
 
 		if (c == 'b')
 		{
-			bool b = va_arg(parameters, int);
-			putchar(b ? '1' : '0');
+			uint32_t i = va_arg(parameters, uint32_t);
+			putunbrr(i, 2);
 			continue;
 		}
 

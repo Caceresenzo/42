@@ -1,12 +1,16 @@
-ASM_SOURCE = $(shell find -type f -name \*.s)
+S_SOURCE = $(shell find -type f -name \*.S)
+NASM_SOURCE = $(shell find -type f -name \*.s)
 C_SOURCE = $(shell find -type f -name \*.c)
 CPP_SOURCE = $(shell find -type f -name \*.cpp)
-OBJECTS = $(ASM_SOURCE:.s=.o) $(C_SOURCE:.c=.o) $(CPP_SOURCE:.cpp=.o)
+OBJECTS = $(S_SOURCE:.S=.o) $(NASM_SOURCE:.s=.o) $(C_SOURCE:.c=.o) $(CPP_SOURCE:.cpp=.o)
 
 TARGET_BIN = kfs.bin
 TARGET_ISO = kfs.iso
 
-AS = i386-elf-as
+AC = i386-elf-as
+AFLAGS = 
+NASMC = nasm
+NASMFLAGS = -f elf
 CC = i386-elf-gcc
 CPPC = i386-elf-g++
 CFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefaultlibs -Wfatal-errors
@@ -15,8 +19,11 @@ LINKERFLAGS = $(CPPFLAGS) -lgcc
 
 all: kfs.bin
 
+.S.o:
+	$(AC) $< -o $@ $(AFLAGS)
+
 .s.o:
-	$(AS) $< -o $@
+	$(NASMC) $< -o $@ $(NASMFLAGS)
 
 .c.o:
 	$(CC) -c $< -o $@ -Iinclude $(CFLAGS)

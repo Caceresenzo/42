@@ -1,4 +1,5 @@
 #include <drivers/vga.hpp>
+#include <cpu/gdt.hpp>
 #include <string.h>
 #include <stdio.h>
 #include <multiboot.h>
@@ -122,5 +123,7 @@ extern "C"
 		multiboot_info_t *mbi = multiboot(magic, addr);
 		if (!mbi)
 			return;
+
+		kfs::gdt::initialize();
 	}
 }
