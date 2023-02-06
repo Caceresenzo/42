@@ -12,6 +12,7 @@
 
 #include <cpu/io.hpp>
 #include <stdio.h>
+#include <string.h>
 
 namespace kfs::io
 {
@@ -46,5 +47,45 @@ namespace kfs::io
 	void wait(void)
 	{
 		outb(0x80, 0);
+	}
+
+	void cpuid(cpuid_requests code, uint32_t *a, uint32_t *d)
+	{
+		asm volatile("cpuid" : "=a"(*a), "=d"(*d) : "a"(code) : "ecx", "ebx");
+	}
+
+	void cpuid(cpuid_requests code, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
+	{
+		asm volatile(
+			"cpuid"
+			: "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
+			: "0" (code), "2" (*ecx)
+		);
+	}
+
+	bool cpuid(cpuid_requests code, char *buffer)
+	{
+		uint32_t where[4];
+		asm volatile("cpuid" : "=a"(*where), "=b"(*(where + 1)), "=c"(*(where + 2)), "=d"(*(where + 3)) : "a"(code));
+
+		if ((int)where[0])
+		{
+			buffer[0] = (where[1] >> 0) & 0xFF;
+			buffer[1] = (where[1] >> 8) & 0xFF;
+			buffer[2] = (where[1] >> 16) & 0xFF;
+			buffer[3] = (where[1] >> 24) & 0xFF;
+			buffer[4] = (where[3] >> 0) & 0xFF;
+			buffer[5] = (where[3] >> 8) & 0xFF;
+			buffer[6] = (where[3] >> 16) & 0xFF;
+			buffer[7] = (where[3] >> 24) & 0xFF;
+			buffer[8] = (where[2] >> 0) & 0xFF;
+			buffer[9] = (where[2] >> 8) & 0xFF;
+			buffer[10] = (where[2] >> 16) & 0xFF;
+			buffer[11] = (where[2] >> 24) & 0xFF;
+			buffer[12] = '\0';
+			return (true);
+		}
+
+		return (false);
 	}
 }

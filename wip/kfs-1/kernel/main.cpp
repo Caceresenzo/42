@@ -132,12 +132,36 @@ namespace shell
 		printk("%d\n", kfs::timer::tick_count());
 	}
 
+	void do_cpuid()
+	{
+		char buffer[20];
+		uint32_t eax;
+		uint32_t ebx;
+		uint32_t ecx;
+		uint32_t edx;
+
+		if (kfs::io::cpuid(kfs::io::cpuid_requests::CPUID_GETVENDORSTRING, buffer))
+			printk("vendor:           %s\n", buffer);
+
+		kfs::io::cpuid(kfs::io::cpuid_requests::CPUID_GETFEATURES, &eax, &ebx, &ecx, &edx);
+		{
+			printk("stepping:         %d\n", eax & 0xF);
+			printk("model:            %d\n", (eax >> 4) & 0xF);
+			printk("family:           %d\n", (eax >> 8) & 0xF);
+			printk("processor type:   %d\n", (eax >> 12) & 0x3);
+			printk("extended model:   %d\n", (eax >> 16) & 0xF);
+			printk("extended family:  %d\n", (eax >> 20) & 0xFF);
+		}
+	}
+
 	void execute(const char *line)
 	{
 		if (strcmp("42", line) == 0 || strcmp("ft", line) == 0)
 			do_ft();
-		if (strcmp("tick", line) == 0)
+		else if (strcmp("tick", line) == 0)
 			do_tick();
+		else if (strcmp("cpuid", line) == 0)
+			do_cpuid();
 		else
 			printk("unknown command\n");
 	}

@@ -48,6 +48,19 @@ void* memset(void *buf, int c, uint32_t len)
 	return (buf);
 }
 
+void* memcpy(void *dst, const void *src, uint32_t n)
+{
+	char *to = dst;
+	const char *from = src;
+	while (n--)
+	{
+		*to = *from;
+		++to;
+		++from;
+	}
+	return (dst);
+}
+
 void* memmove(void *dst, const void *src, uint32_t len)
 {
 	char step = +1;
