@@ -33,13 +33,15 @@ typedef struct
 		unsigned d;
 	} state;
 	unsigned long length;
-	char buffer[64];
+	unsigned char buffer[64];
 } md5_context_t;
 
-void md5_begin(algorithm_t *ctx);
-void md5_update(algorithm_t *ctx, const void *buf, unsigned int len);
-void md5_end(algorithm_t *ctx, unsigned char digest[16]);
+void md5_begin(md5_context_t *ctx);
+void md5_update(md5_context_t *ctx, const void *buf, unsigned int len);
+void md5_end(md5_context_t *ctx, unsigned char digest[16]);
 
-void md5_transform(algorithm_t *ctx, const unsigned char block[64]);
+void md5_transform(md5_context_t *ctx, const unsigned char block[64]);
+
+unsigned left_rotate(unsigned x, unsigned nbits);
 
 #endif

@@ -9,7 +9,7 @@
 /*   Updated: 2023/02/07 00:57:49 by ecaceres         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#define _GNU_SOURCE
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
