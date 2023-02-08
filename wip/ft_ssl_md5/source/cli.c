@@ -29,7 +29,15 @@ static algorithm_t algorithms[] = {
 		.update = (void*)md5_update,
 		.end = (void*)md5_end,
 	},
-	{ 0, 0, 0, 0, 0, }
+	{
+		.name = "sha256",
+		.context_size = sizeof(sha256_context_t),
+		.digest_size = 32,
+		.begin = (void*)sha256_begin,
+		.update = (void*)sha256_update,
+		.end = (void*)sha256_end,
+	},
+	{ 0, 0, 0, 0, 0, 0, }
 };
 
 int main(int argc, char **argv)
@@ -56,7 +64,7 @@ int main(int argc, char **argv)
 		return (EXIT_FAILURE);
 	}
 
-	int fd = 1;
+	int fd = STDIN_FILENO;
 
 	const char *file = argv[2];
 	if (file)
@@ -73,7 +81,7 @@ int main(int argc, char **argv)
 	char context[algorithm->context_size];
 	algorithm->begin((void*)context);
 
-	char buffer[8096 * 8];
+	char buffer[8192 * 8];
 	ssize_t code;
 
 	while ((code = read(fd, buffer, sizeof(buffer))) > 0)
@@ -88,4 +96,6 @@ int main(int argc, char **argv)
 
 	close(fd);
 	return (EXIT_SUCCESS);
+
+	(void)argc;
 }

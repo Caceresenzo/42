@@ -16,15 +16,15 @@ OBJECTS = $(SOURCES:.c=.o)
 TARGET = ft_ssl
 
 CC = gcc
-CFLAGS = -O0 -g3 -Wextra -Wall -Werror
+CFLAGS = -O0 -g3 -Wextra -Wall -Werror -fsanitize=address
 
 all: $(TARGET)
 
 .c.o:
-	$(CC) -c $< -o $@ $(CPPFLAGS)
+	$(CC) -c $< -o $@ $(CFLAGS)
 
 $(TARGET): $(OBJECTS)
-	$(CC) -o $(TARGET) $(OBJECTS)
+	$(CC) -o $(TARGET) $(CFLAGS) $(OBJECTS)
 
 clean:
 	rm -rf $(OBJECTS)
@@ -33,5 +33,13 @@ fclean: clean
 	rm -f $(TARGET)
 
 re: fclean all
+
+test-md5: all
+	bash test/run.sh md5
+
+test-sha256: all
+	bash test/run.sh sha256
+
+test: test-md5 test-sha256
 
 .PHONY: all .c.o clean fclean re

@@ -64,7 +64,7 @@ void md5_begin(md5_context_t *ctx)
 	memset(ctx->buffer, 0, sizeof(ctx->buffer));
 }
 
-void md5_update(md5_context_t *ctx, const void *buf, unsigned int len)
+void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 {
 	unsigned buffer_size;
 	while (1)
@@ -130,22 +130,22 @@ void md5_transform(md5_context_t *ctx, const unsigned char block[64])
 		unsigned F;
 		unsigned g;
 
-		if (0 <= i && i <= 15)
+		if (i <= 15)
 		{
 			F = (B and C) or ((not B) and D);
 			g = i;
 		}
-		else if (16 <= i && i <= 31)
+		else if (i <= 31)
 		{
 			F = (D and B) or ((not D) and C);
 			g = (5 * i + 1) mod 16;
 		}
-		else if (32 <= i && i <= 47)
+		else if (i <= 47)
 		{
 			F = B xor C xor D;
 			g = (3 * i + 5) mod 16;
 		}
-		else if (48 <= i && i <= 63)
+		else if (i <= 63)
 		{
 			F = C xor (B or (not D));
 			g = (7 * i) mod 16;
