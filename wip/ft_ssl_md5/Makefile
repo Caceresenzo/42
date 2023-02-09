@@ -16,7 +16,7 @@ OBJECTS = $(SOURCES:.c=.o)
 TARGET = ft_ssl
 
 CC = gcc
-CFLAGS = -O0 -g3 -Wextra -Wall -Werror -fsanitize=address
+CFLAGS = -O0 -g3 -Wextra -Wall -Werror # -fsanitize=address
 
 all: $(TARGET)
 

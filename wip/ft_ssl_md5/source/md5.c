@@ -90,25 +90,6 @@ void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 	ctx->length += len;
 }
 
-void md5_end(md5_context_t *ctx, unsigned char digest[16])
-{
-	unsigned long total_length_bits = ctx->length * 8;
-	unsigned char length_bits[8];
-	memcpy(length_bits, &total_length_bits, 8);
-
-	unsigned length_mod = ctx->length % 64;
-	unsigned padding_length;
-	if (length_mod < 56)
-		padding_length = 56 - length_mod;
-	else
-		padding_length = (64 + 56) - length_mod;
-
-	md5_update(ctx, PADDING, padding_length);
-	md5_update(ctx, length_bits, 8);
-
-	memcpy(digest, &ctx->state, sizeof(ctx->state));
-}
-
 void md5_transform(md5_context_t *ctx, const unsigned char block[64])
 {
 #define and &
@@ -162,4 +143,23 @@ void md5_transform(md5_context_t *ctx, const unsigned char block[64])
 	ctx->state.b += B;
 	ctx->state.c += C;
 	ctx->state.d += D;
+}
+
+void md5_end(md5_context_t *ctx, unsigned char digest[16])
+{
+	unsigned long total_length_bits = ctx->length * 8;
+	unsigned char length_bits[8];
+	memcpy(length_bits, &total_length_bits, 8);
+
+	unsigned length_mod = ctx->length % 64;
+	unsigned padding_length;
+	if (length_mod < 56)
+		padding_length = 56 - length_mod;
+	else
+		padding_length = (64 + 56) - length_mod;
+
+	md5_update(ctx, PADDING, padding_length);
+	md5_update(ctx, length_bits, 8);
+
+	memcpy(digest, &ctx->state, sizeof(ctx->state));
 }

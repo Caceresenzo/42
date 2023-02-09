@@ -253,7 +253,6 @@ int main(int argc, const char **argv)
 		return (invalid_command(command));
 
 	int file_index = parse_flags(argc - 2, argv + 2) + 2;
-//	printf("flags { stdin=%d quiet=%d reverse=%d string=%s }\n", flags.stdin_, flags.quiet, flags.reverse, flags.string);
 
 	if (flags.stdin_)
 		process_stdin_echo(algorithm);
