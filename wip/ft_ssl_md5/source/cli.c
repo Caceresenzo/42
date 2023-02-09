@@ -268,7 +268,7 @@ int main(int argc, const char **argv)
 		process_file(algorithm, file);
 	}
 
-	if (file_index == index)
+	if (file_index == index && !flags.stdin_ && !flags.string)
 		process_stdin(algorithm);
 
 	return (EXIT_SUCCESS);
