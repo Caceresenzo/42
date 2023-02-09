@@ -42,4 +42,10 @@ test-sha256: all
 
 test: test-md5 test-sha256
 
+scenario-md5: all
+	bash test/scenario.sh md5
+
+scenario-sha256: all
+	bash test/scenario.sh sha256
+
 .PHONY: all .c.o clean fclean re
