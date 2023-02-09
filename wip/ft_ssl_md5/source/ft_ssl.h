@@ -14,6 +14,15 @@
 # define FT_SSL_H_
 
 # include <stddef.h>
+# include <stdbool.h>
+
+typedef struct
+{
+	bool stdin_;
+	bool quiet;
+	bool reverse;
+	const char* string;
+} flags_t;
 
 typedef struct
 {
@@ -62,5 +71,7 @@ unsigned left_rotate(unsigned x, unsigned nbits);
 unsigned right_rotate(unsigned x, unsigned nbits);
 unsigned endian_small_to_big(unsigned x);
 unsigned long endian_small_to_big_long(unsigned long x);
+
+size_t ft_strlen(const char *str);
 
 #endif
