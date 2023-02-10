@@ -23,6 +23,12 @@ static unsigned k[64] = {
 	   0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
 	   0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 };
+
+static unsigned char PADDING[64] = {
+	0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+};
 // @formatter:on
 
 void sha256_begin(sha256_context_t *ctx)
@@ -106,7 +112,18 @@ void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])
 
 void sha256_end(sha256_context_t *ctx, unsigned char digest[32])
 {
-	sha_end((void*)ctx, (void*)&sha256_update);
+	unsigned long L = ft_bswap64(ctx->length * 8);
+	unsigned char bits[8];
+	ft_memcpy(bits, &L, sizeof(L));
+
+	unsigned padding_length = 64 - (ctx->length % 64);
+	if (padding_length <= 8)
+		padding_length += 64 - 8;
+	else
+		padding_length -= 8;
+
+	sha256_update(ctx, PADDING, padding_length);
+	sha256_update(ctx, bits, sizeof(bits));
 
 	ft_memcpy(digest, &ctx->state, sizeof(ctx->state));
 

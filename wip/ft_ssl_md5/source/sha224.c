@@ -40,13 +40,10 @@ void sha224_update(sha224_context_t *ctx, const void *buf, size_t len)
 	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha256_transform);
 }
 
-void sha224_end(sha224_context_t *ctx, unsigned char digest[32])
+void sha224_end(sha224_context_t *ctx, unsigned char digest[28])
 {
-	sha_end((void*)ctx, (void*)&sha224_update);
+	unsigned char digest_32[32];
+	sha256_end((void*)ctx, digest_32);
 
-	ft_memcpy(digest, &ctx->state, sizeof(ctx->state) - sizeof(unsigned));
-
-	unsigned *digest4 = (void*)digest;
-	for (unsigned i = 0; i < 7; ++i)
-		digest4[i] = ft_bswap32(digest4[i]);
+	ft_memcpy(digest, digest_32, 28);
 }

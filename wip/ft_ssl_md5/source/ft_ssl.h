@@ -60,10 +60,6 @@ typedef struct
 
 void generic_update(generic_context_t *ctx, const void *buf, size_t len, unsigned block_size, void (*transform)(void*, const unsigned char[]));
 
-typedef generic_context_t sha_context_t;
-
-void sha_end(sha_context_t *ctx, void (*update)(void*, const void*, size_t));
-
 typedef struct
 {
 	unsigned long length;
