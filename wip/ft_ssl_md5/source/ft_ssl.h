@@ -36,6 +36,8 @@ typedef struct
 
 typedef struct
 {
+	unsigned long length;
+	unsigned char buffer[64];
 	struct
 	{
 		unsigned a;
@@ -43,8 +45,6 @@ typedef struct
 		unsigned c;
 		unsigned d;
 	} state;
-	unsigned long length;
-	unsigned char buffer[64];
 } md5_context_t;
 
 void md5_begin(md5_context_t *ctx);
@@ -54,18 +54,37 @@ void md5_end(md5_context_t *ctx, unsigned char digest[16]);
 
 typedef struct
 {
+	unsigned long length;
+	unsigned char buffer[];
+} generic_context_t;
+
+void generic_update(generic_context_t *ctx, const void *buf, size_t len, void (*transform)(void*, const unsigned char[]));
+
+typedef generic_context_t sha_context_t;
+
+void sha_update(sha_context_t *ctx, const void *buf, size_t len, void (*transform)(void*, const unsigned char[]));
+void sha_end(sha_context_t *ctx, void (*update)(void*, const void*, size_t));
+
+typedef struct
+{
+	unsigned long length;
+	unsigned char buffer[64];
 	struct
 	{
 		unsigned h[8];
 	} state;
-	unsigned long length;
-	unsigned char buffer[64];
 } sha256_context_t;
 
 void sha256_begin(sha256_context_t *ctx);
 void sha256_update(sha256_context_t *ctx, const void *buf, size_t len);
 void sha256_transform(sha256_context_t *ctx, const unsigned char block[64]);
 void sha256_end(sha256_context_t *ctx, unsigned char digest[32]);
+
+typedef sha256_context_t sha224_context_t;
+
+void sha224_begin(sha224_context_t *ctx);
+void sha224_update(sha224_context_t *ctx, const void *buf, size_t len);
+void sha224_end(sha224_context_t *ctx, unsigned char digest[32]);
 
 int ft_strcmp(const char *s1, const char *s2);
 void* ft_memset(void *b, int c, size_t len);

@@ -10,14 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdbool.h>
-
 #include "ft_ssl.h"
 
 // @formatter:off
@@ -30,12 +22,6 @@ static unsigned k[64] = {
 	   0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
 	   0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
 	   0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
-};
-
-static unsigned char PADDING[64] = {
-	0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
 // @formatter:on
 
@@ -56,28 +42,7 @@ void sha256_begin(sha256_context_t *ctx)
 
 void sha256_update(sha256_context_t *ctx, const void *buf, size_t len)
 {
-	unsigned buffer_size;
-	while (1)
-	{
-		buffer_size = ctx->length % 64;
-
-		if (buffer_size + len >= 64)
-		{
-			unsigned copied = 64 - buffer_size;
-
-			ft_memcpy(ctx->buffer + buffer_size, buf, copied);
-			sha256_transform(ctx, ctx->buffer);
-
-			len -= copied;
-			buf += copied;
-			ctx->length += copied;
-		}
-		else
-			break;
-	}
-
-	ft_memcpy(ctx->buffer + buffer_size, buf, len);
-	ctx->length += len;
+	sha_update((void*)ctx, buf, len, (void*)&sha256_transform);
 }
 
 void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])
@@ -141,18 +106,7 @@ void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])
 
 void sha256_end(sha256_context_t *ctx, unsigned char digest[32])
 {
-	unsigned long L = ft_bswap_uint64(ctx->length * 8);
-	unsigned char bits[8];
-	ft_memcpy(bits, &L, sizeof(L));
-
-	unsigned padding_length = 64 - (ctx->length % 64);
-	if (padding_length <= 8)
-		padding_length += 64 - 8;
-	else
-		padding_length -= 8;
-
-	sha256_update(ctx, PADDING, padding_length);
-	sha256_update(ctx, bits, sizeof(bits));
+	sha_end((void*)ctx, (void*)&sha256_update);
 
 	ft_memcpy(digest, &ctx->state, sizeof(ctx->state));
 

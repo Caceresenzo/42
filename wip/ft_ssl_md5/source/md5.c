@@ -66,28 +66,7 @@ void md5_begin(md5_context_t *ctx)
 
 void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 {
-	unsigned buffer_size;
-	while (1)
-	{
-		buffer_size = ctx->length % 64;
-
-		if (buffer_size + len >= 64)
-		{
-			unsigned copied = 64 - buffer_size;
-
-			ft_memcpy(ctx->buffer + buffer_size, buf, copied);
-			md5_transform(ctx, ctx->buffer);
-
-			len -= copied;
-			buf += copied;
-			ctx->length += copied;
-		}
-		else
-			break;
-	}
-
-	ft_memcpy(ctx->buffer + buffer_size, buf, len);
-	ctx->length += len;
+	generic_update((void*)ctx, buf, len, (void*)&md5_transform);
 }
 
 void md5_transform(md5_context_t *ctx, const unsigned char block[64])
