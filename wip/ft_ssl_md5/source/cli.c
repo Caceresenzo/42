@@ -143,6 +143,11 @@ void digest_to_string(algorithm_t *algorithm, unsigned char *digest, char *hash)
 		sprintf(hash + (i * 2), "%02x", digest[i]);
 }
 
+ssize_t ft_putchar(char chr)
+{
+	return (write(STDOUT_FILENO, &chr, 1));
+}
+
 void process_stdin_echo(algorithm_t *algorithm)
 {
 	char context[algorithm->context_size];
@@ -167,7 +172,7 @@ void process_stdin_echo(algorithm_t *algorithm)
 		{
 			char chr = buffer[index];
 			if (chr != '\n' && chr != '\r')
-				write(STDOUT_FILENO, &chr, 1);
+				ft_putchar(chr);
 		}
 	}
 	algorithm->end((void*)context, digest);
