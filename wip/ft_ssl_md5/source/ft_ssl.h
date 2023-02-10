@@ -58,11 +58,10 @@ typedef struct
 	unsigned char buffer[];
 } generic_context_t;
 
-void generic_update(generic_context_t *ctx, const void *buf, size_t len, void (*transform)(void*, const unsigned char[]));
+void generic_update(generic_context_t *ctx, const void *buf, size_t len, unsigned block_size, void (*transform)(void*, const unsigned char[]));
 
 typedef generic_context_t sha_context_t;
 
-void sha_update(sha_context_t *ctx, const void *buf, size_t len, void (*transform)(void*, const unsigned char[]));
 void sha_end(sha_context_t *ctx, void (*update)(void*, const void*, size_t));
 
 typedef struct
@@ -86,13 +85,30 @@ void sha224_begin(sha224_context_t *ctx);
 void sha224_update(sha224_context_t *ctx, const void *buf, size_t len);
 void sha224_end(sha224_context_t *ctx, unsigned char digest[32]);
 
+typedef struct
+{
+	unsigned long length;
+	unsigned char buffer[128];
+	struct
+	{
+		unsigned long h[8];
+	} state;
+} sha512_context_t;
+
+void sha512_begin(sha512_context_t *ctx);
+void sha512_update(sha512_context_t *ctx, const void *buf, size_t len);
+void sha512_transform(sha512_context_t *ctx, const unsigned char block[128]);
+void sha512_end(sha512_context_t *ctx, unsigned char digest[64]);
+
 int ft_strcmp(const char *s1, const char *s2);
 void* ft_memset(void *b, int c, size_t len);
 void* ft_memcpy(void *dst, const void *src, size_t n);
 size_t ft_strlen(const char *str);
-unsigned ft_left_rotate(unsigned x, unsigned nbits);
-unsigned ft_right_rotate(unsigned x, unsigned nbits);
-unsigned ft_bswap_uint32(unsigned x);
-unsigned long ft_bswap_uint64(unsigned long x);
+unsigned ft_rotl32(unsigned x, unsigned nbits);
+unsigned ft_rotr32(unsigned x, unsigned nbits);
+unsigned long ft_rotl64(unsigned long x, unsigned nbits);
+unsigned long ft_rotr64(unsigned long x, unsigned nbits);
+unsigned ft_bswap32(unsigned x);
+unsigned long ft_bswap64(unsigned long x);
 
 #endif

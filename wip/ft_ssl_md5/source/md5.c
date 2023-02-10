@@ -66,7 +66,7 @@ void md5_begin(md5_context_t *ctx)
 
 void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 {
-	generic_update((void*)ctx, buf, len, (void*)&md5_transform);
+	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&md5_transform);
 }
 
 void md5_transform(md5_context_t *ctx, const unsigned char block[64])
@@ -115,7 +115,7 @@ void md5_transform(md5_context_t *ctx, const unsigned char block[64])
 		A = D;
 		D = C;
 		C = B;
-		B = B + ft_left_rotate(F, s[i]);
+		B = B + ft_rotl32(F, s[i]);
 	}
 
 	ctx->state.a += A;

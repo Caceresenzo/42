@@ -37,7 +37,7 @@ void sha224_begin(sha224_context_t *ctx)
 
 void sha224_update(sha224_context_t *ctx, const void *buf, size_t len)
 {
-	sha_update((void*)ctx, buf, len, (void*)&sha256_transform);
+	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha256_transform);
 }
 
 void sha224_end(sha224_context_t *ctx, unsigned char digest[32])
@@ -48,5 +48,5 @@ void sha224_end(sha224_context_t *ctx, unsigned char digest[32])
 
 	unsigned *digest4 = (void*)digest;
 	for (unsigned i = 0; i < 7; ++i)
-		digest4[i] = ft_bswap_uint32(digest4[i]);
+		digest4[i] = ft_bswap32(digest4[i]);
 }
