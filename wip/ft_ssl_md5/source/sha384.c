@@ -12,8 +12,6 @@
 
 #include "ft_ssl.h"
 
-#include <stdio.h>
-
 void sha384_begin(sha384_context_t *ctx)
 {
 	ctx->state.h[0] = 0xcbbb9d5dc1059ed8;
