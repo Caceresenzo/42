@@ -73,10 +73,6 @@ void sha512_transform(sha512_context_t *ctx, const unsigned char block[128])
 #define and &
 #define not ~
 
-//	for (unsigned i = 0; i < 128; ++i)
-//		printf("%02x ", block[i]);
-//	printf("\n");
-
 	unsigned long w[80] = { 0 };
 
 	ft_memcpy(w, block, sizeof(unsigned long) * 16);
@@ -136,13 +132,10 @@ void sha512_end(sha512_context_t *ctx, unsigned char digest[64])
 	ft_memcpy(bits, &L, sizeof(L));
 
 	unsigned padding_length = 128 - (ctx->length % 128);
-//	printf("B padding_length=%u\n", padding_length);
 	if (padding_length <= 16)
 		padding_length += 128 - 16;
 	else
 		padding_length -= 16;
-
-//	printf("A padding_length=%u\n", padding_length);
 
 	sha512_update(ctx, PADDING, padding_length + 8);
 	sha512_update(ctx, bits, sizeof(bits));
