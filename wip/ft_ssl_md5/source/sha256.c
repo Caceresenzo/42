@@ -51,7 +51,7 @@ void sha256_begin(sha256_context_t *ctx)
 	ctx->state.h[7] = 0x5be0cd19;
 
 	ctx->length = 0;
-	memset(ctx->buffer, 0, sizeof(ctx->buffer));
+	ft_memset(ctx->buffer, 0, sizeof(ctx->buffer));
 }
 
 void sha256_update(sha256_context_t *ctx, const void *buf, size_t len)
@@ -65,7 +65,7 @@ void sha256_update(sha256_context_t *ctx, const void *buf, size_t len)
 		{
 			unsigned copied = 64 - buffer_size;
 
-			memcpy(ctx->buffer + buffer_size, buf, copied);
+			ft_memcpy(ctx->buffer + buffer_size, buf, copied);
 			sha256_transform(ctx, ctx->buffer);
 
 			len -= copied;
@@ -76,7 +76,7 @@ void sha256_update(sha256_context_t *ctx, const void *buf, size_t len)
 			break;
 	}
 
-	memcpy(ctx->buffer + buffer_size, buf, len);
+	ft_memcpy(ctx->buffer + buffer_size, buf, len);
 	ctx->length += len;
 }
 
@@ -89,14 +89,14 @@ void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])
 
 	unsigned w[64] = { 0 };
 
-	memcpy(w, block, sizeof(unsigned) * 16);
+	ft_memcpy(w, block, sizeof(unsigned) * 16);
 	for (unsigned i = 0; i < 16; ++i)
-		w[i] = __builtin_bswap32(w[i]);
+		w[i] = ft_bswap_uint32(w[i]);
 
 	for (unsigned i = 16; i < 64; ++i)
 	{
-		unsigned s0 = right_rotate(w[i - 15], 7) xor right_rotate(w[i - 15], 18) xor (w[i - 15] rightshift 3);
-		unsigned s1 = right_rotate(w[i - 2], 17) xor right_rotate(w[i - 2], 19) xor (w[i - 2] rightshift 10);
+		unsigned s0 = ft_right_rotate(w[i - 15], 7) xor ft_right_rotate(w[i - 15], 18) xor (w[i - 15] rightshift 3);
+		unsigned s1 = ft_right_rotate(w[i - 2], 17) xor ft_right_rotate(w[i - 2], 19) xor (w[i - 2] rightshift 10);
 
 		w[i] = w[i - 16] + s0 + w[i - 7] + s1;
 	}
@@ -112,10 +112,10 @@ void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])
 
 	for (unsigned i = 0; i < 64; ++i)
 	{
-		unsigned S1 = right_rotate(e, 6) xor right_rotate(e, 11) xor right_rotate(e, 25);
+		unsigned S1 = ft_right_rotate(e, 6) xor ft_right_rotate(e, 11) xor ft_right_rotate(e, 25);
 		unsigned ch = (e and f) xor ((not e) and g);
 		unsigned temp1 = h + S1 + ch + k[i] + w[i];
-		unsigned S0 = right_rotate(a, 2) xor right_rotate(a, 13) xor right_rotate(a, 22);
+		unsigned S0 = ft_right_rotate(a, 2) xor ft_right_rotate(a, 13) xor ft_right_rotate(a, 22);
 		unsigned maj = (a and b) xor (a and c) xor (b and c);
 		unsigned temp2 = S0 + maj;
 
@@ -141,9 +141,9 @@ void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])
 
 void sha256_end(sha256_context_t *ctx, unsigned char digest[32])
 {
-	unsigned long L = endian_small_to_big_long(ctx->length * 8);
+	unsigned long L = ft_bswap_uint64(ctx->length * 8);
 	unsigned char bits[8];
-	memcpy(bits, &L, sizeof(L));
+	ft_memcpy(bits, &L, sizeof(L));
 
 	unsigned padding_length = 64 - (ctx->length % 64);
 	if (padding_length <= 8)
@@ -154,9 +154,9 @@ void sha256_end(sha256_context_t *ctx, unsigned char digest[32])
 	sha256_update(ctx, PADDING, padding_length);
 	sha256_update(ctx, bits, sizeof(bits));
 
-	memcpy(digest, &ctx->state, sizeof(ctx->state));
+	ft_memcpy(digest, &ctx->state, sizeof(ctx->state));
 
 	unsigned *digest4 = (void*)digest;
 	for (unsigned i = 0; i < 8; ++i)
-		digest4[i] = __builtin_bswap32(digest4[i]);
+		digest4[i] = ft_bswap_uint32(digest4[i]);
 }

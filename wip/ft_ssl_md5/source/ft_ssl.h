@@ -21,7 +21,7 @@ typedef struct
 	bool stdin_;
 	bool quiet;
 	bool reverse;
-	const char* string;
+	const char *string;
 } flags_t;
 
 typedef struct
@@ -67,11 +67,13 @@ void sha256_update(sha256_context_t *ctx, const void *buf, size_t len);
 void sha256_transform(sha256_context_t *ctx, const unsigned char block[64]);
 void sha256_end(sha256_context_t *ctx, unsigned char digest[32]);
 
-unsigned left_rotate(unsigned x, unsigned nbits);
-unsigned right_rotate(unsigned x, unsigned nbits);
-unsigned endian_small_to_big(unsigned x);
-unsigned long endian_small_to_big_long(unsigned long x);
-
+int ft_strcmp(const char *s1, const char *s2);
+void* ft_memset(void *b, int c, size_t len);
+void* ft_memcpy(void *dst, const void *src, size_t n);
 size_t ft_strlen(const char *str);
+unsigned ft_left_rotate(unsigned x, unsigned nbits);
+unsigned ft_right_rotate(unsigned x, unsigned nbits);
+unsigned ft_bswap_uint32(unsigned x);
+unsigned long ft_bswap_uint64(unsigned long x);
 
 #endif

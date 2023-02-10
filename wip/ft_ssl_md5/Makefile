@@ -48,10 +48,16 @@ scenario-md5: all
 scenario-sha256: all
 	bash test/scenario.sh sha256
 
+scenario: scenario-md5 scenario-sha256
+
 incremental-md5: all
 	bash test/incremental.sh md5
 
 incremental-sha256: all
 	bash test/incremental.sh sha256
+
+incremental: incremental-md5 incremental-sha256
+
+test-all: test scenario incremental
 
 .PHONY: all .c.o clean fclean re

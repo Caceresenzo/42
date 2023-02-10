@@ -61,7 +61,7 @@ void md5_begin(md5_context_t *ctx)
 	ctx->state.d = 0x10325476;
 
 	ctx->length = 0;
-	memset(ctx->buffer, 0, sizeof(ctx->buffer));
+	ft_memset(ctx->buffer, 0, sizeof(ctx->buffer));
 }
 
 void md5_update(md5_context_t *ctx, const void *buf, size_t len)
@@ -75,7 +75,7 @@ void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 		{
 			unsigned copied = 64 - buffer_size;
 
-			memcpy(ctx->buffer + buffer_size, buf, copied);
+			ft_memcpy(ctx->buffer + buffer_size, buf, copied);
 			md5_transform(ctx, ctx->buffer);
 
 			len -= copied;
@@ -86,7 +86,7 @@ void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 			break;
 	}
 
-	memcpy(ctx->buffer + buffer_size, buf, len);
+	ft_memcpy(ctx->buffer + buffer_size, buf, len);
 	ctx->length += len;
 }
 
@@ -99,7 +99,7 @@ void md5_transform(md5_context_t *ctx, const unsigned char block[64])
 #define mod %
 
 	unsigned int M[16];
-	memcpy(M, block, sizeof(M));
+	ft_memcpy(M, block, sizeof(M));
 
 	unsigned A = ctx->state.a;
 	unsigned B = ctx->state.b;
@@ -136,7 +136,7 @@ void md5_transform(md5_context_t *ctx, const unsigned char block[64])
 		A = D;
 		D = C;
 		C = B;
-		B = B + left_rotate(F, s[i]);
+		B = B + ft_left_rotate(F, s[i]);
 	}
 
 	ctx->state.a += A;
@@ -149,7 +149,7 @@ void md5_end(md5_context_t *ctx, unsigned char digest[16])
 {
 	unsigned long total_length_bits = ctx->length * 8;
 	unsigned char length_bits[8];
-	memcpy(length_bits, &total_length_bits, 8);
+	ft_memcpy(length_bits, &total_length_bits, 8);
 
 	unsigned length_mod = ctx->length % 64;
 	unsigned padding_length;
@@ -161,5 +161,5 @@ void md5_end(md5_context_t *ctx, unsigned char digest[16])
 	md5_update(ctx, PADDING, padding_length);
 	md5_update(ctx, length_bits, 8);
 
-	memcpy(digest, &ctx->state, sizeof(ctx->state));
+	ft_memcpy(digest, &ctx->state, sizeof(ctx->state));
 }

@@ -76,7 +76,7 @@ algorithm_t* parse_command(const char *command)
 {
 	for (algorithm_t *algorithm = algorithms; algorithm->name; ++algorithm)
 	{
-		if (strcmp(algorithm->name, command) == 0)
+		if (ft_strcmp(algorithm->name, command) == 0)
 			return (algorithm);
 	}
 
@@ -90,13 +90,13 @@ int parse_flags(int argc, const char **argv)
 	{
 		const char *arg = argv[index];
 
-		if (strcmp("-p", arg) == 0)
+		if (ft_strcmp("-p", arg) == 0)
 			flags.stdin_ = true;
-		else if (strcmp("-q", arg) == 0)
+		else if (ft_strcmp("-q", arg) == 0)
 			flags.quiet = true;
-		else if (strcmp("-r", arg) == 0)
+		else if (ft_strcmp("-r", arg) == 0)
 			flags.reverse = true;
-		else if (strcmp("-s", arg) == 0)
+		else if (ft_strcmp("-s", arg) == 0)
 		{
 			flags.string = argv[++index];
 
@@ -185,7 +185,7 @@ void process_string(algorithm_t *algorithm)
 	char hash[algorithm->digest_size * 2 + 1];
 
 	algorithm->begin((void*)context);
-	algorithm->update((void*)context, flags.string, strlen(flags.string));
+	algorithm->update((void*)context, flags.string, ft_strlen(flags.string));
 	algorithm->end((void*)context, digest);
 
 	digest_to_string(algorithm, digest, hash);
@@ -204,7 +204,7 @@ void process_string(algorithm_t *algorithm)
 void process_file(algorithm_t *algorithm, const char *file)
 {
 	int fd = STDIN_FILENO;
-	if (strcmp(file, FILE_STDIN))
+	if (ft_strcmp(file, FILE_STDIN))
 		fd = open(file, O_RDONLY);
 
 	if (fd == -1)
