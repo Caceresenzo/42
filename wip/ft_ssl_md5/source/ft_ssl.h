@@ -83,7 +83,7 @@ typedef sha256_context_t sha224_context_t;
 
 void sha224_begin(sha224_context_t *ctx);
 void sha224_update(sha224_context_t *ctx, const void *buf, size_t len);
-void sha224_end(sha224_context_t *ctx, unsigned char digest[32]);
+void sha224_end(sha224_context_t *ctx, unsigned char digest[28]);
 
 typedef struct
 {
@@ -99,6 +99,12 @@ void sha512_begin(sha512_context_t *ctx);
 void sha512_update(sha512_context_t *ctx, const void *buf, size_t len);
 void sha512_transform(sha512_context_t *ctx, const unsigned char block[128]);
 void sha512_end(sha512_context_t *ctx, unsigned char digest[64]);
+
+typedef sha512_context_t sha384_context_t;
+
+void sha384_begin(sha384_context_t *ctx);
+void sha384_update(sha384_context_t *ctx, const void *buf, size_t len);
+void sha384_end(sha384_context_t *ctx, unsigned char digest[48]);
 
 int ft_strcmp(const char *s1, const char *s2);
 void* ft_memset(void *b, int c, size_t len);

@@ -46,7 +46,10 @@ test-sha224: all
 test-sha512: all
 	bash test/run.sh sha512
 
-test: test-md5 test-sha256 test-sha224 test-sha512
+test-sha384: all
+	bash test/run.sh sha384
+
+test: test-md5 test-sha256 test-sha224 test-sha512 test-sha384
 
 scenario-md5: all
 	bash test/scenario.sh md5
@@ -60,6 +63,9 @@ scenario-sha224: all
 scenario-sha512: all
 	bash test/scenario.sh sha512
 
+scenario-sha384: all
+	bash test/scenario.sh sha384
+
 incremental-md5: all
 	bash test/incremental.sh md5
 
@@ -72,7 +78,10 @@ incremental-sha224: all
 incremental-sha512: all
 	bash test/incremental.sh sha512
 
-incremental: incremental-md5 incremental-sha256 incremental-sha224 incremental-sha512
+incremental-sha384: all
+	bash test/incremental.sh sha384
+
+incremental: incremental-md5 incremental-sha256 incremental-sha224 incremental-sha512 incremental-sha384
 
 test-all: test incremental
 

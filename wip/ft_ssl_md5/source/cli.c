@@ -61,6 +61,14 @@ static algorithm_t algorithms[] = {
 		.update = (void*)sha512_update,
 		.end = (void*)sha512_end,
 	},
+	{
+		.name = "sha384",
+		.context_size = sizeof(sha384_context_t),
+		.digest_size = 48,
+		.begin = (void*)sha384_begin,
+		.update = (void*)sha384_update,
+		.end = (void*)sha384_end,
+	},
 	{ 0, 0, 0, 0, 0, 0, }
 };
 
