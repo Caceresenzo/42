@@ -12,30 +12,32 @@
 
 #include "ft_ssl.h"
 
-#include <stdio.h>
-
 void generic_update(generic_context_t *ctx, const void *buf, size_t len, unsigned block_size, void (*transform)(void*, const unsigned char[]))
 {
-	unsigned buffer_size;
-	while (1)
+	unsigned buffer_size = ctx->length % block_size;
+
+	if (buffer_size + len >= block_size)
 	{
-		buffer_size = ctx->length % block_size;
+		unsigned copied = block_size - buffer_size;
 
-		if (buffer_size + len >= block_size)
+		ft_memcpy(ctx->buffer + buffer_size, buf, copied);
+		transform(ctx, ctx->buffer);
+
+		len -= copied;
+		buf += copied;
+		ctx->length += copied;
+
+		while (len >= block_size)
 		{
-			unsigned copied = block_size - buffer_size;
+			transform(ctx, buf);
 
-			ft_memcpy(ctx->buffer + buffer_size, buf, copied);
-			transform(ctx, ctx->buffer);
-
-			len -= copied;
-			buf += copied;
-			ctx->length += copied;
+			len -= block_size;
+			buf += block_size;
+			ctx->length += block_size;
 		}
-		else
-			break;
 	}
 
+	buffer_size = ctx->length % block_size;
 	ft_memcpy(ctx->buffer + buffer_size, buf, len);
 	ctx->length += len;
 }
