@@ -31,6 +31,11 @@ namespace kfs::io
 		asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
 	}
 
+	void outw(uint16_t port, uint16_t value)
+	{
+		asm volatile ("outw %w0, %w1" : : "a" (value), "Nd" (port));
+	}
+
 	void halt(void)
 	{
 		asm volatile ("hlt");
@@ -100,5 +105,17 @@ namespace kfs::io
 
 		outb(0x64, 0xFE);
 		halt();
+	}
+
+	void shutdown()
+	{
+		/* Bochs & QEMU */
+		kfs::io::outw(0xB004, 0x2000);
+
+		/* QEMU */
+		kfs::io::outw(0x604, 0x2000);
+
+		/* Virtual Box */
+		kfs::io::outw(0x4004, 0x3400);
 	}
 }

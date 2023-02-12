@@ -59,6 +59,7 @@ namespace shell
 	void do_tick();
 	void do_cpuid();
 	void do_reboot();
+	void do_shutdown();
 	void do_multiboot();
 	void do_help();
 
@@ -68,6 +69,7 @@ namespace shell
 		{ .name = "tick", .function = do_tick },
 		{ .name = "cpuid", .function = do_cpuid },
 		{ .name = "reboot", .function = do_reboot },
+		{ .name = "shutdown", .function = do_shutdown },
 		{ .name = "multiboot", .function = do_multiboot },
 		{ .name = "help", .function = do_help },
 		{ 0, 0 },
@@ -117,8 +119,14 @@ namespace shell
 
 	void do_reboot()
 	{
-		printk("good bye!\n");
+		printk("see you!\n");
 		kfs::io::reboot();
+	}
+
+	void do_shutdown()
+	{
+		printk("good bye!\n");
+		kfs::io::shutdown();
 	}
 
 	void do_multiboot()
@@ -155,6 +163,12 @@ namespace shell
 
 	void callback(kfs::keyboard::key_t key)
 	{
+		if (key.letter == '\e')
+		{
+			do_shutdown();
+			return;
+		}
+
 		uint8_t letter = key.letter;
 		if (!letter || !key.state)
 			return;

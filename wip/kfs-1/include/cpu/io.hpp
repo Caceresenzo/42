@@ -22,6 +22,7 @@ namespace kfs::io
 	void halt(void);
 
 	void outb(uint16_t port, uint8_t value);
+	void outw(uint16_t port, uint16_t value);
 	uint8_t inb(uint16_t port);
 	void wait(void);
 
@@ -38,6 +39,7 @@ namespace kfs::io
 	bool cpuid(cpuid_requests code, char *buffer);
 
 	void reboot();
+	void shutdown();
 }
 
 #endif /* IO_HPP_ */
