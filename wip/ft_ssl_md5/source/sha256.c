@@ -48,7 +48,7 @@ void sha256_begin(sha256_context_t *ctx)
 
 void sha256_update(sha256_context_t *ctx, const void *buf, size_t len)
 {
-	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha256_transform);
+	generic_update_64((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha256_transform);
 }
 
 void sha256_transform(sha256_context_t *ctx, const unsigned char block[64])

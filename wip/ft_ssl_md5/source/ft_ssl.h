@@ -52,13 +52,25 @@ void md5_update(md5_context_t *ctx, const void *buf, size_t len);
 void md5_transform(md5_context_t *ctx, const unsigned char block[64]);
 void md5_end(md5_context_t *ctx, unsigned char digest[16]);
 
+typedef unsigned long uint128_t[2];
+
+void uint128_zero(uint128_t *value);
+void uint128_add(uint128_t *value, unsigned long add);
+
 typedef struct
 {
 	unsigned long length;
 	unsigned char buffer[];
-} generic_context_t;
+} generic_context_64_t;
 
-void generic_update(generic_context_t *ctx, const void *buf, size_t len, unsigned block_size, void (*transform)(void*, const unsigned char[]));
+typedef struct
+{
+	uint128_t length;
+	unsigned char buffer[];
+} generic_context_128_t;
+
+void generic_update_64(generic_context_64_t *ctx, const void *buf, size_t len, unsigned block_size, void (*transform)(void*, const unsigned char[]));
+void generic_update_128(generic_context_128_t *ctx, const void *buf, size_t len, unsigned block_size, void (*transform)(void*, const unsigned char[]));
 
 typedef struct
 {
@@ -83,7 +95,7 @@ void sha224_end(sha224_context_t *ctx, unsigned char digest[28]);
 
 typedef struct
 {
-	unsigned long length;
+	uint128_t length;
 	unsigned char buffer[128];
 	struct
 	{

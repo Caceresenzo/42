@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sha256.c                                           :+:      :+:    :+:   */
+/*   sha512.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecaceres <ecaceres@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -39,8 +39,6 @@ static unsigned char PADDING[128 + 8] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0,
-	/* extra: no 128bit int support yet */
-	0, 0, 0, 0, 0, 0, 0, 0,
 };
 // @formatter:on
 
@@ -55,13 +53,13 @@ void sha512_begin(sha512_context_t *ctx)
 	ctx->state.h[6] = 0x1f83d9abfb41bd6b;
 	ctx->state.h[7] = 0x5be0cd19137e2179;
 
-	ctx->length = 0;
+	uint128_zero(&ctx->length);
 	ft_memset(ctx->buffer, 0, sizeof(ctx->buffer));
 }
 
 void sha512_update(sha512_context_t *ctx, const void *buf, size_t len)
 {
-	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha512_transform);
+	generic_update_128((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha512_transform);
 }
 
 void sha512_transform(sha512_context_t *ctx, const unsigned char block[128])
@@ -125,17 +123,20 @@ void sha512_transform(sha512_context_t *ctx, const unsigned char block[128])
 
 void sha512_end(sha512_context_t *ctx, unsigned char digest[64])
 {
-	unsigned long L = ft_bswap64(ctx->length * 8);
-	unsigned char bits[8];
-	ft_memcpy(bits, &L, sizeof(L));
+	unsigned long L_high = (ft_bswap64(ctx->length[1] << 3)) | (ft_bswap64(ctx->length[0] >> 61));
+	unsigned long L_low = ft_bswap64(ctx->length[0] << 3);
 
-	unsigned padding_length = 128 - (ctx->length % 128);
+	unsigned char bits[16];
+	ft_memcpy(bits, &L_high, sizeof(L_high));
+	ft_memcpy(bits + 8, &L_low, sizeof(L_low));
+
+	unsigned padding_length = 128 - (ctx->length[0] % 128);
 	if (padding_length <= 16)
 		padding_length += 128 - 16;
 	else
 		padding_length -= 16;
 
-	sha512_update(ctx, PADDING, padding_length + 8);
+	sha512_update(ctx, PADDING, padding_length);
 	sha512_update(ctx, bits, sizeof(bits));
 
 	ft_memcpy(digest, &ctx->state, sizeof(ctx->state));

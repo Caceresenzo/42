@@ -29,7 +29,7 @@ void sha224_begin(sha224_context_t *ctx)
 
 void sha224_update(sha224_context_t *ctx, const void *buf, size_t len)
 {
-	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&sha256_transform);
+	sha256_update((void*)ctx, buf, len);
 }
 
 void sha224_end(sha224_context_t *ctx, unsigned char digest[28])

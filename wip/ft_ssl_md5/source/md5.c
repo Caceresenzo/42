@@ -59,7 +59,7 @@ void md5_begin(md5_context_t *ctx)
 
 void md5_update(md5_context_t *ctx, const void *buf, size_t len)
 {
-	generic_update((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&md5_transform);
+	generic_update_64((void*)ctx, buf, len, sizeof(ctx->buffer), (void*)&md5_transform);
 }
 
 void md5_transform(md5_context_t *ctx, const unsigned char block[64])
