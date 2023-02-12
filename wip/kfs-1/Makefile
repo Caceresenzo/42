@@ -42,10 +42,7 @@ kfs.iso: $(TARGET_BIN) boot/grub.cfg
 	cp boot/grub.cfg /tmp/iso/boot/grub/
 	grub-mkrescue -o $(TARGET_ISO) /tmp/iso/
 
-run-kernel: $(TARGET_BIN)
-	qemu-system-i386 -kernel $(TARGET_BIN)
-
-run-iso: $(TARGET_ISO)
+run: $(TARGET_ISO)
 	qemu-system-i386 -cdrom $(TARGET_ISO) # -d int
 
 clean:
