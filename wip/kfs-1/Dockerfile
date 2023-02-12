@@ -1,4 +1,4 @@
-FROM ubuntu:latest as builder
+FROM ubuntu:latest
 
 ENV PREFIX="/opt/cross"
 ENV TARGET=i386-elf

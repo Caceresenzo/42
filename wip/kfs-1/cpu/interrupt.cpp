@@ -91,7 +91,7 @@ namespace kfs::interrupt
 		printk("[interrupt] no=%d error=\"%s\" code=%b\n", regs.int_no, name, regs.err_code);
 
 		kfs::io::cli();
-		kfs::io::hlt();
+		kfs::io::halt();
 	}
 	
 	void unhandled(registers_t regs)
@@ -99,7 +99,7 @@ namespace kfs::interrupt
 		printk("[interrupt] unhandled no=%d code=%b\n", regs.int_no, regs.err_code);
 
 		kfs::io::cli();
-		kfs::io::hlt();
+		kfs::io::halt();
 	}
 
 	void initialize(void)

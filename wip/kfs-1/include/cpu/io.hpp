@@ -19,7 +19,7 @@ namespace kfs::io
 {
 	void sti(void);
 	void cli(void);
-	void hlt(void);
+	void halt(void);
 
 	void outb(uint16_t port, uint8_t value);
 	uint8_t inb(uint16_t port);
@@ -36,6 +36,8 @@ namespace kfs::io
 	void cpuid(cpuid_requests code, uint32_t *a, uint32_t *d);
 	void cpuid(cpuid_requests code, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx);
 	bool cpuid(cpuid_requests code, char *buffer);
+
+	void reboot();
 }
 
 #endif /* IO_HPP_ */

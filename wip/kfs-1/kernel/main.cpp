@@ -154,6 +154,12 @@ namespace shell
 		}
 	}
 
+	void do_reboot()
+	{
+		printk("good bye!\n");
+		kfs::io::reboot();
+	}
+
 	void execute(const char *line)
 	{
 		if (strcmp("42", line) == 0 || strcmp("ft", line) == 0)
@@ -162,6 +168,8 @@ namespace shell
 			do_tick();
 		else if (strcmp("cpuid", line) == 0)
 			do_cpuid();
+		else if (strcmp("reboot", line) == 0)
+			do_reboot();
 		else
 			printk("unknown command\n");
 	}

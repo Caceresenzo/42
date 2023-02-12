@@ -31,7 +31,7 @@ namespace kfs::io
 		asm volatile ("outb %1, %0" : : "dN" (port), "a" (value));
 	}
 
-	void hlt(void)
+	void halt(void)
 	{
 		asm volatile ("hlt");
 	}
@@ -87,5 +87,18 @@ namespace kfs::io
 		}
 
 		return (false);
+	}
+
+	void reboot()
+	{
+		uint8_t good;
+		do
+		{
+			good = inb(0x64);
+		}
+		while (good & 0x02);
+
+		outb(0x64, 0xFE);
+		halt();
 	}
 }
