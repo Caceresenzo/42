@@ -8,10 +8,11 @@ __asm_kfs_gdt_flush:
    jmp 0x08:.reload_cs ; 0x08 is the offset to our code segment: Far jump!
 
 .reload_cs:
-   mov eax, 0x10       ; 0x10 is the offset in the GDT to our data segment
+   mov ax, 0x10        ; 0x10 is the offset in the GDT to our data segment
    mov ds, ax          ; Load all data segment selectors
    mov es, ax
    mov fs, ax
    mov gs, ax
+   mov ax, 0x18        ; 0x18 is the offset in the GDT to our stack segment
    mov ss, ax
    ret

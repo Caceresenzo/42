@@ -23,7 +23,8 @@ namespace kfs::gdt
 			uint16_t base_low;
 			uint8_t base_middle;
 			uint8_t access;
-			uint8_t granularity;
+			uint8_t limit_high :4;
+			uint8_t flags :4;
 			uint8_t base_high;
 	} __attribute__((packed)) entry_t;
 
@@ -34,7 +35,7 @@ namespace kfs::gdt
 	} __attribute__((packed)) ptr_t;
 
 	void initialize();
-	void set(int32_t id, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity);
+	void set(int32_t id, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags, const char *comment);
 	void flush(uint32_t address);
 }
 

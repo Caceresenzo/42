@@ -15,12 +15,6 @@
 #include <cpu/pit.hpp>
 #include <stdio.h>
 
-#define NULL_SEGMENT_ACCESS 0
-#define CODE_SEGMENT_ACCESS 0x9A
-#define DATA_SEGMENT_ACCESS 0x92
-#define USERM_CODE_SEGMENT_ACCESS 0xFA
-#define USERM_DATA_SEGMENT_ACCESS 0xF2
-
 extern "C"
 {
 	void __asm_kfs_idt_flush(uint32_t address);

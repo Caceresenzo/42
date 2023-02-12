@@ -6,6 +6,11 @@ ENTRY(_start)
    kernel image. */
 SECTIONS
 {
+	.gdt 0x800 :
+	{
+		KEEP(*(.gdt))
+	}
+
 	/* Begin putting sections at 1 MiB, a conventional place for kernels to be
 	   loaded at by the bootloader. */
 	. = 1M;
