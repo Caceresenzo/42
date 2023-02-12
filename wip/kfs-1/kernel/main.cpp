@@ -47,7 +47,31 @@ void lolwrite(const char *str)
 
 namespace shell
 {
+	typedef struct
+	{
+			const char *name;
+			void (*function)(void);
+	} command_t;
+
 	char buffer[32] = { 0 };
+
+	void do_ft();
+	void do_tick();
+	void do_cpuid();
+	void do_reboot();
+	void do_multiboot();
+	void do_help();
+
+	command_t commands[] = {
+		{ .name = "42", .function = do_ft },
+		{ .name = "ft", .function = do_ft },
+		{ .name = "tick", .function = do_tick },
+		{ .name = "cpuid", .function = do_cpuid },
+		{ .name = "reboot", .function = do_reboot },
+		{ .name = "multiboot", .function = do_multiboot },
+		{ .name = "help", .function = do_help },
+		{ 0, 0 },
+	};
 
 	void do_ft()
 	{
@@ -102,20 +126,26 @@ namespace shell
 		kfs::multiboot::dump();
 	}
 
+	void do_help()
+	{
+		for (command_t *command = commands; command->name; ++command)
+			printk("%s ", command->name);
+
+		printk("\n");
+	}
+
 	void execute(const char *line)
 	{
-		if (strcmp("42", line) == 0 || strcmp("ft", line) == 0)
-			do_ft();
-		else if (strcmp("tick", line) == 0)
-			do_tick();
-		else if (strcmp("cpuid", line) == 0)
-			do_cpuid();
-		else if (strcmp("reboot", line) == 0)
-			do_reboot();
-		else if (strcmp("multiboot", line) == 0)
-			do_multiboot();
-		else
-			printk("unknown command\n");
+		for (command_t *command = commands; command->name; ++command)
+		{
+			if (strcmp(command->name, line) == 0)
+			{
+				command->function();
+				return;
+			}
+		}
+
+		printk("unknown command\n");
 	}
 
 	void prompt()
