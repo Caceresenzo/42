@@ -1,29 +1,27 @@
-%macro ISR_NOERRCODE 1  ; define a macro, taking one parameter
-  [GLOBAL isr%1]        ; %1 accesses the first parameter.
-  isr%1:
+%macro ISR_NOERRCODE 1
+  global __asm_kfs_isr%1
+  __asm_kfs_isr%1:
     cli
     push byte 0
     push byte %1
-    jmp isr_common_stub
+    jmp __asm_kfs_isr_common_stub
 %endmacro
 
 %macro ISR_ERRCODE 1
-  [GLOBAL isr%1]
-  isr%1:
+  global __asm_kfs_isr%1
+  __asm_kfs_isr%1:
     cli
     push byte %1
-    jmp isr_common_stub
+    jmp __asm_kfs_isr_common_stub
 %endmacro
 
-; This macro creates a stub for an IRQ - the first parameter is
-; the IRQ number, the second is the ISR number it is remapped to.
 %macro IRQ 2
-  global irq%1
-  irq%1:
+  global __asm_kfs_irq%1
+  __asm_kfs_irq%1:
     cli
     push byte 0
     push byte %2
-    jmp irq_common_stub
+    jmp __asm_kfs_irq_common_stub
 %endmacro
 
 ISR_NOERRCODE 0
@@ -75,17 +73,17 @@ IRQ  13,    45
 IRQ  14,    46
 IRQ  15,    47
 
-global isr_stub_table
-isr_stub_table:
+global __asm_kfs_isr_stub_table
+__asm_kfs_isr_stub_table:
 %assign i 0
 %rep    32
-    dd isr%+i
+    dd __asm_kfs_isr%+i
 %assign i i+1
 %endrep
 
 %assign i 0
 %rep    16
-    dd irq%+i
+    dd __asm_kfs_irq%+i
 %assign i i+1
 %endrep
 
@@ -93,7 +91,7 @@ isr_stub_table:
 ; up for kernel mode segments, calls the C-level fault handler,
 ; and finally restores the stack frame.
 extern __asm_kfs_isr_handler
-isr_common_stub:
+__asm_kfs_isr_common_stub:
    pusha                    ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
 
    mov ax, ds               ; Lower 16-bits of eax = ds.
@@ -120,7 +118,7 @@ isr_common_stub:
 
 
 extern __asm_kfs_irq_handler
-irq_common_stub:
+__asm_kfs_irq_common_stub:
     pusha                    ; Pushes edi,esi,ebp,esp,ebx,edx,ecx,eax
 
     mov ax, ds               ; Lower 16-bits of eax = ds.

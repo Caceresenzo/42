@@ -18,7 +18,7 @@
 extern "C"
 {
 	void __asm_kfs_idt_flush(uint32_t address);
-	extern void *isr_stub_table[];
+	extern void *__asm_kfs_isr_stub_table[];
 }
 
 namespace kfs::idt
@@ -32,10 +32,10 @@ namespace kfs::idt
 		idtr.limit = (uint16_t)(sizeof(idt) - 1);
 
 		for (uint8_t id = 0; id < 32; id++)
-			set(id, isr_stub_table[id], 0x8E);
+			set(id, __asm_kfs_isr_stub_table[id], 0x8E);
 
 		for (uint8_t id = 32; id < 48; id++)
-			set(id, isr_stub_table[id], 0x8E);
+			set(id, __asm_kfs_isr_stub_table[id], 0x8E);
 
 		flush((uint32_t)&idtr);
 
