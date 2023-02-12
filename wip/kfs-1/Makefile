@@ -53,3 +53,5 @@ clean:
 
 fclean: clean
 	rm -f $(TARGET_BIN) $(TARGET_ISO)
+
+re: fclean all
