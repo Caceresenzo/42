@@ -6,6 +6,7 @@
 #include <cpu/pit.hpp>
 #include <cpu/io.hpp>
 #include <cpu/interrupt.hpp>
+#include <cpu/multiboot.hpp>
 #include <string.h>
 #include <stdio.h>
 #include <multiboot.h>
@@ -42,70 +43,6 @@ void lolwrite(const char *str)
 	}
 
 	kfs::vga::write(str);
-}
-
-multiboot_info_t* multiboot(unsigned long magic, unsigned long addr)
-{
-#define CHECK_FLAG(flags,bit)   ((flags) & (1 << (bit)))
-
-	if (magic != MULTIBOOT_BOOTLOADER_MAGIC)
-	{
-		printk("multiboot: invalid magic number: 0x%x\n", (unsigned)magic);
-		return (NULL);
-	}
-
-	multiboot_info_t *mbi = (multiboot_info_t*)addr;
-	if (CHECK_FLAG(mbi->flags, 0))
-		printk("mem_lower = %uKB, mem_upper = %uKB\n",
-			(unsigned)mbi->mem_lower, (unsigned)mbi->mem_upper);
-
-	/* Is boot_device valid? */
-	if (CHECK_FLAG(mbi->flags, 1))
-		printk("boot_device = 0x%x\n", (unsigned)mbi->boot_device);
-
-	/* Is the command line passed? */
-	if (CHECK_FLAG(mbi->flags, 2))
-		printk("cmdline = %s\n", (char*)mbi->cmdline);
-
-	/* Are mods_* valid? */
-	if (CHECK_FLAG(mbi->flags, 3))
-	{
-		multiboot_module_t *mod;
-		int i;
-
-		printk("mods_count = %d, mods_addr = 0x%x\n",
-			(int)mbi->mods_count, (int)mbi->mods_addr);
-		for (i = 0, mod = (multiboot_module_t*)mbi->mods_addr;
-			i < mbi->mods_count;
-			i++, mod++)
-			printk(" mod_start = 0x%x, mod_end = 0x%x, cmdline = %s\n",
-				(unsigned)mod->mod_start,
-				(unsigned)mod->mod_end,
-				(char*)mod->cmdline);
-	}
-
-	/* Are mmap_* valid? */
-	if (CHECK_FLAG(mbi->flags, 6))
-	{
-		multiboot_memory_map_t *mmap;
-
-		printk("mmap_addr = 0x%x, mmap_length = 0x%x\n",
-			(unsigned)mbi->mmap_addr, (unsigned)mbi->mmap_length);
-		for (mmap = (multiboot_memory_map_t*)mbi->mmap_addr;
-			(unsigned long)mmap < mbi->mmap_addr + mbi->mmap_length;
-			mmap = (multiboot_memory_map_t*)((unsigned long)mmap
-				+ mmap->size + sizeof(mmap->size)))
-			printk(" size = 0x%x, base_addr = 0x%x%x,"
-				" length = 0x%x%x, type = 0x%x\n",
-				(unsigned)mmap->size,
-				(unsigned)(mmap->addr >> 32),
-				(unsigned)(mmap->addr & 0xffffffff),
-				(unsigned)(mmap->len >> 32),
-				(unsigned)(mmap->len & 0xffffffff),
-				(unsigned)mmap->type);
-	}
-
-	return (mbi);
 }
 
 namespace shell
@@ -160,6 +97,11 @@ namespace shell
 		kfs::io::reboot();
 	}
 
+	void do_multiboot()
+	{
+		kfs::multiboot::dump();
+	}
+
 	void execute(const char *line)
 	{
 		if (strcmp("42", line) == 0 || strcmp("ft", line) == 0)
@@ -170,6 +112,8 @@ namespace shell
 			do_cpuid();
 		else if (strcmp("reboot", line) == 0)
 			do_reboot();
+		else if (strcmp("multiboot", line) == 0)
+			do_multiboot();
 		else
 			printk("unknown command\n");
 	}
@@ -239,8 +183,7 @@ extern "C"
 		kfs::timer::initialize();
 		kfs::keyboard::initialize();
 
-		multiboot_info_t *mbi = multiboot(magic, addr);
-		if (!mbi)
+		if (!kfs::multiboot::initialize(magic, addr))
 			return;
 
 		kfs::io::sti();

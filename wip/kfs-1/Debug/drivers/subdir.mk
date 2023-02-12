@@ -10,6 +10,7 @@ CPP_SRCS += \
 
 O_SRCS += \
 ../drivers/keyboard.o \
+../drivers/timer.o \
 ../drivers/vga.o 
 
 CPP_DEPS += \

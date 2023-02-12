@@ -8,6 +8,7 @@ CPP_SRCS += \
 ../cpu/idt.cpp \
 ../cpu/interrupt.cpp \
 ../cpu/io.cpp \
+../cpu/multiboot.cpp \
 ../cpu/pit.cpp 
 
 O_SRCS += \
@@ -22,6 +23,7 @@ CPP_DEPS += \
 ./cpu/idt.d \
 ./cpu/interrupt.d \
 ./cpu/io.d \
+./cpu/multiboot.d \
 ./cpu/pit.d 
 
 OBJS += \
@@ -29,6 +31,7 @@ OBJS += \
 ./cpu/idt.o \
 ./cpu/interrupt.o \
 ./cpu/io.o \
+./cpu/multiboot.o \
 ./cpu/pit.o 
 
 
@@ -44,7 +47,7 @@ cpu/%.o: ../cpu/%.cpp cpu/subdir.mk
 clean: clean-cpu
 
 clean-cpu:
-	-$(RM) ./cpu/gdt.d ./cpu/gdt.o ./cpu/idt.d ./cpu/idt.o ./cpu/interrupt.d ./cpu/interrupt.o ./cpu/io.d ./cpu/io.o ./cpu/pit.d ./cpu/pit.o
+	-$(RM) ./cpu/gdt.d ./cpu/gdt.o ./cpu/idt.d ./cpu/idt.o ./cpu/interrupt.d ./cpu/interrupt.o ./cpu/io.d ./cpu/io.o ./cpu/multiboot.d ./cpu/multiboot.o ./cpu/pit.d ./cpu/pit.o
 
 .PHONY: clean-cpu
 

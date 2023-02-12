@@ -41,8 +41,6 @@ namespace kfs::gdt
 		set(4, 0, 0xFFFFFFFF, USERM_DATA_SEGMENT_ACCESS, 0xCF);
 
 		flush((uint32_t)&gdt_ptr);
-
-		printk("[gdt]: initialized\n");
 	}
 
 	void set(int32_t id, uint32_t base, uint32_t limit, uint8_t access, uint8_t granularity)
