@@ -62,6 +62,7 @@ namespace shell
 	void do_shutdown();
 	void do_multiboot();
 	void do_halt();
+	void do_exit();
 	void do_help();
 
 	command_t commands[] = {
@@ -73,6 +74,7 @@ namespace shell
 		{ .name = "shutdown", .function = do_shutdown },
 		{ .name = "multiboot", .function = do_multiboot },
 		{ .name = "halt", .function = do_halt },
+		{ .name = "exit", .function = do_exit },
 		{ .name = "help", .function = do_help },
 		{ 0, 0 },
 	};
@@ -140,6 +142,11 @@ namespace shell
 	{
 		printk("halted!\n");
 		kfs::io::halt();
+	}
+
+	void do_exit()
+	{
+		kfs::io::shutdown();
 	}
 
 	void do_help()
@@ -244,6 +251,6 @@ extern "C"
 		shell::initialize();
 
 		while (1)
-			asm ("hlt");
+			kfs::io::halt();
 	}
 }
