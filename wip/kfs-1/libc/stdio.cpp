@@ -134,7 +134,7 @@ void printk(const char *format, ...)
 			continue;
 		}
 
-		if (c == 'x')
+		if (c == 'p')
 		{
 			void *p = va_arg(parameters, void*);
 			putstr("0x");
