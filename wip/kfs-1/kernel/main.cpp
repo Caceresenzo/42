@@ -61,6 +61,7 @@ namespace shell
 	void do_reboot();
 	void do_shutdown();
 	void do_multiboot();
+	void do_halt();
 	void do_help();
 
 	command_t commands[] = {
@@ -71,6 +72,7 @@ namespace shell
 		{ .name = "reboot", .function = do_reboot },
 		{ .name = "shutdown", .function = do_shutdown },
 		{ .name = "multiboot", .function = do_multiboot },
+		{ .name = "halt", .function = do_halt },
 		{ .name = "help", .function = do_help },
 		{ 0, 0 },
 	};
@@ -132,6 +134,12 @@ namespace shell
 	void do_multiboot()
 	{
 		kfs::multiboot::dump();
+	}
+
+	void do_halt()
+	{
+		printk("halted!\n");
+		kfs::io::halt();
 	}
 
 	void do_help()
