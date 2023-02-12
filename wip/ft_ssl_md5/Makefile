@@ -51,20 +51,8 @@ test-sha384: all
 
 test: test-md5 test-sha256 test-sha224 test-sha512 test-sha384
 
-scenario-md5: all
-	bash test/scenario.sh md5
-
-scenario-sha256: all
-	bash test/scenario.sh sha256
-
-scenario-sha224: all
-	bash test/scenario.sh sha224
-
-scenario-sha512: all
-	bash test/scenario.sh sha512
-
-scenario-sha384: all
-	bash test/scenario.sh sha384
+scenario: all
+	bash test/scenario.sh
 
 incremental-md5: all
 	bash test/incremental.sh md5
