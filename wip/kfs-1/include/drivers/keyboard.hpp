@@ -27,6 +27,8 @@ namespace kfs::keyboard
 
 	void initialize(void);
 	void set_callback(void (*function)(key_t));
+
+	void wait(void);
 }
 
 #endif /* KEYBOARD_HPP_ */

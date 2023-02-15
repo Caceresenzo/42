@@ -21,6 +21,7 @@
 
 namespace kfs::keyboard
 {
+	static uint32_t pressed_count = 0;
 	static void (*callback)(key_t) = NULL;
 	static bool shift = false;
 
@@ -306,6 +307,8 @@ namespace kfs::keyboard
 		uint8_t scan_code = kfs::io::inb(0x60);
 		if (scan_code & 0x80)
 		{
+			++pressed_count;
+
 //			printk("R %d\n", scancode & 0x7F);
 			if (scan_code == 0xAA)
 				shift = false;
@@ -369,4 +372,10 @@ namespace kfs::keyboard
 		callback = function;
 	}
 
+	void wait(void)
+	{
+		uint32_t start = pressed_count;
+		while (start == pressed_count)
+			kfs::io::halt();
+	}
 }
