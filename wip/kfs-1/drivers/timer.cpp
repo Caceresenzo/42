@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <drivers/timer.hpp>
+#include <cpu/io.hpp>
 #include <cpu/interrupt.hpp>
 #include <stdio.h>
 
@@ -31,5 +32,12 @@ namespace kfs::timer
 	uint32_t tick_count()
 	{
 		return (g_tick_count);
+	}
+
+	void sleep(uint32_t tick)
+	{
+		uint32_t end = g_tick_count + tick;
+		while (g_tick_count <= end)
+			kfs::io::halt();
 	}
 }

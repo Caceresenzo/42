@@ -19,6 +19,8 @@ namespace kfs::timer
 {
 	void initialize(void);
 	uint32_t tick_count();
+
+	void sleep(uint32_t tick);
 }
 
 #endif /* TIMER_HPP_ */
