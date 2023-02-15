@@ -17,7 +17,7 @@ CFLAGS = -O0 -g3 -ffreestanding -fno-builtin -fno-exceptions -fno-stack-protecto
 CPPFLAGS = $(CFLAGS) -fno-rtti
 LINKERFLAGS = $(CPPFLAGS) -lgcc
 
-all: kfs.bin
+all: $(TARGET_ISO)
 
 .S.o:
 	$(AC) $< -o $@ $(AFLAGS)
@@ -31,11 +31,11 @@ all: kfs.bin
 .cpp.o:
 	$(CPPC) -c $< -o $@ -Iinclude $(CPPFLAGS)
 
-kfs.bin: $(OBJECTS) boot/linker.ld
+$(TARGET_BIN): $(OBJECTS) boot/linker.ld
 	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(LINKERFLAGS)
 	grub-file --is-x86-multiboot $(TARGET_BIN)
 
-kfs.iso: $(TARGET_BIN) boot/grub.cfg
+$(TARGET_ISO): $(TARGET_BIN) boot/grub.cfg
 	rm -rf /tmp/iso/boot/
 	mkdir -p /tmp/iso/boot/grub
 	cp $(TARGET_BIN) /tmp/iso/boot/
