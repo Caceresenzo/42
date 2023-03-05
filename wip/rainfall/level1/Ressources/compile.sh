@@ -1,0 +1,1 @@
+gcc source.c -o level1 -fno-stack-protector -m32
