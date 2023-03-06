@@ -1,3 +1,4 @@
+#include <kernel/trace.hpp>
 #include <drivers/vga.hpp>
 #include <drivers/timer.hpp>
 #include <drivers/keyboard.hpp>
@@ -63,6 +64,7 @@ namespace shell
 	void do_multiboot();
 	void do_halt();
 	void do_exit();
+	void do_stack();
 	void do_help();
 
 	command_t commands[] = {
@@ -75,6 +77,7 @@ namespace shell
 		{ .name = "multiboot", .function = do_multiboot },
 		{ .name = "halt", .function = do_halt },
 		{ .name = "exit", .function = do_exit },
+		{ .name = "stack", .function = do_stack },
 		{ .name = "help", .function = do_help },
 		{ 0, 0 },
 	};
@@ -157,6 +160,16 @@ namespace shell
 		printk("\n");
 	}
 
+	void do_stack()
+	{
+		void *frames[25];
+		int32_t frame_count = kfs::trace::backtrace(frames, countof(frames));
+
+		printk("Stack Trace:\n");
+		for (int32_t frame = 0; frame < frame_count; ++frame)
+			printk("%d  0x%x\n", frame, frames[frame]);
+	}
+
 	void execute(const char *line)
 	{
 		for (command_t *command = commands; command->name; ++command)
@@ -228,6 +241,30 @@ namespace shell
 	}
 }
 
+void a()
+{
+	void *frames[25];
+	int32_t frame_count = kfs::trace::backtrace(frames, countof(frames));
+
+	for (int32_t frame = 0; frame < frame_count; ++frame)
+		printk("%d  0x%x\n", frame, frames[frame]);
+}
+
+void b()
+{
+	a();
+}
+
+void c()
+{
+	b();
+}
+
+void d()
+{
+	c();
+}
+
 extern "C"
 {
 	void kmain(unsigned long magic, unsigned long addr)
@@ -249,6 +286,8 @@ extern "C"
 
 		shell::do_ft();
 		shell::initialize();
+
+		shell::do_stack();
 
 		while (1)
 			kfs::io::halt();
