@@ -13,8 +13,21 @@
 #ifndef TRACE_HPP_
 # define TRACE_HPP_
 
+# include <types.h>
+
 namespace kfs::trace
 {
+	typedef struct
+	{
+			uint32_t start;
+			uint32_t end;
+			const char *name;
+	} symbol_t;
+
+	extern symbol_t symbols_table[];
+
+	symbol_t get_symbol(void *frame);
+
 	int backtrace(void **buffer, int size);
 }
 

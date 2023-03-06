@@ -64,7 +64,7 @@ namespace shell
 	void do_multiboot();
 	void do_halt();
 	void do_exit();
-	void do_stack();
+	void do_trace();
 	void do_help();
 
 	command_t commands[] = {
@@ -77,7 +77,7 @@ namespace shell
 		{ .name = "multiboot", .function = do_multiboot },
 		{ .name = "halt", .function = do_halt },
 		{ .name = "exit", .function = do_exit },
-		{ .name = "stack", .function = do_stack },
+		{ .name = "trace", .function = do_trace },
 		{ .name = "help", .function = do_help },
 		{ 0, 0 },
 	};
@@ -160,14 +160,25 @@ namespace shell
 		printk("\n");
 	}
 
-	void do_stack()
+	void do_trace()
 	{
 		void *frames[25];
 		int32_t frame_count = kfs::trace::backtrace(frames, countof(frames));
 
 		printk("Stack Trace:\n");
-		for (int32_t frame = 0; frame < frame_count; ++frame)
-			printk("%d  0x%x\n", frame, frames[frame]);
+		for (int32_t index = 0; index < frame_count; ++index)
+		{
+			void *frame = frames[index];
+			kfs::trace::symbol_t symbol = kfs::trace::get_symbol(frame);
+
+			if (symbol.name)
+			{
+				int32_t offset = (int32_t)frame - symbol.start;
+				printk("%d - 0x%x - %s+%d\n", index, frame, symbol.name, offset);
+			}
+			else
+				printk("%d - 0x%x - ??\n", index, frame);
+		}
 	}
 
 	void execute(const char *line)
@@ -241,30 +252,6 @@ namespace shell
 	}
 }
 
-void a()
-{
-	void *frames[25];
-	int32_t frame_count = kfs::trace::backtrace(frames, countof(frames));
-
-	for (int32_t frame = 0; frame < frame_count; ++frame)
-		printk("%d  0x%x\n", frame, frames[frame]);
-}
-
-void b()
-{
-	a();
-}
-
-void c()
-{
-	b();
-}
-
-void d()
-{
-	c();
-}
-
 extern "C"
 {
 	void kmain(unsigned long magic, unsigned long addr)
@@ -286,8 +273,6 @@ extern "C"
 
 		shell::do_ft();
 		shell::initialize();
-
-		shell::do_stack();
 
 		while (1)
 			kfs::io::halt();
