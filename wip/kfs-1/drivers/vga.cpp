@@ -49,6 +49,16 @@ namespace kfs::vga
 		g_buffer[index] = VGA_ENTRY(c, color);
 	}
 
+	uint8_t get_color(void)
+	{
+		return (g_color);
+	}
+
+	void set_color(uint8_t color)
+	{
+		g_color = color;
+	}
+
 	void set_color(enum color fore, enum color back)
 	{
 		g_color = VGA_ENTRY_COLOR(fore, back);

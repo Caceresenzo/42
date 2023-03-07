@@ -24,6 +24,8 @@ namespace kfs::vga
 
 	void initialize(void);
 	void set(char c, enum color color, uint32_t x, uint32_t y);
+	uint8_t get_color(void);
+	void set_color(uint8_t color);
 	void set_color(enum color fore, enum color back);
 	void put(char c);
 	void write(const char *data);

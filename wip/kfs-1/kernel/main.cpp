@@ -25,6 +25,8 @@ void lolwrite(const char *str)
 	uint32_t line = 0;
 	uint32_t offset = 0;
 
+	uint8_t previous_color = kfs::vga::get_color();
+
 	char c;
 	while ((c = *str))
 	{
@@ -44,6 +46,8 @@ void lolwrite(const char *str)
 	}
 
 	kfs::vga::write(str);
+
+	kfs::vga::set_color(previous_color);
 }
 
 namespace shell
