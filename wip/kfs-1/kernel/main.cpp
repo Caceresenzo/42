@@ -173,7 +173,7 @@ namespace shell
 			void *frame = frames[index];
 			kfs::trace::symbol_t symbol = kfs::trace::get_symbol(frame);
 
-			if (symbol.name)
+			if (symbol.name[0])
 			{
 				int32_t offset = (int32_t)frame - symbol.start;
 				printk("%d - 0x%x - %s+%d\n", index, frame, symbol.name, offset);

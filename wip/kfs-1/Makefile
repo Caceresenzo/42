@@ -32,11 +32,7 @@ all: $(TARGET_ISO)
 	$(CPPC) -c $< -o $@ -Iinclude $(CPPFLAGS)
 
 $(TARGET_BIN): $(OBJECTS) boot/linker.ld
-	$(CC) -T boot/linker.ld -o /tmp/$(TARGET_BIN) $(OBJECTS) generated/* -Iinclude $(LINKERFLAGS)
-	
-	python3 scripts/symbols.py kfs.bin > generated/symbols.cxx
-	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) generated/* -Iinclude $(LINKERFLAGS)
-	
+	$(CC) -T boot/linker.ld -o $(TARGET_BIN) $(OBJECTS) $(LINKERFLAGS)
 	grub-file --is-x86-multiboot $(TARGET_BIN)
 
 $(TARGET_ISO): $(TARGET_BIN) boot/grub.cfg

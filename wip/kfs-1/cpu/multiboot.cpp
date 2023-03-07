@@ -11,14 +11,18 @@
 /* ************************************************************************** */
 
 #include <cpu/multiboot.hpp>
+#include <drivers/vga.hpp>
+#include <drivers/keyboard.hpp>
 #include <multiboot.h>
 #include <stdio.h>
+#include <elf.h>
+#include <string.h>
 
 #define CHECK_FLAG(flags, bit) ((flags) & (1 << (bit)))
 
 namespace kfs::multiboot
 {
-	static multiboot_info_t *g_info;
+	static multiboot_info_t *g_info = NULL;
 
 	bool initialize(unsigned long magic, unsigned long addr)
 	{

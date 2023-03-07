@@ -17,14 +17,12 @@
 
 namespace kfs::trace
 {
-	typedef struct
+	typedef struct symbol
 	{
 			uint32_t start;
 			uint32_t end;
-			const char *name;
+			char name[128];
 	} symbol_t;
-
-	extern symbol_t symbols_table[];
 
 	symbol_t get_symbol(void *frame);
 
