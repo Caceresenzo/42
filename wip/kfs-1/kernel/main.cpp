@@ -45,8 +45,6 @@ void lolwrite(const char *str)
 		str++;
 	}
 
-	kfs::vga::write(str);
-
 	kfs::vga::set_color(previous_color);
 }
 
