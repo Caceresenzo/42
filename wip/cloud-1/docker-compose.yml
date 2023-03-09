@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  database:
+    build: services/database
+    expose:
+      - 3306
+    volumes:
+      - database:/data
+    init: true
+volumes:
+  database: {}
