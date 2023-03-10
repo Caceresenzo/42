@@ -7,5 +7,10 @@ services:
     volumes:
       - database:/data
     init: true
+  phpmyadmin:
+    build: services/phpmyadmin
+    ports:
+      - "80:80"
+    init: true
 volumes:
   database: {}
