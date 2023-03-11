@@ -7,6 +7,7 @@ services:
     volumes:
       - database:/data
     init: true
+    restart: always
   phpmyadmin:
     build: services/phpmyadmin
     expose:
@@ -14,6 +15,7 @@ services:
     init: true
     depends_on:
       - database
+    restart: always
   wordpress:
     build: services/wordpress
     expose:
@@ -21,6 +23,7 @@ services:
     init: true
     depends_on:
       - database
+    restart: always
   gateway:
     build: services/gateway
     ports:
@@ -29,5 +32,6 @@ services:
     depends_on:
       - phpmyadmin
       - wordpress
+    restart: always
 volumes:
   database: {}
