@@ -7,6 +7,7 @@ RUN mkdir /run/mysqld && \
     sed -i 's/#bind-address=0.0.0.0/bind-address=0.0.0.0/g' /etc/my.cnf.d/mariadb-server.cnf
 
 COPY entry.sh init.sql /
+RUN chmod +x /entry.sh
 
 EXPOSE 3306
 

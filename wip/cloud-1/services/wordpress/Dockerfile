@@ -14,6 +14,7 @@ COPY etc/apache2/conf.d/wordpress.conf /etc/apache2/conf.d/wordpress.conf
 COPY etc/wordpress/wp-config.php /etc/wordpress/wp-config.php
 
 COPY entry.sh /
+RUN chmod +x /entry.sh
 
 EXPOSE 80
 

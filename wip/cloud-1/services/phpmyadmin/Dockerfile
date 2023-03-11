@@ -6,6 +6,7 @@ COPY etc/apache2/conf.d/phpmyadmin.conf /etc/apache2/conf.d/phpmyadmin.conf
 COPY etc/phpmyadmin/config.inc.php /etc/phpmyadmin/config.inc.php
 
 COPY entry.sh /
+RUN chmod +x /entry.sh
 
 EXPOSE 80
 
