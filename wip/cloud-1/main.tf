@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
 provider "tls" {}
@@ -47,8 +47,9 @@ resource "aws_security_group" "app_security_group" {
 }
 
 resource "aws_instance" "app_instance" {
-  ami = "ami-0557a15b87f6559cf"
-  instance_type = "t2.micro"
+  ami = var.ami
+  instance_type = var.instance_type
+  availability_zone = "${var.region}a"
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.app_security_group.id]
   key_name = aws_key_pair.deployer.id
@@ -69,8 +70,8 @@ resource "aws_instance" "app_instance" {
               systemctl start docker
               systemctl enable docker
               usermod -aG docker ubuntu
-              mkdir /home/ubuntu/cloud-1
-              chown -R ubuntu:ubuntu /home/ubuntu/cloud-1
+              mkdir /app
+              chown -R ubuntu:ubuntu /app
               EOF
   tags = {
     Name = "cloud1-instance"
@@ -93,17 +94,17 @@ resource "aws_instance" "app_instance" {
 
   provisioner "file" {
     source      = "docker-compose.yml"
-    destination = "/home/ubuntu/cloud-1/docker-compose.yml"
+    destination = "/app/docker-compose.yml"
   }
 
   provisioner "file" {
     source      = "services"
-    destination = "/home/ubuntu/cloud-1/services"
+    destination = "/app/services"
   }
 
   provisioner "remote-exec" {
     inline = [
-      "cd /home/ubuntu/cloud-1",
+      "cd /app",
       "docker compose build --progress plain",
       "docker compose up -d"
     ]
