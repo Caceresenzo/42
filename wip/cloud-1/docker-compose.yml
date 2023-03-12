@@ -28,6 +28,7 @@ services:
     build: services/gateway
     ports:
       - "80:80"
+      - "443:443"
     init: true
     depends_on:
       - phpmyadmin

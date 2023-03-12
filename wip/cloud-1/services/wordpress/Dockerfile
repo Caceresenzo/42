@@ -10,6 +10,8 @@ RUN cd /tmp && \
     mv wordpress /usr/share/webapps/wordpress && \
     ln -s /etc/wordpress/wp-config.php /usr/share/webapps/wordpress/wp-config.php
 
+RUN echo '<?php phpinfo(); ?>' > /usr/share/webapps/wordpress/phpinfo.php
+
 COPY etc/apache2/conf.d/wordpress.conf /etc/apache2/conf.d/wordpress.conf
 COPY etc/wordpress/wp-config.php /etc/wordpress/wp-config.php
 

@@ -24,9 +24,16 @@ resource "aws_security_group" "app_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description = "Gateway Port"
+    description = "HTTP Port"
     from_port = 80
     to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    description = "HTTPS Port"
+    from_port = 443
+    to_port = 443
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -104,5 +111,5 @@ resource "aws_instance" "app_instance" {
 }
 
 output "public_url" {
-  value = "http://${aws_instance.app_instance.public_ip}/"
+  value = "https://${aws_instance.app_instance.public_ip}/"
 }
