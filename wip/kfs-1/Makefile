@@ -52,3 +52,17 @@ fclean: clean
 	rm -f $(TARGET_BIN) $(TARGET_ISO)
 
 re: fclean all
+
+workspace-image:
+	mkdir -p empty
+	docker build -t kfs-builder -f Dockerfile empty
+	rm -rf empty
+
+workspace-run:
+	if grep -qi microsoft /proc/version; then \
+		echo "docker: running from wsl linux"; \
+		docker run -it --rm -v %cd%:/workspace -e DISPLAY=host.docker.internal:0.0 kfs-builder; \
+	else \
+		echo "docker: running from native linux"; \
+		docker run -it --rm -v $$(pwd):/workspace -e DISPLAY kfs-builder; \
+	fi \
