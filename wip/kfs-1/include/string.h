@@ -18,10 +18,12 @@ extern "C"
 
 	uint32_t strlen(const char *str);
 	char* strcpy(char *dest, const char *src);
+	int memcmp(const void *s1, const void *s2, uint32_t n);
 	void* memset(void *buf, int c, uint32_t len);
 	void* memcpy(void *dst, const void *src, uint32_t n);
 	void* memmove(void *dest, const void *src, uint32_t n);
 	int strcmp(const char *s1, const char *s2);
+	int isprint(int c);
 
 #ifdef __cplusplus
 }

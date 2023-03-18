@@ -38,7 +38,26 @@ int strcmp(const char *s1, const char *s2)
 
 	return (*(unsigned char*)s1 - *(unsigned char*)s2);
 }
-;
+
+#include <stdio.h>
+
+int memcmp(const void *s1, const void *s2, uint32_t n)
+{
+	if (n == 0)
+		return (0);
+
+	const unsigned char *array1 = s1;
+	const unsigned char *array2 = s2;
+
+	while ((*array1 == *array2) && n - 1 > 0)
+	{
+		array1++;
+		array2++;
+		n--;
+	}
+
+	return (*array1 - *array2);
+}
 
 void* memset(void *buf, int c, uint32_t len)
 {
@@ -84,4 +103,9 @@ void* memmove(void *dst, const void *src, uint32_t len)
 	}
 
 	return (dst);
+}
+
+int isprint(int c)
+{
+	return (c >= 0x20 && c < 0x7F);
 }

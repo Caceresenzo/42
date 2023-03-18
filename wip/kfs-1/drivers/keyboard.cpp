@@ -374,6 +374,8 @@ namespace kfs::keyboard
 
 	void wait(void)
 	{
+		kfs::io::sti();
+
 		uint32_t start = pressed_count;
 		while (start == pressed_count)
 			kfs::io::halt();

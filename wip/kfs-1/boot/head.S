@@ -32,9 +32,12 @@ undefined behavior.
 */
 .section .bss
 .align 16
-stack_bottom:
+_stack_bottom:
 .skip 16384 # 16 KiB
-stack_top:
+_stack_top:
+
+.global _stack_bottom
+.global _stack_top
 
 /*
 The linker script specifies _start as the entry point to the kernel and the
@@ -63,7 +66,7 @@ _start:
 	stack (as it grows downwards on x86 systems). This is necessarily done
 	in assembly as languages such as C cannot function without a stack.
 	*/
-	mov $stack_top, %esp
+	mov $_stack_top, %esp
 
     push   $0
     popf

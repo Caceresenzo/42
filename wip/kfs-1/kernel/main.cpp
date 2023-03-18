@@ -48,6 +48,12 @@ void lolwrite(const char *str)
 	kfs::vga::set_color(previous_color);
 }
 
+extern "C"
+{
+	extern uint32_t _stack_bottom;
+	extern uint32_t _stack_top;
+}
+
 namespace shell
 {
 	typedef struct
@@ -57,6 +63,7 @@ namespace shell
 	} command_t;
 
 	char buffer[32] = { 0 };
+	bool running = false;
 
 	void do_ft();
 	void do_tick();
@@ -67,6 +74,7 @@ namespace shell
 	void do_halt();
 	void do_exit();
 	void do_trace();
+	void do_stack();
 	void do_help();
 
 	command_t commands[] = {
@@ -80,6 +88,7 @@ namespace shell
 		{ .name = "halt", .function = do_halt },
 		{ .name = "exit", .function = do_exit },
 		{ .name = "trace", .function = do_trace },
+		{ .name = "stack", .function = do_stack },
 		{ .name = "help", .function = do_help },
 		{ 0, 0 },
 	};
@@ -183,13 +192,85 @@ namespace shell
 		}
 	}
 
+	void do_stack()
+	{
+		uint32_t bottom = (uint32_t)&_stack_bottom;
+		uint32_t top = (uint32_t)&_stack_top;
+
+		if (bottom > top)
+		{
+			uint32_t tmp = bottom;
+			bottom = top;
+			top = tmp;
+		}
+
+		uint32_t align = 16;
+		uint8_t last[align] = { 0 };
+		memset(last, 0, align);
+		bool same = false;
+
+		uint32_t line = 0;
+		for (uint32_t addr = bottom; addr <= top; addr += align)
+		{
+			if (addr != bottom && memcmp((void*)last, (void*)addr, align) == 0)
+			{
+				if (!same)
+				{
+					same = true;
+					printk("*\n");
+					line += 1;
+				}
+
+				continue;
+			}
+			else
+				same = false;
+
+			memcpy(last, (void*)addr, align);
+
+			if (line > 20)
+				kfs::keyboard::wait();
+
+			printk("%p  ", addr);
+
+			for (uint32_t offset = 0; offset < align; ++offset)
+			{
+				if (offset == 8)
+					printk(" ");
+
+				uint8_t value = *(uint8_t*)(addr + offset);
+
+				if (value < 0x10)
+					printk("0");
+				printk("%x ", value);
+			}
+
+			printk(" |");
+			for (uint32_t offset = 0; offset < align; ++offset)
+			{
+				uint8_t value = *(uint8_t*)(addr + offset);
+
+				if (!isprint(value))
+					value = '.';
+
+				printk("%c", value);
+			}
+			printk("|");
+
+			printk("\n");
+			line += 1;
+		}
+	}
+
 	void execute(const char *line)
 	{
 		for (command_t *command = commands; command->name; ++command)
 		{
 			if (strcmp(command->name, line) == 0)
 			{
+				running = true;
 				command->function();
+				running = false;
 				return;
 			}
 		}
@@ -204,6 +285,9 @@ namespace shell
 
 	void callback(kfs::keyboard::key_t key)
 	{
+		if (running)
+			return;
+
 		if (key.letter == '\e')
 		{
 			do_shutdown();
