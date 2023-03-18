@@ -36,6 +36,11 @@ namespace kfs::io
 		asm volatile ("outw %w0, %w1" : : "a" (value), "Nd" (port));
 	}
 
+	void outl(uint16_t port, uint32_t value)
+	{
+		asm volatile ("outl %1, %0" : : "dN" (port), "a" (value));
+	}
+
 	void halt(void)
 	{
 		asm volatile ("hlt");
@@ -45,6 +50,22 @@ namespace kfs::io
 	{
 		uint8_t result;
 		asm volatile("inb %1, %0" : "=a" (result) : "dN" (port));
+
+		return (result);
+	}
+
+	uint16_t inw(uint16_t port)
+	{
+		uint16_t result;
+		asm volatile ("inw %1, %0" : "=a" (result) : "dN" (port));
+
+		return (result);
+	}
+
+	uint32_t inl(uint16_t port)
+	{
+		uint32_t result;
+		asm volatile ("inl %1, %0" : "=a" (result) : "dN" (port));
 
 		return (result);
 	}

@@ -3,6 +3,7 @@
 #include <cpu/interrupt.hpp>
 #include <cpu/io.hpp>
 #include <cpu/multiboot.hpp>
+#include <cpu/pci.hpp>
 #include <drivers/keyboard.hpp>
 #include <drivers/timer.hpp>
 #include <drivers/vga.hpp>
@@ -19,6 +20,7 @@ extern "C"
 		kfs::gdt::initialize();
 		kfs::idt::initialize();
 		kfs::interrupt::initialize();
+		kfs::pci::initialize();
 
 		kfs::timer::initialize();
 		kfs::keyboard::initialize();

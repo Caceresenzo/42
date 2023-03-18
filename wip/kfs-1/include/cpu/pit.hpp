@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef PIT_HPP_
-# define PIT_HPP_
+# define CPI_HPP_
 
 namespace kfs::pit
 {
