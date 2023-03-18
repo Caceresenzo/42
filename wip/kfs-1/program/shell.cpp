@@ -14,6 +14,7 @@
 #include <cpu/io.hpp>
 #include <cpu/rtc.hpp>
 #include <cpu/multiboot.hpp>
+#include <cpu/pci.hpp>
 #include <drivers/keyboard.hpp>
 #include <drivers/timer.hpp>
 #include <drivers/vga.hpp>
@@ -72,18 +73,20 @@ namespace kfs::shell
 	bool running = false;
 
 	command_t commands[] = {
-		COMMAND(ft),
-		COMMAND(tick),
-		COMMAND(time),
-		COMMAND(cpuid),
-		COMMAND(reboot),
-		COMMAND(shutdown),
-		COMMAND(multiboot),
-		COMMAND(halt),
-		COMMAND(exit),
-		COMMAND(trace),
-		COMMAND(stack),
-		COMMAND(help),
+		{ .name = "42", .function = do_ft },
+		{ .name = "ft", .function = do_ft },
+		{ .name = "tick", .function = do_tick },
+		{ .name = "time", .function = do_time },
+		{ .name = "cpuid", .function = do_cpuid },
+		{ .name = "reboot", .function = do_reboot },
+		{ .name = "shutdown", .function = do_shutdown },
+		{ .name = "multiboot", .function = do_multiboot },
+		{ .name = "halt", .function = do_halt },
+		{ .name = "exit", .function = do_exit },
+		{ .name = "trace", .function = do_trace },
+		{ .name = "stack", .function = do_stack },
+		{ .name = "pci", .function = do_pci },
+		{ .name = "help", .function = do_help },
 		{ 0, 0 },
 	};
 
@@ -265,6 +268,16 @@ namespace kfs::shell
 
 			printk("\n");
 			line += 1;
+		}
+	}
+
+	void do_pci()
+	{
+		for (uint32_t index = 0; index < kfs::pci::device_count; ++index)
+		{
+			kfs::pci::device_t device = kfs::pci::devices[index];
+
+			printk("v:%x d:%x - %s (%s)\n", device.vendor, device.device, device.class_.name, device.subclass.name);
 		}
 	}
 

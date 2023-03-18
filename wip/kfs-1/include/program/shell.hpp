@@ -32,6 +32,7 @@ namespace kfs::shell
 	void do_exit();
 	void do_trace();
 	void do_stack();
+	void do_pci();
 	void do_help();
 
 	void initialize();
