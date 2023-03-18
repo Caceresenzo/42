@@ -12,6 +12,7 @@
 
 #include <program/shell.hpp>
 #include <cpu/io.hpp>
+#include <cpu/rtc.hpp>
 #include <cpu/multiboot.hpp>
 #include <drivers/keyboard.hpp>
 #include <drivers/timer.hpp>
@@ -20,6 +21,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <types.h>
+
+#define COMMAND(method) { .name = #method, .function = do_##method }
 
 void lolwrite(const char *str)
 {
@@ -69,18 +72,18 @@ namespace kfs::shell
 	bool running = false;
 
 	command_t commands[] = {
-		{ .name = "42", .function = do_ft },
-		{ .name = "ft", .function = do_ft },
-		{ .name = "tick", .function = do_tick },
-		{ .name = "cpuid", .function = do_cpuid },
-		{ .name = "reboot", .function = do_reboot },
-		{ .name = "shutdown", .function = do_shutdown },
-		{ .name = "multiboot", .function = do_multiboot },
-		{ .name = "halt", .function = do_halt },
-		{ .name = "exit", .function = do_exit },
-		{ .name = "trace", .function = do_trace },
-		{ .name = "stack", .function = do_stack },
-		{ .name = "help", .function = do_help },
+		COMMAND(ft),
+		COMMAND(tick),
+		COMMAND(time),
+		COMMAND(cpuid),
+		COMMAND(reboot),
+		COMMAND(shutdown),
+		COMMAND(multiboot),
+		COMMAND(halt),
+		COMMAND(exit),
+		COMMAND(trace),
+		COMMAND(stack),
+		COMMAND(help),
 		{ 0, 0 },
 	};
 
@@ -102,6 +105,18 @@ namespace kfs::shell
 	void do_tick()
 	{
 		printk("%d\n", kfs::timer::tick_count());
+	}
+
+	void do_time()
+	{
+		kfs::rtc::rtc_time_t time = kfs::rtc::read();
+
+		printk("year=%d\n", time.year);
+		printk("month=%d\n", time.month);
+		printk("day=%d\n", time.day);
+		printk("hour=%d\n", time.hour);
+		printk("minute=%d\n", time.minute);
+		printk("second=%d\n", time.second);
 	}
 
 	void do_cpuid()

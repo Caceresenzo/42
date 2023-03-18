@@ -7,6 +7,7 @@
 #include <drivers/timer.hpp>
 #include <drivers/vga.hpp>
 #include <program/shell.hpp>
+#include <stdio.h>
 
 extern "C"
 {
