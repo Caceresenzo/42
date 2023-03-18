@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <drivers/rtc.hpp>
 #include <cpu/io.hpp>
-#include <cpu/rtc.hpp>
 #include <stdio.h>
 #include <string.h>
 

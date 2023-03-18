@@ -12,7 +12,6 @@
 
 #include <program/shell.hpp>
 #include <cpu/io.hpp>
-#include <cpu/rtc.hpp>
 #include <cpu/multiboot.hpp>
 #include <cpu/pci.hpp>
 #include <drivers/keyboard.hpp>
@@ -22,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <types.h>
+#include <drivers/rtc.hpp>
 
 #define COMMAND(method) { .name = #method, .function = do_##method }
 
