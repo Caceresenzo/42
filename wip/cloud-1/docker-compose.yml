@@ -5,7 +5,7 @@ services:
     expose:
       - 3306
     volumes:
-      - database:/data
+      - ./data:/data
     init: true
     restart: always
   phpmyadmin:
@@ -34,5 +34,4 @@ services:
       - phpmyadmin
       - wordpress
     restart: always
-volumes:
-  database: {}
+

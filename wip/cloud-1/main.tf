@@ -46,43 +46,52 @@ resource "aws_security_group" "app_security_group" {
   }
 }
 
+resource "aws_ebs_volume" "app_data" {
+  availability_zone = "${var.region}a"
+  size = 20
+  type = "gp3"
+  encrypted = false
+}
+
 resource "aws_instance" "app_instance" {
   ami = var.ami
   instance_type = var.instance_type
   availability_zone = "${var.region}a"
   associate_public_ip_address = true
-  vpc_security_group_ids = [aws_security_group.app_security_group.id]
+  vpc_security_group_ids = [
+    aws_security_group.app_security_group.id
+  ]
   key_name = aws_key_pair.deployer.id
   root_block_device {
     delete_on_termination = true
     encrypted = false
-    volume_size = 20
+    volume_size = 10
     volume_type = "gp3"
   }
   user_data = <<-EOF
-              #!/bin/bash
-              apt update
-              apt install -y apt-transport-https ca-certificates curl software-properties-common
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-              add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
-              apt update
-              apt install -y docker-ce
-              systemctl start docker
-              systemctl enable docker
-              usermod -aG docker ubuntu
-              mkdir /app
-              chown -R ubuntu:ubuntu /app
-              EOF
+    #!/bin/bash
+    apt update
+    apt install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+    apt update
+    apt install -y docker-ce
+    systemctl start docker
+    systemctl enable docker
+    usermod -aG docker ubuntu
+    mkdir /app
+    chown -R ubuntu:ubuntu /app
+  EOF
   tags = {
     Name = "cloud1-instance"
   }
 
   connection {  
-    type        = "ssh"  
-    user        = "ubuntu"  
+    type = "ssh"  
+    user = "ubuntu"  
     private_key = tls_private_key.private_key.private_key_openssh
-    host        = aws_instance.app_instance.public_ip
-    timeout     = "4m"  
+    host = aws_instance.app_instance.public_ip
+    timeout = "4m"  
   }
 
   provisioner "remote-exec" {  
@@ -93,12 +102,12 @@ resource "aws_instance" "app_instance" {
   }
 
   provisioner "file" {
-    source      = "docker-compose.yml"
+    source = "docker-compose.yml"
     destination = "/app/docker-compose.yml"
   }
 
   provisioner "file" {
-    source      = "services"
+    source = "services"
     destination = "/app/services"
   }
 
@@ -106,7 +115,38 @@ resource "aws_instance" "app_instance" {
     inline = [
       "cd /app",
       "docker compose build --progress plain",
+    ]
+  }
+}
+
+resource "aws_volume_attachment" "app_data_attachment" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.app_data.id
+  instance_id = aws_instance.app_instance.id
+  skip_destroy = true
+  stop_instance_before_detaching = true
+}
+
+resource "null_resource" "compose_up" {
+  connection {
+    type = "ssh"  
+    user = "ubuntu"  
+    private_key = tls_private_key.private_key.private_key_openssh
+    host = aws_instance.app_instance.public_ip
+    timeout = "4m"  
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "cd /app",
+      "mkdir -p data",
+      "sudo mkfs.xfs /dev/xvdh",
+      "sudo mount /dev/xvdh data",
       "docker compose up -d"
     ]
   }
+
+  depends_on = [
+    aws_volume_attachment.app_data_attachment,
+  ]
 }
