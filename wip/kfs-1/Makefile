@@ -64,5 +64,5 @@ workspace-run:
 		docker run -it --rm -v %cd%:/workspace -e DISPLAY=host.docker.internal:0.0 kfs-builder; \
 	else \
 		echo "docker: running from native linux"; \
-		docker run -it --rm -v $$(pwd):/workspace -e DISPLAY kfs-builder; \
+		docker run -it --rm -v $$(pwd):/workspace -v /tmp/.X11-unix/:/tmp/.X11-unix/ -e DISPLAY=$$DISPLAY kfs-builder; \
 	fi \
