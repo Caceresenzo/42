@@ -23,8 +23,6 @@
 # include <iostream>
 # include <fstream>
 
-# define SERVICE_NAME "tinky"
-
 INT CreateKeyLogger();
 VOID DestroyKeyLogger();
 
