@@ -1,9 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
-provider "tls" {}
-
 resource "tls_private_key" "private_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -111,12 +105,26 @@ resource "aws_instance" "app_instance" {
     destination = "/app/services"
   }
 
+  provisioner "file" {
+    content = acme_certificate.certificate.certificate_pem
+    destination = "/app/services/gateway/etc/ssl/certs/nginx.crt"
+  }
+
+  provisioner "file" {
+    content = acme_certificate.certificate.private_key_pem
+    destination = "/app/services/gateway/etc/ssl/private/nginx.key"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "cd /app",
       "docker compose build --progress plain",
     ]
   }
+
+  depends_on = [ 
+    acme_certificate.certificate
+  ]
 }
 
 resource "aws_volume_attachment" "app_data_attachment" {
@@ -149,4 +157,32 @@ resource "null_resource" "compose_up" {
   depends_on = [
     aws_volume_attachment.app_data_attachment,
   ]
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = var.route53_zone_id
+  name = var.domain
+  type = "A"
+  ttl = 60
+  records = [
+    aws_instance.app_instance.public_ip
+  ]
+}
+
+resource "tls_private_key" "webmaster_private_key" {
+  algorithm = "RSA"
+}
+
+resource "acme_registration" "registration" {
+  account_key_pem = tls_private_key.webmaster_private_key.private_key_pem
+  email_address = var.email
+}
+
+resource "acme_certificate" "certificate" {
+  account_key_pem = acme_registration.registration.account_key_pem
+  common_name = var.domain
+
+  dns_challenge {
+    provider = "route53"
+  }
 }
