@@ -5,7 +5,7 @@ services:
     expose:
       - 3306
     volumes:
-      - ./data:/data
+      - ./data/database:/data
     init: true
     restart: always
   phpmyadmin:
@@ -20,6 +20,8 @@ services:
     build: services/wordpress
     expose:
       - 80
+    volumes:
+      - ./data/wordpress:/data
     init: true
     depends_on:
       - database
@@ -34,4 +36,3 @@ services:
       - phpmyadmin
       - wordpress
     restart: always
-
