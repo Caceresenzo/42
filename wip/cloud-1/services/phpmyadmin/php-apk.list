@@ -1,0 +1,5 @@
+php-session
+php-mbstring
+php-gettext
+php-mysqli
+php-pdo_mysql

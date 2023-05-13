@@ -10,3 +10,4 @@ php-gd
 php-iconv
 php-intl
 php-xml
+php-session
