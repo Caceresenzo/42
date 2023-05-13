@@ -1,3 +1,8 @@
+variable "prefix" {
+  type = string
+  default = "cloud1"
+}
+
 variable "region" {
   type = string
   default = "us-east-1"

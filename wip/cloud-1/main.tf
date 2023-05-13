@@ -4,8 +4,17 @@ resource "tls_private_key" "private_key" {
 }
 
 resource "aws_key_pair" "deployer" {
-  key_name_prefix = "cloud1-"
+  key_name_prefix = "${var.prefix}-"
   public_key = tls_private_key.private_key.public_key_openssh
+}
+
+resource "aws_eip" "ip" {
+  vpc = true
+  public_ipv4_pool = "amazon"
+  
+  tags = {
+    Name = "${var.prefix}-ip"
+  }
 }
 
 resource "aws_security_group" "app_security_group" {
@@ -94,6 +103,33 @@ resource "aws_instance" "app_instance" {
       "cloud-init status --wait >/dev/null"  
     ]
   }
+}
+
+resource "aws_volume_attachment" "app_data_attachment" {
+  device_name = "/dev/sdh"
+  volume_id = aws_ebs_volume.app_data.id
+  instance_id = aws_instance.app_instance.id
+  skip_destroy = true
+  stop_instance_before_detaching = true
+}
+
+resource "aws_eip_association" "app_eip" {
+  instance_id = aws_instance.app_instance.id
+  allocation_id = aws_eip.ip.id
+}
+
+resource "null_resource" "compose_up" {
+  triggers = {
+    instance_id = aws_instance.app_instance.id
+  }
+
+  connection {
+    type = "ssh"  
+    user = "ubuntu"  
+    private_key = tls_private_key.private_key.private_key_openssh
+    host = aws_eip_association.app_eip.public_ip
+    timeout = "4m"
+  }
 
   provisioner "file" {
     source = "docker-compose.yml"
@@ -117,45 +153,20 @@ resource "aws_instance" "app_instance" {
 
   provisioner "remote-exec" {
     inline = [
-      "cd /app",
-      "docker compose build --progress plain",
-    ]
-  }
-
-  depends_on = [ 
-    acme_certificate.certificate
-  ]
-}
-
-resource "aws_volume_attachment" "app_data_attachment" {
-  device_name = "/dev/sdh"
-  volume_id   = aws_ebs_volume.app_data.id
-  instance_id = aws_instance.app_instance.id
-  skip_destroy = true
-  stop_instance_before_detaching = true
-}
-
-resource "null_resource" "compose_up" {
-  connection {
-    type = "ssh"  
-    user = "ubuntu"  
-    private_key = tls_private_key.private_key.private_key_openssh
-    host = aws_instance.app_instance.public_ip
-    timeout = "4m"  
-  }
-
-  provisioner "remote-exec" {
-    inline = [
+      "echo '/dev/xvdh     /app/data   auto    rw,user,auto    0    0' | sudo tee -a /etc/fstab",
+      "sudo mkfs.xfs /dev/xvdh || true",
       "cd /app",
       "mkdir -p data",
-      "sudo mkfs.xfs /dev/xvdh",
-      "sudo mount /dev/xvdh data",
-      "docker compose up -d"
+      "sudo mount data",
+      "docker compose build --progress plain",
+      "docker compose up --detach"
     ]
   }
 
   depends_on = [
+    aws_eip_association.app_eip,
     aws_volume_attachment.app_data_attachment,
+    acme_certificate.certificate,
   ]
 }
 
@@ -165,7 +176,7 @@ resource "aws_route53_record" "www" {
   type = "A"
   ttl = 60
   records = [
-    aws_instance.app_instance.public_ip
+    aws_eip.ip.public_ip
   ]
 }
 

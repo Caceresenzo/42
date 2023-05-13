@@ -1,5 +1,9 @@
-output "public_url" {
+output "ec2_public_url" {
   value = "https://${aws_instance.app_instance.public_ip}/"
+}
+
+output "eip_public_url" {
+  value = "https://${aws_eip.ip.public_ip}/"
 }
 
 output "https_url" {
