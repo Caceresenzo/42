@@ -23,11 +23,6 @@ variable "route53_zone_id" {
   default = "Z04158572MIBMJFJ69A0S"
 }
 
-variable "domain" {
-  type = string
-  default = "cloud1.aws.caceresenzo.dev"
-}
-
 variable "email" {
   type = string
   default = "caceresenzo1502+cloud1@gmail.com"

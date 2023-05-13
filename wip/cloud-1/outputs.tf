@@ -7,7 +7,7 @@ output "eip_public_url" {
 }
 
 output "https_url" {
-  value = "https://${var.domain}/"
+  value = "https://${local.domain}/"
 }
 
 # output "certificate_pem" {

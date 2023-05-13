@@ -1,3 +1,11 @@
+data "aws_route53_zone" "zone" {
+  zone_id = var.route53_zone_id
+}
+
+locals {
+  domain = "${var.prefix}.${data.aws_route53_zone.zone.name}"
+}
+
 resource "tls_private_key" "private_key" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -172,7 +180,7 @@ resource "null_resource" "compose_up" {
 
 resource "aws_route53_record" "www" {
   zone_id = var.route53_zone_id
-  name = var.domain
+  name = local.domain
   type = "A"
   ttl = 60
   records = [
@@ -191,7 +199,7 @@ resource "acme_registration" "registration" {
 
 resource "acme_certificate" "certificate" {
   account_key_pem = acme_registration.registration.account_key_pem
-  common_name = var.domain
+  common_name = local.domain
 
   dns_challenge {
     provider = "route53"
