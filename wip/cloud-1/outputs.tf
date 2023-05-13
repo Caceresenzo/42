@@ -2,6 +2,10 @@ output "public_url" {
   value = "https://${aws_instance.app_instance.public_ip}/"
 }
 
+output "https_url" {
+  value = "https://${var.domain}/"
+}
+
 # output "certificate_pem" {
 #   value = acme_certificate.certificate.certificate_pem
 # }
