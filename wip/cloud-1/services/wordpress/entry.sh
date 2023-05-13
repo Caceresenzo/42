@@ -7,7 +7,6 @@ else
     cp -r /usr/share/webapps/wordpress/wp-content-original/* /data
 fi
 
-chmod +wrx /usr/share/webapps/wordpress/wp-content
-chmod -R +wrx /data
+sh /fix-perms.sh
 
 exec httpd -DFOREGROUND

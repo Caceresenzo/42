@@ -1,6 +1,7 @@
 FROM alpine
 
-RUN apk add apache2 php-apache2 php-mysqli php-pdo_mysql mysql-client
+COPY php-apk.list /
+RUN apk add apache2 php-apache2 mysql-client $(cat php-apk.list)
 
 RUN cd /tmp && \
     wget https://wordpress.org/latest.zip && \
@@ -17,8 +18,11 @@ RUN echo '<?php phpinfo(); ?>' > /usr/share/webapps/wordpress/phpinfo.php
 COPY etc/apache2/conf.d/wordpress.conf /etc/apache2/conf.d/wordpress.conf
 COPY etc/wordpress/wp-config.php /etc/wordpress/wp-config.php
 
-COPY entry.sh /
-RUN chmod +x /entry.sh
+COPY entry.sh fix-perms.sh /
+RUN chmod +x /entry.sh /fix-perms.sh
+
+RUN mkdir /data
+RUN sh fix-perms.sh
 
 EXPOSE 80
 
