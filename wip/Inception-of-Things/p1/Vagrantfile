@@ -23,8 +23,7 @@ Vagrant.configure(2) do |config|
         end
         
         control.vm.provision "shell", args: [MASTER_IP], inline: <<-SHELL
-            cd /vagrant/scripts/
-            sh install-master.sh $1
+            sh /vagrant/scripts/install-master.sh $1
         SHELL
     end
 
@@ -37,8 +36,7 @@ Vagrant.configure(2) do |config|
         end
         
         control.vm.provision "shell", args: [MASTER_IP, WORKER_IP], inline: <<-SHELL
-            cd /vagrant/scripts/
-            sh install-worker.sh $1 $2
+            sh /vagrant/scripts/install-worker.sh $1 $2
         SHELL
     end
 end

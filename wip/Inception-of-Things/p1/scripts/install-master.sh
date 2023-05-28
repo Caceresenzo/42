@@ -1,7 +1,7 @@
 echo "Installing master"
 
+export K3S_TOKEN_FILE="/vagrant/confs/token"
 export K3S_KUBECONFIG_MODE="644"
-export K3S_TOKEN_FILE="$PWD/token"
 export K3S_CLUSTER_INIT="true"
 
 export INSTALL_K3S_EXEC="server --tls-san $(hostname) --node-ip $1 --advertise-address=$1 --bind-address=0.0.0.0"
