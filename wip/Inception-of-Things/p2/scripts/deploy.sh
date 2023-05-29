@@ -1,0 +1,1 @@
+k apply -f /vagrant/scripts

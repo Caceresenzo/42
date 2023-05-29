@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-two
+data:
+  index.html: |
+    <html>
+      <head>
+        <title>app-two</title>
+      </head>
+      <body>
+        <h1>hello world from <span color="purple">app-two</span>!</h1>
+        <h2>hostname: %hostname%</h2>
+      </body>
+    </html>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-two
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-two
+  template:
+    metadata:
+      labels:
+        app: app-two
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh", "-c"]
+        args:
+        - >
+          sed "s/%hostname%/$(hostname)/" /usr/share/nginx/template/index.html | tee /usr/share/nginx/html/index.html &&
+          sh docker-entrypoint.sh nginx -g "daemon off;"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: template-file
+          mountPath: /usr/share/nginx/template
+          readOnly: true
+      volumes:
+      - name: template-file
+        configMap:
+          name: app-two
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-two
+spec:
+  selector:
+    app: app-two
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: ClusterIP
