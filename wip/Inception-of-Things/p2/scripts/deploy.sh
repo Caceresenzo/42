@@ -1,1 +1,1 @@
-k apply -f /vagrant/scripts
+k apply -f /vagrant/confs
