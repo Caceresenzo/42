@@ -1,31 +1,24 @@
-export K3S_KUBECONFIG_MODE="644"
-export K3S_CLUSTER_INIT="true"
+echo "[IoT] installing k3d"
+curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
-export INSTALL_K3S_EXEC="--tls-san $(hostname) --node-ip $1 --advertise-address=$1 --bind-address=0.0.0.0"
-
-# k3s
-curl -sfL https://get.k3s.io | sh -s - --docker
-
-# kubectl
+echo "[IoT] installing kubectl"
 curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /tmp/kubectl
 curl -L "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256" -o /tmp/kubectl.sha256
 echo "$(cat /tmp/kubectl.sha256)  /tmp/kubectl" | sha256sum --check
 sudo install -o root -g root -m 0755 /tmp/kubectl /usr/local/bin/kubectl
 rm /tmp/kubectl /tmp/kubectl.sha256
 
-# argocd
-curl -L "https://github.com/argoproj/argo-cd/releases/download/v2.7.3/argocd-linux-amd64" -o /tmp/argocd
-sudo install -o root -g root -m 0755 /tmp/argocd /usr/local/bin/argocd
-
-# "k" alias
+echo "[IoT] aliasing k"
 sudo ln -s $(which kubectl) $(dirname $(which kubectl))/k
 
-# setting environment
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
-sudo chmod +r $KUBECONFIG
-echo "KUBECONFIG=$KUBECONFIG" >> /etc/environment
+echo "[IoT] creating cluster"
+k3d cluster create iot -p "80:80@loadbalancer" -p "443:443@loadbalancer" -p "8888:8888@loadbalancer"
 
-# checks
-k get nodes -o wide
+echo "[IoT] preparing env"
+echo 'export KUBECONFIG="$(k3d kubeconfig write iot)"' >> /home/vagrant/.bashrc
+source /home/vagrant/.bashrc
+
+echo "[IoT] doing additional checks"
 ifconfig eth1 | grep inet
 docker run --rm hello-world
+kubectl cluster-info
