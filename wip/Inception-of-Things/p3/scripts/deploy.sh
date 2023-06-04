@@ -2,7 +2,19 @@ function wait_all()
 {
     namespace=$1
 
-    services=$(kubectl get -n $namespace deployment --no-headers -o custom-columns=":metadata.name" | xargs -I{} echo deployment.apps/{})
+    kubectl get -n $namespace deployment
+    
+    while true; do
+        services=$(kubectl get -n $namespace deployment --no-headers -o custom-columns=":metadata.name" | xargs -I{} echo deployment.apps/{})
+    
+        if [ -z "$services" ]; then
+            echo "no service in namespace '$namespace', retrying in 5 seconds"
+            sleep 5
+        else
+            break
+        fi
+    done
+
     k wait --for=condition=available --timeout=300s -n $namespace $services
 }
 
