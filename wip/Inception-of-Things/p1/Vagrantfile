@@ -1,4 +1,4 @@
-LOGIN = "enzo"
+LOGIN = "ecaceres"
 
 MASTER_NAME = "#{LOGIN}S"
 MASTER_IP = "192.168.56.110"
