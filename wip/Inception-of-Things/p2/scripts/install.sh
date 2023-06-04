@@ -8,7 +8,7 @@ curl -sfL https://get.k3s.io | sh -
 
 echo "[IoT] aliasing k"
 path=/usr/local/bin/k
-echo -e '#!/bin/sh\nk3s kubectl $@' > $path
+echo -e '#!/bin/sh\nk3s kubectl $@' | sed 's/-e //' > $path
 chmod +x $path
 
 echo "[IoT] doing additional checks"
