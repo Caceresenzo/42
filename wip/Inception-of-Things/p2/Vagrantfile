@@ -1,4 +1,4 @@
-LOGIN = "enzo"
+LOGIN = "ecaceres"
 
 MASTER_NAME = "#{LOGIN}S"
 MASTER_IP = "192.168.56.110"
@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
             v.name = MASTER_NAME
         end
         
-        control.vm.provision "docker"
+        # control.vm.provision "docker"
         control.vm.provision "shell", args: [MASTER_IP], inline: <<-SHELL
             . /vagrant/scripts/install.sh $1
             . /vagrant/scripts/deploy.sh
