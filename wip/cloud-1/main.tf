@@ -27,9 +27,7 @@ resource "aws_key_pair" "deployer" {
 }
 
 resource "aws_eip" "ip" {
-  vpc = true
   public_ipv4_pool = "amazon"
-  
   tags = {
     Name = "${var.prefix}-ip"
   }
