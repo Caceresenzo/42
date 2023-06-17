@@ -8,6 +8,9 @@ services:
       - ./data/database:/data
     init: true
     restart: always
+    environment:
+      - WORDPRESS_DATABASE_PASSWORD
+      - PHPMYADMIN_DATABASE_PASSWORD
   phpmyadmin:
     build: services/phpmyadmin
     expose:
@@ -16,6 +19,9 @@ services:
     depends_on:
       - database
     restart: always
+    environment:
+      - WORDPRESS_DATABASE_PASSWORD
+      - PHPMYADMIN_DATABASE_PASSWORD
   wordpress:
     build: services/wordpress
     expose:
@@ -26,6 +32,8 @@ services:
     depends_on:
       - database
     restart: always
+    environment:
+      - "DATABASE_PASSWORD=${WORDPRESS_DATABASE_PASSWORD}"
   gateway:
     build: services/gateway
     ports:

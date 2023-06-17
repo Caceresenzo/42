@@ -26,7 +26,7 @@ define( 'DB_NAME', 'wordpress' );
 define( 'DB_USER', 'wordpress' );
 
 /** Database password */
-define( 'DB_PASSWORD', 'password' );
+define( 'DB_PASSWORD', getenv("DATABASE_PASSWORD") );
 
 /** Database hostname */
 define( 'DB_HOST', 'database' );

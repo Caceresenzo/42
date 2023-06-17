@@ -29,7 +29,7 @@ $cfg['Servers'][$i]['auth_type'] = 'config';
 /* Server parameters */
 $cfg['Servers'][$i]['host'] = 'database';
 $cfg['Servers'][$i]['user'] = 'wordpress';
-$cfg['Servers'][$i]['password'] = 'password';
+$cfg['Servers'][$i]['password'] = getenv("WORDPRESS_DATABASE_PASSWORD");
 $cfg['Servers'][$i]['compress'] = false;
 $cfg['Servers'][$i]['AllowNoPassword'] = false;
 
@@ -41,7 +41,7 @@ $cfg['Servers'][$i]['AllowNoPassword'] = false;
 $cfg['Servers'][$i]['controlhost'] = 'database';
 $cfg['Servers'][$i]['controlport'] = '';
 $cfg['Servers'][$i]['controluser'] = 'phpmyadmin';
-$cfg['Servers'][$i]['controlpass'] = 'password';
+$cfg['Servers'][$i]['controlpass'] = getenv("PHPMYADMIN_DATABASE_PASSWORD");
 
 /* Storage database and tables */
 $cfg['Servers'][$i]['pmadb'] = 'phpmyadmin';
