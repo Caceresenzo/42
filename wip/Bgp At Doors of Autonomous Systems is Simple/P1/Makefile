@@ -1,7 +1,6 @@
-IMAGE_NAME = frr
-
-build:
-	docker build --tag $(IMAGE_NAME) image/
+images:
+	docker build --tag badass-router image/router
+	docker build --tag badass-host image/host
 
 show:
 	@for container_id in $$(docker ps --quiet); \
@@ -12,4 +11,4 @@ show:
 		docker exec $$container_id ps; \
 	done
 
-.PHONY: build show
+.PHONY: images show
