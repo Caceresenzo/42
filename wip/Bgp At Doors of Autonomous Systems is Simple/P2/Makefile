@@ -22,6 +22,7 @@ show-router:
 		if echo "$$hname" | grep -q "routeur_"; then \
 			echo "---\ncontainer id:" $$container_id; \
 			echo "hostname:" $$hname; \
+			echo "macs:"; \
 			docker exec $$container_id brctl showmacs br0; \
 		fi \
 	done
