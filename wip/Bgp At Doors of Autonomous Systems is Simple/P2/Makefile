@@ -1,4 +1,5 @@
 __APPLY_MODE="static"
+.PHONY: __apply
 __apply:
 	@for container_id in $$(docker ps --quiet); \
 	do \
@@ -9,12 +10,15 @@ __apply:
 		fi \
 	done
 
+.PHONY: apply-static
 apply-static:
 	@make --silent __APPLY_MODE="static" __apply
 
+.PHONY: apply-dynamic-multicast
 apply-dynamic-multicast:
 	@make --silent __APPLY_MODE="dynamic multicast" __apply
 
+.PHONY: show-router
 show-router:
 	@for container_id in $$(docker ps --quiet); \
 	do \
@@ -27,6 +31,7 @@ show-router:
 		fi \
 	done
 
+.PHONY: ping-host
 ping-host:
 	@for container_id in $$(docker ps --quiet); \
 	do \
@@ -46,5 +51,3 @@ ping-host:
 			fi \
 		fi \
 	done
-
-.PHONY: apply show

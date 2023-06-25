@@ -1,7 +1,9 @@
+.PHONY: images
 images:
 	docker build --tag badass-router image/router
 	docker build --tag badass-host image/host
 
+.PHONY: show
 show:
 	@for container_id in $$(docker ps --quiet); \
 	do \
@@ -10,5 +12,3 @@ show:
 		echo "processes:"; \
 		docker exec $$container_id ps; \
 	done
-
-.PHONY: images show
