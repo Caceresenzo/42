@@ -1,11 +1,11 @@
 DROP USER ''@'localhost';
 
 CREATE DATABASE `wordpress`;
-CREATE USER 'wordpress'@'%' IDENTIFIED BY 'password';
+CREATE USER 'wordpress'@'%' IDENTIFIED BY 'WORDPRESS_DATABASE_PASSWORD';
 GRANT ALL PRIVILEGES ON `wordpress`.* TO 'wordpress'@'%';
 
 CREATE DATABASE `phpmyadmin`;
-CREATE USER 'phpmyadmin'@'%' IDENTIFIED BY 'password';
+CREATE USER 'phpmyadmin'@'%' IDENTIFIED BY 'PHPMYADMIN_DATABASE_PASSWORD';
 GRANT ALL PRIVILEGES ON *.* TO 'phpmyadmin'@'%';
 
 FLUSH PRIVILEGES;

@@ -11,15 +11,23 @@ resource "tls_private_key" "private_key" {
   rsa_bits  = 4096
 }
 
+resource "random_password" "wordpress_database_user" {
+  length = 32
+  special = false
+}
+
+resource "random_password" "phpmyadmin_database_user" {
+  length = 32
+  special = false
+}
+
 resource "aws_key_pair" "deployer" {
   key_name_prefix = "${var.prefix}-"
   public_key = tls_private_key.private_key.public_key_openssh
 }
 
 resource "aws_eip" "ip" {
-  vpc = true
   public_ipv4_pool = "amazon"
-  
   tags = {
     Name = "${var.prefix}-ip"
   }
@@ -137,6 +145,14 @@ resource "null_resource" "compose_up" {
     private_key = tls_private_key.private_key.private_key_openssh
     host = aws_eip_association.app_eip.public_ip
     timeout = "4m"
+  }
+
+  provisioner "file" {
+    content = <<-EOF
+      WORDPRESS_DATABASE_PASSWORD=${random_password.wordpress_database_user.result}
+      PHPMYADMIN_DATABASE_PASSWORD=${random_password.phpmyadmin_database_user.result}
+    EOF
+    destination = "/app/.env"
   }
 
   provisioner "file" {
