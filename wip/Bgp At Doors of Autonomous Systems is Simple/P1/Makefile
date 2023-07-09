@@ -1,7 +1,7 @@
 .PHONY: images
 images:
-	docker build --tag badass-router image/router
-	docker build --tag badass-host image/host
+	docker build --tag badass-router images/router
+	docker build --tag badass-host images/host
 
 .PHONY: show
 show:
