@@ -1,4 +1,4 @@
-# Level 01
+# Level 1
 
 ## Initial Context
 
@@ -48,7 +48,7 @@ Program received signal SIGSEGV, Segmentation fault.
 
 We can see a corruption of the stack.
 
-By looking at the assembly code, we can see 2 interesting function, `main` and `run`, that is not calling each others.
+By looking at the assembly code, we can see 2 interesting function, `main` and `run`, that are not calling each others.
 
 ```
 $ objdump -d ./level1

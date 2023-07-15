@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// removed from c11 standard
-char *gets(char *s);
+/* removed from c11 standard */
+extern char *gets(char *s);
 
 void run()
 {
@@ -13,7 +13,7 @@ void run()
 
 int main(int argc, char const *argv[])
 {
-    // 0x50 - 0x16
+    /* 0x50 - 0x10 */
     char buffer[64];
 
     gets(buffer);
