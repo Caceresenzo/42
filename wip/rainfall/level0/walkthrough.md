@@ -1,4 +1,4 @@
-# Level 00
+# Level 0
 
 ## Initial Context
 

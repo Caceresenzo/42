@@ -1,4 +1,5 @@
 #define _GNU_SOURCE
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdio.h>
@@ -8,27 +9,28 @@ int main(int argc, char const *argv[])
 {
     if (atoi(argv[1]) == 423)
     {
-        // get file's group owner
-        gid_t gid = getegid();
-        
-        // get file's user owner
-        uid_t uid = geteuid();
-
-        // set process group owner
-        setresgid(gid, gid, gid);
-        
-        // set process file owner
-        setresuid(uid, uid, uid);
-
+        char *const sh = strdup("/bin/sh");
         char *const cmd[] = {
-            "/bin/sh",
+            sh,
             NULL
         };
 
-        execv(cmd[0], cmd);
+        /* get file's effective group owner */
+        gid_t gid = getegid();
+        
+        /* get file's effective user owner */
+        uid_t uid = geteuid();
+
+        /* set process's effective group owner */
+        setresgid(gid, gid, gid);
+        
+        /* set process effective file owner */
+        setresuid(uid, uid, uid);
+
+        execv("/bin/sh", cmd);
     }
     else
-        fwrite("No !\n", 1, 5, stdout);
+        fwrite("No !\n", 1, 5, stderr);
 
     return (0);
 }
