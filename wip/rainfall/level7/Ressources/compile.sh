@@ -1,0 +1,1 @@
+gcc source.c -o level7 -m32
