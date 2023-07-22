@@ -39,7 +39,6 @@ The second and third allocation are only `16 bytes` afar.
 Here is the first payload to overwrite the forth address to `puts@got.plt`:
 
 ```python
-print "A" * (16 + 4) + "\x28\x99\x04\x08"'
 # padding of 16
 "A" * 16
 
