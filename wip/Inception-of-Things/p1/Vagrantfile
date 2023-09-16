@@ -7,7 +7,7 @@ WORKER_NAME = "#{LOGIN}SW"
 WORKER_IP = "192.168.56.111"
 
 Vagrant.configure(2) do |config|
-    config.vm.box = "hashicorp/bionic64"
+    config.vm.box = "debian/bookworm64"
 
     config.vm.provider "virtualbox" do |v|
         v.memory = 1024
@@ -21,10 +21,9 @@ Vagrant.configure(2) do |config|
         control.vm.provider "virtualbox" do |v|
             v.name = MASTER_NAME
         end
-        
-        control.vm.provision "shell", args: [MASTER_IP], inline: <<-SHELL
-            sh /vagrant/scripts/install-master.sh $1
-        SHELL
+
+        control.vm.provision "shell", path: "scripts/install-tools.sh", reset: true
+        control.vm.provision "shell", args: [MASTER_IP], path: "scripts/install-master.sh"
     end
 
     config.vm.define WORKER_NAME do |control|
@@ -34,9 +33,8 @@ Vagrant.configure(2) do |config|
         control.vm.provider "virtualbox" do |v|
             v.name = WORKER_NAME
         end
-        
-        control.vm.provision "shell", args: [MASTER_IP, WORKER_IP], inline: <<-SHELL
-            sh /vagrant/scripts/install-worker.sh $1 $2
-        SHELL
+
+        control.vm.provision "shell", path: "scripts/install-tools.sh", reset: true
+        control.vm.provision "shell", args: [MASTER_IP, WORKER_IP], path: "scripts/install-worker.sh"
     end
 end
