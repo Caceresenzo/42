@@ -14,6 +14,7 @@ Vagrant.configure(2) do |config|
     config.vm.define MASTER_NAME do |control|
         control.vm.hostname = MASTER_NAME
         control.vm.network "private_network", ip: MASTER_IP
+        control.vm.network "forwarded_port", guest: 8888, host: 8888
 
         control.vm.provider "virtualbox" do |v|
             v.name = MASTER_NAME
