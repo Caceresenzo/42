@@ -4,7 +4,7 @@ MASTER_NAME = "#{LOGIN}S"
 MASTER_IP = "192.168.56.110"
 
 Vagrant.configure(2) do |config|
-    config.vm.box = "hashicorp/bionic64"
+    config.vm.box = "debian/bookworm64"
 
     config.vm.provider "virtualbox" do |v|
         v.memory = 4048
@@ -18,11 +18,11 @@ Vagrant.configure(2) do |config|
         control.vm.provider "virtualbox" do |v|
             v.name = MASTER_NAME
         end
-        
+
         control.vm.provision "docker"
-        control.vm.provision "shell", args: [MASTER_IP], inline: <<-SHELL
-            . /vagrant/scripts/install.sh $1
-            . /vagrant/scripts/deploy.sh
-        SHELL
+
+        control.vm.provision "shell", path: "scripts/install-tools.sh", reset: true
+        control.vm.provision "shell", args: [MASTER_IP], path: "scripts/install-k3d.sh"
+        control.vm.provision "shell", path: "scripts/deploy.sh"
     end
 end
