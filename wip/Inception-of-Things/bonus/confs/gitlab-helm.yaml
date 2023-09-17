@@ -1,0 +1,20 @@
+global:
+  edition: ce
+  hosts:
+    https: false
+  ingress:
+    # configureCertmanager: false
+    tls:
+      enabled: false
+# certmanager:
+#   install: false
+nginx-ingress:
+  enabled: false
+
+## skip excess components
+gitlab-runner:
+  install: false
+# prometheus:
+#   install: false
+certmanager-issuer:
+  email: ecaceres@student.42.fr
