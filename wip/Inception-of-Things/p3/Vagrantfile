@@ -19,11 +19,5 @@ Vagrant.configure(2) do |config|
         control.vm.provider "virtualbox" do |v|
             v.name = MASTER_NAME
         end
-
-        control.vm.provision "docker"
-
-        control.vm.provision "shell", path: "scripts/install-tools.sh", reset: true
-        control.vm.provision "shell", args: [MASTER_IP], path: "scripts/install-k3d.sh"
-        control.vm.provision "shell", path: "scripts/deploy.sh"
     end
 end
