@@ -1,3 +1,10 @@
+set -e
+
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Please run as root." >&2;
+    exit 1;
+fi
+
 function wait_all()
 {
     namespace=$1
@@ -18,9 +25,9 @@ function wait_all()
     k wait --for=condition=available --timeout=300s -n $namespace $services
 }
 
-master_ip=$2
-login=$2
-domain=$3
+master_ip=$(ifconfig eth1 | grep inet | head -n 1 | awk '{ print $2 }')
+login=$(hostname | sed 's/S$//')
+domain=local-vm.iot.ft.caceresenzo.com
 
 echo "[IoT] installing helm"
 curl -sfL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash -
