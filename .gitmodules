@@ -1,3 +1,4 @@
-[submodule "wip/Inception-of-Things/p3/confs/dummy-project"]
-	path = wip/Inception-of-Things/p3/confs/dummy-project
+[submodule "Inception-of-Things/p3/confs/dummy-project"]
+	path = Inception-of-Things/p3/confs/dummy-project
 	url = https://github.com/Caceresenzo/42--Inception-of-Things--p3.git
+
