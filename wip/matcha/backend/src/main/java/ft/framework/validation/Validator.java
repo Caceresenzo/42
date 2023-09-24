@@ -28,6 +28,17 @@ public class Validator {
 			.collect(Collectors.toSet());
 	}
 	
+	@SuppressWarnings("unchecked")
+	public <T> T validateOrThrow(T object) {
+		final var violations = validate(object);
+		
+		if (!violations.isEmpty()) {
+			throw new ValidationException((Set<ConstraintViolation<?>>) (Object) violations);
+		}
+		
+		return object;
+	}
+	
 	@SneakyThrows
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public <T> Set<ConstraintViolation<T>> validate(T object, Field field) {
@@ -84,14 +95,14 @@ public class Validator {
 				if (ConstraintValidator.class.equals(type.getRawType())) {
 					return type.getActualTypeArguments()[1];
 				}
- 			}
+			}
 		}
 		
 		// TODO Support super generics
-//		final var super_ = validatorClass.getSuperclass();
-//		if (super_.isAssignableFrom(ConstraintValidator.class)) {
-//			return extractConstraintValidatorType((Class<? extends ConstraintValidator<?, ?>>) super_);
-//		}
+		// final var super_ = validatorClass.getSuperclass();
+		// if (super_.isAssignableFrom(ConstraintValidator.class)) {
+		// return extractConstraintValidatorType((Class<? extends ConstraintValidator<?, ?>>) super_);
+		// }
 		
 		return null;
 	}

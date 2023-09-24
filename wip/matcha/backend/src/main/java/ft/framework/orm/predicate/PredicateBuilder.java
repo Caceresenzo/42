@@ -68,6 +68,14 @@ public class PredicateBuilder<T> {
 		return compare(Comparison.Type.GREATER_THAN_EQUALS, property, value);
 	}
 	
+	public Comparison<T> like(String property, Object value) {
+		return compare(Comparison.Type.LIKE, property, value);
+	}
+	
+	public Comparison<T> likeWildcard(String property, String middle) {
+		return like(property, "%%%s%%".formatted(middle));
+	}
+	
 	public Branch<T> branch(Branch.Type type, List<Predicate<T>> predicates) {
 		return new Branch<>(type, predicates);
 	}

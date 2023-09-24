@@ -24,4 +24,12 @@ public class UserAuthentication implements Authentication {
 		return user;
 	}
 	
+	public static User getUser(Authentication authentication) {
+		if (authentication instanceof UserAuthentication userAuthentication) {
+			return userAuthentication.getUser();
+		}
+		
+		return null;
+	}
+	
 }

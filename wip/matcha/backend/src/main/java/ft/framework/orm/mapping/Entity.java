@@ -16,12 +16,12 @@ public class Entity<T> {
 	private final Table table;
 	
 	@SneakyThrows
-	public Object instantiate() {
+	public T instantiate() {
 		return clazz.getConstructor().newInstance();
 	}
 	
 	@SneakyThrows
-	public Object instantiate(Object id) {
+	public T instantiate(Object id) {
 		final var instance = instantiate();
 		
 		table.getIdColumn().write(instance, id);

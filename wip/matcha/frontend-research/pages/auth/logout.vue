@@ -30,12 +30,12 @@ export default defineComponent({
     const router = useRouter()
     const authStore = useAuthStore()
 
-    const from = computed(() => route.value.query.from)
+    const from = computed(() => route.value.query.from as string)
 
     const logout = async () => {
       await authStore.logout()
 
-      router.push('/')
+      router.push(from.value || '/')
     }
 
     return {

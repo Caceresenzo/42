@@ -1,0 +1,98 @@
+version: '3.4'
+
+services:
+  frontend:
+    image: fyusufa/matcha_frontend
+    expose:
+      - 80
+    ports:
+      # the following port is necessary for vite hot module reload (HMR)
+      - 4443:4443
+    volumes:
+      - ./frontend:/app
+    environment:
+      VITE_BACKEND_HOST: ${BACKEND_HOST:-backend}
+      VITE_BACKEND_PORT: ${BACKEND_PORT:-4567}
+    build:
+      context: ./frontend
+      dockerfile: ${FRONTEND_DOCKERFILE:-Dockerfile}
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-lts-alpine}
+    restart: unless-stopped
+    depends_on:
+      - backend
+  backend:
+    image: fyusufa/matcha_backend
+    expose:
+      - 4567
+    environment:
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      DATABASE_USER: ${DATABASE_USER:-user}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-password}
+      DATABASE_NAME: ${DATABASE_NAME:-matcha}
+      AUTH_JWT_SECRET: ${BACKEND_JWT_SECRET:-secret}
+      AUTH_JWT_EXPIRATION: PT15M
+      AUTH_REFRESH_TOKEN_LENGTH: ${BACKEND_TOKEN_LENGTH:-128}
+      AUTH_REFRESH_TOKEN_EXPIRATION: P3D
+      MAIL_HOST: ${BACKEND_MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${BACKEND_MAIL_PORT:-465}
+      MAIL_AUTH: 'true'
+      MAIL_SSL: 'true'
+      MAIL_DEBUG: ${BACKEND_MAIL_DEBUG:-true}
+      MAIL_AUTH_EMAIL: ${BACKEND_MAIL}
+      MAIL_AUTH_PASSWORD: ${BACKEND_MAIL_PASSWORD}
+      MAIL_SENDER: ${BACKEND_MAIL}
+      HEARTBEAT_MAXMIND_LICENSE_KEY: ${BACKEND_MAXMIND_KEY}
+      SWAGGER_SERVER_NAME: "Production"
+      SWAGGER_SERVER_URL: "/api/"
+    volumes:
+      - backend-data:/app/data
+    build:
+      context: ./backend
+      dockerfile: ${BACKEND_DOCKERFILE:-Dockerfile}
+    restart: unless-stopped
+    depends_on:
+      - mysql
+  mysql:
+    image: fyusufa/matcha_mysql
+    build:
+      context: ./database
+      dockerfile: ${BACKEND_DOCKERFILE:-Dockerfile}
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_HOST: localhost
+      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MYSQL_USER: ${DATABASE_USER:-user}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-password}
+      MYSQL_DATABASE: ${DATABASE_NAME:-matcha}
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/01-setup.sh:/docker-entrypoint-initdb.d/01-setup.sh
+      - ./database/server.cnf:/etc/mysql/conf.d/server.cnf
+  gateway:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./gateway/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend
+      - frontend
+  phpmyadmin:
+    image: phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 8888:80
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ${DATABASE_USER:-user}
+      PMA_PASSWORD: ${DATABASE_PASSWORD:-password}
+    depends_on:
+      - mysql
+    profiles: ["debug"]
+
+volumes:
+  backend-data:
+  mysql-data:

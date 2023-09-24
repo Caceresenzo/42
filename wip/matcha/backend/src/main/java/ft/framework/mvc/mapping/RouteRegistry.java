@@ -185,7 +185,7 @@ public class RouteRegistry {
 			}
 		});
 		
-		add(new FallbackController());
+//		add(new FallbackController());
 	}
 	
 	public void add(Route route, RouteHandler handler) {

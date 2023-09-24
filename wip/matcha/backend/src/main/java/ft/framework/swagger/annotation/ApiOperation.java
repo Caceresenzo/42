@@ -13,4 +13,6 @@ public @interface ApiOperation {
 	
 	String summary() default "";
 	
+	String description() default "";
+	
 }

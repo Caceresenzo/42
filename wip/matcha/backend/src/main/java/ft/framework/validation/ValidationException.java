@@ -17,7 +17,9 @@ public class ValidationException extends RuntimeException {
 	@ResponseErrorProperty
 	private final Set<ConstraintViolation<?>> violations;
 	
-	public ValidationException(Set<ConstraintViolation<?>> violations) {
+	public <T> ValidationException(Set<ConstraintViolation<?>> violations) {
+		super("validation failed");
+		
 		this.violations = violations;
 	}
 	

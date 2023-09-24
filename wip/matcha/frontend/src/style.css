@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;	
+
+@layer base {
+  :root {
+    --color-light: 250 243 246;     /* #faf3f6 */
+    --color-lighter: 255 255 255;   /* #ffffff */
+    --color-dark: 44 51 60;         /* #2c333c */
+
+    --color-darker: 29 25 40;       /* #1d2328 */
+
+    --color-primary: 255 65 129;    /* #ff4181 */
+
+    --color-secondary: 244 143 179; /* #f48fb3 */
+    --color-secondary: 221 114 48; /* #dd7230 */
+  }
+
+  html {
+    @apply text-dark;
+    @apply bg-lighter;
+  }
+
+  h1 {
+    @apply text-4xl text-center my-4;
+  }
+
+  input {
+    @apply border border-gray-300 rounded-md shadow-sm w-full;
+  }
+
+  form {
+    @apply border-gray-300 bg-red-300 rounded-md shadow-md;
+    @apply flex flex-col space-y-6 items-center;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply bg-dark text-light font-bold py-2 px-4 rounded;
+  }
+
+  .form-field {
+    @apply flex flex-col space-y-2 items-start w-full;
+  }
+}
+

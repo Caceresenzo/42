@@ -16,7 +16,7 @@ public class ApplicationEventPublisher {
 		
 		final var filtered = filterListeners(clazz);
 		
-		log.info("Dispatching event '{}' to {} listener(s)", clazz.getName(), filtered.size());
+		log.trace("Dispatching event '{}' to {} listener(s)", clazz.getName(), filtered.size());
 		
 		for (final var listener : filtered) {
 			try {

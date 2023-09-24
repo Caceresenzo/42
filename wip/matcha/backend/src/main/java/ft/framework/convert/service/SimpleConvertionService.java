@@ -1,6 +1,7 @@
 package ft.framework.convert.service;
 
 import java.lang.reflect.ParameterizedType;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import ft.framework.convert.converter.Converter;
 import ft.framework.convert.converter.impl.StringToBooleanConverter;
+import ft.framework.convert.converter.impl.StringToDurationConverter;
 import ft.framework.convert.converter.impl.StringToNumberConverter;
 import ft.framework.convert.converter.impl.StringToUUIDConverter;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class SimpleConvertionService implements ConvertionService {
 	private void loadDefaults() {
 		register(new StringToUUIDConverter());
 		register(new StringToBooleanConverter());
+		register(Duration.class, new StringToDurationConverter());
 		register(Long.class, new StringToNumberConverter(Long::parseLong));
 		register(Integer.class, new StringToNumberConverter(Integer::parseInt));
 	}
@@ -93,7 +96,12 @@ public class SimpleConvertionService implements ConvertionService {
 		}
 		
 		final var converter = findConverter(sourceType, targetType);
-		return converter.convert(value);
+		
+		try {
+			return converter.convert(value);
+		} catch (Exception exception) {
+			throw new ConversionException(value, sourceType, targetType, exception);
+		}
 	}
 	
 	@SuppressWarnings({ "rawtypes" })

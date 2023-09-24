@@ -1,6 +1,6 @@
 package ft.framework.orm.dialect;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.SQLException;
 import java.util.Collection;
 
 import ft.framework.mvc.domain.Pageable;
@@ -9,39 +9,63 @@ import ft.framework.orm.mapping.DataType;
 import ft.framework.orm.mapping.Table;
 import ft.framework.orm.mapping.contraint.Index;
 import ft.framework.orm.mapping.contraint.Unique;
-import ft.framework.orm.mapping.relationship.Relationship;
+import ft.framework.orm.mapping.relationship.ManyToOne;
 import ft.framework.orm.predicate.Predicate;
 
 public interface Dialect {
 	
-	public Exception translate(Table table, SQLIntegrityConstraintViolationException exception);
+	Exception translate(Table table, SQLException exception);
 	
-	public String translate(DataType dataType);
+	String translate(DataType dataType);
 	
-	public String buildCreateTableStatement(Table table);
+	String buildCreateTableStatement(Table table);
 	
-	public String buildAlterTableAddForeignKeyStatement(Table table, Relationship relationship);
+	String buildAlterTableAddColumnStatement(Table table, Column column);
 	
-	public String buildCreateIndexStatement(Table table, Index index);
+	String buildAlterTableAddForeignKeyStatement(Table table, ManyToOne relationship);
 	
-	public String buildAlterTableAddUniqueStatement(Table table, Unique unique);
+	String buildCreateIndexStatement(Table table, Index index);
 	
-	public String buildInsertStatement(Table table, Collection<Column> columns);
+	String buildAlterTableAddUniqueStatement(Table table, Unique unique);
 	
-	public Object buildDeleteStatement(Table table, Predicate<?> predicate);
+	String buildInsertStatement(Table table, Collection<Column> columns);
 	
-	public String buildUpdateByIdStatement(Table table, Collection<Column> columns);
+	Object buildDeleteStatement(Table table, Predicate<?> predicate);
 	
-	public String buildDeleteByIdStatement(Table table);
+	String buildUpdateByIdStatement(Table table, Collection<Column> columns);
 	
-	public String buildSelectStatement(Table table, Collection<Column> columns);
+	String buildDeleteByIdStatement(Table table);
 	
-	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate);
+	String buildSelectByIdStatement(Table table, Collection<Column> columns);
 	
-	public String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate, Pageable pageable);
+	String buildSelectStatement(Table table, Collection<Column> columns);
 	
-	public String buildCountStatement(Table table);
+	String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate);
 	
-	public String buildCountStatement(Table table, Predicate<?> predicate);
+	String buildSelectStatement(Table table, Collection<Column> columns, Predicate<?> predicate, Pageable pageable);
+	
+	String buildCountStatement(Table table);
+	
+	String buildCountStatement(Table table, Predicate<?> predicate);
+
+	Object buildExistsStatement(Table table, Predicate<?> predicate);
+	
+	String buildShowTableStatement();
+	
+	String buildShowColumnStatement(Table table);
+	
+	String buildShowConstraintStatement(Table table);
+	
+	default int getTableNameColumnIndex() {
+		return 1;
+	}
+	
+	default int getColumnNameColumnIndex() {
+		return 1;
+	}
+	
+	default int getConstraintNameColumnIndex() {
+		return 1;
+	}
 	
 }

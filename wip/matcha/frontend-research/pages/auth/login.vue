@@ -4,6 +4,11 @@
       <v-col cols="12">
         <v-card>
           <v-card-title> Login </v-card-title>
+          <v-card-subtitle>
+            <router-link :to="{ path: '/auth/forgot-password', query: { from } }">
+              Forgot password?
+            </router-link>
+          </v-card-subtitle>
           <v-card-text>
             <v-form id="form" @submit.prevent="login">
               <v-text-field v-model="inputs.login" label="Login" />
@@ -15,8 +20,9 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
+            <v-btn to="/auth/oauth" color="secondary"> Login with Google </v-btn>
             <v-spacer />
-            <v-btn type="submit" form="form"> Login </v-btn>
+            <v-btn type="submit" color="primary" form="form"> Login </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -26,17 +32,21 @@
 
 <script lang="ts">
 import {
+  computed,
   defineComponent,
-  onMounted,
   reactive,
+  useRoute,
   useRouter,
   watch,
 } from '@nuxtjs/composition-api'
 import { useAuthStore } from '~/store'
 export default defineComponent({
   setup() {
+    const route = useRoute()
     const router = useRouter()
     const authStore = useAuthStore()
+
+    const from = computed(() => route.value.query.from as string)
 
     const inputs = reactive({
       login: '',
@@ -47,15 +57,20 @@ export default defineComponent({
       await authStore.login(inputs.login, inputs.password)
     }
 
-    watch(() => authStore.user, (user) => {
+    watch(
+      () => authStore.user,
+      (user) => {
         if (user) {
-            router.push("/")
+          router.push(from.value || '/')
         }
-    }, { immediate: true })
+      },
+      { immediate: true }
+    )
 
     return {
       inputs,
       login,
+      from,
     }
   },
 })

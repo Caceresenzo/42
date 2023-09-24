@@ -11,7 +11,7 @@ public class PositiveOrZeroValidator implements ConstraintValidator<PositiveOrZe
 			return true;
 		}
 		
-		return value.intValue() >= 0;
+		return value.longValue() >= 0;
 	}
 	
 }

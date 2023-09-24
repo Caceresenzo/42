@@ -14,6 +14,7 @@ import javax.persistence.UniqueConstraint;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import ft.framework.orm.annotation.OnDelete;
 import ft.framework.orm.mapping.contraint.Index;
 import ft.framework.orm.mapping.contraint.Unique;
 import ft.framework.orm.mapping.naming.LowerCaseNamingStrategy;
@@ -112,6 +113,7 @@ public class MappingBuilder {
 			final var idAnnotation = field.getAnnotation(javax.persistence.Id.class);
 			final var columnAnnotation = field.getAnnotation(javax.persistence.Column.class);
 			final var manyToOneAnnotation = field.getAnnotation(javax.persistence.ManyToOne.class);
+			final var onDeleteAnnotation = field.getAnnotation(OnDelete.class);
 			
 			if (idAnnotation == null && columnAnnotation == null && manyToOneAnnotation == null) {
 				continue;
@@ -149,7 +151,11 @@ public class MappingBuilder {
 					.foreignKeyName(formatForeignKeyName(keyName, name))
 					.dataType(targetEntity.getTable().getIdColumn().getDataType());
 				
-				table.manyToOne(manyToOne.build());
+				if (onDeleteAnnotation != null) {
+					manyToOne.onDeleteAction(onDeleteAnnotation.action());
+				}
+				
+				columns.add(manyToOne.build());
 			} else {
 				final var dataTypeBuilder = DataType.builder()
 					.type(field.getType())
@@ -234,8 +240,8 @@ public class MappingBuilder {
 		}
 		
 		return Index.builder()
-			.name(formatIndexName(annotation.name(), tableName, columns))
-			.columns(columns)
+			.name(formatIndexName(annotation.name(), tableName, filteredColumns))
+			.columns(filteredColumns)
 			.unique(annotation.unique())
 			.build();
 	}
@@ -247,14 +253,14 @@ public class MappingBuilder {
 		}
 		
 		return Unique.builder()
-			.name(formatUniqueName(annotation.name(), tableName, columns))
-			.columns(columns)
+			.name(formatUniqueName(annotation.name(), tableName, filteredColumns))
+			.columns(filteredColumns)
 			.build();
 	}
 	
 	public List<Column> getColumnsByNames(List<Column> columns, String[] names) {
 		return Arrays.stream(names)
-			.map((column) -> getColumnByName(columns, column))
+			.map((name) -> getColumnByName(columns, name))
 			.toList();
 	}
 	

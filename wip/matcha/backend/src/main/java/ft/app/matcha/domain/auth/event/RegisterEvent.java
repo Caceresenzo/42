@@ -1,11 +1,12 @@
 package ft.app.matcha.domain.auth.event;
 
 import ft.app.matcha.domain.user.User;
+import ft.framework.event.ApplicationEvent;
 import lombok.Getter;
 
 @Getter
 @SuppressWarnings("serial")
-public class RegisterEvent extends AuthEvent {
+public class RegisterEvent extends ApplicationEvent {
 	
 	private final User user;
 	

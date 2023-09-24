@@ -3,9 +3,12 @@ package ft.framework.swagger.part;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
 import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import ft.framework.mvc.annotation.Body;
+import ft.framework.mvc.annotation.FormData;
 import ft.framework.mvc.mapping.Route;
 import ft.framework.swagger.annotation.ApiHidden;
 import ft.framework.swagger.annotation.ApiOperation;
@@ -13,6 +16,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
+import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
@@ -37,6 +41,11 @@ public class OperationBuilder {
 			if (StringUtils.isNotBlank(summary)) {
 				operation.setSummary(summary);
 			}
+
+			final var description = annotation.description();
+			if (StringUtils.isNotBlank(description)) {
+				operation.setDescription(description);
+			}
 		}
 		
 		for (final var parameter : route.getParameters()) {
@@ -48,6 +57,17 @@ public class OperationBuilder {
 			if (parameter.isAnnotationPresent(Body.class)) {
 				operation.requestBody(buildRequestBody(swagger, route, parameter));
 				break;
+			}
+		}
+		
+		if (operation.getRequestBody() == null) {
+			final var formDatas = route.getParameters()
+				.stream()
+				.filter((parameter) -> parameter.isAnnotationPresent(FormData.class))
+				.toList();
+			
+			if (!formDatas.isEmpty()) {
+				operation.requestBody(buildRequestBody(swagger, route, formDatas));
 			}
 		}
 		
@@ -96,6 +116,34 @@ public class OperationBuilder {
 		final var mediaType = new MediaType();
 		SchemaBuilder.build(swagger, parameter.getParameterizedType())
 			.ifPresent(mediaType::setSchema);
+		
+		final var content = new Content();
+		content.addMediaType(route.getConsume(), mediaType);
+		
+		final var requestBody = new RequestBody();
+		requestBody.content(content);
+		
+		return requestBody;
+	}
+	
+	private static RequestBody buildRequestBody(OpenAPI swagger, Route route, List<Parameter> formDataParameters) {
+		final var mediaType = new MediaType();
+		
+		final var objectSchema = new ObjectSchema();
+		mediaType.setSchema(objectSchema);
+		
+		for (final var parameter : formDataParameters) {
+			final var annotation = Objects.requireNonNull(parameter.getAnnotation(FormData.class));
+			
+			var name = annotation.name();
+			if (StringUtils.isBlank(name)) {
+				name = parameter.getName();
+			}
+			
+			final var key = name;
+			SchemaBuilder.build(swagger, parameter.getParameterizedType())
+				.ifPresent((schema) -> objectSchema.addProperty(key, schema));
+		}
 		
 		final var content = new Content();
 		content.addMediaType(route.getConsume(), mediaType);

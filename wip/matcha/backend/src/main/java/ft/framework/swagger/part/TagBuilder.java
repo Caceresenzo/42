@@ -22,18 +22,24 @@ public class TagBuilder {
 		}
 		
 		final var tag = getOrCreate(swagger, name);
-		swagger.addTagsItem(tag);
-		
 		return Optional.of(tag);
 	}
 	
 	public static Tag getOrCreate(OpenAPI swagger, String name) {
-		return Optional.ofNullable(swagger.getTags())
+		final var optional = Optional.ofNullable(swagger.getTags())
 			.orElse(Collections.emptyList())
 			.stream()
-			.filter((tag) -> Objects.equals(tag.getName(), name))
-			.findFirst()
-			.orElseGet(() -> new Tag().name(name));
+			.filter((tag_) -> Objects.equals(tag_.getName(), name))
+			.findFirst();
+		
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		
+		final var tag = new Tag().name(name);
+		swagger.addTagsItem(tag);
+		
+		return tag;
 	}
 	
 }

@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 
 import javax.sql.ConnectionPoolDataSource;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
-
 import com.mysql.cj.MysqlType;
 
 import ft.framework.mvc.domain.Page;
 import ft.framework.mvc.domain.Pageable;
+import ft.framework.orm.ddl.DDLStrategy;
+import ft.framework.orm.ddl.UpdateDDLStrategy;
 import ft.framework.orm.dialect.Dialect;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.Entity;
@@ -90,7 +90,7 @@ public class EntityManager {
 				
 				var index = 1;
 				for (final var column : columns) {
-					var value = FieldUtils.readField(column.getField(), original, true);
+					var value = column.read(original);
 					if (column instanceof ManyToOne manyToOne) {
 						final Entity<?> target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
@@ -114,7 +114,7 @@ public class EntityManager {
 					proxied.getEntityHandler().reset();
 					return new Result<T>(instance, affectedRows, false);
 				} else {
-					final var converted = convert(entity, instance);
+					final var converted = convert(entity, instance, false);
 					return new Result<T>(converted, affectedRows, false);
 				}
 			}
@@ -141,7 +141,7 @@ public class EntityManager {
 				
 				var index = 1;
 				for (final var column : columns) {
-					var value = FieldUtils.readField(column.getField(), original, true);
+					var value = column.read(original);
 					if (column instanceof ManyToOne manyToOne) {
 						final Entity<?> target = manyToOne.getTarget();
 						value = target.getTable().getIdColumn().read(value);
@@ -164,9 +164,9 @@ public class EntityManager {
 				
 				try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
 					if (generatedKeys.next()) {
-						final var idField = table.getIdColumn().getField();
-						final var id = generatedKeys.getObject(1, idField.getType());
-						FieldUtils.writeField(idField, instance, id, true);
+						final var idColumn = table.getIdColumn();
+						final var id = generatedKeys.getObject(1, idColumn.getField().getType());
+						idColumn.write(instance, id);
 					} else {
 						throw new SQLException("Creating failed, no ID obtained.");
 					}
@@ -174,7 +174,7 @@ public class EntityManager {
 			}
 		}
 		
-		return convert(entity, instance);
+		return convert(entity, instance, false);
 	}
 	
 	@SneakyThrows
@@ -214,24 +214,65 @@ public class EntityManager {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@SneakyThrows
-	public <T> Optional<T> findBy(Entity<T> entity, Predicate<T> predicate) {
+	public <T> long countBy(Entity<T> entity, Predicate<T> predicate) {
 		final var table = entity.getTable();
-		final var columns = table.getAllColumns();
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
-			final var sql = dialect.buildSelectStatement(table, columns, predicate);
+			final var sql = dialect.buildCountStatement(table, predicate);
 			
-			log.trace("findBy: {}", sql);
+			log.trace("countBy: {}", sql);
 			
 			try (final var statement = connection.prepareStatement(sql.toString())) {
 				applyPredicate(statement, predicate);
 				
 				try (ResultSet resultSet = statement.executeQuery()) {
+					if (resultSet.next()) {
+						return resultSet.getLong(1);
+					}
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
+	@SneakyThrows
+	public <T> boolean existsBy(Entity<T> entity, Predicate<T> predicate) {
+		final var table = entity.getTable();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildExistsStatement(table, predicate);
+			
+			log.trace("existsBy: {}", sql);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				applyPredicate(statement, predicate);
+				
+				try (ResultSet resultSet = statement.executeQuery()) {
+					return resultSet.next();
+				}
+			}
+		}
+	}
+	
+	@SneakyThrows
+	public <T> Optional<T> findById(Entity<T> entity, Object id) {
+		final var table = entity.getTable();
+		final var columns = table.getColumns();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildSelectByIdStatement(table, columns);
+			
+			log.trace("findById: {}", sql);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				statement.setObject(1, id);
+				
+				try (ResultSet resultSet = statement.executeQuery()) {
 					while (resultSet.next()) {
-						final T instance = read((T) entity.instantiate(), resultSet, columns);
-						final T converted = convert(entity, instance);
+						final T instance = read(entity.instantiate(), resultSet, columns);
+						final T converted = convert(entity, instance, false);
 						
 						if (resultSet.next()) {
 							throw new IllegalStateException("more item are available");
@@ -246,11 +287,41 @@ public class EntityManager {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SneakyThrows
+	public <T> Optional<T> findBy(Entity<T> entity, Predicate<T> predicate) {
+		final var table = entity.getTable();
+		final var columns = table.getColumns();
+		
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			final var sql = dialect.buildSelectStatement(table, columns, predicate);
+			
+			log.trace("findBy: {}", sql);
+			
+			try (final var statement = connection.prepareStatement(sql.toString())) {
+				applyPredicate(statement, predicate);
+				
+				try (ResultSet resultSet = statement.executeQuery()) {
+					while (resultSet.next()) {
+						final T instance = read(entity.instantiate(), resultSet, columns);
+						final T converted = convert(entity, instance, false);
+						
+						if (resultSet.next()) {
+							throw new IllegalStateException("more item are available");
+						}
+						
+						return Optional.of(converted);
+					}
+					
+					return Optional.empty();
+				}
+			}
+		}
+	}
+	
 	@SneakyThrows
 	public <T> List<T> findAllBy(Entity<T> entity, Predicate<T> predicate) {
 		final var table = entity.getTable();
-		final var columns = table.getAllColumns();
+		final var columns = table.getColumns();
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var sql = dialect.buildSelectStatement(table, columns, predicate, null);
@@ -264,8 +335,8 @@ public class EntityManager {
 					final var instances = new ArrayList<T>();
 					
 					while (resultSet.next()) {
-						final T instance = read((T) entity.instantiate(), resultSet, columns);
-						final T converted = convert(entity, instance);
+						final T instance = read(entity.instantiate(), resultSet, columns);
+						final T converted = convert(entity, instance, false);
 						
 						instances.add(converted);
 					}
@@ -276,11 +347,10 @@ public class EntityManager {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@SneakyThrows
 	public <T> Page<T> findAllBy(Entity<T> entity, Predicate<T> predicate, Pageable pageable) {
 		final var table = entity.getTable();
-		final var columns = table.getAllColumns();
+		final var columns = table.getColumns();
 		
 		try (final var connection = dataSource.getPooledConnection().getConnection()) {
 			final var content = new ArrayList<T>();
@@ -296,8 +366,8 @@ public class EntityManager {
 					
 					try (ResultSet resultSet = statement.executeQuery()) {
 						while (resultSet.next()) {
-							final T instance = read((T) entity.instantiate(), resultSet, columns);
-							final T converted = convert(entity, instance);
+							final T instance = read(entity.instantiate(), resultSet, columns);
+							final T converted = convert(entity, instance, false);
 							
 							content.add(converted);
 						}
@@ -325,15 +395,18 @@ public class EntityManager {
 		}
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@SneakyThrows
 	public <T> T read(T instance, ResultSet resultSet, List<Column> columns) {
 		int index = 1;
 		for (final var column : columns) {
 			var value = resultSet.getObject(index++);
 			if (column instanceof ManyToOne manyToOne) {
-				final Entity<?> target = manyToOne.getTarget();
+				final Entity target = manyToOne.getTarget();
 				
-				value = target.instantiate(value);
+				if (value != null) {
+					value = convert(target, target.instantiate(value), true);
+				}
 			}
 			
 			column.write(instance, value);
@@ -343,8 +416,8 @@ public class EntityManager {
 	}
 	
 	@SneakyThrows
-	public <T> T convert(Entity<T> entity, T instance) {
-		final var handler = new EntityHandler(entity, instance);
+	public <T> T convert(Entity<T> entity, T instance, boolean lazy) {
+		final var handler = new EntityHandler(this, entity, instance, !lazy);
 		final var proxy = entity.getProxyClass()
 			.getDeclaredConstructor(EntityHandler.class)
 			.newInstance(handler);
@@ -413,12 +486,38 @@ public class EntityManager {
 	@SneakyThrows
 	public void applyPredicate(PreparedStatement statement, Predicate<?> predicate, int[] index) {
 		if (predicate instanceof Comparison<?> comparison) {
-			statement.setObject(index[0]++, comparison.getValue(), MysqlType.VARCHAR /* TODO */);
+			var value = convertValue(comparison.getValue());
+			
+			statement.setObject(index[0]++, value, MysqlType.VARCHAR /* TODO */);
 		} else if (predicate instanceof Branch<?> branch) {
 			for (final Predicate<?> child : branch.getPredicates()) {
 				applyPredicate(statement, child, index);
 			}
 		}
+	}
+	
+	// TODO This should be moved
+	public Object convertValue(Object value) {
+		if (value instanceof ProxiedEntity proxied) {
+			return proxied.getEntityHandler().getId();
+		}
+		if (value instanceof Enum<?> enum_) {
+			return enum_.name();
+		}
+		
+		return value;
+	}
+	
+	@SneakyThrows
+	public void applyDataDefinitionLanguage() {
+		try (final var connection = dataSource.getPooledConnection().getConnection()) {
+			applyDataDefinitionLanguage(new UpdateDDLStrategy(connection, dialect));
+		}
+	}
+	
+	@SneakyThrows
+	public void applyDataDefinitionLanguage(DDLStrategy strategy) {
+		strategy.apply(getEntities());
 	}
 	
 	@Builder

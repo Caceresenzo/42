@@ -3,22 +3,14 @@ package ft.framework.mvc.security;
 import ft.framework.mvc.filter.Filter;
 import spark.Request;
 import spark.Response;
-import spark.utils.StringUtils;
 
 public abstract class AuthenticationFilter implements Filter {
 	
-	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String AUTHENTICATION_ATTRIBUTE = AuthenticationFilter.class.getSimpleName() + ".authentication";
 	
 	@Override
 	public void preProcess(Request request, Response response) {
-		final var authorization = request.headers(AUTHORIZATION_HEADER);
-		
-		Authentication authentication = null;
-		
-		if (StringUtils.isNotBlank(authorization)) {
-			authentication = authenticate(authorization);
-		}
+		Authentication authentication = authenticate(request, response);
 		
 		if (authentication == null) {
 			authentication = AnonymousAuthentication.INSTANCE;
@@ -27,7 +19,7 @@ public abstract class AuthenticationFilter implements Filter {
 		setAuthentication(request, authentication);
 	}
 	
-	public abstract Authentication authenticate(String authorization);
+	public abstract Authentication authenticate(Request request, Response response);
 	
 	public static void setAuthentication(Request request, Authentication authentication) {
 		request.attribute(AUTHENTICATION_ATTRIBUTE, authentication);

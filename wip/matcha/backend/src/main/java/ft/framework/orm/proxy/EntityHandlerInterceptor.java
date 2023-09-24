@@ -24,19 +24,56 @@ public class EntityHandlerInterceptor {
 		@AllArguments Object[] arguments,
 		@Origin Method method
 	) throws Exception {
-		final var methodName = method.getName();
+		final var isGetter = isGetter(method);
 		
-		if (methodName.startsWith("set")) {
-			final var fieldName = method.getName().substring(3);
+		if (!handler.isInitialized()) {
+			if (isGetter) {
+				final var fieldName = getFieldName(method);
+				
+				if (handler.isMatchingIdColumn(fieldName)) {
+					return handler.getId();
+				}
+			}
+			
+			handler.fetchLazy();
+		}
+		
+		if (isSetter(method)) {
+			final var fieldName = getFieldName(method);
 			
 			if (!handler.markModified(fieldName)) {
 				handler.markAllModified();
 			}
-		} else if (!methodName.startsWith("get") && !methodName.startsWith("is") && !EXCLUDED.contains(methodName)) {
+		} else if (!isGetter && !isBooleanGetter(method) && !isExcluded(method)) {
 			handler.markAllModified();
 		}
 		
-		return method.invoke(handler.getOriginal(), arguments);
+		final var returnValue = method.invoke(handler.getOriginal(), arguments);
+		if (returnValue == handler.getOriginal()) {
+			return self;
+		}
+		
+		return returnValue;
+	}
+	
+	public static boolean isGetter(Method method) {
+		return method.getName().startsWith("get");
+	}
+	
+	public static boolean isBooleanGetter(Method method) {
+		return method.getName().startsWith("is");
+	}
+	
+	public static boolean isExcluded(Method method) {
+		return EXCLUDED.contains(method.getName());
+	}
+	
+	public static boolean isSetter(Method method) {
+		return method.getName().startsWith("set");
+	}
+	
+	public static String getFieldName(Method method) {
+		return method.getName().substring(3);
 	}
 	
 }

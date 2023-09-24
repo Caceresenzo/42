@@ -1,5 +1,6 @@
 <template>
-  <v-app dark>
+  <v-app v-if="loaded" dark>
+    <socket-disconnected />
     <v-navigation-drawer
       v-model="drawer"
       mini-variant
@@ -14,7 +15,6 @@
           :key="i"
           :to="item.to"
           router
-          exact
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -53,14 +53,19 @@ import {
   toRefs,
   useContext,
 } from '@nuxtjs/composition-api'
-import { useAuthStore } from '~/store'
+import { useAuthStore, useSocketStore } from '~/store'
 export default defineComponent({
   setup() {
     const { $vuetify } = useContext()
     const authStore = useAuthStore()
+    const socketStore = useSocketStore()
 
-    onBeforeMount(() => {
-      authStore.initialize()
+    const loaded = ref(false)
+
+    onBeforeMount(async () => {
+      await authStore.initialize()
+      await socketStore.initialize()
+      loaded.value = true
     })
 
     const drawer = ref(true)
@@ -71,11 +76,17 @@ export default defineComponent({
       drawer,
       logged,
       mobile,
+      loaded,
       items: [
         {
           icon: 'mdi-apps',
           title: 'Welcome',
           to: '/',
+        },
+        {
+          icon: 'mdi-account',
+          title: 'Users',
+          to: '/users',
         },
       ],
     }

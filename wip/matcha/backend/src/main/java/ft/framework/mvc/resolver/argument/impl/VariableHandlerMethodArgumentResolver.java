@@ -4,8 +4,11 @@ import java.lang.reflect.Parameter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import ft.framework.mvc.annotation.ResponseErrorProperty;
 import ft.framework.mvc.annotation.Variable;
 import ft.framework.mvc.resolver.argument.HandlerMethodArgumentResolver;
+import ft.framework.mvc.resolver.argument.MissingArgumentException;
+import lombok.Getter;
 import spark.Request;
 import spark.Response;
 
@@ -26,12 +29,26 @@ public class VariableHandlerMethodArgumentResolver implements HandlerMethodArgum
 		}
 		
 		final var value = request.params(name);
-		
 		if (value == null) {
-			throw new Exception(String.format("missing `%s`", name));
+			throw new MissingVariableException(name);
 		}
 		
 		return value;
+	}
+	
+	@SuppressWarnings("serial")
+	public static class MissingVariableException extends MissingArgumentException {
+		
+		@Getter
+		@ResponseErrorProperty
+		private final String name;
+		
+		public MissingVariableException(String name) {
+			super(String.format("missing `%s` variable", name));
+			
+			this.name = name;
+		}
+		
 	}
 	
 }

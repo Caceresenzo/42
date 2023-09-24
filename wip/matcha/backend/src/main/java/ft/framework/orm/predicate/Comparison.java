@@ -22,6 +22,7 @@ public final class Comparison<T> implements Predicate<T> {
 		LESS_THAN_EQUALS,
 		GREATER_THAN,
 		GREATER_THAN_EQUALS,
+		LIKE,
 		// TODO Add more
 		;
 		

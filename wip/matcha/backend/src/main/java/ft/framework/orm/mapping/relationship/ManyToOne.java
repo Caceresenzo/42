@@ -1,5 +1,6 @@
 package ft.framework.orm.mapping.relationship;
 
+import ft.framework.orm.annotation.OnDelete;
 import ft.framework.orm.mapping.Column;
 import ft.framework.orm.mapping.Entity;
 import lombok.Data;
@@ -15,5 +16,6 @@ public class ManyToOne extends Column implements Relationship {
 	
 	private final Entity<?> target;
 	private final String foreignKeyName;
+	private final OnDelete.Action onDeleteAction;
 	
 }

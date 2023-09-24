@@ -10,6 +10,7 @@ import ft.framework.mvc.domain.Pageable;
 import ft.framework.mvc.resolver.argument.impl.PageableHandlerMethodArgumentResolver;
 import ft.framework.swagger.annotation.ApiHidden;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.parameters.PathParameter;
 import io.swagger.v3.oas.models.parameters.QueryParameter;
@@ -72,7 +73,16 @@ public class ParameterBuilder {
 			page.setSchema(schema);
 		}
 		
-		return Arrays.asList(size, page);
+		final var sort = new QueryParameter();
+		{
+			final var schema = new ArraySchema();
+			schema.setItems(SchemaBuilder.build(swagger, String.class).get());
+			
+			sort.setName(PageableHandlerMethodArgumentResolver.QUERY_SORT);
+			sort.setSchema(schema);
+		}
+		
+		return Arrays.asList(size, page, sort);
 	}
 	
 	public static Parameter buildPathParameter(OpenAPI swagger, java.lang.reflect.Parameter methodParameter, Variable annotation) {
@@ -91,6 +101,8 @@ public class ParameterBuilder {
 	
 	public static Parameter buildQueryParameter(OpenAPI swagger, java.lang.reflect.Parameter methodParameter, Query annotation) {
 		final var parameter = new QueryParameter();
+		
+		parameter.setRequired(annotation.required());
 		
 		final var name = annotation.name();
 		if (StringUtils.isNotBlank(name)) {
