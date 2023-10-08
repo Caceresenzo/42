@@ -1,19 +1,22 @@
 vtysh <<-EOF
 configure terminal
-  hostname _ecaceres-1
   no ipv6 forwarding
 
   interface eth0
     ip address 10.1.1.1/30
+  exit
 
   interface eth1
     ip address 10.1.1.5/30
+  exit
 
   interface eth2
     ip address 10.1.1.9/30
+  exit
 
   interface lo
     ip address 1.1.1.1/32
+  exit
 
   router bgp 1
     neighbor ibgp peer-group
@@ -21,13 +24,16 @@ configure terminal
     neighbor ibgp update-source lo
     bgp listen range 1.1.1.0/29 peer-group ibgp
 
-  address-family l2vpn evpn
-    neighbor ibgp activate
-    neighbor ibgp route-reflector-client
+    address-family l2vpn evpn
+      neighbor ibgp activate
+      neighbor ibgp route-reflector-client
     exit-address-family
+  exit
 
   router ospf
     network 0.0.0.0/0 area 0
+  exit
   
   line vty
+  exit
 EOF
