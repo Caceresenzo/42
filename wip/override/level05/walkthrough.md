@@ -49,7 +49,7 @@ void main(int argc, char const* argv[])
 
 ```bash
 $ gcc getenv.c -o getenv -m32
-$ ./getenv SHELLCODÈ
+$ ./getenv SHELLCODE
 address: 0xffffd4f8
 ```
 
