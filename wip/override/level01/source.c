@@ -12,7 +12,7 @@ int verify_user_name()
 
 int verify_user_pass(char *passwd)
 {
-    return (strncmp(passwd, "admin", 7));
+    return (strncmp(passwd, "admin", 5));
 }
 
 int main(int argc, char const *argv[])
