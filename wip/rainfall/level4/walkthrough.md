@@ -27,7 +27,7 @@ Since the program only reads `512 bytes`, we need to use `printf`'s identifiers'
 # padding to produce 16930116 characters
 + "%16930112x"
 
-# write using %n, at the forth argument using $4
+# write using %n, at the twelfth argument using $12
 + "%12$n"
 ```
 
