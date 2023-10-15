@@ -32,8 +32,17 @@ def to_username(n: int):
     return f"level{n}"
 
 
+def to_bonus(n: int):
+    return f"bonus{n}"
+
+
 def read_flag(directory: str):
-    with open(os.path.join(directory, "flag")) as fd:
+    path = os.path.join(directory, "flag")
+
+    if not os.path.exists(path):
+        return None
+    
+    with open(path) as fd:
         return fd.read().strip()
 
 
@@ -49,10 +58,20 @@ def cli(
             to_username(n): read_flag(to_username(n - 1))
             for n in range(1, 9 + 1)
         },
-        "bonus0": read_flag(to_username(9))
+        to_bonus(0): read_flag(to_username(9)),
+        **{
+            to_bonus(n): read_flag(to_bonus(n - 1))
+            for n in range(1, 3 + 1)
+        },
+        "end": read_flag(to_bonus(3))
     }
 
     for username, password in combos.items():
+        if password is None:
+            print(f"{username}: skip since no password")
+            print()
+            continue
+
         print(f"{username}: trying password `{password}`")
 
         if connect(hostname, port, username, password):
