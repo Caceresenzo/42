@@ -6,7 +6,7 @@
 
 ## Solving the Challenge
 
-The program expects a number bellow 10, and a buffer overflow.
+The program expects a number below 10, and a buffer overflow.
 `n` bytes will be copied from the second argument to a buffer.
 If the buffer overflows, the number value is changed and must match `1464814662` to get access to a shell.
 
