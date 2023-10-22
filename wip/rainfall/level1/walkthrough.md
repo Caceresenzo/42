@@ -107,7 +107,7 @@ Segmentation fault (core dumped)
 We can see a message, but its still crashing.
 
 By looking further at the `run` function, we can see that it calls `system("/bin/sh")`.
-But by using a pipe, stdin close right after it finished sending our payload. We need to keep it open.
+But by using a pipe, stdin is closed right after it finished sending our payload. We need to keep it open.
 
 For that we can first put our payload into a file.
 Then we need to read it with `cat`, but with re-reading stdin, and sending everything into the pipe.
