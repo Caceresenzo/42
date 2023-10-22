@@ -32,7 +32,7 @@ Meaning that the memory layout is:
 
 | offset | name |
 | --- | --- |
-| 0 | vtable* |
+| 0 | N's vtable* |
 | 4 | char[100] |
 | 100 | int |
 
