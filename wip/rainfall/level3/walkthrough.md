@@ -18,7 +18,7 @@ $ echo hello | ./level3
 hello
 ```
 
-But giving `printf`'s specifiers, it starts to break.
+But giving a `printf`'s specifiers, it starts to break.
 
 ```bash
 $ echo '%s' | ./level3
