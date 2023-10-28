@@ -65,7 +65,7 @@ Breakpoint 2, 0x08048866 in auth ()
 Now that we have the combo `norminette:6235889`, we can get a shell.
 
 ```bash
-$ ./level06 
+$ ./level06
 ***********************************
 *               level06           *
 ***********************************
