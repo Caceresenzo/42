@@ -11,7 +11,7 @@ for directory in level*; do
         sh "$custom_sh"
     else
         echo "$level: using generic: gcc"
-        gcc source.c -o $level -m32
+        gcc source.c -o $level
     fi
     popd
 done
