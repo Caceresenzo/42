@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 struct msg {
     char content[140 /* 0xc0 (handle_msg rsp) - 40 (username) - 4 (max_length) - 8 (gcc)*/];
