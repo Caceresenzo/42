@@ -8,7 +8,7 @@ void p(char *output, const char *prompt)
     char buffer[4104];
 
     puts(prompt);
-    read(stdin, buffer, 4096 /* 0x1000 */);
+    read(STDIN_FILENO, buffer, 4096 /* 0x1000 */);
 
     *strchr(buffer, '\n' /* 0xa */) = '\0';
 
