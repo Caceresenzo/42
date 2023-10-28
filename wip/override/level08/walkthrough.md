@@ -29,6 +29,6 @@ By re-creating the `./backups` directory and the path of `level09`'s `.pass` in 
 $ cd /tmp
 $ mkdir -p ./backups/home/users/level09/
 $ /home/users/level08/level08 /home/users/level09/.pass
-$ cat backups/home/users/level09/.pass 
+$ cat backups/home/users/level09/.pass
 <flag>
 ```
