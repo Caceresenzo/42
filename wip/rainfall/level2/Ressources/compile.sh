@@ -1,1 +1,1 @@
-gcc source.c -o level2 -fno-stack-protector -m32
+gcc source.c -o level2 -fno-stack-protector -Wno-unused-result -m32
