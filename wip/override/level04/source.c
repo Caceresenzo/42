@@ -48,6 +48,7 @@ void prog_timeout()
   syscall(SYS_exit, 1);
 }
 
+__attribute__((constructor))
 void enable_timeout_cons()
 {
     signal(SIGALRM /* 0xe */, &prog_timeout);
