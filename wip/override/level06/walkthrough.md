@@ -44,7 +44,7 @@ Starting program: /home/users/level06/level06
 ***********************************
 *               level06           *
 ***********************************
--> Enter Login: norminette
+-> Enter Login: helloworld
 ***********************************
 ***** NEW ACCOUNT DETECTED ********
 ***********************************
@@ -57,23 +57,23 @@ Breakpoint 1, 0x080487ba in auth ()
 Continuing.
 
 Breakpoint 2, 0x08048866 in auth ()
-(gdb) # show the serial for login "norminette"
+(gdb) # show the serial for login "helloworld"
 (gdb) x/d $ebp-0x10
-0xffffd6a8:     6235889
+0xffffd6a8:     6236969
 ```
 
-Now that we have the combo `norminette:6235889`, we can get a shell.
+Now that we have the combo `helloworld:6236969`, we can get a shell.
 
 ```bash
 $ ./level06
 ***********************************
 *               level06           *
 ***********************************
--> Enter Login: norminette
+-> Enter Login: helloworld
 ***********************************
 ***** NEW ACCOUNT DETECTED ********
 ***********************************
--> Enter Serial: 6235889
+-> Enter Serial: 6236969
 Authenticated!
 $ whoami
 level07
