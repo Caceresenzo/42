@@ -43,7 +43,7 @@ For that, we can write a small utility ([full code](./Ressources/getenv.c)):
 void main(int argc, char const* argv[])
 {
     char const *ptr = getenv(argv[1]);
-    printf("address: %p\n", var_name, ptr, ptr);
+    printf("address: %p\n", ptr);
 }
 ```
 
