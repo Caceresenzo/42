@@ -41,7 +41,7 @@ The output is:
 ...
 ```
 
-We can see that offset 22 to 26 contains ASCII.
+We can see that offset 22 to 26 seems to contains ASCII.
 To decode it, we convert HEX to ASCII and to reverse it (since we are in the wrong endianness).
 
 ```python

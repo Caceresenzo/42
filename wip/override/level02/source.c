@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
 
     int read = 0;
     FILE *stream = NULL;
-    
+
     stream = fopen("/home/users/level03/.pass", "r");
     if (stream == NULL)
     {
@@ -21,7 +21,8 @@ int main(int argc, char const *argv[])
     read = fread(flag, 1, 41 /* 0x29 */, stream);
     flag[strcspn(flag, "\n")] = '\0';
 
-    if (read != 41 /* 0x29 */) {
+    if (read != 41 /* 0x29 */)
+    {
         fwrite("ERROR: failed to read password file\n", 1, 36 /* 0x24 */, stderr);
         fwrite("ERROR: failed to read password file\n", 1, 36 /* 0x24 */, stderr);
         exit(1);
@@ -41,7 +42,7 @@ int main(int argc, char const *argv[])
     printf("--[ Password: ");
     fgets(passwd, 100 /* 0x64 */, stdin);
     passwd[strcspn(passwd, "\n")] = 0;
-    
+
     puts("*****************************************");
 
     if (strncmp(flag, passwd, 41 /* 0x29 */))
@@ -50,7 +51,7 @@ int main(int argc, char const *argv[])
         system("/bin/sh");
         return (0);
     }
-    
+
     printf(login);
     puts(" does not have access!");
     exit(1);
