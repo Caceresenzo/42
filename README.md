@@ -1,5 +1,16 @@
 # My 42 Repository
 
+Here you can find my project that I did when I was still at school 42.
+
+I have received the RNCP 5 certificate, so this repository will not be updated anymore and the WIP projects will remain as they are.
+
+Please do not just copy/paste what you see here, that is not the goal of the school to blindly find/use answers without understanding them.
+
+> [!WARNING]
+> If you plan to create a repository for your projects, please do not upload the subject materials, as they are protected by 42's intellectual property.
+
+## Projects
+
 | Project                                      |  Mark   | Tries | Took  | Note       | With               | Language                                             |
 | -------------------------------------------- | :-----: | :---: | :---: | ---------- | ------------------ | ---------------------------------------------------- |
 | libft                                        |  125%   |   3   |  5d   |            |                    | `C`                                                  |
